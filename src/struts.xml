@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+	<struts>
+		<constant name="struts.action.extension" value="do,action," />
+		<constant name="struts.devMode" value="false" />
+		<constant name="struts.i18n.reload" value="true" />
+		<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+		<constant name="struts.multipart.maxSize" value="52428800" />
+		<constant name="struts.custom.i18n.resources" value="application_field_names,responce_codes,app_queries" />
+		<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+		<constant name="struts.mapper.action.prefix.enabled" value="true" />
+		<constant name="struts.action.excludePattern" value="/servlet/DMLOperationServlet,/struts/webconsole.html"/>
+		<package name="intercept" extends="tiles-default,json-default">
+			<interceptors>
+				<interceptor name="noCacheIntercept" class="com.maan.common.util.NoCacheInterceptor" />
+				<interceptor name="SessionIntercept" class="com.maan.common.util.SessionInterceptor" />
+				<interceptor-stack name="noCacheStack">
+					<interceptor-ref name="noCacheIntercept" />
+					<interceptor-ref name="prepare"/>
+					<interceptor-ref name="defaultStack">
+						<param name="exception.logEnabled">true</param>
+						<param name="exception.logLevel">ERROR</param>
+					</interceptor-ref>
+					<interceptor-ref name="token">
+						<param name="excludeMethods">*</param>
+					</interceptor-ref>
+					<interceptor-ref name="fileUpload">
+						<param name="maximumSize">5242880000</param>
+						<param name="allowedType"> * </param>
+					</interceptor-ref>
+					<interceptor-ref name="actionMappingParams" />
+					<interceptor-ref name="params">
+						<param name="excludeParams">dojo\..*,^struts\..*</param>
+					</interceptor-ref>
+					<interceptor-ref name="conversionError" />
+					<interceptor-ref name="validation"/>
+					<interceptor-ref name="workflow"/>
+				</interceptor-stack>
+				<interceptor-stack name="SessionCheckStack">
+					<interceptor-ref name="SessionIntercept" />
+					<interceptor-ref name="noCacheStack" />
+				</interceptor-stack>
+			</interceptors>
+
+			<default-interceptor-ref name="noCacheStack"></default-interceptor-ref>
+
+			<global-results>
+				<result name="SessionExpired" type="tiles">exception</result>
+				<result name="invalid.token" type="tiles">exception</result>
+				<result name="unhandledException" type="tiles">exception</result>
+			</global-results>
+
+			<global-exception-mappings>
+				<exception-mapping exception="java.lang.Exception" result="unhandledException" />
+			</global-exception-mappings>
+		</package>
+
+		<package name="default" extends="intercept" namespace="/">
+			<action name="Login*" class="com.maan.common.login.LogInAction" method="{1}">
+				<interceptor-ref name="noCacheStack"></interceptor-ref>
+				<result name="homepage">/WEB-INF/jsp/login/homepage.jsp</result>
+				<result name="page">/WEB-INF/jsp/login/login.jsp</result>
+				<result name="input">/WEB-INF/jsp/login/login.jsp</result>
+				<result name="changePWD">/WEB-INF/jsp/login/changePWD.jsp</result>
+				<result name="forgotPWD">/WEB-INF/jsp/login/forgotPWD.jsp</result>
+				<result name="invalidate">/WEB-INF/jsp/login/invalidateLogin.jsp</result>
+				<result name="userInvalidate" type="tiles">userInvalidate</result>
+				<result name="home" type="redirectAction">
+					<param name="actionName">welcomeHome</param>
+					<param name="expiryDate">${expiryDate}</param>
+					<param name="expiryCount">${expiryCount}</param>
+				</result>
+				<result name="adminHome" type="redirectAction">
+					<param name="actionName">welcomeHomeAdmin</param>
+				</result>
+			</action>
+
+			<action name="*Admin" class="com.maan.action.admin.AdminAction" method="{1}">
+				<result name="input" type="tiles">AdminHome</result>
+				<result name="NewUser" type="tiles">Newuser</result>
+				<result name="appList">/WEB-INF/jsp/admin/appPopUp.jsp</result>
+				<result name="MailMaster" type="tiles">Mailmaster</result>
+				<result name="existingUser" type="tiles">ExistingUser</result>
+				<result name="adminAjax">/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				<result name="profitCenter" type="tiles">profitCenter</result>
+				<result name="userListMaster" type="tiles">userListMaster</result>
+				<result name="exchangeMaster" type="tiles">exchangeMaster</result>
+				<result name="menuMaster" type="tiles">menuMaster</result>
+				<result name="department" type="tiles">department</result>
+				<result name="productMaster" type="tiles">productMaster</result>
+				<result name="territoryMaster" type="tiles">territoryMaster</result>
+				<result name="categoryMaster" type="tiles">categoryMaster</result>
+				<result name="currencyMaster" type="tiles">currencyMaster</result>
+				<result name="processMaster" type="tiles">processMaster</result>
+				<result name="subprofitCenter" type="tiles">subprofitCenter</result>
+				<result name="policyBranch" type="tiles">policyBranch</result>
+				<result name="underwritertMaster" type="tiles">underwritertMaster</result>
+				<result name="riskgradeMaster" type="tiles">riskgradeMaster</result>
+				<result name="countryMaster" type="tiles">countryMaster</result>
+				<result name="branchMaster" type="tiles">branchMaster</result>
+				<result name="cedingMaster" type="tiles">cedingMaster</result>
+				<result name="openperiodMaster" type="tiles">openperiodMaster</result>
+				<result name="submenuMaster" type="tiles">submenuMaster</result>
+				<result name="globalSubmit" type="tiles">globalSubmit</result>
+				<result name="menuPopUp">/WEB-INF/jsp/Masters/menuPopUp.jsp</result>
+				<result name="uwLimitMaster" type="tiles">uwLimitMaster</result>
+				<result name="crestaMaster" type="tiles">crestaMaster</result>
+				<result name="rateMaster" type="tiles">rateMaster</result>
+				<result name="clientmaster" type="tiles">clientmaster</result>
+				<result name="admindocupload" type="tiles">admindocupload</result>
+				<result name="pdfReport">\WEB-INF\jsp\Reports\pdfReport.jsp</result>
+				<result name="viewPDF">${fileName}</result>
+
+			</action>
+
+			<action name="*Home" class="com.maan.action.HomeAction" method="{1}">
+				<result name="dashBoard" type="tiles">dashBoard</result>
+				<result name="welcome" type="tiles">welcome</result>
+				<result name="home" type="tiles">home</result>
+				<result name="department" type="tiles">department</result>
+				<result name="firstPage" type="tiles">firstPage</result>
+				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				<result name="journal" type="tiles">journal</result>
+				<result name="journalView" type="tiles">journalView</result>
+				<result name="journalPrint">/WEB-INF/jsp/common/journalsprint.jsp</result>
+				<result name="territoryAjax" >/WEB-INF/jsp/common/territoryAjax.jsp</result>
+				<result name="stream" type="stream">
+					<param name="contentDisposition">attachment;filename=${fileName}</param>
+					<param name="contentType">application/octet-stream</param>
+					<param name="inputName">inputStream</param>
+				</result>
+				<result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+			</action>
+
+			<action name="*Facultative" class="com.maan.action.FacultativeAction" method="{1}">
+				 <result name="faculengg1" type="tiles">faculengg1</result>
+				 <result name="input" > faculengg2</result>
+				 <result name="faculengg2" type="tiles">faculengg2</result>
+				 <result name="SucusssFac" type="tiles">SucusssFac</result>
+				 <result name="FacView" type="tiles">FacView</result>
+				 <result name="redirect" type="redirect">FacView</result>
+				 <result name="bonusPopUp" >/WEB-INF/jsp/Facultative/bonusPopUp.jsp</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="copyPage" type="tiles">copyPage</result>
+			</action>
+			<action name="*PremiumMaster" class="com.maan.action.PremiumAction" method="{1}">
+				 <result name="premiummaster" type="tiles">premiummaster</result>
+				 <result name="claimMaster" type="tiles">claimMaster</result>
+			</action>
+			<action name="*RiskDetails" class="com.maan.action.RiskDetailsAction" method="{1}">
+				 <result name="protreaty1" type="tiles">protreaty1</result>
+				 <result name="protreaty2" type="tiles">protreaty2</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="SucusssFac" type="tiles">SucusssFac</result>
+				 <result name="ProView" type="tiles">ProView</result>
+				 <result name="input" > /WEB-INF/jsp/common/crestaPopUp.jsp </result>
+				 <result name="retentionPopUp" > /WEB-INF/jsp/common/retentionPopUp.jsp </result>
+				 <result name="redirectAction" type="redirectAction">
+					<param name="actionName">InitPortfolio</param>
+					<param name="actionMessage">${actionMessage}</param>
+					<param name="flag">${flag}</param>
+				</result>
+				
+				 <result name="cancelMenu" type="redirectAction">
+					<param name="actionName">InitPortfolio</param>
+					<param name="proposalNo">${proposalNo}</param>
+				</result>
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="redirectAction1" type="redirectAction">
+					<param name="actionName">menuMenu</param>
+					<param name="actionMessage">${actionMessage}</param>
+					<param name="manufactureID">${manufactureID}</param>
+				</result>
+				<result name="crestaPopUp" >/WEB-INF/jsp/common/crestaPopUp.jsp</result>
+				<result name="profitCommission" >/WEB-INF/jsp/common/profitCommission.jsp</result>
+				<result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="scalePopUp" >/WEB-INF/jsp/Facultative/bonusPopUp.jsp</result>
+
+			</action>
+
+			<action name="*Xol" class="com.maan.action.XolAction" method="{1}">
+				 <result name="xol1" type="tiles">xol1</result>
+				 <result name="xol2" type="tiles">xol2</result>
+				 <result name="retroxol1" type="tiles">retroxol1</result>
+				 <result name="retroxol2" type="tiles">retroxol2</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="SucusssFac" type="tiles">SucusssFac</result>
+				 <result name="viewXol" type="tiles">viewXol</result>
+				 <result name="viewRetroXol" type="tiles">viewRetroXol</result>
+				 <result name="popup" >/WEB-INF/jsp/Xol/xolPopUp.jsp</result>
+				 <result name="redirectAction" type="redirectAction">
+					<param name="actionName">InitPortfolio</param>
+					<param name="actionMessage">${actionMessage}</param>
+					<param name="flag">${flag}</param>
+				</result>
+				<result name="bonusPopUp" >/WEB-INF/jsp/Facultative/bonusPopUp.jsp</result>
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="redirectAction1" type="redirectAction">
+					<param name="actionName">menuMenu</param>
+					<param name="actionMessage">${actionMessage}</param>
+					<param name="manufactureID">${manufactureID}</param>
+				</result>
+				<result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="iemodule" type="tiles">iemodule</result>
+			</action>
+
+			<action name="*Retro" class="com.maan.action.RetroAction" method="{1}">
+				 <result name="department" type="tiles">department</result>
+				 <result name="retro1" type="tiles">retro1</result>
+				 <result name="retro2" type="tiles">retro2</result>
+				 <result name="SucusssFac" type="tiles">SucusssFac</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="retroView" type="tiles">retroView</result>
+				 <result name="retroprocess" type="tiles">retroprocess</result>
+				 <result name="stream" type="stream">
+					<param name="contentDisposition">attachment;filename=${fileName}</param>
+					<param name="contentType">application/octet-stream</param>
+					<param name="inputName">inputStream</param>
+				</result>
+				
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+					
+				</result>
+			</action>
+			<action name="*Portfolio" class="com.maan.action.PortfolioAction" method="{1}">
+				<result name="portfolioList" type="tiles">portfolioList</result>
+				<result name="autoList" type="tiles">auto</result>
+				<result name="first" type="tiles">first</result>
+				<result name="statistics" type="tiles">statistics</result>
+				<result name="json" type="json" />
+				<result name="gridAjax" type="json"/>
+				<result name="ajaxSearch"></result>
+				<result name="copyPage" type="tiles">copyPage</result>
+			</action>
+			<action name="*Statistics" class="com.maan.action.StatisticsAction" method="{1}">
+				<result name="statistics" type="tiles">statistics</result>
+				<result name="statisticsView" type="tiles">statisticsView</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+			</action>
+			
+			<action name="*Json" class="com.maan.action.PortfolioAction" method="{1}">
+				<result name="json" type="json" />
+			</action>
+			<action name="*Menu" class="com.maan.action.MenuAction" method="{1}">
+				 <result name="first" type="tiles">first</result>
+				 <result name="redirect" type="redirect">${menuUrl}</result>
+			</action>
+			<action name="*FaculPremium" class="com.maan.action.FaculPremiumAction" method="{1}">
+				 <result name="premiumList" type="tiles">premiumList</result>
+				 <result name="editPremium" type="tiles">editPremium</result>
+				 <result name="premiummaster" type="tiles">premiummaster</result>
+				 <result name="PremiumSucuss" type="tiles">PremiumSucuss</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="bonusviewPopup" >/WEB-INF/jsp/common/bonusviewPopup.jsp</result>
+				 <result name="PremiumSucuss" type="tiles">PremiumSucuss</result>
+				 <result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+					
+				</result>
+				<result name="masterList" type="redirectAction">
+					<param name="actionName">premiumListPremiumMaster</param>
+					<param name="type">${type}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				 <result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="contractidentifier" type="redirectAction">
+					<param name="actionName">contractIdetifierPremiumMaster</param>
+					<param name="type">${type}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+			</action>
+			<action name="*ProportionPremium" class="com.maan.action.ProportionalPremiumAction" method="{1}">
+				 <result name="premiumList" type="tiles">premiumList</result>
+				 <result name="editPremium" type="tiles">proportionPremium</result>
+				  <result name="premiummaster" type="tiles">premiummaster</result>
+				 <result name="PremiumSucuss" type="tiles">proportionSucuss</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="cashlossPOP" >/WEB-INF/jsp/common/cashLossCredit.jsp</result>
+				<result name="slideCommission" >/WEB-INF/jsp/ProportionalTreaty/slideCommission.jsp</result>
+				<result name="premiumResPOP" >/WEB-INF/jsp/common/premiumReserved.jsp</result>
+				<result name="profitCommission" >/WEB-INF/jsp/ProportionalTreaty/profitCommission.jsp</result>
+				<result name="lossParticipation" >/WEB-INF/jsp/ProportionalTreaty/lossParticipation.jsp</result>
+				<result name="propView" type="tiles">propView</result>
+				 <result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="masterList" type="redirectAction">
+					<param name="actionName">premiumListPremiumMaster</param>
+					<param name="type">${type}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+
+			</action>
+			<action name="*XolPremium" class="com.maan.action.XolPremiumAction" method="{1}">
+				 <result name="premiumList" type="tiles">premiumList</result>
+				 <result name="editPremium" type="tiles">xolPremium</result>
+				  <result name="premiummaster" type="tiles">premiummaster</result>
+				<result name="auto" type="tiles">autoNPT</result>
+				 <result name="PremiumSucuss" type="tiles">xolview</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="masterList" type="redirectAction">
+					<param name="actionName">premiumListPremiumMaster</param>
+					<param name="type">${type}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="contractidentifier" type="redirectAction">
+					<param name="actionName">contractIdetifierPremiumMaster</param>
+					<param name="type">${type}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				
+			</action>
+
+			<action name="*Treasury" class="com.maan.action.TreasuryAction" method="{1}">
+				 <result name="payment" type="tiles">payment</result>
+				 <result name="allocation" type="tiles">allocation</result>
+				 <result name="treasuryPopUp" type="tiles">treasuryPopUp</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="paymentPrint" >/WEB-INF/jsp/Payment/paymentPrint.jsp</result>
+			</action>
+
+			<action name="*Claim" class="com.maan.action.ClaimAction" method="{1}">
+				<result name="CliamInitAction" type="tiles">editClaim</result>
+				<result name="ClaimListAction" type="tiles">listClaim</result>
+				<result name="CliamViewAction" type="tiles">viewClaim</result>
+				<result name="claimMaster" type="tiles">claimMaster</result>
+				<result name="claimPayment" type="tiles">claimPayment</result>
+				<result name="claimRedirect" type="redirectAction">
+					<param name="actionName">cliamPageModesClaim</param>
+					<param name="BusinessMode">${BusinessMode}</param>
+					<param name="MsgFlag">${MsgFlag}</param>
+					<param name="proposal_No">${proposal_No}</param>
+					<param name="claimDisplay">${claimDisplay}</param>
+					<param name="layerNo">${layerNo}</param>
+					<param name="contarctno">${contarctno}</param>
+				</result>
+				<result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				<result name="reinsPopUp" >/WEB-INF/jsp/Claim/claimReInsPopUp.jsp</result>
+				<result name="ReserveList" type="tiles">reserveList</result>
+				<result name="first" type="tiles">first</result>
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+				<result name="cedentDetails" >/WEB-INF/jsp/Claim/cedentDetails.jsp</result>
+				<result name="claimAuth" type="tiles">claimAuth</result>
+				<result name="ajaxClaimAuth" >/WEB-INF/jsp/Claim/claimAuthAjax.jsp</result>
+				<result name="ajaxClaimDetail" >/WEB-INF/jsp/Claim/claimDetailAuthAjax.jsp</result>
+			</action>
+			
+			<action name="*Retroclm" class="com.maan.action.RetroClaimAction" method="{1}">
+				<result name="CliamInitAction" type="tiles">retroeditClaim</result>
+				<result name="ClaimListAction" type="tiles">retrolistClaim</result>
+				<result name="CliamViewAction" type="tiles">retroviewClaim</result>
+				<result name="claimRedirect" type="redirectAction">
+					<param name="actionName">cliamPageModesRetroclm</param>
+					<param name="BusinessMode">${BusinessMode}</param>
+					<param name="MsgFlag">${MsgFlag}</param>
+					<param name="proposal_No">${proposal_No}</param>
+					<param name="claimDisplay">${claimDisplay}</param>
+					<param name="layerNo">${layerNo}</param>
+				</result>
+				<result name="streamResult" type="stream">
+							<param name="contentType">text/html</param>
+							<param name="inputName">inputStream</param>
+				</result>
+				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				<result name="reinsPopUp" >/WEB-INF/jsp/Claim/claimReInsPopUp.jsp</result>
+				<result name="ReserveList" type="tiles">reserveList</result>
+				<result name="first" type="tiles">first</result>
+				<result name="portfoliList" type="redirectAction">
+					<param name="actionName">menuPortfolio</param>
+					<param name="flag">${flag}</param>
+					<param name="multiuserError">${multiuserError}</param>
+				</result>
+			</action>
+
+			<action name="*Ceding" class="com.maan.action.admin.CedingMasterAction" method="{1}">
+				<result name="ceding" type="tiles">ceding</result>
+				<result name="PopUpView">/WEB-INF/jsp/Facultative/popup.jsp</result>
+				<result name="proposalcach" type="tiles">proposalcach</result>
+			</action>
+
+			<action name="*Reports" class="com.maan.action.ReportsAction" method="{1}">
+				<result name="Reports" type="tiles">Reports</result>
+				<result name="MovementReports" type="tiles">MovementReports</result>
+				<result name="DebtorsAgeing" type="tiles">DebtorsAgeing</result>
+				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				<result name="journalReports" type="tiles">journalReports</result>
+				<result name="allocationReports" type="tiles">allocationReports</result>
+				<result name="stream" type="stream">
+					<param name="contentDisposition">attachment;filename=${excelFileName}</param>
+					<param name="contentType">application/octet-stream</param>
+					<param name="inputName">inputStream</param>
+					<param name="bufferSize">1024</param>
+				</result>
+				<result name="journal" type="tiles">journal</result>
+			</action>
+
+			<action name="*Upload" class="com.maan.action.UploadAction" method="{1}">
+				<result name="input" type="tiles">fileUpload</result>
+				<result name="fileUpload" type="tiles">fileUpload</result>
+				 <result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				 <result name="pdfReport">\WEB-INF\jsp\Reports\pdfReport.jsp</result>
+				 <result name="viewPDF">${fileName}</result>
+			</action>
+			<action name="*Journal" class="com.maan.action.JournalAction" method="{1}">
+				<result name="journal" type="tiles">journal</result>
+				<result name="journalView" type="tiles">journalView</result>
+				<result name="manualJournal" type="tiles">manualJournal</result>
+				<result name="journalPrint">/WEB-INF/jsp/common/journalsprint.jsp</result>
+				<result name="redirectPDFReport" type="redirectAction">
+					<param name="actionName">pdfJournal</param>
+					<param name="req">report</param>
+				</result>
+				<result name="pdfJournal">\WEB-INF\jsp\Reports\pdfReport.jsp</result>
+				<result name="userManual">\WEB-INF\jsp\common\userManual.jsp</result>
+				
+				<result name="viewPDF">${fileName}</result>
+				<result name="stream" type="stream">
+					<param name="contentDisposition">attachment;filename=${fileName}</param>
+					<param name="contentType">application/octet-stream</param>
+					<param name="inputName">inputStream</param>
+				</result>
+				<result name="journalDownload" type="redirectAction">
+					<param name="actionName">getRlistReports</param>
+					<param name="startDate">${startDate}</param>
+					<param name="endDate">${endDate}</param>
+					<param name="status">${status}</param>
+					<param name="typeId">${typeId}</param>
+					<param name="journalType">${journalType}</param>
+					<param name="reportType">${reportType}</param>
+				</result>
+			</action>
+			<action name="*Adjustment" class="com.maan.action.AdjustmentAction" method="{1}">
+				<result name="adjustmentHome" type="tiles">adjustmentHome</result>
+				<result name="adjustmentList" type="tiles">adjustmentList</result>
+				<result name="adjustmentPrint" >/WEB-INF/jsp/common/adjustmentPrint.jsp</result>
+			</action>
+			<action name="*RetroAdj" class="com.maan.action.RetroManualAdjAction" method="{1}">
+			<result name="retroPremList" type="tiles">retroPremList</result>
+			<result name="retroManualAdj" type="tiles">retroManualAdj</result>
+			<result name="retroManualAdjView" type="tiles">retroManualAdjView</result>
+			<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+			</action>
+			
+		
+		</package>
+	</struts>

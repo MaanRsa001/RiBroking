@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE tiles-definitions PUBLIC 
+    "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="CommonTemplate" template="/WEB-INF/jsp/layout/commonLayout.jsp">
+		<put-attribute name="title" value="Title::: Reinsurance :::" />
+		<put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp" />
+		<put-attribute name="navigation" value="/WEB-INF/jsp/common/navigation.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/jsp/common/menu.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>
+	<definition name="AdminCommonTemplate" template="/WEB-INF/jsp/layout/printLayout.jsp">
+		<put-attribute name="title" value="Title::: Reinsurance :::" />
+		<put-attribute name="header" value="/WEB-INF/jsp/common/adminHeader.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>	
+	<definition name="HomeTemplate" template="/WEB-INF/jsp/layout/homeLayout.jsp">
+		<put-attribute name="title" value="Title::: Reinsurance :::" />
+		<put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp" />
+		<put-attribute name="navigation" value="/WEB-INF/jsp/common/navigation.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>
+	<definition name="ClaimTemplate" template="/WEB-INF/jsp/layout/claimLayout.jsp">
+		<put-attribute name="title" value="Title::: Reinsurance :::" />
+		<put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp" />
+		<put-attribute name="navigation" value="/WEB-INF/jsp/common/navigation.jsp" />		
+		<put-attribute name="claimdetails" value="/WEB-INF/jsp/Claim/claimDetails.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>
+	<definition name="PrintTemplate" template="/WEB-INF/jsp/layout/printLayout.jsp">
+		<put-attribute name="title" value="Title::: Reinsurance :::" />
+		<put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>
+	<definition name="ClaimPrintTemplate" template="/WEB-INF/jsp/layout/claimPrintLayout.jsp">
+		<put-attribute name="title" value="Title::: Reinsurance :::" />
+		<put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp" />
+		<put-attribute name="claimdetails" value="/WEB-INF/jsp/Claim/claimDetails.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp" />
+	</definition>
+	<definition name="exception" template="/WEB-INF/jsp/common/ErrorMsg.jsp" />
+	<definition name="firstPage" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/FirstPageNew.jsp" />
+	</definition>
+	<definition name="portfolioList" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/PortfolioView.jsp" />
+	</definition>
+	<definition name="first" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/firstPage.jsp" />
+	</definition>
+	<definition name="login" template="/WEB-INF/jsp/login/login.jsp">
+		<put-attribute name="title" value="Login - Re-Insurance" />		
+	</definition>
+		
+	<definition name="AdminHome" extends="AdminCommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/admin/adminHome.jsp" />
+	</definition>
+	
+	
+	<definition name="userInvalidate" extends="AdminCommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/login/userInvalidate.jsp" />
+	</definition>
+	
+	
+	<definition name="Newuser" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/admin/newUser.jsp" />
+	</definition>
+	
+	<definition name="Mailmaster" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/admin/mailMaster.jsp" />
+	</definition>
+	
+	<definition name="ExistingUser" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/admin/existingUser.jsp" />
+	</definition>
+	<definition name="journal" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/journals.jsp" />
+	</definition>
+	<definition name="journalView" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/journalsview.jsp" />
+	</definition>
+	<definition name="manualJournal" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/manualJournal.jsp" />
+	</definition>
+	
+	<definition name="dashBoard" extends="HomeTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/dashBoard.jsp" />
+	</definition>
+	
+	<definition name="welcome" extends="HomeTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/home.jsp" />
+	</definition>
+	
+	<definition name="faculengg1" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Facultative" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Facultative/facultative1.jsp" />
+	</definition>
+	
+	<definition name="faculengg2" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Facultative" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Facultative/facultative2.jsp" />
+	</definition>
+	<definition name="copyPage" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Copy" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/copyPage.jsp" />
+	</definition>
+	
+	
+	<definition name="SucusssFac" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/Facultative/SucusssFac.jsp" />
+	</definition>
+	
+	<definition name="View" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/Facultative/facultativeView.jsp" />
+	</definition>
+	
+	<definition name="protreaty1" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/ProportionalTreaty/proportionaltreaty1.jsp" />
+	</definition>
+	
+	<definition name="protreaty2" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/ProportionalTreaty/proportionaltreaty2.jsp" />
+	</definition>
+	
+	<definition name="premiummaster" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - XOL" />
+		<put-attribute name="body" value="/WEB-INF/jsp/common/premiummaster.jsp" />
+	</definition>
+	<definition name="xol1" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - XOL" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Xol/xol1.jsp" />
+	</definition>
+	
+	<definition name="xol2" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - XOL" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Xol/xol2.jsp" />
+	</definition> 
+	
+	<definition name="department" extends="HomeTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/common/home.jsp" />
+	</definition>
+	
+	<definition name="retro1" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Retro/retro1.jsp" />
+	</definition>
+	
+	<definition name="retro2" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Retro/retro2.jsp" />
+	</definition>
+	
+	<definition name="retroxol1" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Retro/retroxol1.jsp" />
+	</definition>
+	
+	<definition name="retroxol2" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Retro/retroxol2.jsp" />
+	</definition>
+	<definition name="retroprocess" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Retro/retroprocess.jsp" />
+	</definition>
+
+	<definition name="premiumList" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/FaculPremium/PremiumList.jsp" />
+	</definition>
+	
+	<definition name="protpremium" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Premium" />
+		<put-attribute name="body" value="/WEB-INF/jsp/ProportionalTreaty/protreatyPremium.jsp" />
+	</definition>
+	
+	<definition name="xolpremium" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Premium" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Xol/xolPremium.jsp" />
+	</definition>
+	
+	<definition name="editPremium" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Facultative" />
+		<put-attribute name="body" value="/WEB-INF/jsp/FaculPremium/faculpremium.jsp" />
+	</definition>
+	
+	<definition name="PremiumSucuss" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Facultative" />
+		<put-attribute name="body" value="/WEB-INF/jsp/FaculPremium/FaculPremiumView.jsp" />
+	</definition>
+	
+    <definition name="auto" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Auto Premium Posting" />
+        <put-attribute name="body" value="/WEB-INF/jsp/FaculPremium/auto.jsp" />
+    </definition>
+
+    <definition name="autoNPT" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Auto Premium Posting" />
+        <put-attribute name="body" value="/WEB-INF/jsp/Xol/auto.jsp" />
+    </definition>
+
+	<definition name="proportionPremium" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/ProportionalTreaty/protreatyPremium.jsp" />
+	</definition>
+	
+	<definition name="proportionSucuss" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/ProportionalTreaty/ProportiontreatyView.jsp" />
+	</definition>
+	
+	<definition name="xolPremium" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Non Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Xol/xolPremium.jsp" />
+	</definition>
+	
+	<definition name="xolview" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Non Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Xol/XolPremiumView.jsp" />
+	</definition>
+	
+	<definition name="allocation" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Teasury" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Payment/allocation.jsp" />
+	</definition>
+	<definition name="claimMaster" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Teasury" />
+		<put-attribute name="body" value="/WEB-INF/jsp/common/ClaimMaster.jsp" />
+	</definition>
+	<definition name="claimPayment" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Teasury" />
+		<put-attribute name="body" value="/WEB-INF/jsp/common/claimPaymentMaster.jsp" />
+	</definition>
+	<definition name="payment" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Teasury" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Payment/payment.jsp" />
+	</definition>
+	
+	<definition name="treasuryPopUp" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Treasury"/>
+		<put-attribute name="body" value="/WEB-INF/jsp/Payment/popup.jsp"/>
+	</definition>
+	
+	<definition name="fileUpload" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Upload" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Upload/fileUpload.jsp" />
+	</definition>
+	
+	<definition name="editClaim" extends="ClaimTemplate">
+		<put-attribute name="title" value="Re-Insurance - Claim" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/claim.jsp" />
+	</definition>
+	
+	<definition name="listClaim" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Claim" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/claimList.jsp" />
+	</definition>
+	
+	<definition name="viewClaim" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Claim" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/ClaimView.jsp" />
+	</definition>
+	
+	<definition name="retroeditClaim" extends="ClaimTemplate">
+		<put-attribute name="title" value="Re-Insurance - Claim" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/retroClaim.jsp" />
+	</definition>
+	
+	<definition name="retrolistClaim" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Claim" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/retroClaimList.jsp" />
+	</definition>
+	
+	<definition name="retroviewClaim" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Claim" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/RetroClaimView.jsp" />
+	</definition>
+	
+	<definition name="reserveList" template="/WEB-INF/jsp/Claim/reserverList.jsp">
+		<put-attribute name="title" value="Re-Insurance - Claim"/>		
+	</definition>	
+	
+	<definition name="FacView" template="/WEB-INF/jsp/Facultative/facultativeView.jsp">
+		<put-attribute name="title" value="Re-Insurance - Facutative" />
+	</definition>
+	
+	<definition name="ProView" template="/WEB-INF/jsp/ProportionalTreaty/proTreatyView.jsp">
+		<put-attribute name="title" value="Re-Insurance - ProportionalTreaty" />
+	</definition>
+	<definition name="statisticsView" template="/WEB-INF/jsp/Portfolio/Statistics.jsp">
+		<put-attribute name="title" value="Re-Insurance - ProportionalTreaty" />
+	</definition>
+	<definition name="propView" template="/WEB-INF/jsp/ProportionalTreaty/ProportiontreatyView.jsp">
+		<put-attribute name="title" value="Re-Insurance - ProportionalTreaty" />
+	</definition>
+	
+	
+	<definition name="viewXol" template="/WEB-INF/jsp/Xol/xolView.jsp">
+		<put-attribute name="title" value="Re-Insurance - XOL" />
+	</definition>
+	
+	<!--<definition name="viewXol" template="/WEB-INF/jsp/Xol/xolView.jsp">-->
+		<!--<put-attribute name="title" value="Re-Insurance - XOL" />-->
+	<!--</definition>-->
+	
+	<definition name="retroView" template="/WEB-INF/jsp/Retro/retroView.jsp">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+	</definition>
+	
+	<definition name="viewRetroXol" template="/WEB-INF/jsp/Retro/retroXolView.jsp">
+		<put-attribute name="title" value="Re-Insurance - RetroXol" />
+	</definition>
+	
+	<definition name="ceding" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Ceding Company Master" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/cedingMaster.jsp" />
+	</definition>
+	
+	<definition name="Reports" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Reports" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Reports/reports.jsp" />
+	</definition>
+	
+	<definition name="MovementReports" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Reports" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Reports/movementReports.jsp" />
+	</definition>
+	
+	<definition name="journalReports" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Reports" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Reports/journalReports.jsp" />
+	</definition>
+	
+	<definition name="allocationReports" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Reports" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Reports/allocationReports.jsp" />
+	</definition>
+	
+	<definition name="DebtorsAgeing" extends="CommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Reports" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Reports/debtorsAgeing.jsp" />
+	</definition>
+	<definition name="profitCenter" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/profitCenter.jsp" />
+	</definition>
+	<definition name="userListMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/userMaster.jsp" />
+	</definition>
+	<definition name="exchangeMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/exchangeMaster.jsp" />
+	</definition>
+	<definition name="menuMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/menuMaster.jsp" />
+	</definition>
+	<definition name="crestaMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/crestaMaster.jsp" />
+	</definition>
+	<definition name="rateMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/rateMaster.jsp" />
+	</definition>
+	
+	<definition name="department" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance-Master" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/department.jsp" />
+	</definition>
+	<definition name="productMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance-Master" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/productMaster.jsp" />
+	</definition>
+	<definition name="territoryMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance-Master" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/territoryMaster.jsp" />
+	</definition>
+	<definition name="categoryMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/categoryMaster.jsp" />
+	</definition>
+	<definition name="currencyMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/currencyMaster.jsp" />
+	</definition>
+	<definition name="processMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/processMaster.jsp" />
+	</definition>
+	<definition name="subprofitCenter" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/subProfitCenter.jsp" />
+	</definition>
+	<definition name="policyBranch" extends="AdminCommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/policyBranch.jsp" />
+	</definition>
+	<definition name="underwritertMaster" extends="AdminCommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/underwriterMaster.jsp" />
+	</definition>
+	<definition name="riskgradeMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/riskGradeMaster.jsp" />
+	</definition>
+	<definition name="countryMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/countryMaster.jsp" />
+	</definition>
+	<definition name="branchMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/branchMaster.jsp" />
+	</definition>
+	<definition name="cedingMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/cedingMaster.jsp" />
+	</definition>
+	<definition name="openperiodMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/openperiodMaster.jsp" />
+	</definition>
+	<definition name="submenuMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/subMenuMaster.jsp" />
+	</definition>
+	<definition name="uwLimitMaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/uwLimitMaster.jsp" />
+	</definition>
+	<definition name="adjustmentHome" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Adjustment" />
+        <put-attribute name="body" value="/WEB-INF/jsp/common/adjustment.jsp" />
+    </definition>
+    <definition name="adjustmentList" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Adjustment" />
+        <put-attribute name="body" value="/WEB-INF/jsp/common/adjustmentList.jsp" />
+    </definition>
+	<definition name="globalSubmit" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/userMaster.jsp" />
+	</definition>
+	<definition name="clientmaster" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/clientMaster.jsp" />
+	</definition>
+	<definition name="admindocupload" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Client Master" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Masters/adminDocUpload.jsp" />
+	</definition>
+	<definition name="iemodule" extends="HomeTemplate">
+		<put-attribute name="title" value="Re-Insurance - Retro" />
+		<put-attribute name="body" value="/WEB-INF/jsp/common/includeExcludePopUp.jsp" />
+	</definition>
+	<definition name="retentionPopUp" template="/WEB-INF/jsp/common/retentionPopUp.jsp">
+		<put-attribute name="title" value="Re-Insurance" />
+	</definition>
+	
+	<definition name="statistics" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/Statistics.jsp" />
+	</definition>
+	<definition name="proposalcach" extends="AdminCommonTemplate">
+		<put-attribute name="title" value="Re-Insurance - Masters" />
+		<put-attribute name="body" value="/WEB-INF/jsp/admin/proposalCache.jsp" />
+	</definition>
+	<definition name="retroPremList" extends="CommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Retro Manual Adj"/>
+	<put-attribute name="body" value="/WEB-INF/jsp/RetroManualAdj/retroPremList.jsp"/>
+	</definition>
+	<definition name="retroManualAdj" extends="CommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Retro Manual Adj"/>
+	<put-attribute name="body" value="/WEB-INF/jsp/RetroManualAdj/retroManualAdj.jsp"/>
+	</definition>
+	<definition name="retroManualAdjView" extends="CommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Retro Manual Adj"/>
+	<put-attribute name="body" value="/WEB-INF/jsp/RetroManualAdj/retroManualAdjView.jsp"/>
+	</definition>
+	<definition name="authentication" extends="CommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Authentication"/>
+	<put-attribute name="body" value="/WEB-INF/jsp/common/authentication.jsp"/>
+	</definition>
+	<definition name="authenticationSuccess" extends="CommonTemplate">
+	<put-attribute name="title" value="Re-Insurance - Authentication"/>
+	<put-attribute name="body" value="/WEB-INF/jsp/common/authenticationSuccess.jsp"/>
+	</definition>
+	<definition name="ajaxClaimAuth" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Facultative" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/claimAuthAjax.jsp" />
+	</definition>
+	<definition name="ajaxClaimDetailAuth" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Facultative" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Claim/claimAuthAjax.jsp" />
+	</definition>
+	<definition name="claimAuth" template="/WEB-INF/jsp/Claim/claimAuth.jsp">
+		<put-attribute name="title" value="Re-Insurance - Facutative" />
+	</definition>
+</tiles-definitions>
