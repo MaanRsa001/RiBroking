@@ -12,14 +12,20 @@
        	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/reset.css">       				
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
 		<link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />		
-		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">		    
-    <%--<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.js"></script>--%>
-		<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>		
+		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">	
+		<link href="<%=request.getContextPath()%>/dataTables/css/jquery-start-ui.css" rel="stylesheet" type="text/css" ></link>	
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/bootstrap-multiselect.css"></link>	    
+		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
+		<script type="text/javascript" src="js/select2.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     	<script type="text/javascript" src="${pageContext.request.contextPath}/js/motor.js"></script>
     	<script type="text/javascript" src="${pageContext.request.contextPath}/js/test.js"></script>
-    	<script type="text/javascript" src="${pageContext.request.contextPath}/js/shortcut.js"></script>	
+    	<script type="text/javascript" src="${pageContext.request.contextPath}/js/shortcut.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-ui.js"></script> 
+	
+	<script src="<%=request.getContextPath()%>/js/bootstrap-multiselect.js" type="text/javascript"></script>
     	<script type="text/javascript">
     	$(window).on('beforeunload', function () {
 	         $("input[type=submit], input[type=button]").prop("disabled", "disabled");

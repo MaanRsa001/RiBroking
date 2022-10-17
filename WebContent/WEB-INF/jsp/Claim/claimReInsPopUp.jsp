@@ -15,8 +15,8 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
     <link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+   <!--  <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -199,7 +199,7 @@ $(function(){
 								   <div class="boxcontent" >
 										<div class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;">
 										<s:if test="XlPremiumList.size()>0">
-											<table class="footable" id="Contract" width="100%">
+											<table class="table table-bordered" id="Contract" width="100%">
 											<thead>
 											<tr>
 												<th   class="no-sort" width="3%" style="text-align: center; vertical-align: middle;"><s:text name="Select" /><input type="checkbox" id="selectall"/></th>
@@ -264,7 +264,7 @@ $(function(){
 											 <s:else>
 					                              <div class="panel panel-primary" >
 					                                  <div class="panel-body">
-					                                  <table class="footable" id="Contract" width="100%">
+					                                  <table class="table table-bordered" id="Contract" width="100%">
 					                                  </table>
 					                                      No Data Available
 					                                  </div>
@@ -282,7 +282,7 @@ $(function(){
 								   <div class="boxcontent" >
 										<div class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;">
 										<s:if test="claimPaidList.size()>0">
-											<table class="footable" id="Paid" class="grid" width="100%">
+											<table class="table table-bordered" id="Paid" class="grid" width="100%">
 											<thead>
 											<tr >
 												<th class="no-sort" width="1%"><s:text name="Sr No" /></th>

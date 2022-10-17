@@ -465,7 +465,7 @@
 												<s:textfield readonly="true" name="retentionYN" cssClass="inputBox" />
 											</div>											
 										</div>
-										<table class="footable" id="newgen" width="100%" >				
+										<table class="table table-bordered" id="newgen" width="100%" >				
 									<thead>
 										<tr>
 											<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Sno" />  </th>
@@ -534,7 +534,7 @@
 								</div>
 								</s:if>
 								<hr class="clear"/>
-										<table class="footable">
+										<table class="table table-bordered">
 											<thead>
 											<tr>
 												<th width="16.66%">100%</th>
@@ -1107,7 +1107,7 @@
 										</div>
 										<hr class="clear"/>
 										
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"> <s:text name="Facu.InsuraerNo" /> </th>
@@ -1473,7 +1473,7 @@
 										<div class="panel-heading"> All Remarks </div>
 										<div class="panel-body">
 											<div class="boxcontent">								
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 												<tr>
 													<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>

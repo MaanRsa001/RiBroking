@@ -432,7 +432,7 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="25%"></th>

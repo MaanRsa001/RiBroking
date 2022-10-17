@@ -1,16 +1,14 @@
 package com.maan.dao.impl;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.maan.bean.FaculitivesBean;
 import com.maan.bean.RiskDetailsBean;
 import com.maan.common.db.DBConstants;
 import com.maan.common.db.MyJdbcTemplate;
@@ -32,11 +30,12 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			Object[] args=null;
 			if (saveFlag) {
 				if (ChkSavFlg){
-					args = getFirstPageEditSaveModeAruguments(beanObj, pid,getMaxAmednId(beanObj.getProposal_no()));
+					String maxAmendID= getMaxAmednId(beanObj.getProposal_no());
+					args = getFirstPageEditSaveModeAruguments(beanObj, pid,maxAmendID);
 					sql ="UPDATE ttrn_risk_details SET RSK_LAYER_NO=? WHERE RSK_PROPOSAL_NUMBER=? AND RSK_ENDORSEMENT_NO=?";
 					Object argus[] =new Object[3];
 					argus[1] = beanObj.getProposal_no();
-					argus[2]=getMaxAmednId(beanObj.getProposal_no());
+					argus[2]=maxAmendID;
 					argus[0] = StringUtils.isEmpty(beanObj.getLayerNo())?"0":beanObj.getLayerNo();
 					this.mytemplate.update(sql,argus);
 					sql = getQuery(DBConstants.RISK_UPDATE_RSKDTLS);
@@ -44,7 +43,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					logger.info("Query=>"+sql);
 					int updateCount = this.mytemplate.update(sql, args);
 					logger.info("Result=>"+updateCount);
-					args[1]=(Integer.parseInt((String)args[37])+1)+"";
+					args[1]=(Integer.parseInt(maxAmendID)+1)+"";
 					if (updateCount > 0) {
 						savFlg = true;
 					} else {
@@ -61,7 +60,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			} 
 			else {
 				String maxAmendID = getMaxAmednId(beanObj.getProposal_no());
-				if(StringUtils.isBlank(beanObj.getProposal_no()) || maxAmendID.equalsIgnoreCase(beanObj.getAmendId())) {
+				if (maxAmendID.equalsIgnoreCase(beanObj.getAmendId()) ) {
 					args = getFirstPageInsertAruguments(beanObj, pid, amendId);
 					sql = getQuery(DBConstants.RISK_INSERT_ISAMENDIDPROTREATY);
 					logger.info("insert qry=>" + sql);
@@ -81,7 +80,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					logger.info("Query=>"+sql);
 					int updateCount = this.mytemplate.update(sql, args);
 					logger.info("Result=>"+updateCount);
-					args[1]=(Integer.parseInt((String)args[37])+1)+"";
+					args[1]=(Integer.parseInt(maxAmendID)+1)+"";
 				}
 			}
 			insertClassLimit(beanObj);
@@ -941,7 +940,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					updateQry = getQuery(DBConstants.RISK_UPDATE_PRO35FIRPAGERSKPRO);
 					logger.info("updateQry=>" + updateQry);
 					if (this.mytemplate.update(updateQry, obj) > 0) {
-						if(StringUtils.isNotBlank(beanObj.getContNo())) {
+						/*if(StringUtils.isNotBlank(beanObj.getContNo())) {
 							beanObj.setContractGendration("Your Proposal is saved in Endorsement with Proposal No : "+ beanObj.getProposal_no());
 						}
 						else if (beanObj.getProStatus().equalsIgnoreCase("A") || beanObj.getProStatus().equalsIgnoreCase("P")||"0".equalsIgnoreCase(beanObj.getProStatus())) {
@@ -950,7 +949,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 							beanObj.setContractGendration("Your Proposal is saved in Not Taken Up Stage with Proposal No : "+ beanObj.getProposal_no());
 						}else if(beanObj.getProStatus().equalsIgnoreCase("R")){
 							beanObj.setContractGendration("Your Proposal is saved in Rejected Stage with Proposal No : "+ beanObj.getProposal_no());
-						}
+						}*/
 					}
 					updateFirstPageFields(beanObj, getMaxAmednIdPro(beanObj.getProposal_no()));
 					
@@ -996,7 +995,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				}
 			} else {
 				if (!ChekmodeFlag) {
-					if(maxAmendId.equalsIgnoreCase(beanObj.getAmendId())){
+					if (maxAmendId.equalsIgnoreCase(beanObj.getAmendId())){
 						insertQry = getQuery(DBConstants.RISK_INSERT_PRO35RSKPROPOSAL);
 						logger.info("Insert Qry=>" + insertQry);
 						obj = getFirstPageSecondTableInsertAruguments(beanObj,pid, amednIdvalue, amendId);
@@ -1035,7 +1034,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					} else {
 						proposalno = beanObj.getProposal_no();
 					}
-					this.showSecondpageEditItems(beanObj, pid, proposalno);
+					//this.showSecondpageEditItems(beanObj, pid, proposalno);
 				}
 			}
 			InsertFlag = true;
@@ -1131,7 +1130,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			//}
 			instalMentPremium(beanObj);
 			if("3".equalsIgnoreCase(productId)){
-				insertRetroContracts(beanObj,productId);
+				//insertRetroContracts(beanObj,productId);
 			}
 			if  ("5".equals(productId)){
 				insertRetroCess(beanObj);
@@ -1345,7 +1344,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				if(resList!=null && resList.size()>0) {
 					resMap = (Map<String, Object>)resList.get(0);
 					if(resMap!=null && resMap.size()>0) {
-						for (int i = 0; i < resMap.size(); i++) {
+						//for (int i = 0; i < resMap.size(); i++) {
 							if (resMap.get("RSK_LIMIT_OS_OC") != null) {
 								beanObj.setLimitOurShare(resMap.get("RSK_LIMIT_OS_OC").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_LIMIT_OS_OC").toString());
 								beanObj.setLimitOSViewOC(DropDownControllor.formatter(resMap.get("RSK_LIMIT_OS_OC").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_LIMIT_OS_OC").toString()));
@@ -1416,7 +1415,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 								beanObj.setBurningCost(resMap.get("RSK_BURNING_COST_PCT").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_BURNING_COST_PCT").toString());
 							}
 							savFlg = true;
-						}
+						//}
 						if (resMap.get("RSK_LIMIT_OS_DC") != null) {
 							beanObj.setLimitOSViewDC(DropDownControllor.formatter(resMap.get("RSK_LIMIT_OS_DC").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_LIMIT_OS_DC").toString()));
 						}
@@ -1534,25 +1533,18 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					}
 					beanObj.setInstalmentDateList(finalList);
 					beanObj.setPaymentDueDays(paymentdays);
+					beanObj.setInstalList(finalList);
 				}else{
 					List<String> paymentdays = new ArrayList<String>();
+					if(StringUtils.isNotBlank(beanObj.getM_d_InstalmentNumber())) {
 					for (int k = 0; k <Integer.parseInt(beanObj.getM_d_InstalmentNumber()); k++) {
 						paymentdays.add(beanObj.getPaymentDuedays());
+					}
 					}
 					beanObj.setPaymentDueDays(paymentdays);
 				}
 			}
-			if ("3".equalsIgnoreCase(pid)){
-				for(int i=0;i<Integer.parseInt(beanObj.getNo_Insurer());i++){
-					if("3".equals(pid)){
-						beanObj.setProduct_id("4");
-						beanObj.setRetroType("TR");
-					}
-					beanObj.setBranchCode(beanObj.getBranchCode());
-					beanObj.setIncepDate(beanObj.getIncepDate());
-					beanObj.setRetroUwyear(getRetroContractDetailsList(beanObj,1,""));
-				}
-			}
+			
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 			e.printStackTrace();
@@ -1915,7 +1907,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			}
 			instalMentPremium(beanObj);
 			if("3".equalsIgnoreCase(productId)){
-				insertRetroContracts(beanObj,productId);
+				//insertRetroContracts(beanObj,productId);
 			}
 			reInstatementMainInsert(beanObj);
 			insertCrestaMaintable(beanObj);
@@ -2253,7 +2245,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				InsertRemarkDetails(beanObj);
 				GetRemarksDetails(beanObj);
 				this.updateRiskProposal(beanObj, pid);
-				this.showSecondpageEditItems(beanObj, pid, proposalno);
+				//this.showSecondpageEditItems(beanObj, pid, proposalno);
 				savFlg = true;
 			}
 		} catch (Exception e) {
@@ -2282,6 +2274,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				saveFlag = true;
 			}
 			updateFirstPageFields(beanObj, getMaxAmednIdPro(beanObj.getProposal_no()));
+			if(StringUtils.isBlank(beanObj.getBaseLayer())) {
 			obj = updateHomePostion(beanObj, pid,true);
 			updateQry = getQuery(DBConstants.RISK_UPDATE_POSITIONMASTER);
 			logger.info("updateQry " + updateQry);
@@ -2290,6 +2283,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			if (res > 0) {
 				saveFlag = true;
 			}
+			}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 		}
@@ -2297,7 +2291,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	}
 	public Object[] updateHomePostion(final RiskDetailsBean beanObj,final String pid, final boolean bool) {
 
-		Object[] obj = new Object[19];
+		Object[] obj = new Object[22];
 		obj[0] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();
 		obj[1] = "";
 		obj[2] = pid;
@@ -2340,8 +2334,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[14] = beanObj.getLoginId();
 		obj[15] = "";
 		obj[16] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
-		obj[17] = beanObj.getProposal_no();
-		obj[18] = beanObj.getAmendId();
+		obj[17] = beanObj.getBouquetModeYN();
+		obj[18] = beanObj.getBouquetMode();
+		obj[19] = beanObj.getUwYearTo();
+		obj[20] = beanObj.getProposal_no();
+		obj[21] = beanObj.getAmendId();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -3067,11 +3064,12 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[33] = StringUtils.isEmpty(beanObj.getOurAssessment()) ? "": beanObj.getOurAssessment();
 		obj[35] = beanObj.getLoginId();
 		obj[36] = beanObj.getBranchCode();
+		
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
 	public Object[] insertHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid, final Object args2, final boolean amendId,String renewalStatus) {
-		Object[] obj = new Object[26];
+		Object[] obj = new Object[30];
 		if (amendId) {
 			obj[1] = beanObj.getContNo();
 			obj[2] = args2;
@@ -3109,6 +3107,10 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[23] = "N";
 		obj[24] = "";
 		obj[25] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
+		obj[26] = beanObj.getBouquetModeYN();
+		obj[27] = beanObj.getBouquetMode();
+		obj[28] = beanObj.getUwYearTo();
+		obj[29] = beanObj.getSectionNo();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -3184,12 +3186,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[35] =beanObj.getLoginId();
 		obj[36] = beanObj.getBranchCode();
 		
+		
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
 
 	public Object[] updateHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid, final String maxAmdId) {
-		Object[] obj = new Object[19];
+		Object[] obj = new Object[22];
 		obj[0] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();
 		obj[1] = "";
 		obj[2] = pid;
@@ -3217,8 +3220,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[14] = beanObj.getLoginId();
 		obj[15] = "";
 		obj[16] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
-		obj[17] = beanObj.getProposal_no();
-		obj[18] = maxAmdId;
+		obj[17] = beanObj.getBouquetModeYN();
+		obj[18] = beanObj.getBouquetMode();
+		obj[19] = beanObj.getUwYearTo();
+		obj[20] = beanObj.getProposal_no();
+		obj[21] = maxAmdId;
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -3364,6 +3370,9 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setTreatyName_type(resMap.get("RSK_TREATYID")==null?"":resMap.get("RSK_TREATYID").toString());
 				beanObj.setMonth(resMap.get("RSK_MONTH")==null?"":resMap.get("RSK_MONTH").toString());
 				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
+				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
+				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
+				beanObj.setBouquetMode(resMap.get("Bouquet_Mode")==null?"":resMap.get("Bouquet_Mode").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
 				if(!"Layer".equalsIgnoreCase(beanObj.getProposalReference())){
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
@@ -3458,6 +3467,16 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setEndorsmenttype(resMap.get("RS_ENDORSEMENT_TYPE")==null?"":resMap.get("RS_ENDORSEMENT_TYPE").toString());
 				beanObj.setRenewal_contract_no(resMap.get("OLD_CONTRACTNO")==null?"":resMap.get("OLD_CONTRACTNO").toString());
 				beanObj.setBaseLoginID(resMap.get("LOGIN_ID")==null?"":resMap.get("LOGIN_ID").toString());
+				beanObj.setPaymentPartner(resMap.get("PAYMENT_PARTNER")==null?"":resMap.get("PAYMENT_PARTNER").toString());
+				beanObj.setRateOnLine(resMap.get("RATE_ON_LINE")==null?"":resMap.get("RATE_ON_LINE").toString());
+				beanObj.setRiskdetailYN(resMap.get("RISK_DET_YN")==null?"":resMap.get("RISK_DET_YN").toString());
+				beanObj.setBrokerdetYN(resMap.get("BROKER_DET_YN")==null?"":resMap.get("BROKER_DET_YN").toString());
+				beanObj.setPremiumdetailYN(resMap.get("PREMIUM_DET_YN")==null?"":resMap.get("PREMIUM_DET_YN").toString());
+				beanObj.setInstallYN(resMap.get("INTALL_DET_YN")==null?"":resMap.get("INTALL_DET_YN").toString());
+				beanObj.setAcqdetailYN(resMap.get("ACQCOST_DET_YN")==null?"":resMap.get("ACQCOST_DET_YN").toString());
+				beanObj.setReinstdetailYN(resMap.get("REINST_DET_YN")==null?"":resMap.get("REINST_DET_YN").toString());
+				
+				
 				saveFlag = true;
 			}
 
@@ -3471,6 +3490,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			beanObj.setAmendId(new DropDownControllor().getRiskComMaxAmendId(beanObj.getProposal_no()));
 			getClassLimitDetails(beanObj);
 			GetRemarksDetails(beanObj);
+			String proposalno="";
+			if (StringUtils.isNotEmpty(beanObj.getLayerProposalNo())) {
+				proposalno = beanObj.getLayerProposalNo();
+			} else {
+				proposalno = beanObj.getProposal_no();
+			}
+			this.showSecondpageEditItems(beanObj, beanObj.getProduct_id(), proposalno);
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 			e.printStackTrace();
@@ -3681,7 +3707,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		boolean updateStatus = true;
 		int res=0;
 		String query=getQuery("UPDATE_RISK_PROPOSAL_DETAILS");
-		Object[] obj= new Object[41];
+		Object[] obj= new Object[54];
 		try {
 			obj[0] = StringUtils.isEmpty(beanObj.getEvent_limit()) ? "": beanObj.getEvent_limit();
 			obj[1] = StringUtils.isEmpty(beanObj.getEvent_limit())	|| StringUtils.isEmpty(beanObj.getExchRate()) ? "0"	: getDesginationCountry(beanObj.getEvent_limit(), beanObj.getExchRate());
@@ -3729,8 +3755,21 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			obj[36] = StringUtils.isEmpty(beanObj.getEpipml())|| StringUtils.isEmpty(beanObj.getExchRate()) ? "0": getDesginationCountry(beanObj.getEpipml(), beanObj.getExchRate());
 			obj[37] =StringUtils.isEmpty(beanObj.getEpipmlOS()) ? "0": beanObj.getEpipmlOS();
 			obj[38] = StringUtils.isEmpty(beanObj.getEpipmlOS())|| StringUtils.isEmpty(beanObj.getExchRate()) ? "0": getDesginationCountry(beanObj.getEpipmlOS(), beanObj.getExchRate());
-			obj[39] = beanObj.getProposal_no();
-			obj[40]=endNo;
+			obj[39]=beanObj.getRiskdetailYN();
+			obj[40]=beanObj.getBrokerdetYN();
+			obj[41]=beanObj.getCoverdetYN();
+			obj[42]=beanObj.getPremiumdetailYN();
+			obj[43]=beanObj.getAcqdetailYN();
+			obj[44]=beanObj.getCommissiondetailYN();
+			obj[45]=beanObj.getDepositdetailYN();
+			obj[46]=beanObj.getLossdetailYN();
+			obj[47]=beanObj.getDocdetailYN();
+			obj[48] = beanObj.getPaymentPartner();
+			obj[49] = beanObj.getInstallYN();
+			obj[50] = beanObj.getReinstdetailYN();
+			obj[51] = beanObj.getRateOnLine();
+			obj[52] = beanObj.getProposal_no();
+			obj[53]=endNo;
 			logger.info("Args[]=>" + StringUtils.join(obj,","));
 			logger.info("updateQry " + query);
 			res=this.mytemplate.update(query, obj);
@@ -3905,6 +3944,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				args[1] = bean.getBranchCode();
 					query =getQuery("REINSTATEMENT_MAIN_SELECT_A");
 					result = this.mytemplate.queryForList(query,args);
+					if(CollectionUtils.isEmpty(result)) {
+						args[0] = bean.getReferenceNo();
+						query =getQuery("REINSTATEMENT_MAIN_SELECT_A_REFERENCE");
+						result = this.mytemplate.queryForList(query,args);
+					}
 				for(int i=0;i<result.size();i++){
 		               Map<String,Object> tempMap = result.get(i);
 		               sno.add(tempMap.get("REINST_NO")==null?"":tempMap.get("REINST_NO").toString());
@@ -3921,16 +3965,19 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	               bean.setReinstatementMinTime(minTime);
 	               query =getQuery("REINSTATEMENT_MAIN_SELECT_B");
 	               list = this.mytemplate.queryForList(query,args);
-	               
+	               if(CollectionUtils.isEmpty(result)) {
+						query =getQuery("REINSTATEMENT_MAIN_SELECT_B_REFERENCE");
+						result = this.mytemplate.queryForList(query,args);
+					}
 	               for(int i=0;i<list.size();i++){
 		               Map<String,Object> tempMap = list.get(i);
 		               coverdepartId.add(tempMap.get("DEPARTMENT_CLASS")==null?"":tempMap.get("DEPARTMENT_CLASS").toString());
 		               annualAgri.add(tempMap.get("ANNUAL_AGGRE_LAIBLE")==null?"":DropDownControllor.formatter(tempMap.get("ANNUAL_AGGRE_LAIBLE").toString()));
 	               }
 	               if(list!=null && list.size()>0){
-	            	   bean.setCoverdepartId(coverdepartId); 
-	            	   bean.setCoverLimitOC(annualAgri);
-	            	   bean.setCoverList(list);
+	            	   bean.setCoverdepartIdRe(coverdepartId); 
+	            	   bean.setCoverLimitOCRe(annualAgri);
+	            	   bean.setCoverListRe(list);
 	               }if(!"U".equalsIgnoreCase(bean.getReinstatementOption())){
 	               bean.setBusinessType("1");
 	               getClassLimitDetails(bean);
@@ -3994,6 +4041,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				args[1] = bean.getBranchCode();
 				args[2] = bean.getAmendId();
 				result = this.mytemplate.queryForInt(query,args);
+				if(result==0) {
+					query =getQuery("REINSTATEMENT_COUNT_MAIN_REFERENCE");
+					args[0] = bean.getReferenceNo();
+					result = this.mytemplate.queryForInt(query,args);
+				}
 		
 		}
 		catch(Exception e){
@@ -4146,8 +4198,14 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			bean.setAmendId("0");
 		}
 	    deleteMainTable(bean);
+	    if(StringUtils.isBlank(bean.getProposal_no()) && StringUtils.isBlank(bean.getReferenceNo())) {
+        	String referenceNo="";
+        	String query=getQuery("GET_REFERENCE_NO_SEQ");
+        	referenceNo=this.mytemplate.queryForObject(query, String.class);
+        	bean.setReferenceNo(referenceNo);
+        }
 	    String query =getQuery("INSERT_REINSTATEMENT_MAIN");
-	    Object args[] = new Object[14];
+	    Object args[] = new Object[15];
 			for(int i=0;i<bean.getReinstatementNo().size();i++){
 			args[0] = bean.getReinstatementNo().get(i);
 			args[1] = bean.getReinstatementTypeId().get(i);
@@ -4163,12 +4221,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			args[11] = StringUtils.isEmpty(bean.getLayerNo()) ? "0"	: bean.getLayerNo();
 			args[12] = bean.getReinstatementOption();
 			args[13] = "A";
+			args[14]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(args, ","));
 			this.mytemplate.update(query,args);
 			}
 			query =getQuery("INSERT_REINSTATEMENT_MAIN_B");
-			 Object args1[] = new Object[10];
+			 Object args1[] = new Object[11];
 			for(int i=0;i<bean.getCoverdepartId().size();i++){
 				args1[0] = bean.getCoverdepartId().get(i);
 				args1[1] = bean.getCoverLimitOC().get(i).replaceAll(",", "");
@@ -4180,6 +4239,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				args1[7] = bean.getProduct_id();
 				args1[8] = StringUtils.isEmpty(bean.getLayerNo()) ? "0"	: bean.getLayerNo();
 				args1[9] = "B";
+				args[10]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
 				logger.info("Query=>"+query);
 				logger.info("Args=>"+StringUtils.join(args1));
 				this.mytemplate.update(query,args1);
@@ -4275,6 +4335,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			args[3] = bean.getAmendId();
 			args[4] = StringUtils.isEmpty(bean.getLayerNo())?"0":bean.getLayerNo();
 			result = this.mytemplate.queryForInt(query,args);
+			if(result==0) {
+				query =getQuery("BONUS_COUNT_MAIN_REFERENCE");
+				args[0] = bean.getReferenceNo();
+				result = this.mytemplate.queryForInt(query,args);
+			}
 		}
 		catch(Exception e){
 			logger.debug("Exception @ { " + e + " } ");
@@ -4291,10 +4356,19 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				Object args[]=new Object[1];
 	           args[0] =bean.getProposal_no();
 	           bean.setEndorsmentno(this.mytemplate.queryForObject(query,args, String.class))	;
+	           if(StringUtils.isBlank(bean.getEndorsmentno())) {
+	        	   bean.setEndorsmentno("0");
+	           }
 			}
 	        deleteMaintable(bean);
+	        if(StringUtils.isBlank(bean.getProposal_no()) && StringUtils.isBlank(bean.getReferenceNo())) {
+	        	String referenceNo="";
+	        	String query=getQuery("GET_REFERENCE_NO_SEQ");
+	        	referenceNo=this.mytemplate.queryForObject(query, String.class);
+	        	bean.setReferenceNo(referenceNo);
+	        }
 	        String query =getQuery("BONUS_MAIN_INSERT");
-			Object args[]=new Object[14];
+			Object args[]=new Object[15];
 			for(int i=0;i<bean.getBonusFrom().size();i++){
 				if(StringUtils.isNotBlank(bean.getBonusFrom().get(i)) && StringUtils.isNotBlank(bean.getBonusTo().get(i)) &&StringUtils.isNotBlank(bean.getBonusLowClaimBonus().get(i)) ){
 			           args[0] =bean.getProposal_no();
@@ -4311,6 +4385,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			           args[11] = bean.getEndorsmentno();
 			           args[12] =bean.getDepartmentId();
 			           args[13] =StringUtils.isEmpty(bean.getLayerNo())?"0":bean.getLayerNo();
+			           args[14]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
 			           logger.info("Query=>"+query);
 			           logger.info("Args=>"+StringUtils.join(args, ","));
 					   this.mytemplate.update(query,args);
@@ -4388,7 +4463,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				args[2] = bean.getAcqBonus();
 					query =getQuery("BONUS_MAIN_SELECT");
 					result = this.mytemplate.queryForList(query,args);
-					
+					if(CollectionUtils.isEmpty(result)) {
+						args[0] = bean.getReferenceNo();
+						query =getQuery("BONUS_MAIN_SELECT_REFERENCE");
+						result = this.mytemplate.queryForList(query,args);
+					}
 				for(int i=0;i<result.size();i++){
 		               Map<String,Object> tempMap = result.get(i);
 		               bean.setBonusTypeId(tempMap.get("LCB_TYPE")==null?"":tempMap.get("LCB_TYPE").toString());
@@ -4686,5 +4765,45 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		
 		
 	}
-
+	@Override
+	public List<Map<String, Object>> getLayerInfo(RiskDetailsBean bean) {
+		List<Map<String, Object>>result=new ArrayList<Map<String, Object>>();
+		try {
+			String query=getQuery("GET_LAYER_INFO");
+			Object[] obj= new Object[2];
+			obj[0]=bean.getProposal_no();
+			obj[1]=bean.getProposal_no();
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			
+			result=this.mytemplate.queryForList(query,obj);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public void CancelProposal(RiskDetailsBean bean, String newProposal) {
+		String query="";
+		Object args[] = new Object[1];
+		try{
+			if(!"Layer".equalsIgnoreCase(bean.getProposalReference())){
+			query=getQuery("CANCEL_OLD_PROPOSAL");
+			args[0] = bean.getProposal_no();
+			logger.info("Old Proposal[]=>"+StringUtils.join(args,","));
+			logger.info("Sql=>"+query);
+			this.mytemplate.update(query,args);
+			}
+			query=getQuery("CANCEL_PROPOSAL");
+			args[0] = newProposal;
+			logger.info("New Proposal[]=>"+StringUtils.join(args,","));
+			logger.info("Sql=>"+query);
+			this.mytemplate.update(query,args);
+			
+			
+		}
+		catch(Exception e){
+			logger.debug("Exception @ { " + e + " } ");
+			e.printStackTrace();
+		}
+	}
 }

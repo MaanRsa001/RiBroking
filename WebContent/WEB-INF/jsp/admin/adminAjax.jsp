@@ -43,7 +43,7 @@
 <s:elseif test='"DocList".equalsIgnoreCase(dropDown)'>
 <td class="formCon"  valign="top" id="DocListDiv">
 <div class="boxcontent">
-											<table class="footable" id="DocTable">
+											<table class="table table-bordered" id="DocTable">
 												<thead>
 												<tr>
 													<th width="5%">
@@ -85,7 +85,7 @@
 										</div>
 	</s:elseif>
 	<s:elseif test='"exRate".equalsIgnoreCase(dropDown)'>
-     	<s:textfield name="exchRate"  cssStyle="text-align:right;" readonly="true" cssClass="inputBox" />
+     	<s:hidden name="exchRate" id="exchRate"/>
 	</s:elseif>
 	<s:elseif test='"section".equalsIgnoreCase(dropDown)'>
 		<s:select list="sectionList" name="sectionName" id="sectionName"  listKey="SECTION_NO" listValue="SECTION_NAME" headerKey="-1" headerValue="---Select---" cssClass="inputBoxS" />	</s:elseif>
@@ -335,7 +335,7 @@
 		</div>
 		</s:elseif>
 <s:elseif test='"newgen".equalsIgnoreCase(dropDown)'>
-<table class="footable" width="100%" id="newgen">
+<table class="table table-bordered" width="100%" id="newgen">
 	<thead>
 		<tr>
 			<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -343,7 +343,6 @@
 			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.coverLimitPoc" />  </th>
 			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.deductiblePoc" /> </th>
 			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.egnpiasperoffer" /> </th>
-			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.gnpiasperoffer" /> </th>
 			<th width="10.8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
 		</tr>
 	</thead>
@@ -354,7 +353,7 @@
 					<s:textfield name="coverSNo[%{#stat.count-1}]" id="coverSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/> 
 					</td>
 				<td id="coverdepartIdtable<s:property value='%{#stat.count-1}'/>">
-					<s:select list="coverDepartmentList" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="coverdepartId[%{#stat.count-1}]" id="coverdepartId[%{#stat.count-1}]" cssClass="inputBoxS" headerKey="" headerValue="---Select---" theme="simple"  />
+					<s:select list="coverDepartmentList" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="coverdepartId[%{#stat.count-1}]" id="coverdepartId[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" theme="simple"  />
 					<%--<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="coverdepartIdS[%{#stat.count-1}]" id="coverdepartIdS[%{#stat.count-1}]" cssClass="inputBoxS" headerKey="" headerValue="---Select---" theme="simple" /><%--disabled="0==(#stat.count-1)?true:false" --%>
 					<s:if test='0==(#stat.count-1)'>
 					<s:text name="(Main Class)" />
@@ -368,10 +367,7 @@
 				<s:textfield name="deductableLimitOC[%{#stat.count-1}]" id="deductableLimitOC[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple"/>
 				</td>
 				<td>
-					<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30"  theme="simple"/>
-				</td>
-				<td >
-					<s:textfield name="gnpiAsPO[%{#stat.count-1}]" id="gnpiAsPO%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiVal('newgen');"  maxlength="30"  theme="simple" disabled="true"/>
+					<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30"  theme="simple"/>
 				</td>
 				<td align="center">
 				<s:if test='0!=(#stat.count-1)'>
@@ -392,7 +388,7 @@
 		</s:if>
 </s:elseif>
 <s:elseif test='"newgen1".equalsIgnoreCase(dropDown)'>
-<table class="footable" width="100%" id="newgen1">
+<table class="table table-bordered" width="100%" id="newgen1">
 <thead>
 	<tr>
 		<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -464,7 +460,7 @@
 	</s:if>
 </s:elseif>
 <s:elseif test='"remark".equalsIgnoreCase(dropDown)'>
-<table class="footable" width="100%" id="remark">
+<table class="table table-bordered" width="100%" id="remark">
 		<thead>
 			<tr>
 				<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -506,7 +502,7 @@
 			</div>
 </s:elseif>
 <s:elseif test='"coverdeductable".equalsIgnoreCase(dropDown)'>
-<table class="footable" width="100%" id="newgen">
+<table class="table table-bordered" width="100%" id="newgen">
 	<thead>
 		<tr>
 			<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -600,7 +596,7 @@
 		</table>
 		
 <br class="clear"/>
-		<table class="footable" width="100%" id="newgen">
+		<table class="table table-bordered" width="100%" id="newgen">
 		<tr>
 			<td width="20%"> Total:  </td>
 			<td class="tableColWidth"></td>
@@ -662,7 +658,7 @@
 </script>
 </s:elseif>
 <s:elseif test='"xolcoverdeductable".equalsIgnoreCase(dropDown)'>
-<table class="footable" width="100%" id="xolnewgen">
+<table class="table table-bordered" width="100%" id="xolnewgen">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -731,7 +727,7 @@
 															
 															</table>
 															
-															<table class="footable" width="100%" id="xolnewgen">
+															<table class="table table-bordered" width="100%" id="xolnewgen">
 															<tr>
 																<td width="2%"> Total:&nbsp;  </td>
 																<td class="tableColWidth"></td>
@@ -856,7 +852,7 @@
 											<div class="row" >
 												<div >
 
-													<table class="footable" id="bonusTb" width="100%" >
+													<table class="table table-bordered" id="bonusTb" width="100%" >
 														<thead>
 														<tr>
 															<th width="15%" style="text-align: center; vertical-align: middle;"> <b><s:text name="label.particulers" /></b></th>
@@ -942,7 +938,7 @@
 					</s:if>
 					<div style="overflow-x:auto; ">
 <s:if test="premiumFinallist2.size()>0">
-						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="footable">
+						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="table table-bordered">
 							<thead>
 							<tr>
 								<th  style="text-align: center; vertical-align: middle;"><b>Currency </b></th>
@@ -1043,7 +1039,7 @@
 </s:elseif>
 <s:elseif test='"retention".equalsIgnoreCase(dropDown)'>
 <div id="retentionDis" >
-<table class="footable" id="newgen" width="100%" >				
+<table class="table table-bordered" id="newgen" width="100%" >				
 									<thead>
 										<tr>
 											<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Sno" />  </th>
@@ -1258,9 +1254,15 @@ $(document).ready(function() {
 	<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" cssClass="inputBoxS"   />
 </s:elseif>
 </s:elseif>
+<s:elseif test='"yearIdto".equalsIgnoreCase(dropDown)'>
+<s:select list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS"  disabled='%{"Layer".equals(proposalReference) || dislayer ||(contNo != "" && contNo != null)?true:false}' />
+</s:elseif>
+<s:elseif test='"paypartid".equalsIgnoreCase(dropDown)'>
+<s:select list="paymentPartnerlist" listKey="CUSTOMER_ID" listValue="NAME" name="paymentPartner" id="paymentPartner" cssClass="select1 inputBoxS"  />
+</s:elseif>
 <s:elseif test='"obsList".equalsIgnoreCase(dropDown)'>
 <s:if test="OSBList.size()>0">
-<table class="footable" width="100%"  >
+<table class="table table-bordered" width="100%"  >
 <thead>
 	<tr>
 		<th style="text-align: center; vertical-align: middle;"> <s:text name="Transaction No" />  </th>
@@ -1380,7 +1382,7 @@ $(document).ready(function() {
 											<div class="row" >
 												<div >
 
-													<table class="footable" id="bonusTb" width="100%" >
+													<table class="table table-bordered" id="bonusTb" width="100%" >
 														<thead>
 														<tr>
 															<th width="15%" style="text-align: center; vertical-align: middle;"> <b><s:text name="label.particulers" /></b></th>
@@ -1532,7 +1534,7 @@ $(document).ready(function() {
 					</s:if>
 					<div style="overflow-x:auto; ">
 <s:if test="premiumFinallist2.size()>0">
-						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="footable">
+						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="table table-bordered">
 							<thead>
 							<tr>
 								<th  style="text-align: center; vertical-align: middle;"><b>Currency </b></th>
@@ -1660,7 +1662,7 @@ $(document).ready(function() {
 </s:if>
 <s:else>
 <s:if test="reinstatementList.size()>0">
-	<table class="footable" id="Paid" width="100%">
+	<table class="table table-bordered" id="Paid" width="100%">
 	<thead>
 	<tr>
 		<th class="no-sort" width="1%" style="text-align: center; vertical-align: middle;"><s:text name="Sr No" /></th>
@@ -1799,7 +1801,7 @@ $(document).ready(function() {
 											<div class="row" >
 												<div >
 
-													<table class="footable" id="bonusTb" width="100%" >
+													<table class="table table-bordered" id="bonusTb" width="100%" >
 														<thead>
 														<tr>
 															<th width="15%" style="text-align: center; vertical-align: middle;"> <b><s:text name="label.particulers" /></b></th>
@@ -1885,7 +1887,7 @@ $(document).ready(function() {
 					</s:if>
 					<div style="overflow-x:auto; ">
 <s:if test="premiumFinallist2.size()>0">
-						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="footable">
+						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="table table-bordered">
 							<thead>
 							<tr>
 								<th  style="text-align: center; vertical-align: middle;"><b>Currency </b></th>
@@ -2041,7 +2043,7 @@ $(document).ready(function() {
 											<div class="row" >
 												<div >
 
-													<table class="footable" id="bonusTb" width="100%" >
+													<table class="table table-bordered" id="bonusTb" width="100%" >
 														<thead>
 														<tr>
 															<th width="15%" style="text-align: center; vertical-align: middle;"> <b><s:text name="label.particulers" /></b></th>
@@ -2136,7 +2138,7 @@ $(document).ready(function() {
 					</s:if>
 					<div style="overflow-x:auto; ">
 <s:if test="premiumFinallist2.size()>0">
-						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="footable">
+						<table id="testTable" summary="Code page support in different versions of MS Windows." rules="groups" frame="hsides" border="2" class="table table-bordered">
 							<thead>
 							<tr>
 								<th  style="text-align: center; vertical-align: middle;"><b>Currency </b></th>
@@ -2237,10 +2239,10 @@ $(document).ready(function() {
 </s:elseif>
 <s:elseif test='"typeBus".equalsIgnoreCase(dropDown)'>
 	<s:if test="RenewalMode != null">	
-		<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="inputBoxS" headerKey="" headerValue="---Select---" onchange="getDepatmentCover();GetBusinessType(this.value);GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled='%{(baseLayer==null  || "".equalsIgnoreCase(baseLayer))?true:false}' />
+		<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled='%{(baseLayer==null  || "".equalsIgnoreCase(baseLayer))?true:false}' />
 	</s:if>
 	<s:else>
-		<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="inputBoxS" headerKey="" headerValue="---Select---" onchange="getDepatmentCover();GetBusinessType(this.value);GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+		<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 	</s:else>
 </s:elseif>
 <s:elseif test='"rdsBasis".equalsIgnoreCase(dropDown)'>
@@ -2422,7 +2424,7 @@ $(document).ready(function() {
 		
 		<div class="panel-body">
 			<div class="boxcontent">
-				<table class="footable" id="DocTable">
+				<table class="table table-bordered" id="DocTable">
 					<thead>
 					<tr>
 						<th width="5%">
@@ -2526,4 +2528,113 @@ alert("This action is not allowed because a previous transaction is pending for 
 <script type="text/javascript">
 	insertPremiumDet('<s:property value="popupShowStatus"/>');
 </script>
-</s:elseif>							
+</s:elseif>
+<s:elseif test='"deleteInst".equalsIgnoreCase(dropDown)'>
+<table width="100%" class="table table-bordered" id="installid">
+			<thead>
+			<tr>
+				<th width="7%"> <s:text name="label.installmentNo" /> </th>
+				<th width="31.66%"> <s:text name="label.installmentDate" /> </th>
+				<th width="31.66%"> <s:text name="RiskDetails.M&DPremium" /> </th>
+				<th width="31.66%"> <s:text name="label.paymentDueDays" /> </th>
+				<th width="15%" > <s:text name="Delete Row" /> </th>
+			</tr>
+			</thead>
+			<tbody>	
+			<s:iterator value="instalList" var="retroContract" status="stat">										
+			<tr>
+				<td>
+				<s:textfield name="installsno[%{#stat.count-1}]" id="installsno[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/>
+				  </td>
+				<td>
+					<s:textfield name="instalmentDateList[%{#stat.count-1}]" id="instalmentDateList[%{#stat.count-1}]"  cssClass="inputBox datepicker instalmentDate"   onkeyup="validateSpecialChars(this);" disabled='%{("".equals(transactionList[#stat.count-1]))?false:true}' theme="simple"/>
+				</td>
+				<td>
+					<s:textfield name="installmentPremium[%{#stat.count-1}]" id="installmentPremium[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"  onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);this.value=Comma(this.value);allow2DigitDecValues(this);" maxlength="26" disabled='%{("".equals(transactionList[#stat.count-1]))?false:true}' theme="simple"/>
+				</td> 
+				<td>
+					<s:textfield name="paymentDueDays[%{#stat.count-1}]" id="[%{#stat.count-1}]" cssClass="inputBox"   cssStyle="text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" maxlength="26" disabled='%{("".equals(transactionList[#stat.count-1]))?false:true}' theme="simple"/> 
+				</td> 
+				<td align="center">
+					<s:if test='0!=(#stat.count-1)'>
+					<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');removeInst('<s:property value="%{#stat.count-1}"/>')" theme="simple"/>
+					</s:if>
+				</td>
+			</tr>												
+			</s:iterator>
+			</tbody>
+		</table>
+</s:elseif>
+<s:elseif test='"scale".equalsIgnoreCase(dropDown)'>
+	<table class="table table-bordered" id="bonusTbl" width="100%" >										
+		<thead>
+			<tr>
+				<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
+				<th width="30%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Ratio From"/> </th>
+				<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Ratio To "/> </th>
+				<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Sliding Scale Commission %" /> </th>
+				<th width="8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
+			</tr>
+		</thead>
+			<tbody>
+			<s:iterator value="scaleCommissionList" var="list" status="stat">
+				<tr>
+					<td>
+ 					<s:textfield name="scaleSNo[%{#stat.count-1}]" id="scaleSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/> 
+ 					</td>
+					<td >
+					<s:textfield name="scaleFrom[%{#stat.count-1}]" id="scaleFrom[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple"/>
+					</td>
+					<td >
+					<s:textfield name="scaleTo[%{#stat.count-1}]" id="scaleTo[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple"/>
+					</td >
+					<td >
+					<s:textfield name="scaleLowClaimBonus[%{#stat.count-1}]" id="scaleLowClaimBonus[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="26" theme="simple"/>
+					</td>
+					<td>
+					<s:if test='0!=(#stat.count-1)'>
+					<INPUT type="button" value="Delete" class="btn btn-sm btn-info"   onclick="scaleremoveRow('<s:property value="%{#stat.count-1}"/>')" />
+					</s:if>
+					</td>
+				</tr>
+			</s:iterator>
+			</tbody>
+	</table>
+</s:elseif>
+<s:elseif test='"lossparticipates".equalsIgnoreCase(dropDown)'>
+	<table class="table table-bordered" width="100%" id="bonusTbl">
+		<thead>
+			<tr>
+				<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
+				<th width="30%" style="text-align: center; vertical-align: middle;"> <s:text name="Claims Ratio From"/> </th>
+				<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Claims Ratio To "/> </th>
+				<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Participation of the Cedant %" /> </th>
+				<th width="8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
+			</tr>
+		</thead>
+			<tbody>
+				<s:iterator value="scaleCommissionList" var="list" status="stat">
+					<tr>
+						<td>
+	 					<s:textfield name="scaleSNo[%{#stat.count-1}]" id="scaleSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/> 
+	 					</td>
+						<td >
+						<s:textfield name="scaleFrom[%{#stat.count-1}]" id="scaleFrom[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple"/>
+						</td>
+						<td >
+						<s:textfield name="scaleTo[%{#stat.count-1}]" id="scaleTo[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple"/>
+						</td>
+						<td >
+						<s:textfield name="scaleLowClaimBonus[%{#stat.count-1}]" id="scaleLowClaimBonus[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="26" theme="simple"/>
+						</td>
+						<td >
+						<s:if test='0!=(#stat.count-1)'>
+						<INPUT type="button" value="Delete" class="btn btn-sm btn-info"   onclick="scaleremoveRow('<s:property value="%{#stat.count-1}"/>')" />
+						</s:if>
+						</td>
+					</tr>
+				</s:iterator>
+			</tbody>
+		</table>
+</s:elseif>
+							

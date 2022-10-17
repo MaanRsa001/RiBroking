@@ -960,6 +960,7 @@ public class FaculitivesBean  {
 	private List<Map<String,Object>> CeddingCompany;
 	private List<Map<String,Object>> modeOfTransports;
 	private List<Map<String,Object>> yearList;
+	private List<Map<String,Object>> yearToList;
 	private List<Map<String,Object>> categoryList;
 	private List<Map<String,Object>> riskGradeList;
 	private List<Map<String,Object>> risklist1;
@@ -999,6 +1000,12 @@ public class FaculitivesBean  {
 	
 	
 	
+	public List<Map<String, Object>> getYearToList() {
+		return yearToList;
+	}
+	public void setYearToList(List<Map<String, Object>> yearToList) {
+		this.yearToList = yearToList;
+	}
 	public String getRetroDupMode() {
 		return retroDupMode;
 	}

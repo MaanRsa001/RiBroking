@@ -52,7 +52,8 @@ body {
 .text
 {				
 	float: left;
-	width: 50%;						
+	width: 50%;	
+	font-weight: 600;				
 }
 
 .tbox
@@ -129,14 +130,14 @@ ul.listBullet > li
 .inputBox {
 	display: block;
 	width: 90%;
-	height: 28px;
+	height: 35px;
 	padding: 4px 6px;
 	font-size: 12px;
 	line-height: 1.42857143;
 	color: #555;
 	background-color: #fff;
 	background-image: none;
-	border: 1px solid #ccc;
+	border: 0.5px solid #839CBE;
 	border-radius: 4px;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 	        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
@@ -155,7 +156,7 @@ ul.listBullet > li
 
 .inputBoxA {
 	background-color: #fff;
-	border: 1px solid #dcdcdc;
+	border: 0.5px solid #839CBE;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
@@ -179,13 +180,14 @@ ul.listBullet > li
 	
 	display: block;
 	width: 90%;
+	height: 35px;
 	padding: 4px 6px;
 	font-size: 12px;
 	line-height: 1.42857143;
 	color: #555;
 	background-color: #fff;
 	background-image: none;
-	border: 1px solid #ccc;
+	border: 0.5px solid #839CBE;
 	border-radius: 4px;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 	        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
@@ -225,6 +227,7 @@ ul.listBullet > li
 {
 	float:left;
 	width: 50%;	
+	margin: 4px 0;
 }
 
 .panelWidth {

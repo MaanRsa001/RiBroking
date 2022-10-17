@@ -475,7 +475,7 @@
 										<div class="boxcontent">
 										<div >
 										<div id="newgenid">
-										<table class="footable" width="100%" id="newgen">
+										<table class="table table-bordered" width="100%" id="newgen">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -567,7 +567,7 @@
 									<div class="panel-body">
 										<div class="boxcontent">
 										<div id="newgenid1">
-										<table class="footable" width="100%" id="newgen1">
+										<table class="table table-bordered" width="100%" id="newgen1">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>

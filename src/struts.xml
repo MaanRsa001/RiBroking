@@ -194,6 +194,7 @@
 							<param name="inputName">inputStream</param>
 				</result>
 				<result name="scalePopUp" >/WEB-INF/jsp/Facultative/bonusPopUp.jsp</result>
+				<result name="sectionview" type="tiles">sectionview</result>
 
 			</action>
 
@@ -228,6 +229,7 @@
 							<param name="inputName">inputStream</param>
 				</result>
 				<result name="iemodule" type="tiles">iemodule</result>
+				 <result name="layerview" type="tiles">layerview</result>
 			</action>
 
 			<action name="*Retro" class="com.maan.action.RetroAction" method="{1}">

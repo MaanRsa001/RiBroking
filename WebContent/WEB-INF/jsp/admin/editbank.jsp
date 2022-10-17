@@ -39,7 +39,7 @@
 										<s:submit type="button" action="editBankAdmin" value="Add New" cssClass="btn2 rEdge" />
 									</div>					 				
 									<div class="boxcontent">
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<thead>
 												<tr>
 													<th>Bank ID</th>

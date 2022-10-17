@@ -91,7 +91,7 @@
 									</div>
 									<div class="panel-body">
 										<s:if test='"C".equals(customerType)  '>
-										<display:table name="CedingList" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+										<display:table name="CedingList" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -111,7 +111,7 @@
 										</display:table>
 										</s:if>
 										<s:if test='"B".equals(customerType)'>
-										<display:table name="CedingList" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+										<display:table name="CedingList" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />

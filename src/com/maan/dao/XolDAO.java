@@ -40,4 +40,6 @@ public interface XolDAO {
 	List<Map<String, Object>> getInclusionExList(RiskDetailsBean bean);
 	void BaseLayerStatus(RiskDetailsBean bean, String pid);
 	boolean GetShareValidation(RiskDetailsBean bean);
+	List<Map<String, Object>> getLayerInfo(RiskDetailsBean bean);
+	void CancelProposal(RiskDetailsBean bean, String renewalProposalNo);
 }

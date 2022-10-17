@@ -373,7 +373,7 @@
 								
 										<div class="boxcontent">
 										<div >
-										<table class="footable" width="100%" id="newgen">
+										<table class="table table-bordered" width="100%" id="newgen">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -420,7 +420,7 @@
 							<div class="boxcontent" id="stoploss" style="display:none;">
 										<div class="boxcontent">
 										<div >
-										<table class="footable" width="100%" id="newgen1">
+										<table class="table table-bordered" width="100%" id="newgen1">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -597,7 +597,7 @@
 										</s:if>
 										<hr class="clear"/>
 										
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th width="16.66%">100%</th>
@@ -912,7 +912,7 @@
 										</table>
 										<hr class="clear"/>
 										<s:if test='!"0".equals(m_d_InstalmentNumber)'>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"> <s:text name="RiskDetails.InstallmentNo" /> </th>
@@ -1005,7 +1005,7 @@
 																</div>
 															</div>																				
 															<hr class="clear"/>	
-															<table width="100%" class="footable">
+															<table width="100%" class="table table-bordered">
 																<thead>
 																<tr>
 																	<th width="5%" style="text-align: center; vertical-align: middle;"> <s:text name="label.sNo" /> </th>
@@ -1135,7 +1135,7 @@
 										<div class="panel-heading"><s:text name="All Remarks" /> </div>
 										<div class="panel-body">
 											<div class="boxcontent">									
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 												<tr>
 													<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>

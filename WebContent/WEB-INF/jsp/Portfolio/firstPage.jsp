@@ -218,7 +218,7 @@
 													 <s:if test='!"5".equals(#session.mfrid) '>
 													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Duplicate Layer" /></th>
+													<%-- <th style="text-align: center; vertical-align: middle;"><s:text name="Duplicate Layer" /></th> --%>
 													</s:if>
 													</s:if>
 													</tr>
@@ -241,12 +241,16 @@
 													</s:if>
 													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
 													<td>
+													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer '>
 													<a class="btn btn-sm btn-primary" title="Edit" style="cursor: pointer;" onclick="funEditMode('${list.proposalNo}','${list.cedding_company_id}','<s:property value="#session.mfrid" />','${list.baseLayer}','${list.contractno1}','${list.departmentId}')">Edit</a>
+													</s:if>
 													</td>
 													</s:if>
 													<s:if test='#session.MenuRights.indexOf("V")!=-1'>
 													<td>
+													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer '>
 													 <a class="btn btn-sm btn-primary" title="View" style="cursor: pointer;" onclick="funViewMode('${list.proposalNo}','<s:property value="#session.mfrid" />','${list.flag}','${list.amendId}')">View</a>
+													 </s:if>
 													</td>	
 													</s:if>
 													<s:if test='!"5".equals(#session.mfrid) '>
@@ -254,11 +258,11 @@
 													<td>
 													<s:property value="baseLayer"/>
 													</td>	
-													<td>
+													<%-- <td>
 													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer '>
 													<a class="btn btn-sm btn-primary" title="L" style="cursor: pointer;" onclick="funLayerMode('${list.proposalNo}','${list.cedding_company_id}','${list.layerNo}')">L</a>
 													</s:if>
-													</td>
+													</td> --%>
 													</s:if>
 													</s:if>					
 													</tr>

@@ -11,12 +11,23 @@
 	<div class="boxcontent" >
 		<div class="panel panel-primary">											
 			<div class="panel-heading">
-				<s:text name="All Remarks" /> 
+				<s:text name="label.exclusionRemarks" /> 
 			</div>
 			<div class="panel-body">
 				<div class="boxcontent">
+					<div class="textfieldA25">
+						<s:text name="label.exclusion" />
+					</div>
+					<div class="textfieldA75">
+						<s:textarea id="exclusion" name="exclusion" rows="3" cssClass="inputBoxA" cssStyle="width: 100%; resize: vertical; "/>
+						<br/>
+						<span class="textAreaRemaining"><label id="exclusion_left"></label> &nbsp; <s:text name="Characters Remaining" /> </span>
+					</div>
+					<br class="clear"/>
+				</div>
+				<div class="boxcontent">
 				<div id="remarkid">
-				<table class="footable" width="100%" id="remark">
+				<table class="table table-bordered" width="100%" id="remark">
 								<thead>
 									<tr>
 										<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -33,7 +44,7 @@
 						 					<s:textfield name="remarkSNo[%{#stat.count-1}]" id="remarkSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true"/> 
 						 					</td>
 											<td>
-											<s:textfield name="description[%{#stat.count-1}]" id="description[%{#stat.count-1}]"  cssClass = "inputBox"  cssStyle="width: 100%; height: 100%;" />
+											<s:textfield name="description[%{#stat.count-1}]" id="description[%{#stat.count-1}]"  cssClass = "inputBox"  />
 											
 											</td>
 											<td>

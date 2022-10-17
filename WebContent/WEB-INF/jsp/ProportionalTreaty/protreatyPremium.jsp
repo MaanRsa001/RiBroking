@@ -202,7 +202,7 @@
 									<br class="clear"/>
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<tr>
 												<s:if test='"1"==treatyType ||"3"==treatyType || "4"==treatyType ||"5"==treatyType'>
 													<td width="25%" class="txtB">
@@ -513,10 +513,10 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<tr >
 												<td width="50%" >
-													<table width="100%" class="footable">
+													<table width="100%" class="table table-bordered">
 														<thead>
 														<tr>
 															<th width="50%"></th>
@@ -708,7 +708,7 @@
 
 												</td>
 												<td width="50%" >
-												<table width="100%" class="footable">
+												<table width="100%" class="table table-bordered">
 													<thead>
 													<tr>
 														<th width="50%"></th>
@@ -920,7 +920,7 @@
 												</tr>
 												<tr>
 													<td>
-														<table class="footable" >
+														<table class="table table-bordered" >
 														<tr >
 														<td>
 														<s:text name="Do you want to record Outstanding Loss Update?" />
@@ -942,7 +942,7 @@
 														</table>
 													</td>
 													<td colspan="3">
-													<table width="100%" class="footable">
+													<table width="100%" class="table table-bordered">
 															<tbody>
 															<s:if test="osClaimLoss.size()>0">
 																<tr>
@@ -957,7 +957,7 @@
 															</s:if>
 															</tbody>
 														</table>
-														<%-- <table width="100%" class="footable">
+														<%-- <table width="100%" class="table table-bordered">
 															<tbody>
 															<s:iterator id="OSClaim" value="osClaimLoss">
 																<tr>
@@ -994,7 +994,7 @@
 										<s:label key="label.cashlossdetails" />
 								</div>	
 									<div class="panel-body">
-										<display:table name="CliamList" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+										<display:table name="CliamList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />

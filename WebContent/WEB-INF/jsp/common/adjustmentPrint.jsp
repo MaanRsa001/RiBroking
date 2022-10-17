@@ -66,7 +66,7 @@
 									</div>									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedList" pagesize="" requestURI="" class="footable" uid="row" id="record2" >
+											<display:table name="allocatedList" pagesize="" requestURI="" class="table table-bordered" uid="row" id="record2" >
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />

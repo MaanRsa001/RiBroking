@@ -211,7 +211,7 @@
 						<div class="panel-body">
 							<%-- String hidRow=(request.getAttribute("HidRowCnt")==null?"3":request.getAttribute("HidRowCnt")).toString();
 								int line=Integer.parseInt(hidRow); --%>
-							<table width="75%" style="margin: 0 auto;" class="footable">
+							<table width="75%" style="margin: 0 auto;" class="table table-bordered">
 								<tr>
 									<td width="25%">
 										<s:if test='"PT".equals(allocType)'>
@@ -340,7 +340,7 @@
 							</table>
 							<br class="clear"/>
 							<s:if test='"Transaction".equals(transactionType)'>
-							<table class="footable" width="100%" id="gen">
+							<table class="table table-bordered" width="100%" id="gen">
 								<thead>
 								<tr>
 									<th> S.No. </th>
@@ -433,7 +433,7 @@
 							</s:if>
 							<s:if test='"Treasury".equals(transactionType)'>
 							<s:hidden name="type" />
-								<display:table name="ReversalInfo" pagesize="0" requestURI="/initTreasury.action&flag=VIEW" class="footable" uid="row" id="record">
+								<display:table name="ReversalInfo" pagesize="0" requestURI="/initTreasury.action&flag=VIEW" class="table table-bordered" uid="row" id="record">
 									<display:setProperty name="paging.banner.one_item_found" value="" />
 									<display:setProperty name="paging.banner.one_items_found" value="" />
 									<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -522,7 +522,7 @@
 						<div class="panel-body">
 							<%-- String hidRow=(request.getAttribute("HidRowCnt")==null?"3":request.getAttribute("HidRowCnt")).toString();
 								int line=Integer.parseInt(hidRow); --%>
-							<table width="75%" style="margin: 0 auto;" class="footable">
+							<table width="75%" style="margin: 0 auto;" class="table table-bordered">
 								<tr>
 									<td width="25%">
 										<s:if test='"PT".equals(allocType)'>
@@ -664,7 +664,7 @@
 							</table>
 							<br class="clear"/>
 							<s:if test='"Transaction".equalsIgnoreCase(transactionType)'>
-							<display:table name="detailsList" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+							<display:table name="detailsList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 								<display:setProperty name="paging.banner.one_item_found" value="" />
 								<display:setProperty name="paging.banner.one_items_found" value="" />
 								<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -694,7 +694,7 @@
 							</display:table>
 						</s:if>
 						<s:if test='"Treasury".equalsIgnoreCase(transactionType)'>
-							<display:table name="detailsList" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+							<display:table name="detailsList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 								<display:setProperty name="paging.banner.one_item_found" value="" />
 								<display:setProperty name="paging.banner.one_items_found" value="" />
 								<display:setProperty name="paging.banner.all_items_found" value="" />

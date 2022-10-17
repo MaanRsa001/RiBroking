@@ -86,7 +86,7 @@
 												<s:text name="user.UserMasterList" />
 											</div>
 											<div class="panel-body">
-												<display:table name="userListMaster" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+												<display:table name="userListMaster" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 													<display:setProperty name="paging.banner.one_item_found" value="" />
 													<display:setProperty name="paging.banner.one_items_found" value="" />
 													<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -200,7 +200,7 @@
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-														<table width="100%" class="footable">
+														<table width="100%" class="table table-bordered">
 															<!-- Iterator Starts Here id="smlist" property="subMenuList" name="UserMasterForm" -->
 															<s:iterator id="smlist" value="subMenuList">
 
@@ -287,7 +287,7 @@
 														</div>
 													</div>
 													<br class="clear"/>
-													<table class="footable" width="100%">
+													<table class="table table-bordered" width="100%">
 														<!-- Iterator Starts Here id="mlist" name="UserMasterForm" property="rightList" -->
 														<s:if test="mlist != '' || mlist != null">
 															<tr>
@@ -306,7 +306,7 @@
 																<td>
 																	<!-- Iterator Starts Here id="mlist" name="UserMasterForm" property="rightList" --> -->
 																	<s:if test="slist != '' || slist != null">
-																		<table width="100%" class="footable">
+																		<table width="100%" class="table table-bordered">
 																			<tr>
 																				<td width="50%">
 																					<s:property value="key"/>
@@ -374,7 +374,7 @@
 													</div>
 												</s:else>
 												<s:if test='"1".equals(entry)'>
-													<table class="footable" width="100%">
+													<table class="table table-bordered" width="100%">
 														<!-- Iterator Starts id="MenuList" name="mainMenuList" -->
 														<tr>
 															<td>
@@ -610,7 +610,7 @@
 														<span data-target="#menuInfo_0<s:property value="%{#menuinfoStatus.count}"/>" data-toggle="collapse" aria-expanded="true" style="cursor: pointer" title="Click here to view the Main Menu -> Child Menus -> Buttons for <s:property value='#menuinfoVar.key'/>"><i class="more-less glyphicon glyphicon-plus"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<s:checkbox name="selectedProduct" disabled="true" fieldValue='%{#menuinfoVar.key}' value='true'/>&nbsp;&nbsp;<s:property value='#menuinfoVar.key'/> 
 													</div>
 													<div class="collapse" id="menuInfo_0<s:property value="%{#menuinfoStatus.count}"/>">
-														<table width="100%" class="footable" id='<s:property value='#menuinfoVar.key'/>'>
+														<table width="100%" class="table table-bordered" id='<s:property value='#menuinfoVar.key'/>'>
 														<tr align="center"><td width="20%" align="center">
 														Select All &nbsp;<span class="cr" onclick="productselectAllOptions(this)" style="cursor: pointer" title="Click here to Select / Deselect Child Menus & Buttons for <s:property value='%{#menuinfoVar.key}'/>"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 														</td>
@@ -621,7 +621,7 @@
 																		<s:checkbox name="selectedDepartment" disabled="true" fieldValue='%{#menuinfoVar.key+","+#productmapVar.key}' value='%{selectedDepartment.contains(#menuinfoVar.key+","+#productmapVar.key)}'/><s:property value='#productmapVar.key'/>  <span class="cr" onclick="selectAllOptions(this)" style="cursor: pointer" title="Click here to Select / Deselect Child Menus & Buttons for <s:property value='%{#menuinfoVar.key+"->"+#productmapVar.key}'/>"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 																	</td>
 																	<td width="80%">
-																		<table width="100%" class="footable">
+																		<table width="100%" class="table table-bordered">
 																			<s:set id="deptinfo" name="productinfo" value="value" />
 																			<s:iterator value="#productmapVar.value" var="productInfoVar" status="productInfoStatus">
 																				<tr>
@@ -630,14 +630,14 @@
 																					</td>
 																					<td width="70%">
 																						<s:set id="lid" name="loginId" value="loginId"/>
-																						<table width="100%" class="footable">
+																						<table width="100%" class="table table-bordered">
 																							<s:iterator id="subMenuInfo" value="#productInfoVar.value" var="subMenuInfoVar">
 																								<tr>
 																									<td width="40%">
 																										<s:checkbox name="selectedMainMenu" fieldValue='%{#subMenuInfoVar.key.substring(0,#subMenuInfoVar.key.indexOf("_"))}' value='%{selectedMainMenu.contains(#subMenuInfoVar.key.substring(0,#subMenuInfoVar.key.indexOf("_")))}' onclick="selectAllSubMenuButtons(this)"/><s:property value='#subMenuInfoVar.key.substring(#subMenuInfoVar.key.indexOf("_")+1, #subMenuInfoVar.key.length())'/>
 																									</td>
 																									<td width="40%">
-																										<table width="100%" class="footable">
+																										<table width="100%" class="table table-bordered">
 																											<s:iterator id="subMenuInfo" value="#subMenuInfoVar.value" var="subMenuInfoVar">
 																												<tr>
 																													<td width="100%">
@@ -687,7 +687,7 @@
 													<s:text name="user.menuallocation" />
 												</div>
 												<div class="panel-body">
-													<table width="100%" class="footable">
+													<table width="100%" class="table table-bordered">
 														<s:iterator var="menuinfoVar" value="menuinfo" status="id">
 															<tr>
 																<td>
@@ -719,21 +719,21 @@
 													<s:property value='#subMenuInfoVar.key'/>
 												</div>
 												<div class="panel-body">
-													<table width="100%" class="footable">
+													<table width="100%" class="table table-bordered">
 														<s:iterator id="productinfo" value="#subMenuInfoVar.value" var="submenuproductVar">
 															<tr>
 																<td width="30%">
 																	<s:checkbox name="selectedDepartment" fieldValue='%{#subMenuInfoVar.key+","+#submenuproductVar.key}' value='%{selectedDepartment.contains(#subMenuInfoVar.key+","+#submenuproductVar.key)}'/><s:property value='#submenuproductVar.key'/>
 																</td>
 																<td width="70%">
-																	<table width="100%" class="footable">
+																	<table width="100%" class="table table-bordered">
 																		<s:iterator id="deptinfo" value="#submenuproductVar.value" var="deptinfoVar">
 																			<tr>
 																				<td width="30%">
 																					<s:property value='#deptinfoVar.key'/>
 																				</td>
 																				<td width="70%">
-																					<table width="100%" class="footable">
+																					<table width="100%" class="table table-bordered">
 																						<s:iterator id="menuinfo" value="#deptinfoVar.value" var="menuinfoVar">
 																							<tr>
 																								<td width="50%">

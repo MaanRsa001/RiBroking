@@ -109,7 +109,17 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		}*/
 		return yearsList;
 	}
-
+	private List<Map<String,Object>> getYearToList(){
+		Validation val =new Validation();
+		List<Map<String,Object>> yearsList=new ArrayList<Map<String,Object>>();
+		if(StringUtils.isNotBlank(bean.getIncepDate()) && !val.checkDate(bean.getIncepDate()).equalsIgnoreCase("INVALID")){
+			if(StringUtils.isNotBlank(bean.getExpDate()) && !val.checkDate(bean.getExpDate()).equalsIgnoreCase("INVALID")){
+				yearsList = dropDownController.getYearToListValue(bean.getIncepDate(),bean.getExpDate());
+			}
+		}
+		
+		return yearsList;
+	}
 	public String ajaxValue(){	
 		if("country".equalsIgnoreCase(bean.getDropDown())){
 			bean.setUnderwriterCountryList(dropDownController.getUnderwriterCountryList(bean,branchCode));
@@ -175,6 +185,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		 creList.add(doubleMap);
 		 bean.setCoverList(creList);
 		 bean.setCount(Integer.toString(creList.size()));
+		 List<String> inslist=new ArrayList<String>();
+		 inslist.add("");
+		 bean.setInstalList(inslist);
 		 bean.setOurAssessment("100");
 		try {
 			bean.setSubProfitList(new ArrayList<Map<String,Object>>());
@@ -216,6 +229,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			if(StringUtils.isNotBlank(bean.getDepartId())){
 				session.put("DepartmentId",bean.getDepartId());
 			}
+			if(StringUtils.isNotBlank(bean.getLayerLayerNo())) {
+				bean.setLayerNo(bean.getLayerLayerNo());
+			}
 			if (pid.equalsIgnoreCase("5")){
 				forward="retroxol1";
 			}
@@ -228,11 +244,20 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			}
 			if (!hasActionErrors()) {
 				bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
-				final boolean SaveFlag = service.insertProportionalTreaty(bean,pid, true, false);
+				boolean  SaveFlag=false;
+				if(StringUtils.isBlank(bean.getProposal_no())) {
+				  SaveFlag = service.insertProportionalTreaty(bean,pid, false, false);
+				}else {
+				  SaveFlag = service.updateProportionalTreaty(bean,pid);
+				}
 				if (SaveFlag) {
+					service.saveSecondPage(bean, bean.getProduct_id());
 					bean.setStatus(bean.getContractGendration());
 					if(StringUtils.isBlank(bean.getBaseLayer()) && !hasActionErrors()){
 						dropDownController.updateSubClass(bean.getProposal_no(),"Save");
+					}
+					if(StringUtils.isNotBlank(bean.getReferenceNo())) {
+						dropDownController.updateProposalno(bean);
 					}
 					if(StringUtils.isNotBlank(bean.getContNo())) {
 						bean.setBackmode("Con");
@@ -263,11 +288,18 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					else{
 						dropDownController.updateSubEditMode(bean.getProposal_no(),"N","");
 					}
-					forward="SucusssFac";
+					
+					ShowDropDown("edit");
+					EditMode();
+					forward="xol1";
+					if("S".equals(bean.getEditMode())) {
+						forward="SucusssFac";
+					}
 				} else {
 					ShowDropDown("");
 					resetCoverLimit();
 					resetRemarks();
+					resetIntallment();
 					if ("3".equalsIgnoreCase(pid)||"5".equalsIgnoreCase(pid)) {
 						addActionError(getText("error.layerNo.Exists"));
 					}
@@ -287,6 +319,10 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				ShowDropDown("");
 				resetCoverLimit();
 				resetRemarks();
+				resetIntallment();
+			}
+			if("layer".equals(bean.getLayerMode()) || StringUtils.isNotBlank(bean.getLayerLayerNo())) {
+				bean.setProposal_no(bean.getProposalNo());
 			}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
@@ -879,9 +915,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		String editMode ="N";
 		String Status="";
 		try {
-			if( !"edit".equalsIgnoreCase(bean.getMultiuserMode()) && StringUtils.isNotBlank(bean.getProposal_no())){
-			editMode = dropDownController.EditModeStatus(bean.getProposal_no(),bean.getLayerNo());
-		}
+			
 		if(!"N".equalsIgnoreCase(editMode)){
 			forward ="redirectAction";	
 			bean.setFlag("error");
@@ -896,6 +930,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			forward="xol1";
 		}
 		final String contractNo=bean.getRenewal_contract_no();
+		bean.setLayerNo(bean.getLayerLayerNo());
 		final String layerNo=bean.getLayerNo();
 		bean.setLay1(layerNo);
 		bean.setContractno1(contractNo);
@@ -967,6 +1002,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				dropDownController.updateRenewalEditMode(bean.getProposal_no(),Status,bean.getProposal_no());
 			}
 			dropDownController.updateEditMode(bean.getProposal_no(),"CL",bean.getProposal_no());
+			dropDownController.updateBaseLayer(bean.getProposalNo(),bean.getProposal_no());
 			if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
 				dropDownController.updateEditMode(bean.getBaseLayer(),"CL",bean.getProposal_no());
 				dropDownController.updateSubEditMode(bean.getBaseLayer(),"CL",bean.getProposal_no());
@@ -1342,6 +1378,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			}
 		}
 		bean.setYearList(getYearList());
+		bean.setYearToList(getYearToList());
 		bean.setProfit_Centerlist(dropDownController.getProfitCentreDropDown(branchCode));
 		if(StringUtils.isBlank(bean.getDepartId())){
 			bean.setSubProfitList(new ArrayList<Map<String,Object>>());
@@ -1355,7 +1392,6 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		bean.setAccontPeriodlist(dropDownController.getConstantDropDown("5"));
 		bean.setPNOCDayslist(dropDownController.getConstantDropDown("3"));
 		bean.setBrokerlist(dropDownController.getPersonalInfoDropDown(branchCode,"B",pid));
-		
 		bean.setProposaltypelist(dropDownController.getConstantDropDown("4"));
 		bean.setOrginalCurrencylist(dropDownController.getCurrencyMasterDropDown(branchCode, countryId));
 		bean.setTerritortylist(dropDownController.getTerritoryDropDown(branchCode));
@@ -1364,6 +1400,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		bean.setInwardBusinessTypelist(dropDownController.getConstantDropDown("24"));
 		//bean.setBusinessTypelist(dropDownController.getConstantDropDownBusinessType("29",pid));
 		getTypeOfBusiness();
+		bean.setPaymentPartnerlist(dropDownController.getPaymentPartnerlist(branchCode,bean.getCedingCo(),bean.getBroker()));
 		if("RI02".equalsIgnoreCase(sourceId)){
 		bean.setPerilCoveredlist(dropDownController.getConstantDropDown("30"));
 		}
@@ -1374,7 +1411,6 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 
 	public void validatesave(){
 		try {
-			boolean flags = true;
 			boolean cedCheck = true;
 			boolean cedflag = true;
 			final Validation val = new Validation();
@@ -1383,58 +1419,17 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					addActionError(getText("end.type.error"));
 				}
 			}
-			if (val.isSelect(bean.getDepartId()).equalsIgnoreCase("")) {
-				addActionError(getText("error.departId.required"));
-			}
-			if (val.isSelect(bean.getSubProfit_center()).equalsIgnoreCase("")) {
-				addActionError(getText("error.subProfit_center.required"));
-			}else{
-				bean.setSubProfit_center((bean.getSubProfit_center()).replaceAll(" ", ""));
-			}
-			
-			
-			if (val.isNull(bean.getUnderwriter()).equalsIgnoreCase("")) {
-				addActionError(getText("error.underwriter.required"));
-			}
-			if("3".equalsIgnoreCase(pid)){
-			if (StringUtils.isBlank(bean.getMaxLimit_Product())) {
-				addActionError(getText("error.maxLimitproduct.required"));
-				cedCheck = false;
-			} else {
-				bean.setMaxLimit_Product((bean.getMaxLimit_Product()).replaceAll(",", ""));
-				if (val.isValidNo(bean.getMaxLimit_Product().trim()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("error.maxLimitproduct.invalid"));
-					cedCheck = false;
-				} else {
-					String uwLimit=dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, "0");
-					uwLimit=uwLimit.replaceAll(",", "");
-					if (Double.parseDouble(uwLimit) == 0) {
-						addActionError(getText("error.maxLimitProduct.config"));
-						cedCheck = false;
-					} else if (Double.parseDouble(bean.getMaxLimit_Product()) > Double.parseDouble(uwLimit)) {
-						addActionError(getText("error.maxLimitProduct.exceedLimit", new String[] {uwLimit} ));
-						cedCheck = false;
-					}
+			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
+				addActionError(getText("error.bouquetModeYn.required"));
+			}else if("Y".equalsIgnoreCase(bean.getBouquetMode())) {
+				if(StringUtils.isBlank(bean.getBouquetMode())) {
+					addActionError(getText("error.bouquetMode.required"));
 				}
 			}
-			}
-			if (val.isNull(bean.getPolBr()).equalsIgnoreCase("")) {
-				addActionError(getText("error.polBr.required"));
-			}
-			if(StringUtils.isBlank(bean.getBusinessType())){
-				addActionError(getText("error.BusinessType.required"));
-			}
-			if (val.isSelect(bean.getCedingCo()).equalsIgnoreCase("")) {
+			if (val.isSelect(bean.getDepartId()).equalsIgnoreCase("")) {
+				addActionError(getText("error.departId.required"));
+			}if (val.isSelect(bean.getCedingCo()).equalsIgnoreCase("")) {
 				addActionError(getText("error.cedingCo.required"));
-			}
-			if (StringUtils.isBlank(bean.getBroker())) {
-				addActionError(getText("error.broker.required"));
-			}
-			
-			if (val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
-				addActionError(getText("error.layerNo.required"));
-			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
-				addActionError(getText("error.layerNo.error"));
 			}
 			Map<String, Object> map = null;
 			List<Map<String, Object>> list = service.getValidation(bean);
@@ -1462,34 +1457,30 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					addActionError(getText("error.expDate.check"));
 				}
 			}
-			 if (StringUtils.isNotBlank(bean.getAccDate())&&val.checkDate(bean.getAccDate()).equalsIgnoreCase("INVALID")) {
-				addActionError(getText("error.accDate.checkerror"));
-			}
 			if (val.isSelect(bean.getUwYear()).equalsIgnoreCase("")) {
 				addActionError(getText("error.uwYear.required"));
-			} else if (!"".equals(bean.getRenewal_contract_no()) && !"0".equals(bean.getRenewal_contract_no()) && map != null && Integer.parseInt((String) map.get("UW_YEAR")) >= Integer.parseInt(bean.getUwYear())) {
-				//addActionError(getText("errors.year.invalid"));
+			}if (val.isSelect(bean.getUwYearTo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.uwYearTo.required"));
 			}
+			
 			
 			if(!val.isNull(bean1.getOpstartDate()).equalsIgnoreCase("")&& !val.isNull(bean1.getOpendDate()).equalsIgnoreCase("") && !val.isNull(bean.getAccDate()).equalsIgnoreCase("") && !bean.getEdit().equalsIgnoreCase("endorsment") && !val.checkDate(bean.getAccDate()).equalsIgnoreCase("INVALID")){
 				if(new DropDownControllor().Validatethree(branchCode, bean.getAccDate())==0){
 					addActionError(getText("errors.open.period.date",new String[] {bean1.getOpenPeriodDate()}));
 				}
 			}
-			if (!bean.getExpDate().equalsIgnoreCase("") && !bean.getAccDate().equalsIgnoreCase("") &&!val.checkDate(bean.getAccDate()).equalsIgnoreCase("INVALID")) {
-				if (Validation.ValidateTwo(bean.getAccDate(), bean.getExpDate()).equalsIgnoreCase("Invalid")) {
-					addActionError(getText("error.accDate.check"));
-				}
-			}
 			if (StringUtils.isNotBlank(bean.getIncepDate())&& StringUtils.isNotBlank(bean.getExpDate())) {
 				if (Validation.ValidateTwo(bean.getIncepDate(),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
 					addActionError(getText("error.accDate.check1"));
 				}
+			}if (val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.layerNo.required"));
+			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
+				addActionError(getText("error.layerNo.error"));
 			}
 			if (StringUtils.isBlank(val.isSelect(bean.getOrginalCurrency()))) {
 				addActionError(getText("error.orginalCurrency.required"));
 			}
-			
 			if (StringUtils.isBlank(bean.getExchRate())) {
 				addActionError(getText("error.exchRate.required"));
 				cedCheck = false;
@@ -1497,14 +1488,21 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				addActionError(getText("error.exchRate.check"));
 				cedCheck = false;
 			}
+			
+			if(StringUtils.isBlank(bean.getBusinessType())){
+				addActionError(getText("error.BusinessType.required"));
+			}
+			
+			if (StringUtils.isBlank(bean.getBroker())) {
+				addActionError(getText("error.broker.required"));
+			}
+			if(StringUtils.isBlank(bean.getPaymentPartner())) {
+				addActionError(getText("error.PaymentPartner.required"));
+			}
+			
 			double maxlimit = 0.0;
 			boolean spflag = true;
 			if ("3".equals(pid)) {
-				
-				if (val.isNull(bean.getSpRetro()).equalsIgnoreCase("")) {
-					addActionError(getText("errors.SpRetro.error"));
-					spflag = false;
-				}
 				
 				if("4".equals(bean.getDepartId())|| "2".equals(bean.getDepartId()) || "10".equals(bean.getDepartId())){
 					if(val.isNull(bean.getLimitPerVesselOC()).equalsIgnoreCase("")){
@@ -1526,10 +1524,6 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				}
 			}
 			if("3".equals(pid) || "5".equals(pid)){
-				
-				if(StringUtils.isBlank(bean.getLOCIssued())){
-					addActionError(getText("locissued.error"));
-				}
 				if(StringUtils.isNotBlank(bean.getBusinessType()) &&(!"5".equalsIgnoreCase(bean.getBusinessType()))){
 					//SList<String>coversubdepartId=new ArrayList<String>();
 					for(int i=0;i<bean.getCoverLimitOC().size();i++){
@@ -1655,42 +1649,6 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				}
 				}
 				if("3".equals(pid)){
-					if(StringUtils.isBlank(bean.getEgnpiOffer())){
-						addActionError(getText("error.egnpias.required"));
-					}else {
-						bean.setEgnpiOffer((bean.getEgnpiOffer()).replaceAll(",", ""));
-						if (val.isValidNo(bean.getEgnpiOffer().trim()).equalsIgnoreCase("INVALID")) {
-							addActionError(getText("error.egnpias.required.format"));
-						}else {
-							bean.setEgnpiOffer((bean.getEgnpiOffer()).replaceAll(",", ""));
-							if (val.isValidNo(bean.getEgnpiOffer().trim()).equalsIgnoreCase("INVALID")) {
-								addActionError(getText("error.egnpias.required.format"));
-							}else{
-								String ans = calcu.calculateXOL(bean,"EGNPIAsper",0,sourceId);
-								if(Double.parseDouble(ans)!=Double.parseDouble(bean.getEgnpiOffer().replaceAll(",",""))){
-									//addActionError(getText("error.calcul.mistake"));
-									logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
-								}else{
-									bean.setEgnpiOffer(ans);
-								}
-							}
-						}
-					}
-				if(StringUtils.isBlank(bean.getOurAssessment())){
-					addActionError(getText("error.ourassessment.required"));
-				}else {
-					if (val.isValidNo(bean.getOurAssessment().trim()).equalsIgnoreCase("INVALID")) {
-						addActionError(getText("error.ourassessment.required.format"));
-					}else{
-						String ans = calcu.calculateXOL(bean,"OverAss",0,sourceId);
-						if(Double.parseDouble(ans)!=Double.parseDouble(bean.getOurAssessment().replaceAll(",",""))){
-							addActionError(getText("error.calcul.mistake"));
-							logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
-						}else{
-							bean.setOurAssessment(ans);
-						}
-					}
-				}
 				if (StringUtils.isBlank(bean.getSubPremium())) {
 					addActionError(getText("error.subPremium.required"));
 				} else {
@@ -1836,11 +1794,8 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				if(StringUtils.isBlank(bean.getPaymentDuedays())){
 					addActionError(getText("error.PaymentDuedays.Required"));
 				}
-				flags = true;
 				double cedPer = 0.0;
-				if (StringUtils.isBlank(bean.getProStatus())) {
-					addActionError(getText("error.proStatus.required"));
-				}
+				
 				if("5".equalsIgnoreCase(pid)){
 					if(StringUtils.isBlank(bean.getNoRetroCess())){
 						addActionError(getText("error.no.of.retro.cession"));
@@ -1849,23 +1804,53 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 						addActionError(getText("error.no.of.retro.cession.greater.than.zero"));
 					}
 				}
-				if (StringUtils.isBlank(bean.getShareWritt())) {
-					if ("3".equals(pid)) {
-						addActionError(getText("error.shareWrit.required"));
-					}		
-					flags = false;
-					cedCheck = false;
-				} else if (bean.getProStatus().equalsIgnoreCase("A") && val.percentageNewValid(bean.getShareWritt().trim()).equalsIgnoreCase("Invalid")) {
-					if ("3".equals(pid)) {
-						addActionError(getText("error.shareWrit.invalid"));
-					} 
-					flags = false;
-					cedCheck = false;
-				} else {
-					cedPer = Double.parseDouble(bean.getShareWritt());
-					if ("2".equals(pid)	&& cedflag	&& Double.parseDouble(bean.getShareWritt())	+ Double.parseDouble(bean.getCedReten()) > 100) {
-						addActionError(getText("error.SWCedPer.invalid"));
+				Validation validation = new Validation();
+				if(StringUtils.isBlank(bean.getInstallYN())) {
+					addActionError(getText("error.InstallYN.required"));
+				}else if("Y".equalsIgnoreCase(bean.getInstallYN())) {
+					if ("3".equals(pid) || "5".equals(pid)) {
+						int instalmentperiod = Integer.parseInt(bean.getM_d_InstalmentNumber());
+						double mndPremiumOC=Double.parseDouble(bean.getMd_premium_our_service().replaceAll(",", ""));
+						double totalInstPremium=0.0;
+						boolean tata = false;
+						for (int i = 0; i < instalmentperiod; i++) {
+							
+							if (!validation.isNull(bean.getInstalmentDateList().get(0)).equalsIgnoreCase("")) {
+								if (validation.ValidateINstallDates(bean.getIncepDate(),bean.getInstalmentDateList().get(0)).equalsIgnoreCase("Invalid")) {
+									tata = true;
+								}
+							}
+							if (!validation.isNull(	bean.getInstalmentDateList().get(i)).equalsIgnoreCase("")) {
+								if (validation.ValidateTwoDates(bean.getInstalmentDateList().get(i),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
+									addActionError(getText("Error.Select.Expirydate", new String[] { String.valueOf(i + 1)}));
+								}
+							}
+							if (!validation.isNull(bean.getInstallmentPremium().get(i))	.equalsIgnoreCase("")) {
+								try{
+					            	totalInstPremium+=Double.parseDouble(bean.getInstallmentPremium().get(i).replaceAll(",", ""));                	
+					            }catch (Exception e) {
+					            	//addActionError(getText("Error.installment.Premium",new String[]{String.valueOf(i+1)}));
+								}
+							}
+							if (i != 0) {
+								if (!validation.isNull(	bean.getInstalmentDateList().get(i)).equalsIgnoreCase("")) {
+									if (validation.ValidateTwoDates(bean.getInstalmentDateList().get(i-1),	bean.getInstalmentDateList().get(i)).equalsIgnoreCase("Invalid")) {
+										addActionError(getText("Error.required.InstalDate",new String[] { String.valueOf(i + 1)}));
+									}
+								}
+							}
+							
+						}
+						BigDecimal bd = new BigDecimal(totalInstPremium).setScale(2, RoundingMode.HALF_EVEN);
+						totalInstPremium = bd.doubleValue();
+						if((totalInstPremium)!=mndPremiumOC){
+							//addActionError(getText("Error.total.installment.premium",new String[]{" Deposit Premium - Our Share - OC"}));
+					    }
+						if (tata == true) {
+							addActionError(getText("Error.Select.AfterInceptionDate"));
+						}
 					}
+					
 				}
 				
 					double amt = 0.0;
@@ -2001,7 +1986,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				}
 				bean.setContractTypelist(dropDownController.getContractValidation(pid,bean.getCedingCo(),bean.getIncepDate(),bean.getExpDate(),bean.getUwYear(),bean.getOrginalCurrency(),bean.getDepartId(),bean.getBusinessType(),sumInsured,StringUtils.isEmpty(bean.getContNo())? "0":bean.getContNo(),bean.getProfit_Center(),deductible,coverPer,dedPer,bean.getLayerNo(),bean.getBranchCode()));
 				}
-				if(bean.getContractTypelist().size()>0){
+				if(bean.getContractTypelist()!=null && bean.getContractTypelist().size()>0){
 					if(StringUtils.isBlank(bean.getContractListVal())){
 						addActionError(getText("error.contract.list"));
 					}
@@ -2017,85 +2002,29 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			boolean cedCheck = true;
 			boolean cedflag = true;
 			final Validation val = new Validation();
+			Map<String, Object> map = null;
+			List<Map<String, Object>> list = service.getValidation(bean);
+			if (list != null && list.size() > 0) {
+				map = (Map<String, Object>) list.get(0);
+			}
 			if(StringUtils.isNotBlank(bean.getAmendId())&& Integer.parseInt(bean.getAmendId())>0 && pid.equalsIgnoreCase("3")){
 				if(StringUtils.isBlank(bean.getEndorsmenttype())){
 					addActionError(getText("end.type.error"));
 				}
 			}
+			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
+				addActionError(getText("error.bouquetModeYn.required"));
+			}else if("Y".equalsIgnoreCase(bean.getBouquetMode())) {
+				if(StringUtils.isBlank(bean.getBouquetMode())) {
+					addActionError(getText("error.bouquetMode.required"));
+				}
+			}
+			
 			if (val.isSelect(bean.getDepartId()).equalsIgnoreCase("")) {
 				addActionError(getText("error.departId.required"));
 			}
-			if (val.isSelect(bean.getSubProfit_center()).equalsIgnoreCase("")) {
-				addActionError(getText("error.subProfit_center.required"));
-			}else{
-				bean.setSubProfit_center((bean.getSubProfit_center()).replaceAll(" ", ""));
-			}
-			if (val.isSelect(bean.getProfit_Center()).equalsIgnoreCase("")) {
-				addActionError(getText("error.Profit_Center.required"));
-			}
-			if("3".equalsIgnoreCase(pid)){
-			if(StringUtils.isBlank(bean.getInwardType())){
-				if("RI01".equalsIgnoreCase(sourceId)){
-					addActionError(getText("error.InwardType.required"));
-				}
-				else{
-					addActionError(getText("error.InwardType.required02"));
-				}
-			}
-			}
-			if (val.isNull(bean.getUnderwriter()).equalsIgnoreCase("")) {
-				addActionError(getText("error.underwriter.required"));
-			}
-			if("3".equalsIgnoreCase(pid)){
-			if (StringUtils.isBlank(bean.getMaxLimit_Product())) {
-				addActionError(getText("error.maxLimitproduct.required"));
-				cedCheck = false;
-			} else {
-				bean.setMaxLimit_Product((bean.getMaxLimit_Product()).replaceAll(",", ""));
-				if (val.isValidNo(bean.getMaxLimit_Product().trim()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("error.maxLimitproduct.invalid"));
-					cedCheck = false;
-				} else {
-					String uwLimit=dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, "0");
-					uwLimit=uwLimit.replaceAll(",", "");
-					if (Double.parseDouble(uwLimit) == 0) {
-						addActionError(getText("error.maxLimitProduct.config"));
-						cedCheck = false;
-					} else if (Double.parseDouble(bean.getMaxLimit_Product()) > Double.parseDouble(uwLimit)) {
-						addActionError(getText("error.maxLimitProduct.exceedLimit", new String[] {uwLimit} ));
-						cedCheck = false;
-					}
-				}
-			}
-			}
-			if (val.isNull(bean.getPolBr()).equalsIgnoreCase("")) {
-				addActionError(getText("error.polBr.required"));
-			}
-			if(StringUtils.isBlank(bean.getBusinessType())){
-				addActionError(getText("error.BusinessType.required"));
-			}
 			if (val.isSelect(bean.getCedingCo()).equalsIgnoreCase("")) {
 				addActionError(getText("error.cedingCo.required"));
-			}
-			if (StringUtils.isBlank(bean.getBroker())) {
-				addActionError(getText("error.broker.required"));
-			}
-			if("3".equalsIgnoreCase(pid))
-			if (StringUtils.isBlank(bean.getTreatyName_type())) {
-				addActionError(getText("error.treatyName_type.required"));
-			}
-			else if("5".equalsIgnoreCase(pid)){
-				addActionError(getText("error.retroTreatyName.required"));
-			}
-			if (val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
-				addActionError(getText("error.layerNo.required"));
-			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
-				addActionError(getText("error.layerNo.error"));
-			}
-			Map<String, Object> map = null;
-			List<Map<String, Object>> list = service.getValidation(bean);
-			if (list != null && list.size() > 0) {
-				map = (Map<String, Object>) list.get(0);
 			}
 			if (val.isNull(bean.getIncepDate()).equalsIgnoreCase("")) {
 				addActionError(getText("error.incepDate.required"));
@@ -2120,119 +2049,55 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			}
 			if (val.isSelect(bean.getUwYear()).equalsIgnoreCase("")) {
 				addActionError(getText("error.uwYear.required"));
-			} else if (!"".equals(bean.getRenewal_contract_no()) && !"0".equals(bean.getRenewal_contract_no()) && map != null && Integer.parseInt((String) map.get("UW_YEAR")) >= Integer.parseInt(bean.getUwYear())) {
-				//addActionError(getText("errors.year.invalid"));
-			}
-			if(StringUtils.isNotBlank(bean.getProStatus()) &&"A".equalsIgnoreCase(bean.getProStatus())){
-			if (StringUtils.isBlank(bean.getAccDate())) {
-				addActionError(getText("error.accDate.required"));
-			}
-			}
-			 if (!bean.getAccDate().equalsIgnoreCase("") &&val.checkDate(bean.getAccDate()).equalsIgnoreCase("INVALID")) {
-				addActionError(getText("error.accDate.checkerror"));
-			}
-			if(!val.isNull(bean1.getOpstartDate()).equalsIgnoreCase("")&& !val.isNull(bean1.getOpendDate()).equalsIgnoreCase("") && !val.isNull(bean.getAccDate()).equalsIgnoreCase("") && !bean.getEdit().equalsIgnoreCase("endorsment")){
-				if(new DropDownControllor().Validatethree(branchCode, bean.getAccDate())==0){
-					addActionError(getText("errors.open.period.date",new String[] {bean1.getOpenPeriodDate()}));
-				}
-			}
-			if (!bean.getExpDate().equalsIgnoreCase("") && !bean.getAccDate().equalsIgnoreCase("") && !val.checkDate(bean.getAccDate()).equalsIgnoreCase("INVALID")) {
-				if (Validation.ValidateTwo(bean.getAccDate(), bean.getExpDate()).equalsIgnoreCase("Invalid")) {
-					addActionError(getText("error.accDate.check"));
-				}
+			}if (val.isSelect(bean.getUwYearTo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.uwYearTo.required"));
 			}
 			if (StringUtils.isNotBlank(bean.getIncepDate())&& StringUtils.isNotBlank(bean.getExpDate())) {
 				if (Validation.ValidateTwo(bean.getIncepDate(),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
 					addActionError(getText("error.accDate.check1"));
 				}
 			}
-			if (StringUtils.isBlank(val.isSelect(bean.getOrginalCurrency()))) {
-				addActionError(getText("error.orginalCurrency.required"));
+			if (val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.layerNo.required"));
+			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
+				addActionError(getText("error.layerNo.error"));
 			}
-			/*if(StringUtils.isBlank(bean.getExchangeType())){
-				addActionError(getText("error.ExchangeType.required"));
-			}*/
-			if (StringUtils.isBlank(bean.getExchRate())) {
-				addActionError(getText("error.exchRate.required"));
-				cedCheck = false;
-			} else if (val.isValidNo(bean.getExchRate().trim().toString()).equalsIgnoreCase("invalid")) {
-				addActionError(getText("error.exchRate.check"));
-				cedCheck = false;
-			}
-			double maxlimit = 0.0;
-			boolean spflag = true;
-			if ("3".equals(pid)) {
-				
-				if (val.isNull(bean.getSpRetro()).equalsIgnoreCase("")) {
-					addActionError(getText("errors.SpRetro.error"));
-					spflag = false;
-				}
-				if (val.isNull(bean.getNo_Insurer()).equalsIgnoreCase("")) {
-					addActionError(getText("Errors.No_Insurar.Required"));
-				} else if (val.isValidNo(bean.getNo_Insurer()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("Errors.No_Insurar.NumberFormat"));
-				} else if (spflag && "Y".equals(bean.getSpRetro()) && Integer.parseInt(bean.getNo_Insurer()) <= 0) {
-					addActionError(getText("Errors.No_Insurar.gr0"));
-				}
-				if("4".equals(bean.getDepartId())|| "2".equals(bean.getDepartId()) || "10".equals(bean.getDepartId())){
-					if(val.isNull(bean.getLimitPerVesselOC()).equalsIgnoreCase("")){
-						addActionError(getText("errors.LimitPerVesselOC.required"));
-					}else{
-						bean.setLimitPerVesselOC((bean.getLimitPerVesselOC()).replaceAll(",",""));
-						if(val.isValidNo(bean.getLimitPerVesselOC().trim()).equalsIgnoreCase("INVALID")){
-							addActionError(getText("errors.LimitPerVesselOC.invalid"));
-						}
-					}
-					if(val.isNull(bean.getLimitPerLocationOC()).equalsIgnoreCase("")){
-						addActionError(getText("errors.LimitPerLocationOC.required"));
-					}else{
-						bean.setLimitPerLocationOC((bean.getLimitPerLocationOC()).replaceAll(",",""));
-						if(val.isValidNo(bean.getLimitPerLocationOC().trim()).equalsIgnoreCase("INVALID")){
-							addActionError(getText("errors.LimitPerLocationOC.invalid"));
-						}
-					}
+			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
+				if (service.getLayerDuplicationCheck(bean)) {
+					logger.info("// PMD Changes");
+					addActionError(getText("error.layer.duplicate"));
 				}
 			}
-				if(StringUtils.isBlank(bean.getTerritory())){
-					addActionError(getText("errors.territoryCode.required"));
-				}if(StringUtils.isBlank(bean.getCountryIncludedList())){
-					addActionError(getText("errors.CountryInclude.required"));
+			if(StringUtils.isBlank(bean.getRiskdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}else if("Y".equals(bean.getRiskdetailYN())) {
+				if (StringUtils.isBlank(val.isSelect(bean.getOrginalCurrency()))) {
+					addActionError(getText("error.orginalCurrency.required"));
 				}
-			
-			if (StringUtils.isBlank(bean.getTerritoryscope())) {
-				addActionError(getText("error.terrtoryScope.required"));
-			}
-			if (StringUtils.isBlank(bean.getPortfoloCovered())) {
-				addActionError(getText("error.portfoloCovered.required"));
-			}
-			if (StringUtils.isBlank(bean.getBasis())) {
-				addActionError(getText("error.basic.required"));
-			}
-			if("3".equals(pid) || "5".equals(pid)){
-				/*if(StringUtils.isBlank(bean.getPerilCovered())){
-					addActionError(getText("error.PerilCovered.required"));
+				/*if(StringUtils.isBlank(bean.getExchangeType())){
+					addActionError(getText("error.ExchangeType.required"));
 				}*/
-				if(StringUtils.isBlank(bean.getLOCIssued())){
-					addActionError(getText("locissued.error"));
+				if (StringUtils.isBlank(bean.getExchRate())) {
+					addActionError(getText("error.exchRate.required"));
+					cedCheck = false;
+				} else if (val.isValidNo(bean.getExchRate().trim().toString()).equalsIgnoreCase("invalid")) {
+					addActionError(getText("error.exchRate.check"));
+					cedCheck = false;
 				}
-				else if("Y".equalsIgnoreCase(bean.getLOCIssued())){
-					if(StringUtils.isBlank(bean.getLocBankName())){
-						addActionError(getText("error.locbank.required"));
+				if (StringUtils.isBlank(bean.getTreatyName_type())) {
+					if("3".equalsIgnoreCase(pid)) {
+						addActionError(getText("error.treatyName_type.required"));
 					}
-					if(StringUtils.isBlank(bean.getLocCreditPrd())){
-						addActionError(getText("error.loccrditPerd.required"));
+					else if("5".equalsIgnoreCase(pid)){
+						addActionError(getText("error.retroTreatyName.required"));
 					}
-					if(StringUtils.isBlank(bean.getLocCreditAmt())){
-						addActionError(getText("error.loccreditAmt.required"));
-					}
-					else{
-						bean.setLocCreditAmt(bean.getLocCreditAmt().replaceAll(",", ""));
-					}
-					if(StringUtils.isBlank(bean.getLocBeneficerName())){
-						addActionError(getText("error.locbenifName.required"));
-					}
-					
-					}
+				}
+				if(StringUtils.isBlank(bean.getBusinessType())){
+					addActionError(getText("error.BusinessType.required"));
+				}
+				if (StringUtils.isBlank(bean.getBasis())) {
+					addActionError(getText("error.basic.required"));
+				}
 				if(StringUtils.isNotBlank(bean.getBusinessType()) &&(!"5".equalsIgnoreCase(bean.getBusinessType()))){
 					for(int i=0;i<bean.getCoverLimitOC().size();i++){
 						if(StringUtils.isBlank(bean.getCoverdepartId().get(i))){
@@ -2338,50 +2203,50 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				
 				}
 			}
+			}
+			if(StringUtils.isBlank(bean.getBrokerdetYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}else if("Y".equals(bean.getBrokerdetYN())) {
+				if (StringUtils.isBlank(bean.getBroker())) {
+					addActionError(getText("error.broker.required"));
+				}
+				if(StringUtils.isBlank(bean.getPaymentPartner())) {
+					addActionError(getText("error.PaymentPartner.required"));
+				}
+				if (val.isNull(bean.getLeader_Underwriter()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.leader_Underwriter.second"));
+				}
+				if("RI02".equalsIgnoreCase(sourceId) && "3".equalsIgnoreCase(bean.getProduct_id())){
+					if(StringUtils.isBlank(bean.getLeader_Underwriter_country())){
+						addActionError(getText("errors.leader_Underwriter.second.country"));
+					}
+				}
+				if (val.isNull(bean.getUnderwriter_Recommendations()).equalsIgnoreCase("")) {
+					//addActionError(getText("errors.underwriter_Recommendations.second"));
+				}
+				if (val.isNull(bean.getLeader_Underwriter_share()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.leader_Underwriter_share.second"));
+				} else if (val.percentageValid(bean.getLeader_Underwriter_share()).trim().equalsIgnoreCase("INVALID")) {
+					addActionError(getText("errors.leader_Underwriter_share.second1"));
+				} else if (val.percentageValid(bean.getLeader_Underwriter_share()).trim().equalsIgnoreCase("less")) {
+					addActionError(getText("errors.leader_Underwriter_share.secondless"));
+				} else if (val.percentageValid(bean.getLeader_Underwriter_share()).trim().equalsIgnoreCase("greater")) {
+					addActionError(getText("errors.leader_Underwriter_share.secondgreater"));
+				}
+				/*if(StringUtils.isNotBlank(bean.getLeader_Underwriter_share()) && !"64".equalsIgnoreCase(bean.getLeader_Underwriter())){
+					if(service.GetShareValidation(bean)){
+					addActionError(getText("errors.leader_Underwriter_share.greater.signed"));
+				}
+				}else{
+					if(dropDownController.GetShareEqualValidation(bean.getProduct_id(),bean.getLeader_Underwriter_share(),bean.getProposal_no())){
+						addActionError(getText("errors.leader_Underwriter_share.equals.signed"));
+					} 
+				}*/
 				
-				if("5".equals(pid)){
-				if(StringUtils.isBlank(bean.getEgnpiOffer())){
-					addActionError(getText("error.egnpi.required"));
-				}else {
-					bean.setEgnpiOffer((bean.getEgnpiOffer()).replaceAll(",", ""));
-					if (val.isValidNo(bean.getEgnpiOffer().trim()).equalsIgnoreCase("INVALID")) {
-						addActionError(getText("error.egnpi.required.format"));
-					}
-				}
-				}
-				if("3".equals(pid)){
-					if(StringUtils.isBlank(bean.getEgnpiOffer())){
-						addActionError(getText("error.egnpias.required"));
-					}else {
-						bean.setEgnpiOffer((bean.getEgnpiOffer()).replaceAll(",", ""));
-						if (val.isValidNo(bean.getEgnpiOffer().trim()).equalsIgnoreCase("INVALID")) {
-							addActionError(getText("error.egnpias.required.format"));
-						}else{
-							String ans = calcu.calculateXOL(bean,"EGNPIAsper",0,sourceId);
-							if(Double.parseDouble(ans)!=Double.parseDouble(bean.getEgnpiOffer().replaceAll(",",""))){
-								//addActionError(getText("error.calcul.mistake"));
-								logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
-							}else{
-								bean.setEgnpiOffer(ans);
-							}
-						}
-					}
-				if(StringUtils.isBlank(bean.getOurAssessment())){
-					addActionError(getText("error.ourassessment.required"));
-				}else {
-					if (val.isValidNo(bean.getOurAssessment().trim()).equalsIgnoreCase("INVALID")) {
-						addActionError(getText("error.ourassessment.required.format"));
-					}
-					else{
-						String ans = calcu.calculateXOL(bean,"OverAss",0,sourceId);
-						if(Double.parseDouble(ans)!=Double.parseDouble(bean.getOurAssessment().replaceAll(",",""))){
-							addActionError(getText("error.calcul.mistake"));
-							logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
-						}else{
-							bean.setOurAssessment(ans);
-						}
-					}
-				}
+			}
+			if(StringUtils.isBlank(bean.getPremiumdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}else if("Y".equals(bean.getPremiumdetailYN())) {
 				if (StringUtils.isBlank(bean.getSubPremium())) {
 					addActionError(getText("error.subPremium.required"));
 				} else {
@@ -2389,46 +2254,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					if (val.isValidNo(bean.getSubPremium().trim()).equalsIgnoreCase("INVALID")) {
 						addActionError(getText("error.subPremium.required.format"));
 					}
-					else{
-						String ans = calcu.calculateXOL(bean,"EGNPI",0,sourceId);
-						if(Double.parseDouble(ans)!=Double.parseDouble(bean.getSubPremium().replaceAll(",",""))){
-							addActionError(getText("error.calcul.mistake"));
-							logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
-						}else{
-							bean.setSubPremium(ans);
-						}
-					}
-				}
-				}
-				if(StringUtils.isNotBlank(bean.getPml()) && "Y".equalsIgnoreCase(bean.getPml())){
-					if(StringUtils.isBlank(bean.getPmlPercent())){
-						addActionError(getText("error.pmlpercent.required"));
-					} else if (val.isValidNo(bean.getPmlPercent().trim()).equalsIgnoreCase("INVALID")) {
-						addActionError(getText("error.pmlpercent.required.format"));
-					} else if (val.percentageValid(bean.getPmlPercent().trim()).equalsIgnoreCase("greater")) {
-						addActionError(getText("error.pmlpercent.checkgreater"));
-					}
 					
-					/*if("3".equals(pid)){
-						if(StringUtils.isBlank(bean.getEgnpipml())){
-							 addActionError(getText("error.Egnpipmlour.required"));
-							}else {
-								bean.setEgnpipml((bean.getEgnpipml()).replaceAll(",", ""));
-								if (val.isValidNo(bean.getEgnpipml().trim()).equalsIgnoreCase("INVALID")) {
-									addActionError(getText("error.Egnpipmlour.required"));
-								}
-							}
-					}
-					if("5".equals(pid)){
-						if(StringUtils.isBlank(bean.getEgnpipml())){
-							 addActionError(getText("error.Egnpipml.required"));
-							}else {
-								bean.setEgnpipml((bean.getEgnpipml()).replaceAll(",", ""));
-								if (val.isValidNo(bean.getEgnpipml().trim()).equalsIgnoreCase("INVALID")) {
-									addActionError(getText("error.Egnpipml.required"));
-								}
-							}
-					}*/
 				}
 				if(StringUtils.isBlank(bean.getPremiumbasis())){
 					addActionError(getText("error.Premiumbasis.required"));
@@ -2536,172 +2362,6 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 						addActionError(getText("error.m_dPremium.required.format"));
 					}
 				}
-				}
-				if (val.isNull(bean.getM_d_InstalmentNumber()).equalsIgnoreCase("")) {
-					addActionError(getText("error.Instalment.error"));
-					
-				} else if (val.isValidNo(bean.getM_d_InstalmentNumber()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("error.Instalment.Required"));
-				}
-				
-				if(StringUtils.isBlank(bean.getPaymentDuedays())){
-					addActionError(getText("error.PaymentDuedays.Required"));
-				}
-				flags = true;
-				double cedPer = 0.0;
-				if (StringUtils.isBlank(bean.getProStatus())) {
-					addActionError(getText("error.proStatus.required"));
-				}
-				if("5".equalsIgnoreCase(pid)){
-					if(StringUtils.isBlank(bean.getNoRetroCess())){
-						addActionError(getText("error.no.of.retro.cession"));
-					}
-					else if("0".equalsIgnoreCase(bean.getNoRetroCess())){
-						addActionError(getText("error.no.of.retro.cession.greater.than.zero"));
-					}
-				}
-				if (StringUtils.isBlank(bean.getShareWritt())) {
-					if ("3".equals(pid)) {
-						addActionError(getText("error.shareWrit.required"));
-					}		
-					flags = false;
-					cedCheck = false;
-				} else if (bean.getProStatus().equalsIgnoreCase("A") && val.percentageNewValid(bean.getShareWritt().trim()).equalsIgnoreCase("Invalid")) {
-					if ("3".equals(pid)) {
-						addActionError(getText("error.shareWrit.invalid"));
-					} 
-					flags = false;
-					cedCheck = false;
-				} else {
-					cedPer = Double.parseDouble(bean.getShareWritt());
-					if ("2".equals(pid)	&& cedflag	&& Double.parseDouble(bean.getShareWritt())	+ Double.parseDouble(bean.getCedReten()) > 100) {
-						addActionError(getText("error.SWCedPer.invalid"));
-					}
-				}
-				if (bean.getProStatus().equalsIgnoreCase("A")) {
-					/*if (val.percentageNewValid(bean.getShareWritt().trim()).equalsIgnoreCase("Invalid")) {
-						if ("3".equals(pid)) {
-							addActionError(getText("error.shareWrit.invalid"));
-						} 
-						flags = false;
-						cedCheck = false;
-					}*/
-					if (StringUtils.isBlank(bean.getSharSign())) {
-						if ( "3".equals(pid)) {
-							addActionError(getText("error.shareSign.required.pro"));
-						} 
-						flags = false;
-						cedCheck = false;
-					} else if (val.percentageNewValid(bean.getSharSign().trim()).equalsIgnoreCase("Invalid")) {
-						if ("3".equals(pid)) {
-							addActionError(getText("error.shareSign.required"));
-						} 
-						flags = false;
-						cedCheck = false;
-					} else {
-						cedPer = Double.parseDouble(bean.getSharSign());
-					}
-					if (flags) {
-						if (Double.parseDouble(bean.getSharSign().equalsIgnoreCase("") ? "0" : bean.getSharSign()) > Double.parseDouble(bean.getShareWritt().equalsIgnoreCase("") ? "0" : bean.getShareWritt())) {
-							addActionError(getText("error.shareSign.invalid"));
-							cedCheck = false;
-						}
-					}
-					double amt = 0.0;
-					if ("3".equalsIgnoreCase(pid) || "5".equalsIgnoreCase(pid)) {
-						if (StringUtils.isBlank(bean.getLimitOrigCur())) {
-							//addActionError(getText("error.limit.required"));
-							cedCheck = false;
-						} else {
-							bean.setLimitOrigCur((bean.getLimitOrigCur()).replaceAll(",", ""));
-							if (val.isValidNo(bean.getLimitOrigCur()).equalsIgnoreCase("invalid")) {
-								addActionError(getText("error.limit.check"));
-								cedCheck = false;
-							} else {
-								amt = Double.parseDouble(bean.getLimitOrigCur());
-							}
-						}
-						if (StringUtils.isBlank(bean.getDeduc_hunPercent())) {
-							addActionError(getText("error.deduc_hunPercent.required"));
-						} else {
-							bean.setDeduc_hunPercent((bean.getDeduc_hunPercent()).replaceAll(",", ""));
-							if (val.isValidNo(bean.getDeduc_hunPercent().trim()).equalsIgnoreCase("INVALID")) {
-								addActionError(getText("error.deduc_hunPercent.check"));
-							}
-						}
-					}
-					if ("3".equals(pid)){
-						if (cedCheck) {
-							double amount = (amt * (cedPer / 100.0));
-							amount = amount / Double.parseDouble(bean.getExchRate());
-							maxlimit = Double.parseDouble(bean.getMaxLimit_Product());
-							logger.info("Cedent Amount=>" + amount);
-							logger.info("Max Limit=>" + maxlimit);
-							if (amount > maxlimit) {
-								addActionError(getText("error.accAmtlessUWAmt"));
-							}
-						}
-					}
-					if(StringUtils.isNotBlank(bean.getM_dPremium()) && StringUtils.isNotBlank(bean.getSharSign())){
-						final  DecimalFormat twoDigit = new DecimalFormat("###0.00");
-						final double dvalue = (Double.parseDouble(bean.getM_dPremium())* (Double.parseDouble(bean.getSharSign())) / 100);
-						logger.info("Gwpi Our Share Calculated Value=>" + dvalue);
-						final double dround = Math.round(dvalue * 100.0) / 100.0;
-						logger.info("Rounded Value=>" + dround);
-						final double valu = Double.parseDouble(twoDigit.format(dround));//A
-						logger.info("Formated Value=>" + valu);
-						if(StringUtils.isNotBlank(bean.getContNo())){
-						double sumInst=new DropDownControllor().getSumOfInstallmentBooked(bean.getContNo(), bean.getLayerNo());//B
-							if(valu<sumInst){
-								addActionError(getText("error.installment.premiumbooked.xol"));
-							}
-						}
-					}if(StringUtils.isNotBlank(bean.getM_d_InstalmentNumber())){
-						int count=new DropDownControllor().getCountOfInstallmentBooked(bean.getContNo(), bean.getLayerNo());
-						if(Double.parseDouble(bean.getM_d_InstalmentNumber())<count){
-							addActionError(getText("error.no.installment.premiumbooked.xol"));
-						}
-					}
-					
-					
-				}
-			
-			/*if ("5".equalsIgnoreCase(pid)) {
-				
-				if (StringUtils.isBlank(bean.getAdjRate())) {
-					addActionError(getText("error.adjRate.required"));
-				} else if (val.isValidNo(bean.getAdjRate().trim()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("error.adjRate.required"));
-				} else if (val.percentageValid(bean.getAdjRate().trim()).equalsIgnoreCase("greater")) {
-					addActionError(getText("error.adjrate.checkgreater"));
-				}
-				if (StringUtils.isBlank(bean.getEpi())) {
-					addActionError(getText("error.epiperCent.required"));
-				} else {
-					bean.setEpi((bean.getEpi()).replaceAll(",", ""));
-					if (val.isValidNo(bean.getEpi().trim()).equalsIgnoreCase("Invalid")) {
-						addActionError(getText("error.epiperCent.check"));
-					}
-				}
-				if (StringUtils.isBlank(bean.getM_dPremium())) {
-					addActionError(getText("error.m_dPremium.required"));
-				} else {
-					bean.setM_dPremium((bean.getM_dPremium()).replaceAll(",", ""));
-					if (val.isValidNo(bean.getM_dPremium().trim()).equalsIgnoreCase("INVALID")) {
-						addActionError(getText("error.m_dPremium.required"));
-					}
-				}
-				if (val.isNull(bean.getM_d_InstalmentNumber()).equalsIgnoreCase("")) {
-					addActionError(getText("error.Instalment.Required"));
-				} else if (val.isValidNo(bean.getM_d_InstalmentNumber()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("error.Instalment.error"));
-				}
-				if (StringUtils.isBlank(bean.getXlPremium())) {
-					addActionError(getText("error.xlPremium.required"));
-				} else if (val.isValidNo(bean.getXlPremium().trim()).equalsIgnoreCase("INVALID")) {
-					addActionError(getText("error.xlPremium.required"));
-				}
-			}*/
 				if (StringUtils.isNotBlank(bean.getM_dPremium()) && StringUtils.isNotBlank(bean.getEpi())) {
 					bean.setM_dPremium((bean.getM_dPremium()).replaceAll(",", ""));
 					bean.setEpi((bean.getEpi()).replaceAll(",", ""));
@@ -2729,20 +2389,175 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					}
 				}
 			}
-			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
-				if (service.getLayerDuplicationCheck(bean)) {
-					logger.info("// PMD Changes");
-					addActionError(getText("error.layer.duplicate"));
+				if (val.isNull(bean.getM_d_InstalmentNumber()).equalsIgnoreCase("")) {
+					addActionError(getText("error.Instalment.error"));
+					
+				} else if (val.isValidNo(bean.getM_d_InstalmentNumber()).equalsIgnoreCase("INVALID")) {
+					addActionError(getText("error.Instalment.Required"));
+				}
+				if(StringUtils.isBlank(bean.getRateOnLine())) {
+					addActionError(getText("error.rateonline.Required"));
+				}
+			}
+			if(StringUtils.isBlank(bean.getInstallYN())) {
+					addActionError(getText("error.InstallYN.required"));
+			}else if("Y".equalsIgnoreCase(bean.getInstallYN()) && StringUtils.isNotBlank(bean.getM_d_InstalmentNumber())) {
+				if ("3".equals(pid) || "5".equals(pid)) {
+					int instalmentperiod = Integer.parseInt(bean.getM_d_InstalmentNumber());
+					double totalInstPremium=0.0;
+					boolean tata = false;
+					for (int i = 0; i < instalmentperiod; i++) {
+						
+						if (!val.isNull(bean.getInstalmentDateList().get(0)).equalsIgnoreCase("")) {
+							if (val.ValidateINstallDates(bean.getIncepDate(),bean.getInstalmentDateList().get(0)).equalsIgnoreCase("Invalid")) {
+								tata = true;
+							}
+						}
+						if (!val.isNull(	bean.getInstalmentDateList().get(i)).equalsIgnoreCase("")) {
+							if (val.ValidateTwoDates(bean.getInstalmentDateList().get(i),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
+								addActionError(getText("Error.Select.Expirydate", new String[] { String.valueOf(i + 1)}));
+							}
+						}
+						if (!val.isNull(bean.getInstallmentPremium().get(i))	.equalsIgnoreCase("")) {
+							try{
+				            	totalInstPremium+=Double.parseDouble(bean.getInstallmentPremium().get(i).replaceAll(",", ""));                	
+				            }catch (Exception e) {
+				            	//addActionError(getText("Error.installment.Premium",new String[]{String.valueOf(i+1)}));
+							}
+						}
+						if (i != 0) {
+							if (!val.isNull(	bean.getInstalmentDateList().get(i)).equalsIgnoreCase("")) {
+								if (val.ValidateTwoDates(bean.getInstalmentDateList().get(i-1),	bean.getInstalmentDateList().get(i)).equalsIgnoreCase("Invalid")) {
+									addActionError(getText("Error.required.InstalDate",new String[] { String.valueOf(i + 1)}));
+								}
+							}
+						}
+						
+					}
+					BigDecimal bd = new BigDecimal(totalInstPremium).setScale(2, RoundingMode.HALF_EVEN);
+					totalInstPremium = bd.doubleValue();
+					
+					if (tata == true) {
+						addActionError(getText("Error.Select.AfterInceptionDate"));
+					}
+				}
+				if(StringUtils.isNotBlank(bean.getM_d_InstalmentNumber())){
+					int count=new DropDownControllor().getCountOfInstallmentBooked(bean.getContNo(), bean.getLayerNo());
+					if(Double.parseDouble(bean.getM_d_InstalmentNumber())<count){
+						addActionError(getText("error.no.installment.premiumbooked.xol"));
+					}
+				}
+				
+			}
+			if(StringUtils.isBlank(bean.getAcqdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}else if("Y".equals(bean.getAcqdetailYN())) {
+				if (val.isNull(bean.getBrokerage()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.brokerage.second"));
+				} else if (val.percentageValid(bean.getBrokerage()).trim().equalsIgnoreCase("INVALID")) {
+					addActionError(getText("errors.brokerage.second1"));
+				} else if (val.percentageValid(bean.getBrokerage()).trim().equalsIgnoreCase("greater")) {
+					addActionError(getText("errors.brokerage.secondgreater"));
+				}
+				if (val.isNull(bean.getTax()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.tax.second"));
+				} else if (val.percentageValid(bean.getTax()).trim().equalsIgnoreCase("INVALID")) {
+					addActionError(getText("errors.tax.second1"));
+				} else if (val.percentageValid(bean.getTax()).trim().equalsIgnoreCase("less")) {
+					addActionError(getText("errors.tax.secondless"));
+				} else if (val.percentageValid(bean.getTax()).trim().equalsIgnoreCase("greater")) {
+					addActionError(getText("errors.tax.secondgreater"));
+				}
+				if (val.isNull(bean.getOthercost()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.othercost.second"));
+				} else if (val.percentageValid(bean.getOthercost()).trim().equalsIgnoreCase("INVALID")) {
+					addActionError(getText("errors.othercost.secondinvalid"));
+				} else if (val.percentageValid(bean.getOthercost()).trim().equalsIgnoreCase("less")) {
+					addActionError(getText("errors.othercost.secondless"));
+				} else if (val.percentageValid(bean.getOthercost()).trim().equalsIgnoreCase("greater")) {
+					addActionError(getText("errors.othercost.secondgreater"));
+				}
+				if ((!"4".equalsIgnoreCase(pid)) && (!"5".equalsIgnoreCase(pid))) {
+					
+					if(StringUtils.isBlank(bean.getAcqBonus())){
+						//addActionError(getText("bonus.error.bonus"));
+					}
+					else{
+						if("LCB".equalsIgnoreCase(bean.getAcqBonus())){
+							if(StringUtils.isBlank(bean.getBonusPopUp())){
+			                    addActionError(getText("bonus.popup.recheck"));
+			                }else{
+							int count = service.getBonusListCount(bean);
+							if(count<=0){
+								addActionError(getText("bonus.error.lcb.table.empty"));
+							}
+			                }
+						}
+						else if("NCB".equalsIgnoreCase(bean.getAcqBonus())){
+						   if(StringUtils.isBlank(bean.getAcqBonusPercentage())){
+							   addActionError(getText("bonus.error.noclaimbonu.per"));
+							}
+						   else if(100<Double.parseDouble(bean.getAcqBonusPercentage())){
+							addActionError(getText("bonus.error.low.claim.bonus.range"));
+							}
+						}
+						
+					}
+				}
+				if (val.isNull(bean.getAcquisition_Cost()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.acquisition_Cost.second"));
+				} else {
+					bean.setAcquisition_Cost((bean.getAcquisition_Cost()).replaceAll(",", ""));
+					if (val.isValidNo(bean.getAcquisition_Cost()).trim().equalsIgnoreCase("INVALID")) {
+						addActionError(getText("errors.acquisition_Cost.second1"));
+					}
+					else{
+						String ans = calcu.calculateXOL(bean,"AcqCost",0,sourceId);
+						if(Double.parseDouble(ans)!=Double.parseDouble(bean.getAcquisition_Cost().replaceAll(",",""))){
+							addActionError(getText("error.calcul.mistake"));
+							logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
+						}else{
+							bean.setAcquisition_Cost(ans);
+						}
+
+					}
+				}
+			}
+			if(StringUtils.isBlank(bean.getReinstdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}else if("Y".equals(bean.getReinstdetailYN())) {
+				if(StringUtils.isBlank(bean.getReInstatementPremium())){
+					addActionError(getText("Please Select Reinstatement Premium"));
+				}
+				else if("Y".equalsIgnoreCase(bean.getReInstatementPremium())){
+					if(StringUtils.isBlank(bean.getReinsPopUp())){
+	                    addActionError(getText("reins.popup.recheck"));
+	                }else{
+					int count=service.getReInstatementCount(bean,"");
+					if(count<=0){
+						addActionError(getText("errors.reinstatement.schedule"));
+					}
+	                }
+				}
+				if (val.isNull(bean.getAnualAggregateLiability()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.AnualAggregateLiability.number"));
+				} else {
+					bean.setAnualAggregateLiability((bean.getAnualAggregateLiability()).replaceAll(",", ""));
+					if (val.isValidNo(bean.getAnualAggregateLiability()).equalsIgnoreCase("INVALID")) {
+						addActionError(getText("errors.AnualAggregateLiability.number.format"));
+					}
+				}
+				
+				if (val.isNull(bean.getAnualAggregateDeduct()).equalsIgnoreCase("")) {
+					addActionError(getText("errors.AnualAggregateDeduct.number"));
+				} else {
+					bean.setAnualAggregateDeduct((bean.getAnualAggregateDeduct()).replaceAll(",", ""));
+					if (val.isValidNo(bean.getAnualAggregateDeduct()).equalsIgnoreCase("INVALID")) {
+						addActionError(getText("errors.AnualAggregateDeduct.number.format"));
+					}
 				}
 			}
 			
-			/*	if(StringUtils.isNotBlank(bean.getLayerProposalNo()) && !hasActionErrors() && StringUtils.isBlank(bean.getRskCountCheck()) ) {
-
-					int res = dropDownController.riskCommission(bean.getLayerProposalNo());
-				if(res<=0){
-					addActionError(getText("error.risk.commission.count", new String[] {bean.getLayerProposalNo()} ));
-				}
-			}*/
 			if("3".equalsIgnoreCase(pid)){
 				validationContract();
 				}
@@ -2888,31 +2703,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				}
                 }
 			}
-			if (validation.isNull(bean.getBrokerage()).equalsIgnoreCase("")) {
-				addActionError(getText("errors.brokerage.second"));
-			} else if (validation.percentageValid(bean.getBrokerage()).trim().equalsIgnoreCase("INVALID")) {
-				addActionError(getText("errors.brokerage.second1"));
-			} else if (validation.percentageValid(bean.getBrokerage()).trim().equalsIgnoreCase("greater")) {
-				addActionError(getText("errors.brokerage.secondgreater"));
-			}
-			if (validation.isNull(bean.getTax()).equalsIgnoreCase("")) {
-				addActionError(getText("errors.tax.second"));
-			} else if (validation.percentageValid(bean.getTax()).trim().equalsIgnoreCase("INVALID")) {
-				addActionError(getText("errors.tax.second1"));
-			} else if (validation.percentageValid(bean.getTax()).trim().equalsIgnoreCase("less")) {
-				addActionError(getText("errors.tax.secondless"));
-			} else if (validation.percentageValid(bean.getTax()).trim().equalsIgnoreCase("greater")) {
-				addActionError(getText("errors.tax.secondgreater"));
-			}
-			if (validation.isNull(bean.getOthercost()).equalsIgnoreCase("")) {
-				addActionError(getText("errors.othercost.second"));
-			} else if (validation.percentageValid(bean.getOthercost()).trim().equalsIgnoreCase("INVALID")) {
-				addActionError(getText("errors.othercost.secondinvalid"));
-			} else if (validation.percentageValid(bean.getOthercost()).trim().equalsIgnoreCase("less")) {
-				addActionError(getText("errors.othercost.secondless"));
-			} else if (validation.percentageValid(bean.getOthercost()).trim().equalsIgnoreCase("greater")) {
-				addActionError(getText("errors.othercost.secondgreater"));
-			}
+			
 			if ((!"4".equalsIgnoreCase(pid)) && (!"5".equalsIgnoreCase(pid))) {
 				if (limitOurShare.equalsIgnoreCase("")) {
 					addActionError(getText("errors.limitOurShare.second"));	
@@ -2938,33 +2729,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 						}
 					}*/
 				}
-				if ((!"4".equalsIgnoreCase(pid)) && (!"5".equalsIgnoreCase(pid))) {
-					
-					if(StringUtils.isBlank(bean.getAcqBonus())){
-						//addActionError(getText("bonus.error.bonus"));
-						}
-						else{
-						if("LCB".equalsIgnoreCase(bean.getAcqBonus())){
-							if(StringUtils.isBlank(bean.getBonusPopUp())){
-			                    addActionError(getText("bonus.popup.recheck"));
-			                }else{
-							int count = service.getBonusListCount(bean);
-							if(count<=0){
-								addActionError(getText("bonus.error.lcb.table.empty"));
-							}
-			                }
-						}
-						else if("NCB".equalsIgnoreCase(bean.getAcqBonus())){
-						   if(StringUtils.isBlank(bean.getAcqBonusPercentage())){
-							   addActionError(getText("bonus.error.noclaimbonu.per"));
-								}
-						   else if(100<Double.parseDouble(bean.getAcqBonusPercentage())){
-							addActionError(getText("bonus.error.low.claim.bonus.range"));
-							}
-							}
-						
-						}
-				}
+				
 				
 				if (validation.isNull(bean.getAcquisition_Cost()).equalsIgnoreCase("")) {
 					addActionError(getText("errors.acquisition_Cost.second"));
@@ -3841,7 +3606,7 @@ private void resetCoverLimit() {
 				else if(pid.equalsIgnoreCase("5")){
 					//value="<script type='text/javascript'>window.opener.retroxol2.anualAggregateLiability.value='"+bean.getAnualAggregateLiability()+"';window.close();</script>";
 				}
-				value="<script type='text/javascript'>window.close();</script>";
+				value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value="+bean.getReferenceNo()+"</script>";
 
 				byte[] byteArray = value.getBytes();
 				inputStream=new ByteArrayInputStream(byteArray);
@@ -3914,7 +3679,7 @@ private void resetCoverLimit() {
 			bean.setProduct_id(pid);
 			bean.setDepartmentId((String) session.get("DepartmentId"));
 			String result = service.LowClaimBonusInser(bean);
-			String value="<script type='text/javascript'>window.close();</script>";
+			String value="<script type='text/javascript'>$('#companyModal2').modal('toggle');</script>";
 			byte[] byteArray = value.getBytes();
 			inputStream=new ByteArrayInputStream(byteArray);
 		}
@@ -3936,7 +3701,46 @@ private void resetCoverLimit() {
 		}
 		return  forward;
 	}
-	
+	public String removeRowBonus(){
+		List<String> from=new ArrayList<String>();
+		List<String> to=new ArrayList<String>();
+		List<String> per=new ArrayList<String>();
+		bean.getBonusSNo().remove(bean.getDeleteId());
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>(5);
+		for(int i=0;i<bean.getBonusSNo().size();i++){
+		Map<String,Object> string = new HashMap<String,Object>();
+		string.put("1","1");
+		list.add(string);
+		}
+		int j=1;
+		
+		for(int k=0;k<bean.getBonusSNo().size();k++){
+			int value=Integer.parseInt(bean.getDeleteId());
+			if(k<value){
+				from.add(bean.getBonusFrom().get(k));
+				to.add(bean.getBonusTo().get(k));
+				per.add(bean.getBonusLowClaimBonus().get(k));
+			}
+			else{
+			if(StringUtils.isNotBlank(bean.getBonusFrom().get(j))){
+				from.add(bean.getBonusFrom().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getBonusFrom().get(j))){
+				to.add(bean.getBonusTo().get(j));	
+						}
+			if(StringUtils.isNotBlank(bean.getBonusLowClaimBonus().get(j))){
+				per.add(bean.getBonusLowClaimBonus().get(j));
+			}
+			}
+			j++;
+		}
+		bean.setBonusFrom(from);
+		bean.setBonusTo(to);
+		bean.setBonusLowClaimBonus(per);
+		bean.setLowClaimBonusList(list);
+		return "bonusPopUp";
+	}
+
 	private void validation() {
 		int j=1;
 		int k=2;
@@ -4070,7 +3874,7 @@ private void resetCoverLimit() {
          bean.setDepartIdlist(dropDownController.getDepartmentDropDown(branchCode,pid,"Y","","","","",""));
  		bean.setCoverLimitOC(coverOC);
  		bean.setCoverList(coverlist);
-        // bean.setTotalNoOfRows(bean.getReInstatementDetailsList().size());
+        bean.setTotalNoOfRows(String.valueOf(bean.getReInstatementDetailsList().size()));
 		return "popup";
 	}
 	private void validationReinstatementDetails() {
@@ -4103,28 +3907,28 @@ private void resetCoverLimit() {
 				if(StringUtils.isBlank(bean.getReinstatementOption())){
 					list1.add(getText("Scale.error.option.val"));					
 				}
-				for(int i=0;i<bean.getCoverLimitOC().size();i++){
-					if(StringUtils.isBlank(bean.getCoverLimitOC().get(i))){
+				for(int i=0;i<bean.getCoverLimitOCRe().size();i++){
+					if(StringUtils.isBlank(bean.getCoverLimitOCRe().get(i))){
 						list1.add(getText("error.coverList",new String[] { String.valueOf(i + 1) }));
 					}
-					if(StringUtils.isNotBlank(bean.getCoverLimitOC().get(i))){
-					val+=Double.parseDouble(bean.getCoverLimitOC().get(i).replace(",", ""));
+					if(StringUtils.isNotBlank(bean.getCoverLimitOCRe().get(i))){
+					val+=Double.parseDouble(bean.getCoverLimitOCRe().get(i).replace(",", ""));
 					}
 					if(StringUtils.isNotBlank(bean.getReinstatementOption()) && "S".equals(bean.getReinstatementOption())){
-						if(StringUtils.isNotBlank(bean.getCoverLimitOC().get(i)) && StringUtils.isNotBlank(bean.getHcoverLimitOC().get(i)) ){
-							if(Double.parseDouble(bean.getCoverLimitOC().get(i).replace(",", ""))<(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", ""))*Double.parseDouble(bean.getTotalNoOfRows()))){
+						if(StringUtils.isNotBlank(bean.getCoverLimitOCRe().get(i)) && StringUtils.isNotBlank(bean.getHcoverLimitOC().get(i)) ){
+							if(Double.parseDouble(bean.getCoverLimitOCRe().get(i).replace(",", ""))<(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", ""))*Double.parseDouble(bean.getTotalNoOfRows()))){
 								String dept=new DropDownControllor().getDepartmentName((String)session.get("BRANCH_CODE"), (String)session.get("mfrid"), bean.getCoverdepartId().get(i));
 								list1.add(getText("error.annual.aggre.less",new String[] {dept, String.valueOf(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", ""))*Double.parseDouble(bean.getTotalNoOfRows()))}));
 							}
-							if(Double.parseDouble(bean.getCoverLimitOC().get(i).replace(",", ""))>(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", ""))*(Double.parseDouble(bean.getTotalNoOfRows())+1))){
+							if(Double.parseDouble(bean.getCoverLimitOCRe().get(i).replace(",", ""))>(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", ""))*(Double.parseDouble(bean.getTotalNoOfRows())+1))){
 								String dept=new DropDownControllor().getDepartmentName((String)session.get("BRANCH_CODE"), (String)session.get("mfrid"), bean.getCoverdepartId().get(i));
 								list1.add(getText("error.annual.aggre.greater",new String[] { dept, String.valueOf(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", ""))*(Double.parseDouble(bean.getTotalNoOfRows())+1))}));
 							}
 						}
 					}
 					else{
-						if(StringUtils.isNotBlank(bean.getCoverLimitOC().get(i)) && StringUtils.isNotBlank(bean.getHcoverLimitOC().get(i)) ){
-							if(Double.parseDouble(bean.getCoverLimitOC().get(i).replace(",", ""))<(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", "")))){
+						if(StringUtils.isNotBlank(bean.getCoverLimitOCRe().get(i)) && StringUtils.isNotBlank(bean.getHcoverLimitOC().get(i)) ){
+							if(Double.parseDouble(bean.getCoverLimitOCRe().get(i).replace(",", ""))<(Double.parseDouble(bean.getHcoverLimitOC().get(i).replace(",", "")))){
 								String dept=new DropDownControllor().getDepartmentName((String)session.get("BRANCH_CODE"), (String)session.get("mfrid"), bean.getCoverdepartId().get(i));
 								list1.add(getText("error.annual.aggre.less",new String[] {dept, String.valueOf(bean.getHcoverLimitOC().get(i)) }));
 							}
@@ -4344,6 +4148,69 @@ private void resetRemarks() {
 			bean.setRemarkCount(Integer.toString(result.size()));
 	}
 }
+private void resetIntallment() {
+	if(bean.getInstalmentDateList()!=null && bean.getInstalmentDateList().size()>0){
+		List<String> instalmentDate = new ArrayList<String>();
+		List<String> installmentPremium = new ArrayList<String>();
+		List<String> paymentDueDays = new ArrayList<String>();
+		List<String> instalList = new ArrayList<String>();
+		for(int i=0;i<bean.getInstalmentDateList().size();i++){
+			instalmentDate.add(bean.getInstalmentDateList().get(i));
+			installmentPremium.add(bean.getInstallmentPremium().get(i));
+			paymentDueDays.add(bean.getPaymentDueDays().get(i));
+			instalList.add(String.valueOf(i));
+		}
+			bean.setInstalmentDateList(instalmentDate);
+			bean.setInstallmentPremium(installmentPremium);
+			bean.setPaymentDueDays(paymentDueDays);
+			bean.setInstalList(instalList);
+	}else {
+		if(StringUtils.isNotBlank(bean.getM_d_InstalmentNumber()) && Integer.parseInt(bean.getM_d_InstalmentNumber())>0){
+			List<String> instalList=new ArrayList<String>();
+			for(int i=0;i<Integer.parseInt(bean.getM_d_InstalmentNumber());i++){
+				instalList.add(String.valueOf(i));
+			}
+			bean.setInstalList(instalList);
+		}
+	}
+}
+public String  removeRowInst() {
+	List<String> instalmentDate = new ArrayList<String>();
+	List<String> installmentPremium = new ArrayList<String>();
+	List<String> paymentDueDays = new ArrayList<String>();
+	List<String> instalList = new ArrayList<String>();
+	bean.getInstallsno().remove(bean.getDeleteId());
+	for(int i=0;i<bean.getInstallsno().size();i++){
+		instalList.add("0");
+	}
+	int j=1;
+	
+	for(int k=0;k<bean.getInstallsno().size();k++){
+		int value=Integer.parseInt(bean.getDeleteId());
+		if(k<value){
+			instalmentDate.add(bean.getInstalmentDateList().get(k));
+			installmentPremium.add(bean.getInstallmentPremium().get(k));
+			paymentDueDays.add(bean.getPaymentDueDays().get(k));
+		}
+		else{
+		if(StringUtils.isNotBlank(bean.getInstalmentDateList().get(j))){
+			instalmentDate.add(bean.getInstalmentDateList().get(j));
+		}
+		if(StringUtils.isNotBlank(bean.getInstallmentPremium().get(j))){
+			installmentPremium.add(bean.getInstallmentPremium().get(j));	
+					}
+		if(StringUtils.isNotBlank(bean.getPaymentDueDays().get(j))){
+			paymentDueDays.add(bean.getPaymentDueDays().get(j));
+		}
+		}
+		j++;
+	}
+	bean.setInstalmentDateList(instalmentDate);
+	bean.setInstallmentPremium(installmentPremium);
+	bean.setPaymentDueDays(paymentDueDays);
+	bean.setInstalList(instalList);
+	return "dropdownajax";
+}
 private void validationRemarks() {
 	try{
 		List<String> error=new ArrayList<String>();
@@ -4433,5 +4300,99 @@ public String newDocDelete(){
     bean.setDocDesc(docDesc);
     bean.setDocTypeId(typeId);
 	return "dropdownajax";
+}
+public List<Map<String, Object>> getLayerInfo(){
+	return service.getLayerInfo(bean);
+}
+public String EditLayer(){
+	String forward="";
+	try {
+		
+	bean.setBranchCode(branchCode);
+	bean.setShortname(service.getShortname(bean));
+	bean.setMenuStatus("N");
+	
+	if("5".equalsIgnoreCase(pid)){
+		forward="retroxol1";
+	}else{
+		forward="xol1";
+	}
+	bean.setLayerProposalNo(bean.getProposalNo());
+	bean.setProposal_no(bean.getProposalNo1());
+		if(StringUtils.isBlank(bean.getMode())|| "edit".equalsIgnoreCase(bean.getMode())) {
+			if(StringUtils.isNotBlank(bean.getContractno())){
+				bean.setContNo(bean.getContractno());
+			}
+			
+			final int CheckEditMode = service.getEditMode(bean.getProposal_no());
+			if (CheckEditMode == 2) {
+				bean.setAmend_Id_Mode("true");
+			}
+		}
+		bean.setProduct_id(pid);
+		service.riskEditMode(bean, false);
+		bean.setYearList(getYearList());
+		
+		bean.setSubProfitList(dropDownController.getSubProfitCentreDropDown(bean.getDepartId(),branchCode,pid));
+		//RdsCalculation.SecondPageCaculation(bean,pid);
+		bean.setAnualAggregateLiability(service.getSumOfCover(bean,pid));
+		
+		bean.setEdit(bean.getMode());
+		service.BaseLayerStatus(bean,pid);
+		
+		dropDownController.updateEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getProposal_no());
+		if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
+			String proposal = dropDownController.getBaseProposal(bean.getProposal_no());
+			dropDownController.updateEditMode(proposal,"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"SR":"SE",bean.getProposal_no());
+			dropDownController.updateSubEditMode(proposal,"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"SR":"SE",bean.getProposal_no());
+		}
+		else{
+			dropDownController.updateSubEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getProposal_no());
+		}
+	
+	ShowDropDown("edit");
+	if(StringUtils.isNotBlank(bean.getContNo())){
+		bean.setProdisableStatus("Y");
+	}
+	if("layer".equals(bean.getLayerMode())) {
+		bean.setProposal_no(bean.getProposalNo());
+	}
+	if("copy".equals(bean.getFlag())) {
+		bean.setLayerNo("");
+	}
+	} catch (Exception e) {
+		logger.debug("Exception @ {" + e + "}");
+		e.printStackTrace();
+	}
+	return forward;
+}
+public String layerView() {
+	bean.setProduct_id(pid);
+	bean.setProposal_no(bean.getProposalNo1());
+	service.riskEditMode(bean, false);
+	ShowDropDown("edit");
+	return "layerview";
+	
+}
+public String CancelProposal(){
+	if(!"1".equalsIgnoreCase(pid)){
+	bean.setProposal_no(bean.getProposalNo());
+	}
+	ShowDropDown("edit");
+	service.riskEditMode(bean, false);
+	service.CancelProposal(bean,bean.getRenewalProposalNo());
+	return "xol1";
+}
+public String savepage() {
+	ShowDropDown("edit");
+	service.riskEditMode(bean, false);
+	if("layer".equals(bean.getLayerMode())) {
+		bean.setProposal_no(bean.getProposalNo());
+	}
+	return "xol1";
+}
+public String paymentPartnerAjax(){
+	bean.setPaymentPartnerlist(dropDownController.getPaymentPartnerlist(branchCode,bean.getCedingId(),bean.getBrokerId()));
+return "dropdownajax";
 }
 }

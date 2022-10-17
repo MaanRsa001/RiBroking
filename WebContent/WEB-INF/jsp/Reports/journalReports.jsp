@@ -58,7 +58,7 @@
 									</div>
 									<div class="panel-body" style="overflow: auto;">
 										<div class="boxcontent" align="center">											
-											<display:table name="ReportList" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -198,7 +198,7 @@
 									</div>
 									<div class="panel-body" style="overflow: auto;">
 										<div class="boxcontent">
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -275,7 +275,7 @@
 										</div>
 										<br class="clear"/>
 										<div class="boxcontent">											
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="50%"></th>
@@ -371,7 +371,7 @@
 										</div>
 										<br class="clear"/>
 										<div class="boxcontent">											
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="50%"></th>
@@ -480,7 +480,7 @@
 										</div>										
 										<br class="clear"/>
 										<div class="boxcontent">											
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="50%"></th>
@@ -550,7 +550,7 @@
 										</div>
 										<br class="clear"/>
 										<div class="boxcontent">											
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="50%"></th>

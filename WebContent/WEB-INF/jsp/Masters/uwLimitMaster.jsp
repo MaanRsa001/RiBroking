@@ -73,7 +73,7 @@
 										<s:text name="label.UWlimitMasters" />
 									</div>
 									<div class="panel-body">
-										<display:table name="UWLimitMasterList" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+										<display:table name="UWLimitMasterList" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />

@@ -87,7 +87,7 @@
 									</div>
 									<div class="panel-body">
 										<div class="boxcontent">
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 													
 											<tbody>												
 												<tr>
@@ -110,7 +110,7 @@
 												</tr>
 												</tbody>
 										</table>
-										<table width="75%" style="margin: 0 auto;" class="footable">
+										<table width="75%" style="margin: 0 auto;" class="table table-bordered">
 											<thead>
 												<tr>
 													<th width="15%"><s:text name="Journal ID"/></th>

@@ -94,7 +94,7 @@
 			<div class="panel-body">
 				<div class="boxcontent">
 				<div >
-					<table class="footable" width="100%" id="newgen">
+					<table class="table table-bordered" width="100%" id="newgen">
 						<thead>
 							<tr>
 								<th width="15.8%"> <s:text name="Proposal No" />  </th>

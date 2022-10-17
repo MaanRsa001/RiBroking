@@ -21,7 +21,7 @@
 	<!-- CSS  -->
 
 
-	<link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+	<link rel="stylesheet" type="text/css" href="css/select2.css"/>
 	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
 	<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 	<style type="text/css">
@@ -101,9 +101,6 @@ function preloadFun(){
 	<s:hidden name="lastAccessedTime" id="lastAccessedTime"/>
 </s:form>
 <!--  Scripts-->
-<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="js/jquery-migrate-1.2.1.min.js"></script>
-<script type="text/javascript" src="js/select2-3.4.1.js"></script>
 <script type="text/javascript">
     $('.select1').select2({ });
 </script>
@@ -162,24 +159,6 @@ for (mtbWinCound = 0; mtbWinCound < mtbChildWin.length; mtbWinCound++) {
         document.dash.action='${pageContext.request.contextPath}/sessionTimeOutHome.action';
         document.dash.submit();
     }
-
-
-    //var timeoutHandle;
-    // function count() {
-    //   var startTime = document.getElementById('hms').innerHTML;
-    //    var pieces = startTime.split(":");
-    //    var time = new Date();    time.setHours(pieces[0]);
-    //   	 time.setMinutes(pieces[1]);
-    //    time.setSeconds(pieces[2]);
-    //   var timedif = new Date(time.valueOf() - 1000);
-    //   var newtime = timedif.toTimeString().split(" ")[0];
-    //   	 document.getElementById('hms').innerHTML=newtime;
-    //    timeoutHandle=setTimeout(count, 1000);
-    //}
-    //count();
-</script>
-<script>
- 
 function networkChange(){
  if(!navigator.onLine){
 	  alert("A network change has been detected.   Kindly relogin.");

@@ -339,7 +339,7 @@ jQuery(function ($) {
 								<div class="panel-body">
 								<div class="tablerow">
 								<div class="boxcontent">
-										<display:table name="preTempList" pagesize="10" requestURI=""  class="footable" uid="row" id="record">
+										<display:table name="preTempList" pagesize="10" requestURI=""  class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -388,7 +388,7 @@ jQuery(function ($) {
 							<div class="tablerow">
 								<div class="boxcontent">
 									
-											<display:table name="preList" pagesize="10" requestURI=""  class="footable" uid="row" id="record">
+											<display:table name="preList" pagesize="10" requestURI=""  class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />

@@ -60,7 +60,7 @@
 															<s:if test="status==null">
 																<div class="panel-body">
 																	<div class="boxcontent">
-																		<table width="100%" class="footable">
+																		<table width="100%" class="table table-bordered">
 																			<thead>
 																				<tr>
 																					<th width="10%">

@@ -40,7 +40,7 @@
 										<s:submit type="button" action="editTmasValAdmin" value="Add New" cssClass="btn2 rEdge" />
 									</div>									
 									<div class="boxcontent">
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<thead>
 												<tr>
 													<th>Type</th>
@@ -70,7 +70,7 @@
 									<!-- 
 									<div class="boxcontent">
 										<display:table name="" pagesize="10" htmlId="distable"
-											requestURI="" class="footable" uid="row" id="record">		
+											requestURI="" class="table table-bordered" uid="row" id="record">		
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />

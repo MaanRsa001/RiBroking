@@ -262,7 +262,7 @@
 											<br class="clear"/>
 										</div>
 										<div class="boxcontent">
-											<table class="footable" id="DocTable">
+											<table class="table table-bordered" id="DocTable">
 												<thead>
 												<tr>
 													<th width="5%">

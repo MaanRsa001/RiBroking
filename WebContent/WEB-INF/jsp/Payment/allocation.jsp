@@ -332,7 +332,7 @@
 											</div>
 											<br class="clear"/>
 											<div style="overflow: auto;">
-												<display:table name="RECEIPT_CONTRACT" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+												<display:table name="RECEIPT_CONTRACT" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 													<display:setProperty name="paging.banner.one_item_found" value="" />
 													<display:setProperty name="paging.banner.one_items_found" value="" />
 													<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -444,7 +444,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record1" export="true">
+											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record1" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -545,7 +545,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-										  <%--<display:table name="transactionContractList" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+										  <%--<display:table name="transactionContractList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -868,7 +868,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record1" export="true">
+											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record1" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -972,7 +972,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-										 <display:table name="transactionContractList" pagesize="10" requestURI="" class="footable" uid="row" id="record">
+										 <display:table name="transactionContractList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1196,7 +1196,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record1" export="true">
+											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record1" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1228,7 +1228,7 @@
 									</div>									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedList" pagesize="10" requestURI="" class="footable" uid="row" id="record2" export="true">
+											<display:table name="allocatedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record2" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1351,7 +1351,7 @@
 									</div>									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="revertedList" pagesize="10" requestURI="" class="footable" uid="row" id="record3" export="true">
+											<display:table name="revertedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record3" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1521,7 +1521,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record1" export="true">
+											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record1" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1552,7 +1552,7 @@
 									</div>									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedList" pagesize="10" requestURI="" class="footable" uid="row" id="record2" export="true">
+											<display:table name="allocatedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record2" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1612,7 +1612,7 @@
 									</div>									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="revertedList" pagesize="10" requestURI="" class="footable" uid="row" id="record3" export="true">
+											<display:table name="revertedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record3" export="true">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1756,7 +1756,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record" export="false">
+											<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record" export="false">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1787,7 +1787,7 @@
 									</div>									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocateDetailsList" pagesize="10" requestURI="" class="footable" uid="row" id="record" export="false">
+											<display:table name="allocateDetailsList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record" export="false">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1899,7 +1899,7 @@
 							<div class="boxcontent">
 								<div class="panel panel-primary">									
 									<div class="panel-body" style="overflow: auto;">
-										<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record" export="false">
+										<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record" export="false">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1926,7 +1926,7 @@
 								<div class="panel panel-primary">									
 									<div class="panel-body">
 										<div class="boxcontent" style="overflow: auto;">
-											<display:table name="allocateViewList" pagesize="10" requestURI="" class="footable" uid="row" id="record" export="false">
+											<display:table name="allocateViewList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record" export="false">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -2107,7 +2107,7 @@
 							<div class="boxcontent">
 								<div class="panel panel-primary">									
 									<div class="panel-body" style="overflow: auto;">
-										<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="footable" uid="row" id="record" export="false">
+										<display:table name="allocatedStatusList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record" export="false">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -2137,7 +2137,7 @@
 										<s:text name="heading.reversedContracts" />
 									</div>									
 									<div class="panel-body" style="overflow: auto;">
-										<display:table name="allocateDetailsList" pagesize="10" requestURI="" class="footable" uid="row" id="record" export="false">
+										<display:table name="allocateDetailsList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record" export="false">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />

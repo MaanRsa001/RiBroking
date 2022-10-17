@@ -295,7 +295,7 @@
 													</div>
 													  <div class="panel-body" >
 														<div class="boxcontent"> --%>
-															<display:table name="ReportsList"  pagesize="10" requestURI="" style="" class="footable" uid="row" id="record" export="false">
+															<display:table name="ReportsList"  pagesize="10" requestURI="" style="" class="table table-bordered" uid="row" id="record" export="false">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -430,7 +430,7 @@
 													</div>
 													<div class="panel-body" style="overflow: auto;">
 														<div class="boxcontent">
-															<display:table name="ReportsList" pagesize="20"	requestURI="" class="footable" uid="row" id="record">
+															<display:table name="ReportsList" pagesize="20"	requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -470,7 +470,7 @@
 													</div>
 													<div class="panel-body" style="overflow: auto;">
 														<div class="boxcontent">
-															<display:table name="ReportsList" pagesize="20"	requestURI="" class="footable" uid="row" id="record">
+															<display:table name="ReportsList" pagesize="20"	requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />

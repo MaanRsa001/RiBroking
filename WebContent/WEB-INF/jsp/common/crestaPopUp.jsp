@@ -89,7 +89,7 @@
                     	<div >
                     	</div>
 							<div >
-							<table class="footable" id="newgen" width="100%" >
+							<table class="table table-bordered" id="newgen" width="100%" >
 									<thead>
 										<tr>
 											<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -160,7 +160,7 @@
                     	<div >
                     	</div>
 							<div >
-								<table class="footable" id="newgen" width="100%" >				
+								<table class="table table-bordered" id="newgen" width="100%" >				
 									<thead>
 										<tr>
 											<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>

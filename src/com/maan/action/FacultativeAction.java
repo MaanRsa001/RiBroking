@@ -1728,6 +1728,17 @@ public class FacultativeAction extends ActionSupport implements ModelDriven<Facu
 		}*/
 		return yearsList;
 	}
+	private List<Map<String,Object>> getYearToList(){
+		Validation val =new Validation();
+		List<Map<String,Object>> yearsList=new ArrayList<Map<String,Object>>();
+		if(StringUtils.isNotBlank(bean.getInceptionDate()) && !val.checkDate(bean.getInceptionDate()).equalsIgnoreCase("INVALID")){
+			if(StringUtils.isNotBlank(bean.getExpiryDate()) && !val.checkDate(bean.getExpiryDate()).equalsIgnoreCase("INVALID")){
+				yearsList = dropDownController.getYearToListValue(bean.getInceptionDate(),bean.getExpiryDate());
+			}
+		}
+		
+		return yearsList;
+	}
 	private  void BusinessCalculation(final FaculitivesBean formObj) {
 		final  DecimalFormat twoDigit = new DecimalFormat("###0.00");
 		formObj.setShareValue(formObj.getShSd());
@@ -3810,6 +3821,8 @@ public class FacultativeAction extends ActionSupport implements ModelDriven<Facu
 		}
 		else if("yearId".equalsIgnoreCase(bean.getDropDown())){
 			bean.setYearList(getYearList());
+		}else if("yearIdto".equalsIgnoreCase(bean.getDropDown())){
+			bean.setYearToList(getYearToList());
 		}
 		return "dropdownajax";
 	}

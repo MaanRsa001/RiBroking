@@ -72,7 +72,7 @@
 										<s:text name="SubMenu.SubMenuMasterList" />
 									</div>
 									<div class="panel-body">
-										<display:table name="subMenuList" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+										<display:table name="subMenuList" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -202,7 +202,7 @@
 										</div>
 										<div class="boxcontent">
 										<s:if test='subMenuList != null || subMenuList != ""'>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<!-- Iterator Starts Here -->
 											<tr>
 												<td><%--
@@ -289,7 +289,7 @@
 									<s:set id="productmap" name="menumap" value="%{menumap.key}" />-->
 									<div class="panel-body">
 									
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<!-- Iterator Starts Here id="productinfo" name="productmap" -->
 											<s:iterator id="productinfo" value="value">
 										
@@ -305,7 +305,7 @@
 													<!--<s:text name="%{key}" />-->
 												</td>
 												<td width="70%">
-													<table width="100%" class="footable">
+													<table width="100%" class="table table-bordered">
 														<s:set id="deptmap" name="productinfo" value="%{productinfo.userListMaster}" />
 														<!-- Iterator Starts Here -->
 														<s:iterator id="deptinfo" value="value">
@@ -315,7 +315,7 @@
 																
 															</td>
 															<td width="70%">
-																<table width="100%" class="footable">
+																<table width="100%" class="table table-bordered">
 																	<!-- Iterator Starts Here id="mmap" name="menuinf" -->
 																	<s:iterator id="menuinfo" value="value">
 																	<tr>
@@ -401,14 +401,14 @@
 										<s:set id="prod" name="" value="%{menumap.key}" />
 										<s:set id="productmap" name="" value="%{menumap.value}" />					
 										<div class="boxcontent" align="center">
-											<table class="footable" width="100%">
+											<table class="table table-bordered" width="100%">
 												<!-- Iterator Starts Here id="productinfo" name="productmap" 
 												<tr>
 													<td width="30%">
 														<s:property value="%{productinfo.key}"/>
 													</td>
 													<td width="70%">														
-														<table width="100%" class="footable">
+														<table width="100%" class="table table-bordered">
 															<s:set id="deptmap" name="" value="%{productinfo.value}" />
 															<!-- Iterator Starts Here id="processinfo" name="deptmap"
 															<tr>
@@ -416,7 +416,7 @@
 																	<s:property value="%{processinfo.key}"/>
 																</td>
 																<td width="70%">
-																	<table width="100%" class="footable">
+																	<table width="100%" class="table table-bordered">
 																		<s:set id="menuinf" name="" value="%{processinfo.value}" />
 																		<!-- Iterator Starts Here id="mmap" name="menuinf"
 																		<tr>

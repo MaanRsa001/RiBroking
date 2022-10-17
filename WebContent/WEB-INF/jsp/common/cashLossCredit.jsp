@@ -12,8 +12,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 		<link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />		
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">		    
-		<link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+		<!-- <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
     	<script type="text/javascript" src="${pageContext.request.contextPath}/js/shortcut.js"></script>
     	 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/disableF5.js"></script>
 </head>
@@ -55,7 +55,7 @@
 								<div class="row" id="allocation">
 									<div class="col-xs-12">
 									<s:if test="CashlossCreditList!=null && CashlossCreditList.size()>0">
-									   <table class="footable" width="100%" cellspacing="0">
+									   <table class="table table-bordered" width="100%" cellspacing="0">
 										<thead>
 										<tr>
 											<th><s:text name="Check Box" /></th>

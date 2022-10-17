@@ -335,7 +335,7 @@
 																</div>
 															</s:if>															
 															<br class="clear" />
-															<display:table name="detailsList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="detailsList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -634,7 +634,7 @@
 												<div class="panel panel-primary">
 													<div class="panel-body" style="overflow: auto;">
 														<s:if test='!"reversal".equals(type)'>
-															<display:table name="detailsList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="detailsList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -665,7 +665,7 @@
 															</display:table>
 														</s:if>
 														<s:else>
-															<display:table name="detailsList" pagesize="0" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="detailsList" pagesize="0" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -701,7 +701,7 @@
 													</div>									
 													<div class="panel-body">
 														<div class="boxcontent" style="overflow: auto;">
-															<display:table name="allocatedList" pagesize="10" requestURI="" class="footable" uid="row" id="record2" export="true">
+															<display:table name="allocatedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record2" export="true">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -776,7 +776,7 @@
 													</div>									
 													<div class="panel-body">
 														<div class="boxcontent" style="overflow: auto;">
-															<display:table name="revertedList" pagesize="10" requestURI="" class="footable" uid="row" id="record3" export="true">
+															<display:table name="revertedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record3" export="true">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1301,7 +1301,7 @@
 										<div class="panel-body">
 											<br class="clear"/>
 											<s:if test='"Transaction".equals(transactionType)'>
-											<table class="footable" width="100%" id="gen">
+											<table class="table table-bordered" width="100%" id="gen">
 												<thead>
 													<tr>
 														<th> S.No. </th>
@@ -1400,7 +1400,7 @@
 							</s:if>
 							<s:if test='"Treasury".equals(transactionType)'>
 							<s:hidden name="type" />
-								<display:table name="ReversalInfo" pagesize="0" requestURI="/initTreasury.action&flag=VIEW" class="footable" uid="row" id="record">
+								<display:table name="ReversalInfo" pagesize="0" requestURI="/initTreasury.action&flag=VIEW" class="table table-bordered" uid="row" id="record">
 									<display:setProperty name="paging.banner.one_item_found" value="" />
 									<display:setProperty name="paging.banner.one_items_found" value="" />
 									<display:setProperty name="paging.banner.all_items_found" value="" />

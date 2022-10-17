@@ -13,8 +13,8 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
     <link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -271,7 +271,7 @@
 													<div class="panel panel-primary">
 														<div class="panel-body">
 															<div class="boxcontent">
-																<table width="90%" class="footable">
+																<table width="90%" class="table table-bordered">
 																	<tr>
 																		<td width="25%" class="txtB">
 																			<s:text name="RiskDetails.CommisQ/S" />
@@ -529,7 +529,7 @@
 												<div class="tablerow">
 													<div class="panel panel-primary">
 														<div class="panel-body">
-															<table width="100%" class="footable">
+															<table width="100%" class="table table-bordered">
 																<thead>
 																	<tr>
 																		<th colspan="3">
@@ -1115,7 +1115,7 @@
 																		</td>
 																	</tr>
 																	<tr><td colspan="3">
-																	<table class="footable" >
+																	<table class="table table-bordered" >
 																	<tr >
 																	<td>
 																	<s:text name="Do you want to record Outstanding Loss Update?" />
@@ -1143,7 +1143,7 @@
 																		</table>
 																		</td>
 																		<td colspan="3">
-																			<table width="100%" class="footable">
+																			<table width="100%" class="table table-bordered">
 																				<tbody>
 																					<s:iterator id="OSClaim" value="osClaimLoss">
 																						<tr>
@@ -1222,7 +1222,7 @@
 														</div>
 															<div class="panel-body">
 																<display:table name="allocatedList" pagesize="10"
-																	requestURI="" class="footable" uid="row" id="record2">
+																	requestURI="" class="table table-bordered" uid="row" id="record2">
 																	<display:setProperty name="basic.msg.empty_list"
 																		value="None" />
 																	<display:setProperty
@@ -1402,7 +1402,7 @@
 											</div>
 										</div>
 										<br>
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<tbody>
 												<tr>
 													<td width="25%" style="font-weight: bold">
@@ -1496,7 +1496,7 @@
 											</tbody>
 										</table>
 										<br>
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<tbody>
 
 												<tr>
@@ -1547,7 +1547,7 @@
 											</tbody>
 										</table>
 										<br>
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<thead>
 												<s:if test='!"DN".equals(type)'>
 													<tr>

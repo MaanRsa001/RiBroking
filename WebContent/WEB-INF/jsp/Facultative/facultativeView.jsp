@@ -462,7 +462,7 @@
 															</s:if>
 															<s:else>
 															<hr class="clear"/>
-															<table class="footable" width="100%" id="xolnewgen">
+															<table class="table table-bordered" width="100%" id="xolnewgen">
 														<thead>
 															<tr>
 																<th width="2%"> <s:text name="Serial No" />  </th>
@@ -648,7 +648,7 @@
 											</div>
 											<hr class="clear"/>
 										</s:if>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th width="16.66%">100%</th>
@@ -998,7 +998,7 @@
 										<hr class="clear"/>
 										<s:if test='!"0".equals(noOfInst)'>
 										<s:set name="instalmnt" value="%{noOfInst == null?0:noOfInst}" />
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th width="25%">
@@ -1216,7 +1216,7 @@
 											</div>
 										</div>
 										<hr class="clear"/>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"> <s:text name="Facu.InsuraerNo" /> </th>
@@ -1430,7 +1430,7 @@
 									<div class="panel-heading"> <s:text name="All Remarks" />  </div>
 									<div class="panel-body">
 										<div class="boxcontent">
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 												<tr>
 													<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>

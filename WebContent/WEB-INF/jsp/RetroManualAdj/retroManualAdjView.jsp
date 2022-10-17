@@ -13,8 +13,8 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
     <link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -279,7 +279,7 @@
 												<div class="tablerow">
 													<div class="panel panel-primary">
 														<div class="panel-body">
-															<table width="100%" class="footable">
+															<table width="100%" class="table table-bordered">
 																<thead>
 																	<tr>
 																		<th colspan="3">

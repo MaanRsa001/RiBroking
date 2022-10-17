@@ -135,7 +135,7 @@
 												<div class="panel-body">
 														<div class="boxcontent">
 															<display:table name="RevisionList" pagesize="5"
-																requestURI="" class="footable" uid="row" id="record">
+																requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -164,7 +164,7 @@
 													</div>
 													<div class="panel-body">
 														<div class="boxcontent">
-															<display:table name="ClaimPayment" pagesize="5" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="ClaimPayment" pagesize="5" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -657,7 +657,7 @@
 													</div>
 													<div class="panel-body">
 														<div class="boxcontent">
-															<display:table name="RevisionList" pagesize="5" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="RevisionList" pagesize="5" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -689,7 +689,7 @@
 													</div>
 													<div class="panel-body">
 														<div class="boxcontent">
-															<display:table name="ClaimPayment" pagesize="5" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="ClaimPayment" pagesize="5" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -897,7 +897,7 @@
 													</div>
 													<div class="panel-body">
 														<div class="boxcontent">
-															<display:table name="RevisionList" pagesize="5" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="RevisionList" pagesize="5" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -1146,7 +1146,7 @@
 													</div>
 													<div class="panel-body">
 														<div class="boxcontent">
-															<display:table name="claimReview" pagesize="5" requestURI="" class="footable" uid="row" id="record">
+															<display:table name="claimReview" pagesize="5" requestURI="" class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found" value="" />
 																<display:setProperty name="paging.banner.one_items_found" value="" />
 																<display:setProperty name="paging.banner.all_items_found" value="" />

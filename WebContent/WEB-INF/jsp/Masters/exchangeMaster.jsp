@@ -74,7 +74,7 @@
 										<s:text name="exchange.ExchangeMasterList" />
 									</div>
 									<div class="panel-body">
-									<!--  	<display:table name="exchangeList" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+									<!--  	<display:table name="exchangeList" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -93,7 +93,7 @@
 										
 										</display:table>-->
 										
-										<display:table name="exchangeList" pagesize="10" requestURI="" excludedParams="*" class="footable" uid="row" id="record">
+										<display:table name="exchangeList" pagesize="10" requestURI="" excludedParams="*" class="table table-bordered" uid="row" id="record">
 											<display:setProperty name="paging.banner.one_item_found" value="" />
 											<display:setProperty name="paging.banner.one_items_found" value="" />
 											<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -255,7 +255,7 @@
 										<div class="boxcontent">
 										
 										
-										<display:table name="exchangeCurrencyList" pagesize="" requestURI="" class="footable" uid="row" id="record">
+										<display:table name="exchangeCurrencyList" pagesize="" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />

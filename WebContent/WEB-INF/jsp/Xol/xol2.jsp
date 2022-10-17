@@ -79,7 +79,7 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 											<tr>
 												<td width="16.66%" class="txtB">
 													<s:text name="label.proposalNo" />
@@ -150,7 +150,7 @@
 									</div>
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="50%"></th>
@@ -197,7 +197,7 @@
 									</div>
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="5%"> <s:text name="label.installmentNo" /> </th>
@@ -322,7 +322,7 @@
 												</div>
 											</div>	
 																														
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 												<thead>
 												<tr>
 													<th width="5%"> <s:text name="label.sNo" /> </th>
@@ -632,7 +632,7 @@
 													
 													<div class="panel-body">
 														<div class="boxcontent">
-															<table class="footable" id="DocTable">
+															<table class="table table-bordered" id="DocTable">
 																<thead>
 																<tr>
 																	<th width="5%">

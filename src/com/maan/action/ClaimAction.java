@@ -154,7 +154,6 @@ public class ClaimAction extends ActionSupport implements ModelDriven<ClaimBean>
 			bean.setProposal_No(SERVICE.getProposalNo(bean));
 		}
 		session.put("claim_contract_no",bean.getPolicy_Contract_No());
-		//session.put("claim_proposal_no",bean.getProposal_No());
 		bean.setBranchCode(branchCode);	
 		if(StringUtils.isNotBlank(bean.getProposal_No())){
 		 editMode = dropDownController.EditModeStatus(bean.getProposal_No(),bean.getLayerNo());

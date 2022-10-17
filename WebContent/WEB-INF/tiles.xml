@@ -304,7 +304,12 @@
 	<definition name="viewXol" template="/WEB-INF/jsp/Xol/xolView.jsp">
 		<put-attribute name="title" value="Re-Insurance - XOL" />
 	</definition>
-	
+	<definition name="layerview" template="/WEB-INF/jsp/Xol/layerview.jsp">
+		<put-attribute name="title" value="Re-Insurance - XOL" />
+	</definition>
+	<definition name="sectionview" template="/WEB-INF/jsp/ProportionalTreaty/sectionview.jsp">
+		<put-attribute name="title" value="Re-Insurance - Prop" />
+	</definition>
 	<!--<definition name="viewXol" template="/WEB-INF/jsp/Xol/xolView.jsp">-->
 		<!--<put-attribute name="title" value="Re-Insurance - XOL" />-->
 	<!--</definition>-->

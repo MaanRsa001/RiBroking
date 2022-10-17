@@ -275,7 +275,7 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="90%" class="footable">
+											<table width="90%" class="table table-bordered">
 												<tr>
 													<td width="25%" class="txtB">
 														<s:text name="Premium.CommissionPercent" />
@@ -507,7 +507,7 @@
 							<div class="tablerow">
 								<div class="panel panel-primary">							
 									<div class="panel-body">
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<thead>
 											<tr>
 												<th colspan="3">
@@ -757,7 +757,7 @@
 									<div class="boxcontent">
 										<div class="panel panel-primary">			
 										<div class="panel-body">
-										<display:table name="allocatedList" pagesize="10" requestURI="" class="footable" uid="row" id="record2">
+										<display:table name="allocatedList" pagesize="10" requestURI="" class="table table-bordered" uid="row" id="record2">
 										<display:setProperty name="basic.msg.empty_list" value="None"/>								
 										<display:setProperty name="paging.banner.one_item_found" value="" />
 										<display:setProperty name="paging.banner.one_items_found" value="" />
@@ -915,7 +915,7 @@
 										</div>
 										<br>
 										<br>
-										<table width="100%" class="footable" style="">
+										<table width="100%" class="table table-bordered" style="">
 											<tbody>
 												<tr>
 													<td width="25%" style="font-weight: bold">
@@ -1007,7 +1007,7 @@
 											</tbody>
 										</table>
 										<br>
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<tbody>
 												<tr>
 													<td width="25%" style="font-weight: bold">
@@ -1056,7 +1056,7 @@
 											</tbody>
 										</table>
 										<br>
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<thead>
 												<s:if test='!"DN".equals(type)'>
 													<tr>

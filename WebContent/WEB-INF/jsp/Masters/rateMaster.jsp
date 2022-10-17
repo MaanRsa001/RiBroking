@@ -152,7 +152,7 @@
 										<div class="boxcontent">
 										<br class="clear"/>
 										<br class="clear"/>
-										<table class="footable" width="100%" id="rateTbl">
+										<table class="table table-bordered" width="100%" id="rateTbl">
 														<thead>
 															<tr>
 																<th width="2%"> <s:text name="Serial No" />  </th>
@@ -237,7 +237,7 @@
 										</div>	
 										<br class="clear"/>
 										<br class="clear"/>
-										<table class="footable" width="100%" id="rateTbl">
+										<table class="table table-bordered" width="100%" id="rateTbl">
 														<thead>
 															<tr>
 																<th width="2%"> <s:text name="Serial No" />  </th>

@@ -277,6 +277,7 @@ public class CommonCalculation {
 				logger.info("Jsp Calculation EPI (Our Assessment) - 100% - OC   "+bean.getEpi() );
 				String premiumRate=StringUtils.isBlank(bean.getEpi_origCur())?"0":bean.getEpi_origCur().replaceAll(",", "");
 				String coverlimit=StringUtils.isBlank(bean.getOurEstimate())?"0":bean.getOurEstimate().replaceAll(",", "");
+				if(!"0".equals(premiumRate) && !"0".equals(coverlimit))
 				amt = (Double.parseDouble(premiumRate) * Double.parseDouble(coverlimit))/100;
 				result =  DropDownControllor.formatter(Double.toString(amt)).replaceAll(",", "");
 				logger.info("Java Calculation EPI (Our Assessment) - 100% - OC   "+result );
@@ -285,6 +286,7 @@ public class CommonCalculation {
 				logger.info("Jsp Calculation Our Assessment   "+bean.getOurEstimate() );
 				String premiumRate=StringUtils.isBlank(bean.getEpi())?"0":bean.getEpi().replaceAll(",", "");
 				String coverlimit=StringUtils.isBlank(bean.getEpi_origCur())?"0":bean.getEpi_origCur().replaceAll(",", "");
+				if(!"0".equals(premiumRate) && !"0".equals(coverlimit))
 				amt = (Double.parseDouble(premiumRate) * 100 / Double.parseDouble(coverlimit));
 				result =  DropDownControllor.formatter(Double.toString(amt)).replaceAll(",", "");
 				logger.info("Java Calculation Our Assessment   "+result );
@@ -292,6 +294,7 @@ public class CommonCalculation {
 				String premiumRate=StringUtils.isBlank(bean.getEpiAsPerOffer())?"0":bean.getEpiAsPerOffer().replaceAll(",", "");
 				String coverlimit=StringUtils.isBlank(bean.getOurassessmentorginalacqcost())?"0":bean.getOurassessmentorginalacqcost().replaceAll(",", "");
 				logger.info("Jsp Calculation Our Acq Cost   "+bean.getOuracqCost() );
+				if(!"0".equals(premiumRate) && !"0".equals(coverlimit))
 				amt = (Double.parseDouble(premiumRate) *  Double.parseDouble(coverlimit))/100;
 				result =  DropDownControllor.formatter(Double.toString(amt)).replaceAll(",", "");
 				logger.info("Java Calculation Our Acq Cost   "+result );

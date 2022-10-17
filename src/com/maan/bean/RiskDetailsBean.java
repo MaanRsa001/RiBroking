@@ -488,9 +488,30 @@ public class RiskDetailsBean  {
 	private String minPremiumOSOC;
 	private String minPremiumOSDC;
 
+	private String bouquetModeYN;
+	private String bouquetMode;
+	private String uwYearTo;
+	private String paymentPartner;
+	private String rateOnLine;
+	private String installYN;
+	private String acqdetailYN;
+	private String reinstdetailYN;
 	
-	
-	
+	private String riskdetailYN;
+	private String brokerdetYN;
+	private String coverdetYN;
+	private String premiumdetailYN;
+	private String commissiondetailYN;
+	private String depositdetailYN;
+	private String lossdetailYN;
+	private String docdetailYN;
+	private String sectionNo;
+	private String scfistpc;
+	private String scprofitMont;
+	private String scsubpc;
+	private String scsubProfitMonth;
+	private String scsubSeqCalculation;
+	private String referenceNo;
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -2050,6 +2071,7 @@ public class RiskDetailsBean  {
 	private List<Map<String,Object>> AccontPeriodlist;
 	private List<Map<String,Object>> PNOCDayslist;
 	private List<Map<String,Object>> brokerlist;
+	private List<Map<String,Object>> paymentPartnerlist;
 	private List<Map<String,Object>> Basislist;
 	private List<Map<String,Object>> proposaltypelist;
 	private List<Map<String,Object>> orginalCurrencylist;
@@ -2058,6 +2080,7 @@ public class RiskDetailsBean  {
 	private List<Map<String,Object>> retroTypelist;
 	private List<Map<String,Object>> Productlist;
 	private List<Map<String,Object>> yearList;
+	private List<Map<String,Object>> yearToList;
 	private List<Map<String,Object>> retroContractList;
 	private List<Map<String,Object>> retroUwyear;
 	private List<List<Map<String,Object>>> retroFinalList;
@@ -2069,6 +2092,7 @@ public class RiskDetailsBean  {
 	private List<String> percentRetro;
 	private List<String> instalmentDateList;
 	private List<String> instalList;
+	private List<String> installsno;
 	private List<String> installmentPremium;
 	private List<String> retroCessList;
 	private List<String> cedingCompany;
@@ -2125,10 +2149,13 @@ public class RiskDetailsBean  {
 	private String LOCIssued;
 	private String locRate;
 	private List<Map<String,Object>> CoverList;
+	private List<Map<String,Object>> CoverListRe;
 	private List<Map<String,Object>> premiumBasicList;
 	private List<String> coverdepartId;
+	private List<String> coverdepartIdRe;
 	private List<String> coverdepartIdS;
 	private List<String> coverLimitOC;
+	private List<String> coverLimitOCRe;
 	private List<String> hcoverLimitOC;
 	private List<String> deductableLimitOC;
 	private List<String> coverLimitAmount;
@@ -2170,11 +2197,17 @@ public class RiskDetailsBean  {
 	private String mappingProposal;
 	private String mapingAmendId;
 	private String treatyTypeName;
+	private String anualAggregateLiabilityTemp;
 	
 	
 	
 	
-	
+	public List<Map<String, Object>> getYearToList() {
+		return yearToList;
+	}
+	public void setYearToList(List<Map<String, Object>> yearToList) {
+		this.yearToList = yearToList;
+	}
 	public String getTreatyTypeName() {
 		return treatyTypeName;
 	}
@@ -5211,6 +5244,181 @@ public class RiskDetailsBean  {
 	}
 	public void setRetdepartIdlist(List<Map<String, Object>> retdepartIdlist) {
 		this.retdepartIdlist = retdepartIdlist;
+	}
+	public String getBouquetModeYN() {
+		return bouquetModeYN;
+	}
+	public void setBouquetModeYN(String bouquetModeYN) {
+		this.bouquetModeYN = bouquetModeYN;
+	}
+	public String getBouquetMode() {
+		return bouquetMode;
+	}
+	public void setBouquetMode(String bouquetMode) {
+		this.bouquetMode = bouquetMode;
+	}
+	public String getUwYearTo() {
+		return uwYearTo;
+	}
+	public void setUwYearTo(String uwYearTo) {
+		this.uwYearTo = uwYearTo;
+	}
+	public String getPaymentPartner() {
+		return paymentPartner;
+	}
+	public void setPaymentPartner(String paymentPartner) {
+		this.paymentPartner = paymentPartner;
+	}
+	public String getInstallYN() {
+		return installYN;
+	}
+	public void setInstallYN(String installYN) {
+		this.installYN = installYN;
+	}
+	
+	public String getAcqdetailYN() {
+		return acqdetailYN;
+	}
+	public void setAcqdetailYN(String acqdetailYN) {
+		this.acqdetailYN = acqdetailYN;
+	}
+	public String getReinstdetailYN() {
+		return reinstdetailYN;
+	}
+	public void setReinstdetailYN(String reinstdetailYN) {
+		this.reinstdetailYN = reinstdetailYN;
+	}
+	public String getRateOnLine() {
+		return rateOnLine;
+	}
+	public void setRateOnLine(String rateOnLine) {
+		this.rateOnLine = rateOnLine;
+	}
+	public List<String> getCoverLimitOCRe() {
+		return coverLimitOCRe;
+	}
+	public void setCoverLimitOCRe(List<String> coverLimitOCRe) {
+		this.coverLimitOCRe = coverLimitOCRe;
+	}
+	public List<String> getCoverdepartIdRe() {
+		return coverdepartIdRe;
+	}
+	public void setCoverdepartIdRe(List<String> coverdepartIdRe) {
+		this.coverdepartIdRe = coverdepartIdRe;
+	}
+	public List<Map<String, Object>> getCoverListRe() {
+		return CoverListRe;
+	}
+	public void setCoverListRe(List<Map<String, Object>> coverListRe) {
+		CoverListRe = coverListRe;
+	}
+	public String getAnualAggregateLiabilityTemp() {
+		return anualAggregateLiabilityTemp;
+	}
+	public void setAnualAggregateLiabilityTemp(String anualAggregateLiabilityTemp) {
+		this.anualAggregateLiabilityTemp = anualAggregateLiabilityTemp;
+	}
+	public List<String> getInstallsno() {
+		return installsno;
+	}
+	public void setInstallsno(List<String> installsno) {
+		this.installsno = installsno;
+	}
+	public List<Map<String, Object>> getPaymentPartnerlist() {
+		return paymentPartnerlist;
+	}
+	public void setPaymentPartnerlist(List<Map<String, Object>> paymentPartnerlist) {
+		this.paymentPartnerlist = paymentPartnerlist;
+	}
+	public String getRiskdetailYN() {
+		return riskdetailYN;
+	}
+	public void setRiskdetailYN(String riskdetailYN) {
+		this.riskdetailYN = riskdetailYN;
+	}
+	public String getBrokerdetYN() {
+		return brokerdetYN;
+	}
+	public void setBrokerdetYN(String brokerdetYN) {
+		this.brokerdetYN = brokerdetYN;
+	}
+	public String getCoverdetYN() {
+		return coverdetYN;
+	}
+	public void setCoverdetYN(String coverdetYN) {
+		this.coverdetYN = coverdetYN;
+	}
+	public String getPremiumdetailYN() {
+		return premiumdetailYN;
+	}
+	public void setPremiumdetailYN(String premiumdetailYN) {
+		this.premiumdetailYN = premiumdetailYN;
+	}
+	public String getCommissiondetailYN() {
+		return commissiondetailYN;
+	}
+	public void setCommissiondetailYN(String commissiondetailYN) {
+		this.commissiondetailYN = commissiondetailYN;
+	}
+	public String getDepositdetailYN() {
+		return depositdetailYN;
+	}
+	public void setDepositdetailYN(String depositdetailYN) {
+		this.depositdetailYN = depositdetailYN;
+	}
+	public String getLossdetailYN() {
+		return lossdetailYN;
+	}
+	public void setLossdetailYN(String lossdetailYN) {
+		this.lossdetailYN = lossdetailYN;
+	}
+	public String getDocdetailYN() {
+		return docdetailYN;
+	}
+	public void setDocdetailYN(String docdetailYN) {
+		this.docdetailYN = docdetailYN;
+	}
+	public String getSectionNo() {
+		return sectionNo;
+	}
+	public void setSectionNo(String sectionNo) {
+		this.sectionNo = sectionNo;
+	}
+	public String getScfistpc() {
+		return scfistpc;
+	}
+	public void setScfistpc(String scfistpc) {
+		this.scfistpc = scfistpc;
+	}
+	public String getScprofitMont() {
+		return scprofitMont;
+	}
+	public void setScprofitMont(String scprofitMont) {
+		this.scprofitMont = scprofitMont;
+	}
+	public String getScsubpc() {
+		return scsubpc;
+	}
+	public void setScsubpc(String scsubpc) {
+		this.scsubpc = scsubpc;
+	}
+	public String getScsubProfitMonth() {
+		return scsubProfitMonth;
+	}
+	public void setScsubProfitMonth(String scsubProfitMonth) {
+		this.scsubProfitMonth = scsubProfitMonth;
+	}
+	public String getReferenceNo() {
+		return referenceNo;
+	}
+	public void setReferenceNo(String referenceNo) {
+		this.referenceNo = referenceNo;
+	}
+	public String getScsubSeqCalculation() {
+		return scsubSeqCalculation;
+	}
+	public void setScsubSeqCalculation(String scsubSeqCalculation) {
+		this.scsubSeqCalculation = scsubSeqCalculation;
 	}
 	
 

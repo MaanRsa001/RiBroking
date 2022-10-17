@@ -2960,6 +2960,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 		bean.setBankCurrencyList(service.getbankCurrencyList(bean));
 		bean.setTdsTypeList(service.gettdsTypeList(bean,"36"));
 		bean.setClientList(service.gettdsTypeList(bean,"38"));
+		bean.setDepartList(service.gettdsTypeList(bean,"50"));
 		bean.setBrokercountryList(new DropDownControllor().getCountryDropDown(branchCode));
 		bean.setBroGroupList(service.getbroGroupList(bean));
 		SimpleDateFormat sformat=new SimpleDateFormat("dd/MM/yyyy");
@@ -2978,7 +2979,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 		}
 		if(bean.getContactList()==null){
 			List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(5);
-			for(int i=0;i<5;i++){
+			for(int i=0;i<3;i++){
 				Map<String,Object> doubleMap = new HashMap<String,Object>();
 				List<Map<String,Object>> cntList=new ArrayList<Map<String,Object>>();
 				doubleMap.put("one",new Double(1.0));
@@ -3487,7 +3488,130 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 		}
 		return "admindocupload";
 	}
-
+	
+	public String removeRowCurrency(){
+		
+		List<String> bankaccountnumber=new ArrayList<String>();
+		List<String> bankname=new ArrayList<String>();
+		List<String> accountname=new ArrayList<String>();
+		List<String> swiftcode=new ArrayList<String>();
+		List<String> corespondentbank=new ArrayList<String>();
+		List<String> bankRemarks=new ArrayList<String>();
+		
+		bean.getBankSNo().remove(bean.getDeleteId());
+		
+		
+		List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(5);
+		for(int i=0;i<bean.getBankSNo().size();i++){
+			Map<String,Object> doubleMap = new HashMap<String,Object>();
+			List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
+			doubleMap.put("one",new Double(1.0));
+			creList.add(doubleMap);
+			currencyList1.add(creList);
+		}
+		int j=1;
+		
+		for(int k=0;k<bean.getBankSNo().size();k++){
+			int value=Integer.parseInt(bean.getDeleteId());
+			if(k<value){
+				bankaccountnumber.add(bean.getBankaccountnumber().get(k));
+				bankname.add(bean.getBankname().get(k));
+				accountname.add(bean.getAccountname().get(k));
+				swiftcode.add(bean.getSwiftcode().get(k));
+				corespondentbank.add(bean.getCorespondentbank().get(k));
+				bankRemarks.add(bean.getBankRemarks().get(k));
+			}
+			else{
+			if(StringUtils.isNotBlank(bean.getBankaccountnumber().get(j))){
+				bankaccountnumber.add(bean.getBankaccountnumber().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getBankname().get(j))){
+				bankname.add(bean.getBankname().get(j));	
+						}
+			if(StringUtils.isNotBlank(bean.getAccountname().get(j))){
+				accountname.add(bean.getAccountname().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getSwiftcode().get(j))){
+				swiftcode.add(bean.getAccountname().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getCorespondentbank().get(j))){
+				corespondentbank.add(bean.getAccountname().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getBankRemarks().get(j))){
+				bankRemarks.add(bean.getBankRemarks().get(j));
+			}
+			
+			}
+			j++;
+		}
+		bean.setBankaccountnumber(bankaccountnumber);
+		bean.setBankname(bankname);
+		bean.setAccountname(accountname);
+		bean.setSwiftcode(swiftcode);
+		bean.setCorespondentbank(corespondentbank);
+		bean.setBankRemarks(bankRemarks);
+		bean.setCurrencyList(currencyList1);
+		return "dropdownajax";
+	}
+public String removeRowcontact(){
+		
+		List<String> departmentCD=new ArrayList<String>();
+		List<String> subdepartmentCD=new ArrayList<String>();
+		List<String> emailaddress=new ArrayList<String>();
+		List<String> telephonenumber=new ArrayList<String>();
+		List<String> faxnumber=new ArrayList<String>();
+		
+		bean.getContactSNo().remove(bean.getDeleteId());
+		
+		
+		List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(5);
+		for(int i=0;i<bean.getContactSNo().size();i++){
+			Map<String,Object> doubleMap = new HashMap<String,Object>();
+			List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
+			doubleMap.put("one",new Double(1.0));
+			creList.add(doubleMap);
+			currencyList1.add(creList);
+		}
+		int j=1;
+		
+		for(int k=0;k<bean.getBankSNo().size();k++){
+			int value=Integer.parseInt(bean.getDeleteId());
+			if(k<value){
+				departmentCD.add(bean.getDepartmentCD().get(k));
+				subdepartmentCD.add(bean.getSubdepartmentCD().get(k));
+				emailaddress.add(bean.getEmailaddress().get(k));
+				telephonenumber.add(bean.getTelephonenumber().get(k));
+				faxnumber.add(bean.getFaxnumber().get(k));
+			}
+			else{
+			if(StringUtils.isNotBlank(bean.getDepartmentCD().get(j))){
+				departmentCD.add(bean.getDepartmentCD().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getSubdepartmentCD().get(j))){
+				subdepartmentCD.add(bean.getSubdepartmentCD().get(j));	
+						}
+			if(StringUtils.isNotBlank(bean.getEmailaddress().get(j))){
+				emailaddress.add(bean.getEmailaddress().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getTelephonenumber().get(j))){
+				telephonenumber.add(bean.getTelephonenumber().get(j));
+			}
+			if(StringUtils.isNotBlank(bean.getFaxnumber().get(j))){
+				faxnumber.add(bean.getFaxnumber().get(j));
+			}
+			
+			
+			}
+			j++;
+		}
+		bean.setDepartmentCD(departmentCD);
+		bean.setSubdepartmentCD(subdepartmentCD);
+		bean.setEmailaddress(emailaddress);
+		bean.setTelephonenumber(telephonenumber);
+		bean.setFaxnumber(faxnumber);
+		bean.setContactList(currencyList1);
+		return "dropdownajax";
+	}
 
 
 }

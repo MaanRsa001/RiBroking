@@ -36,7 +36,7 @@
 									</div>
 									<div class="panel-body" style="overflow: auto;">
 										<div class="boxcontent">											
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -92,7 +92,7 @@
 									</div>
 									<div class="panel-body" style="overflow: auto;">
 										<div class="boxcontent">											
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -201,7 +201,7 @@
 											<br class="clear"/>
 										</div>
 										<div class="boxcontent">
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -265,7 +265,7 @@
 											<br class="clear"/>
 										</div>
 										<div class="boxcontent">
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -329,7 +329,7 @@
 											<br class="clear"/>
 										</div>
 										<div class="boxcontent">
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -393,7 +393,7 @@
 									<div class="panel-body">
 										<div class="boxcontent">											
 										  	 <s:iterator value="viewJurnalAll" var="viewJurnalVar" status="stat">
-											  	 <table class="footable" width="100%">
+											  	 <table class="table table-bordered" width="100%">
 											  	 	<tr>
 											  	 		<td class="txtB"> <s:text name="label.sNo" /> </td>
 											  	 		<td> <s:property value="sNo"/></td>
@@ -413,7 +413,7 @@
 											  	 		<td> <s:property value="currencyname" /> </td>
 											  	 	</tr>
 											  	 </table>
-											  	 <table width="100%" class="footable">
+											  	 <table width="100%" class="table table-bordered">
 											  	 	<thead>
 											  	 	<tr>
 											  	 		<th width="20%"> <s:text name="label.description" /> </th>
@@ -629,7 +629,7 @@
 									<div class="panel-body">
 										<div class="boxcontent">
 									  	    <s:iterator value="viewJurnalAll" var="viewJurnalVar" status="stat">
-									  	    <table class="footable" width="100%">
+									  	    <table class="table table-bordered" width="100%">
 										  	 	<tr>
 										  	 		<td width="25%" class="txtB"> <s:text name="label.sNo" /> </td>
 										  	 		<td width="25%" class=""> <s:property value="sNo"/> </td>
@@ -649,7 +649,7 @@
 										  	 		<td> <s:property value="currencyname" /> </td>
 										  	 	</tr>
 										  	 </table>
-										  	 <table width="100%" class="footable">
+										  	 <table width="100%" class="table table-bordered">
 										  	 	<thead>
 										  	 	<tr>
 										  	 		<th width="20%"> <s:text name="label.description" /> </th>
@@ -880,7 +880,7 @@
 									</div>
 									<div class="panel-body">
 										<div class="boxcontent">
-											<display:table name="ReportsList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportsList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -923,7 +923,7 @@
 									</div>
 									<div class="panel-body">
 										<div class="boxcontent">
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -987,7 +987,7 @@
 											<br class="clear"/>
 										</div>
 										<div class="boxcontent">
-											<display:table name="ReportList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />

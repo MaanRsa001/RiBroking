@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
     <link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+   <!--  <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
@@ -561,7 +561,7 @@
                                         <div class="panel-body">
                                             <div class="boxcontent">
                                          <div id="testTable" class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;">  
-										<table class="footable" width="100%" >
+										<table class="table table-bordered" width="100%" >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">
@@ -718,7 +718,7 @@
 										
 									</tbody>
 								</table>
-											<table class="footable" width="100%" >
+											<table class="table table-bordered" width="100%" >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">
@@ -872,7 +872,7 @@
 										</s:iterator>
 									</tbody>
 								</table>
-								<table class="footable" width="100%" >
+								<table class="table table-bordered" width="100%" >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">
@@ -1026,7 +1026,7 @@
 										</s:iterator>
 									</tbody>
 								</table>
-								<table class="footable" width="100%" >
+								<table class="table table-bordered" width="100%" >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">
@@ -1180,7 +1180,7 @@
 										</s:iterator>
 									</tbody>
 								</table>
-								<table class="footable" width="100%" >
+								<table class="table table-bordered" width="100%" >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">
@@ -1334,7 +1334,7 @@
 										</s:iterator>
 									</tbody>
 								</table>
-								<table class="footable" width="100%"  >
+								<table class="table table-bordered" width="100%"  >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">
@@ -1576,7 +1576,7 @@
 										</s:iterator>
 									</tbody>
 								</table>
-								<table class="footable" width="100%" >
+								<table class="table table-bordered" width="100%" >
 									<thead>
 									
 									<s:iterator value="columnHeaderlist" var="list" status="stat">

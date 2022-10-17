@@ -233,21 +233,26 @@ jQuery(function ($) {
 								<div class="panel-body">
 									<div class="boxcontent">
 			     					 <div class="panel-body">
-										<table class="footable" width="100%" id="newgen">
+										<table class="table table-bordered" width="100%" id="newgen1">
 											<thead>
 												<tr>
+													<th width="2.8%"> <s:text name="label.serialnumber" /></th>
 													<th width="15.8%"> <s:text name="label.bankcurrency" /></th>
 													<th width="15.8%"> <s:text name="label.bankaccountnumber" /></th>
 													<th width="15.8%"> <s:text name="label.bankname" /></th>
 													<th width="15.8%"> <s:text name="label.accountname" /></th>
 													<th width="15.8%"> <s:text name="label.swiftcode" /> </th>
-													<th width="15.8%"> <s:text name="label.ifsccode" /> </th>
+													<th width="15.8%"> <s:text name="label.coresondentbank" /> </th>
 													<th width="15.8%"> <s:text name="label.remarks" /> </th>
+													<th width="5.8%"> <s:text name="Delete" /> </th>
 												</tr>
 											</thead>
 											<tbody>
 												<s:iterator value="currencyList" var="list" status="stat">
-													<tr><td>
+													<tr>
+														<td><s:textfield name="bankSNo[%{#stat.count-1}]" id="bankSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/></td>
+													
+														<td>
 															<s:select  list="bankCurrencyList"  name="bankCurrency[%{#stat.count-1}]" id="bankCurrency%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CURRENCY_ID"  listValue="CURRENCY_NAME"/>
 														</td>
 														<td>
@@ -263,16 +268,24 @@ jQuery(function ($) {
 															<s:textfield name="swiftcode[%{#stat.count-1}]" id="swiftcode[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})"/>
 														</td>
 														<td>
-															<s:textfield name="ifsccode[%{#stat.count-1}]" id="ifsccode[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})"/>
+															<s:textarea name="corespondentbank[%{#stat.count-1}]" id="corespondentbank[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" />
 														</td>
 														<td>
 															<s:textfield name="bankRemarks[%{#stat.count-1}]" id="remarks[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})"/>
 														</td>
+														<td align="center">
+																<s:if test='0!=(#stat.count-1)'>
+																<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');deleteRow1('<s:property value="%{#stat.count-1}"/>')" />
+																</s:if>
+															</td>
 														</tr>
 													</s:iterator>
 											</tbody>
 										</table>
 									  </div>
+									  <div class="boxcontent" align="center">
+											<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="insRow1('newgen1');" />
+										</div>
 								    </div>
 								</div>
 			                  </div>
@@ -287,22 +300,27 @@ jQuery(function ($) {
 								<div class="panel-body">
 									<div class="boxcontent">
 										<div class="panel-body">
-											<table class="footable" width="100%" id="newgen">
+											<table class="table table-bordered" width="100%" id="newgen">
 												<thead>
 													<tr>
 													<th width="2.8%"> <s:text name="label.serialnumber" /></th>
 													<th width="15.8%"> <s:text name="label.departmentName" /></th>
+													<th width="15.8%"> <s:text name="label.subdepartmentName" /></th>
 													<th width="15.8%"> <s:text name="label.emailaddress" /></th>
 													<th width="15.8%"> <s:text name="label.telephonenumber" /></th>
 													<th width="15.8%"> <s:text name="label.faxnumber" /> </th>
+													<th width="5.8%"> <s:text name="Delete" /> </th>
 													</tr>
 												</thead>
 												<tbody>
 													<s:iterator value="contactList" var="list" status="stat">
 														<tr>
-															<td><s:property value="#stat.count"/></td>
+															<td><s:textfield name="contactSNo[%{#stat.count-1}]" id="contactSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/></td>
 															<td>
-															<s:textfield name="departmentCD[%{#stat.count-1}]" id="departmentCD[%{#stat.count-1}]" cssClass="inputBox"/>
+															<s:select  list="departList"  name="departmentCD[%{#stat.count-1}]" id="departmentCD%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CATEGORY_DETAIL_ID" listValue="DETAIL_NAME"/>
+															</td>
+															<td>
+															<s:textfield name="subdepartmentCD[%{#stat.count-1}]" id="subdepartmentCD[%{#stat.count-1}]" cssClass="inputBox"/>
 															</td>
 															<td>
 															<s:textfield name="emailaddress[%{#stat.count-1}]" id="emailaddress[%{#stat.count-1}]" cssClass="inputBox"/>
@@ -313,10 +331,18 @@ jQuery(function ($) {
 															<td>
 															<s:textfield name="faxnumber[%{#stat.count-1}]" id="faxnumber[%{#stat.count-1}]" cssClass="inputBox"/>
 															</td>
+															<td align="center">
+																<s:if test='0!=(#stat.count-1)'>
+																<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');deleteRow('<s:property value="%{#stat.count-1}"/>')" />
+																</s:if>
+															</td>
 															</tr>
 														</s:iterator>
 												</tbody>
 											</table>
+										</div>
+										<div class="boxcontent" align="center">
+											<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="insRow('newgen');" />
 										</div>
 									</div>
 								</div>
@@ -532,25 +558,28 @@ jQuery(function ($) {
 changename('<s:property value="clientType"/>');
 function changename(val){
 	if(val=='C'){
-		document.getElementById('cc').style.display='inline';
+		/* document.getElementById('cc').style.display='inline';
 		document.getElementById('BN').style.display='none';
 		document.getElementById('LN').style.display='none';
-		document.getElementById('BG').style.display='none';
+		 */
+		 document.getElementById('BG').style.display='none';
 		document.client.broGroup.value ='';
 		document.client.brokerGroup.checked = false;
 	}
 	if(val=='B'){
-		document.getElementById('BN').style.display='inline';
+		/* document.getElementById('BN').style.display='inline';
 		document.getElementById('cc').style.display='none';
 		document.getElementById('LN').style.display='none';
-		document.getElementById('BG').style.display='inline';
+		 */
+		 document.getElementById('BG').style.display='inline';
 		checkboxChange();
 	}
 	if(val=='L'){
-		document.getElementById('LN').style.display='inline';
+		/* document.getElementById('LN').style.display='inline';
 		document.getElementById('BN').style.display='none';
 		document.getElementById('cc').style.display='none';
-		document.getElementById('BG').style.display='none';
+		 */
+		 document.getElementById('BG').style.display='none';
 		document.client.broGroup.value ='';
 		document.client.brokerGroup.checked = false;
 	}
@@ -626,6 +655,236 @@ function checkCurrency(id,count){
 		alert("Please choose currency in row number "+co);
 		document.getElementById(id).value ="";
 	}
+}
+function insRow(tableID)
+{
+var table = document.getElementById(tableID);
+
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+			
+			var cell1 = row.insertCell(0)
+			var element1 = document.createElement("input");
+			element1.type = "text";
+      	 	element1.name = "contactSNo["+(rowCount-1)+"]";
+       		element1.id = "contactSNo["+(rowCount-1)+"]";
+ 			element1.value = rowCount;
+ 			element1.className = "inputBox";
+			element1.setAttribute("readonly",true);
+       		cell1.appendChild(element1);
+       		
+			var cell2 = row.insertCell(1)
+			createcoverdeptCell(cell2, rowCount)
+       		
+		
+			var cell3 = row.insertCell(2);
+			var element2 = document.createElement("input");
+			element2.type = "text";
+			element2.name = "subdepartmentCD["+(rowCount-1)+"]";
+      		element2.id = "subdepartmentCD["+(rowCount-1)+"]";
+			element2.className = "inputBox";
+			cell3.appendChild(element2);
+			
+			var cell4 = row.insertCell(3);
+			var element3 = document.createElement("input");
+			element3.type = "text";
+			element3.name = "emailaddress["+(rowCount-1)+"]";
+      		element3.id = "emailaddress["+(rowCount-1)+"]";
+			element3.className = "inputBox";
+			cell4.appendChild(element3);
+			
+			
+			var cell5 = row.insertCell(4);
+			var element4 = document.createElement("input");
+			element4.type = "text";
+			element4.name = "telephonenumber["+(rowCount-1)+"]";
+      		element4.id = "telephonenumber"+(rowCount-1);
+			element4.className = "inputBox";
+			cell5.appendChild(element4); 
+			
+			
+			var cell6 = row.insertCell(5);
+			var element5 = document.createElement("input");
+			element5.type = "text";
+			element5.name = "faxnumber["+(rowCount-1)+"]";
+      		element5.id = "faxnumber"+(rowCount-1);
+			element5.className = "inputBox";
+			cell6.appendChild(element5); 
+			
+			
+			var cell7 = row.insertCell(6);
+			cell7.setAttribute("align","center");
+			var element6 = document.createElement("input");
+			element6.type = "button";
+			element6.value="Delete";
+			element6.setAttribute("onclick", "disableForm(this.form,false,'');deleteRow('"+(rowCount-1)+"')");
+			element6.className="btn btn-sm btn-danger"
+			cell7.appendChild(element6);
+		
+			 
+}
+function createcoverdeptCell(cell, rowCount){
+	element = document.createElement("select");
+    element.name = "departmentCD["+(rowCount-1)+"]";
+    element.id = "departmentCD["+(rowCount-1)+"]";
+    element.className = "select1 inputBoxS";
+    populateCoverdept(element);
+    cell.appendChild(element);
+}
+function populateCoverdept(objSelect){
+	var objOption = document.createElement("option");
+          objOption.text = '---Select---';
+          objOption.value = '';
+          if(document.all && !window.opera){
+          	objSelect.add(objOption);
+          }else{
+          	objSelect.add(objOption, null);
+          }
+         	<s:iterator value='departList'>
+				var objOption = document.createElement("option");
+				objOption.text = "<s:property value='DETAIL_NAME' />".replace("&amp;", "&") ;
+				objOption.value = "<s:property value='CATEGORY_DETAIL_ID' />";
+				if(document.all && !window.opera){
+					element.add(objOption);
+				}else{
+					element.add(objOption, null);
+				}
+			</s:iterator>
+ }
+function deleteRow(val){
+	var scale=document.getElementById("pageFor").value;
+	if(val==0){
+		alert("First row can't be deleted");
+	}
+	else{
+		var status=confirm("Do you want to delete specified row");
+		if(status){
+			document.client.action="${pageContext.request.contextPath}/docUploadAdmin.action?flag=client&customerId="+id+"&firstName="+name;
+			document.client.submit();
+			}
+		}
+}
+function insRow1(tableID)
+{
+var table = document.getElementById(tableID);
+
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+			
+			var cell1 = row.insertCell(0)
+			var element1 = document.createElement("input");
+			element1.type = "text";
+      	 	element1.name = "bankSNo["+(rowCount-1)+"]";
+       		element1.id = "bankSNo["+(rowCount-1)+"]";
+ 			element1.value = rowCount;
+ 			element1.className = "inputBox";
+			element1.setAttribute("readonly",true);
+       		cell1.appendChild(element1);
+       		
+			var cell2 = row.insertCell(1)
+			createbankcurCell(cell2, rowCount)
+       		
+		
+			var cell3 = row.insertCell(2);
+			var element2 = document.createElement("input");
+			element2.type = "text";
+			element2.name = "bankaccountnumber["+(rowCount-1)+"]";
+      		element2.id = "bankaccountnumber["+(rowCount-1)+"]";
+			element2.className = "inputBox";
+			cell3.appendChild(element2);
+			
+			var cell4 = row.insertCell(3);
+			var element3 = document.createElement("input");
+			element3.type = "text";
+			element3.name = "bankname["+(rowCount-1)+"]";
+      		element3.id = "bankname["+(rowCount-1)+"]";
+			element3.className = "inputBox";
+			cell4.appendChild(element3);
+			
+			
+			var cell5 = row.insertCell(4);
+			var element4 = document.createElement("input");
+			element4.type = "text";
+			element4.name = "accountname["+(rowCount-1)+"]";
+      		element4.id = "accountname"+(rowCount-1);
+			element4.className = "inputBox";
+			cell5.appendChild(element4); 
+			
+			
+			var cell6 = row.insertCell(5);
+			var element5 = document.createElement("input");
+			element5.type = "text";
+			element5.name = "swiftcode["+(rowCount-1)+"]";
+      		element5.id = "swiftcode"+(rowCount-1);
+			element5.className = "inputBox";
+			cell6.appendChild(element5); 
+			
+			var cell7 = row.insertCell(6);
+			var element6 = document.createElement("input");
+			element6.type = "textarea";
+			element6.name = "corespondentbank["+(rowCount-1)+"]";
+      		element6.id = "corespondentbank"+(rowCount-1);
+			element6.className = "inputBox";
+			cell7.appendChild(element6); 
+			
+			var cell8 = row.insertCell(7);
+			var element7 = document.createElement("input");
+			element7.type = "text";
+			element7.name = "bankRemarks["+(rowCount-1)+"]";
+      		element7.id = "bankRemarks"+(rowCount-1);
+			element7.className = "inputBox";
+			cell8.appendChild(element7); 
+			
+			var cell9 = row.insertCell(8);
+			cell9.setAttribute("align","center");
+			var element8 = document.createElement("input");
+			element8.type = "button";
+			element8.value="Delete";
+			element8.setAttribute("onclick", "disableForm(this.form,false,'');deleteRow1('"+(rowCount-1)+"')");
+			element8.className="btn btn-sm btn-danger"
+			cell9.appendChild(element8);
+		
+			 
+}
+function createbankcurCell(cell, rowCount){
+	element = document.createElement("select");
+    element.name = "bankCurrency["+(rowCount-1)+"]";
+    element.id = "bankCurrency["+(rowCount-1)+"]";
+    element.className = "select1 inputBoxS";
+    populateBankCurrency(element);
+    cell.appendChild(element);
+}
+function populateBankCurrency(objSelect){
+	var objOption = document.createElement("option");
+          objOption.text = '---Select---';
+          objOption.value = '';
+          if(document.all && !window.opera){
+          	objSelect.add(objOption);
+          }else{
+          	objSelect.add(objOption, null);
+          }
+         	<s:iterator value='bankCurrencyList'>
+				var objOption = document.createElement("option");
+				objOption.text = "<s:property value='CURRENCY_NAME' />".replace("&amp;", "&") ;
+				objOption.value = "<s:property value='CURRENCY_ID' />";
+				if(document.all && !window.opera){
+					element.add(objOption);
+				}else{
+					element.add(objOption, null);
+				}
+			</s:iterator>
+ }
+function deleteRow1(val){
+	if(val==0){
+		alert("First row can't be deleted");
+	}
+	else{
+		var status=confirm("Do you want to delete specified row");
+		if(status){
+			document.client.action="${pageContext.request.contextPath}/docUploadAdmin.action?flag=client&customerId="+id+"&firstName="+name;
+			document.client.submit();
+			}
+		}
 }
 </script>
 </body>

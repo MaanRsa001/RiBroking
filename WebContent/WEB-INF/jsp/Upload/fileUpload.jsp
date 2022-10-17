@@ -352,7 +352,7 @@
 										</s:if>
 										<s:else>
 											<!--<div class="boxcontent">
-										<display:table name="DocList" pagesize="10" requestURI=""  class="footable" uid="row" id="record">
+										<display:table name="DocList" pagesize="10" requestURI=""  class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -474,7 +474,7 @@
 											</div>
 											 <div id="DocListDiv">
 											<div class="boxcontent">
-											<table class="footable" id="DocTable">
+											<table class="table table-bordered" id="DocTable">
 												<thead>
 												<tr>
 													<th width="5%">
@@ -617,7 +617,7 @@
 										</div>
 										<s:if test='!"document".equals(type)'>
 										<div class="boxcontent">
-											<table class="footable" id="DocTable">
+											<table class="table table-bordered" id="DocTable">
 												<thead>
 												<tr>
 													<th width="5%">

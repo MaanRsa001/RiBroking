@@ -164,7 +164,7 @@
 								<div class="panel-body">
 									<div class="boxcontent">
 			     					 <div class="panel-body">
-										<table class="footable" width="100%" id="newgen">
+										<table class="table table-bordered" width="100%" id="newgen">
 											<thead>
 												<tr>
 													<th width="15.8%"> <s:text name="label.bankcurrency" /></th>
@@ -220,7 +220,7 @@
 								<div class="panel-body">
 									<div class="boxcontent">
 										<div class="panel-body">
-											<table class="footable" width="100%" id="newgen">
+											<table class="table table-bordered" width="100%" id="newgen">
 												<thead>
 													<tr>
 													<th width="2.8%"> <s:text name="label.serialnumber" /></th>
@@ -404,7 +404,7 @@
 								<s:text name="Heding.CedingCompany" />
 							</div>
 							<div class="panel-body">
-								<table width="75%" style="margin: 0 auto;" class="footable">
+								<table width="75%" style="margin: 0 auto;" class="table table-bordered">
 									<tr>
 										<td width="50%">
 											<s:text name="Ceding.CompanyName" />
@@ -515,7 +515,7 @@
 								<s:text name="broker.name" />
 							</div>
 							<div class="panel-body">
-								<table width="75%" style="margin: 0 auto;" class="footable">
+								<table width="75%" style="margin: 0 auto;" class="table table-bordered">
 									<tr>
 										<td width="50%">
 											<s:text name="Ceding.Title" />
@@ -651,7 +651,7 @@
 						</s:else>--%>
 					</div>
 					<div class="boxcontent" align="center">
-						<input type="button" value="Close" class="btn btn-sm btn-danger"onclick="window.close()" />
+					<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
 					</div>
 				
 		</s:form>

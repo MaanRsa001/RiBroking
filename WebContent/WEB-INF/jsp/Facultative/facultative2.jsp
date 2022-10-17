@@ -7,8 +7,8 @@
 <head>
 	<sj:head jqueryui="true" jquerytheme="start" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+	<!-- <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
 	<link href="<%=request.getContextPath()%>/dataTables/css/jquery-start-ui.css" rel="stylesheet" type="text/css" />	
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.min.js"></script>		
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
@@ -155,7 +155,7 @@
 											<div class="panel panel-primary">
 												<div class="panel-body">
 													<div class="boxcontent">
-														<table width="100%" class="footable">
+														<table width="100%" class="table table-bordered">
 															<tr>
 																<td width="16.66%" class="txtB">
 																	<s:text name="label.proposalNo" />
@@ -223,7 +223,7 @@
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-														<table width="100%" class="footable">
+														<table width="100%" class="table table-bordered">
 															<thead>
 																<tr>
 																	<th width="50%"></th>
@@ -347,7 +347,7 @@
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-														<table width="100%" class="footable">
+														<table width="100%" class="table table-bordered">
 															<thead>
 																<tr>
 																	<th width="25%" style="text-align: center; vertical-align: middle;">
@@ -652,7 +652,7 @@
 																</div>
 																
 															</div>
-															<table width="100%" class="footable">
+															<table width="100%" class="table table-bordered">
 																<thead>
 																	<tr>
 																		<th width="5%" style="text-align: center; vertical-align: middle;">
@@ -1011,7 +1011,7 @@
 													
 													<div class="panel-body">
 														<div class="boxcontent">
-															<table class="footable" id="DocTable">
+															<table class="table table-bordered" id="DocTable">
 																<thead>
 																<tr>
 																	<th width="5%">

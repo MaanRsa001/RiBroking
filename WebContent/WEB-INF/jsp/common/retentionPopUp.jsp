@@ -35,7 +35,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/disableF5.js"></script>
 </head>
 				<div id="retentionid" class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;overflow-y: visible;">
-								<table class="footable" id="newgen" width="100%" >				
+								<table class="table table-bordered" id="newgen" width="100%" >				
 									<thead>
 										<tr>
 											<th width="2%"> <s:text name="Sno" />  </th>

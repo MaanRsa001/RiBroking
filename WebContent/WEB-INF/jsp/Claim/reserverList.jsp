@@ -11,8 +11,8 @@
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
 		<link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />		
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">		    
-		<link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+		<!-- <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/dataTables/css/dataTables.responsive.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/dataTables/css/dataTables.jqueryui.css">
 	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/dataTables/css/dataTables.tableTools.css">
@@ -119,7 +119,7 @@
 								<div class="panel panel-primary">
 									<div class="panel-body"><!--
 									   <s:property value="currencyName"/>-->
-										<display:table name="allocList" pagesize="10"	requestURI="reserveListClaim.do" class="footable" uid="row" id="record" export="true">
+										<display:table name="allocList" pagesize="10"	requestURI="reserveListClaim.do" class="table table-bordered" uid="row" id="record" export="true">
 										<display:setProperty name="paging.banner.one_item_found" value="" />
 										<display:setProperty name="paging.banner.one_items_found" value="" />
 										<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -187,7 +187,7 @@
 										
 									<div class="panel-body"><!--
 									   <s:property value="currencyName"/>-->
-										<display:table name="ReserveList" pagesize="10"	requestURI="reserveListClaim.do" class="footable" uid="row" id="record" export="true">
+										<display:table name="ReserveList" pagesize="10"	requestURI="reserveListClaim.do" class="table table-bordered" uid="row" id="record" export="true">
 										<display:setProperty name="paging.banner.one_item_found" value="" />
 										<display:setProperty name="paging.banner.one_items_found" value="" />
 										<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -232,7 +232,7 @@
 									<div class="panel-body">
 										<s:if test="ReserveList!=null && ReserveList.size()>0">
 										<s:if test='!"3".equals(productId)'>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 												<tr>
 													<th style="text-align: center; vertical-align: middle;"> <s:text name="Reserve ID" /></th>
@@ -309,7 +309,7 @@
 										</table>
 										</s:if>
 										<s:else>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 												<tr>
 													<th style="text-align: center; vertical-align: middle;"> <s:text name="Reserve ID" /></th>

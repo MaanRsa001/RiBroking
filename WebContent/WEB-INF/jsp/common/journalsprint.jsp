@@ -87,7 +87,7 @@
 									<div class="boxcontent">
 									<s:iterator value="journalViewList" var="journalView" status="status">
 									<div style="padding-top: 20px">
-										<table width="100%" style="margin: 0 auto;" class="footable">
+										<table width="100%" style="margin: 0 auto;" class="table table-bordered">
 											<tr>
 											<td>
 												<s:label key="label.transactionDate"/>

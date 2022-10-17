@@ -190,16 +190,22 @@ public class AdminBean {
 	private List<Map<String, Object>> tdsTypeList;
 	private List<Map<String, Object>> clientList;
 	private List<Map<String, Object>> clientPersonalList;
+	private List<Map<String, Object>> departList;
+	private List<String> bankSNo;
 	private List<String> bankaccountnumber;
 	private List<String> bankname;
 	private List<String> accountname;
 	private List<String> swiftcode;
 	private List<String> ifsccode;
+	private List<String> corespondentbank;
 	private String snumber;
 	private List<String> emailaddress;
 	private List<String> telephonenumber;
 	private List<String> faxnumber;
 	private List<String> departmentCD;
+	private List<String> subdepartmentCD;
+	private List<String> contactSNo;
+	
 	private String Servicetax;
 	private String PANnumber;
 	private String type;
@@ -2198,6 +2204,46 @@ public class AdminBean {
 	public void setRemarks(String Remarks) {
 		this.Remarks = Remarks;
 
+	}
+
+	public List<Map<String, Object>> getDepartList() {
+		return departList;
+	}
+
+	public void setDepartList(List<Map<String, Object>> departList) {
+		this.departList = departList;
+	}
+
+	public List<String> getBankSNo() {
+		return bankSNo;
+	}
+
+	public void setBankSNo(List<String> bankSNo) {
+		this.bankSNo = bankSNo;
+	}
+
+	public List<String> getCorespondentbank() {
+		return corespondentbank;
+	}
+
+	public void setCorespondentbank(List<String> corespondentbank) {
+		this.corespondentbank = corespondentbank;
+	}
+
+	public List<String> getSubdepartmentCD() {
+		return subdepartmentCD;
+	}
+
+	public void setSubdepartmentCD(List<String> subdepartmentCD) {
+		this.subdepartmentCD = subdepartmentCD;
+	}
+
+	public List<String> getContactSNo() {
+		return contactSNo;
+	}
+
+	public void setContactSNo(List<String> contactSNo) {
+		this.contactSNo = contactSNo;
 	}
 
 

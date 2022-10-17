@@ -232,7 +232,7 @@
 														<s:if test='!"reversal".equals(type)'>
 															<display:table name="detailsList" pagesize="20"
 																requestURI=""
-																class="footable" uid="row" id="record">
+																class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found"
 																	value="" />
 																<display:setProperty
@@ -292,7 +292,7 @@
 														<s:else>
 															<display:table name="detailsList" pagesize="0"
 																requestURI=""
-																class="footable" uid="row" id="record">
+																class="table table-bordered" uid="row" id="record">
 																<display:setProperty name="paging.banner.one_item_found"
 																	value="" />
 																<display:setProperty
@@ -347,7 +347,7 @@
 											<div class="boxcontent">
 												<div class="panel panel-primary">
 													<div class="panel-body" style="overflow: auto;">
-													<display:table name="reversedetailsList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+													<display:table name="reversedetailsList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 													<display:setProperty name="paging.banner.one_item_found" value="" />
 													<display:setProperty name="paging.banner.one_items_found" value="" />
 													<display:setProperty name="paging.banner.all_items_found" value="" />
@@ -400,7 +400,7 @@
 											<div class="boxcontent">
 											<div class="panel panel-primary">
 											<!--<div class="panel-body" style="overflow: auto;">
-													<display:table name="tresauryRecPaytailsList" pagesize="20" requestURI="" class="footable" uid="row" id="record">
+													<display:table name="tresauryRecPaytailsList" pagesize="20" requestURI="" class="table table-bordered" uid="row" id="record">
 													<display:setProperty name="paging.banner.one_item_found" value="" />
 													<display:setProperty name="paging.banner.one_items_found" value="" />
 													<display:setProperty name="paging.banner.all_items_found" value="" />

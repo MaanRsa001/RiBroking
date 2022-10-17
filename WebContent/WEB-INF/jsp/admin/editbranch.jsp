@@ -40,7 +40,7 @@
 										<s:submit type="button" action="editBranchAdmin" value="Add New" cssClass="btn2 rEdge" />
 									</div>					 				
 									<div class="boxcontent">
-										<table width="100%" class="footable">
+										<table width="100%" class="table table-bordered">
 											<thead>
 												<tr>
 													<th>Branch Code</th>

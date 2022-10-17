@@ -737,7 +737,7 @@
 										<div class="boxcontent">
 										<div>
 										<div id="xolnewgenid" class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;">
-										<table class="footable" width="100%" id="xolnewgen">
+										<table class="table table-bordered" width="100%" id="xolnewgen">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -817,7 +817,7 @@
 															
 															</table>
 															
-															<table class="footable" width="100%" id="xolnewgen">
+															<table class="table table-bordered" width="100%" id="xolnewgen">
 															<tr>
 																<td width="2%" > Total:&nbsp;  </td>
 																<td class="tableColWidth"></td>
@@ -853,7 +853,7 @@
 										<div class="boxcontent">
 										<div>
 										<div id="newgenid" class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;">
-										<table class="footable" width="100%" id="newgen">
+										<table class="table table-bordered" width="100%" id="newgen">
 														<thead>
 															<tr>
 																<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
@@ -951,7 +951,7 @@
 															
 															</table>
 															
-															<table class="footable" width="100%" id="newgen">
+															<table class="table table-bordered" width="100%" id="newgen">
 															<tr>
 																<td width="20%"> Total:&nbsp;  </td>
 																<td class="tableColWidth"></td>
@@ -1084,7 +1084,7 @@
 										<div class="boxcontent">
 										<div>
 											
-									<table class="footable" id="Contract" width="100%">
+									<table class="table table-bordered" id="Contract" width="100%">
 									<thead>
 									<tr>
 										<th style="text-align: center; vertical-align: middle;" class="no-sort" width="3%"><s:text name="Select" /></th>

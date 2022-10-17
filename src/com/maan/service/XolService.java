@@ -216,4 +216,12 @@ public class XolService {
 	public boolean GetShareValidation(RiskDetailsBean bean) {
 		return dao.GetShareValidation(bean);
 	}
+
+	public List<Map<String, Object>> getLayerInfo(RiskDetailsBean bean) {
+		return dao.getLayerInfo(bean);
+	}
+
+	public void CancelProposal(RiskDetailsBean bean, String renewalProposalNo) {
+		dao.CancelProposal( bean,  renewalProposalNo);
+	}
 }

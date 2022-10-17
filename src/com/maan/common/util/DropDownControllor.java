@@ -171,14 +171,21 @@ public class DropDownControllor extends MyJdbcTemplate {
 				department=this.mytemplate.queryForList(query,new Object[]{branchCode,status});	
 			}//&& !"Renewal".equalsIgnoreCase(proposalReference)
 			else if(!StringUtils.isBlank(baseLayer) ) {
-				String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST3);
+				String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST);
+				logger.info("Select Query==> " + query);
+				logger.info("Args[0]==> " + branchCode);
+				logger.info("Args[1]==> " + productCode);
+				logger.info("Args[2]==> " + status);
+				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status});	
+				
+			/*	String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST3);
 				logger.info("Select Query==> " + query);
 				logger.info("Args[0]==> " + branchCode);
 				logger.info("Args[1]==> " + productCode);
 				logger.info("Args[2]==> " + status);
 				logger.info("Args[3]==> " + proposalNo);
 				logger.info("Base Layer==> " + baseLayer);
-				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status,baseLayer,baseLayer,proposalNo});
+				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status,baseLayer,baseLayer,proposalNo});*/
 			}
 			else if(StringUtils.isBlank(proposalNo) && StringUtils.isBlank(contNo)){
 				String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST);
@@ -189,14 +196,20 @@ public class DropDownControllor extends MyJdbcTemplate {
 				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status});	
 			}
 			else if(StringUtils.isBlank(contNo) && !StringUtils.isBlank(proposalNo)){
-				String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST2);
+				String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST);
+				logger.info("Select Query==> " + query);
+				logger.info("Args[0]==> " + branchCode);
+				logger.info("Args[1]==> " + productCode);
+				logger.info("Args[2]==> " + status);
+				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status});	
+				/*String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST2);
 				logger.info("Select Query==> " + query);
 				logger.info("Args[0]==> " + branchCode);
 				logger.info("Args[1]==> " + productCode);
 				logger.info("Args[2]==> " + status);
 				logger.info("Args[3]==> " + proposalNo);
 				logger.info("Base Layer==> " + baseLayer);
-				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status,proposalNo,baseLayer,baseLayer});
+				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productCode,status,proposalNo,baseLayer,baseLayer});*/
 				}
 			else if(!StringUtils.isBlank(contNo) && StringUtils.isBlank(proposalNo)){
 			String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST1);
@@ -3190,6 +3203,93 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 			logger.debug("Exception @ {" + e + "}");
 		}
 		return list;
+	}
+
+	public List<Map<String, Object>> getYearToListValue(String inceptionDate, String expiryDate) {
+		List<Map<String, Object>> yearsList = new  ArrayList<Map<String, Object>>();
+		if(StringUtils.isNotBlank(inceptionDate)){
+			 String format = "dd/MM/yyyy" ;
+		     SimpleDateFormat sdf = new SimpleDateFormat(format) ;
+		      Date dateAsObj = null;
+		      Date dateAsObj1 = null;
+			try {
+					dateAsObj = sdf.parse(inceptionDate);
+					dateAsObj1 = sdf.parse(expiryDate);
+			} catch (ParseException e) {
+					e.printStackTrace();
+			}
+		    Calendar cal = Calendar.getInstance();
+		    cal.setTime(dateAsObj);
+		    int year =cal.get(Calendar.YEAR);
+		    Calendar cal1 = Calendar.getInstance();
+		    cal1.setTime(dateAsObj1);
+		    int year1 =cal1.get(Calendar.YEAR);
+         
+		   for(int j=year;j<=year1;j++){
+				Map<String,Object> yearl=new HashMap<String, Object>();
+				yearl.put("YEAR", j);
+				yearsList.add(yearl);
+			}
+		  
+		}
+		return yearsList;
+	}
+
+	public void updateBaseLayer(String proposalNo, String proposal_no) {
+		try{
+			String query=getQuery("UPDATE_BASE_LAYER");
+			Object args[] = new Object[2];
+			args[0] = proposalNo;
+			args[1] = proposal_no;
+			this.mytemplate.update(query,args);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public List<Map<String, Object>> getPaymentPartnerlist(String branchCode, String cedingId,String brokerId) {
+		List<Map<String,Object>> personalInfo=new ArrayList<Map<String,Object>>();
+		try{
+			Object arg[]=null;
+			if(StringUtils.isNotBlank(cedingId) && StringUtils.isNotBlank(brokerId)) {
+			String query=getQuery("GET_PAYMENT_PARTNER_LIST");
+			if(!"63".equals(brokerId)){
+				query+=getQuery("GET_PAYMENT_PARTNER_BR_LIST");
+				arg=new Object[4];
+				arg[0]=branchCode;
+				arg[1]=cedingId;
+				arg[2]=branchCode;
+				arg[3]=brokerId;
+			}else{
+				arg=new Object[2];
+				arg[0]=branchCode;
+				arg[1]=cedingId;
+			}
+			query+="ORDER BY NAME";
+			logger.info("Select Query==> " + query);
+			logger.info("Args==>" + StringUtils.join(arg,","));
+			personalInfo=this.mytemplate.queryForList(query,arg);
+			}
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");	
+		}
+
+		return personalInfo;
+	}
+
+	public void updateProposalno(RiskDetailsBean bean) {
+		try{
+			String query=getQuery("UPDATE_PROPOSAL_SCALE");
+			Object args[] = new Object[2];
+			args[0] = bean.getProposal_no();
+			args[1] = bean.getReferenceNo();
+			this.mytemplate.update(query,args);
+			query=getQuery("UPDATE_PROPOSAL_REINS");
+		
+			this.mytemplate.update(query,args);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 }

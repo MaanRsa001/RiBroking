@@ -11,8 +11,8 @@
     	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.min.css">
 		<link href="<%=request.getContextPath()%>/css/footable-0.1.css" rel="stylesheet" type="text/css" />		
 		<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css">		    
-		<link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
-    	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/>
+		<!-- <link rel="stylesheet" type="text/css" href="css/select2-3.4.1.css"/>
+    	<link rel="stylesheet" type="text/css" href="css/select2-bootstrap.css"/> -->
     	<script type="text/javascript" src="${pageContext.request.contextPath}/js/shortcut.js"></script>
     	<script type="text/javascript" src="${pageContext.request.contextPath}/js/disableF5.js"></script>	
 </head>
@@ -40,7 +40,7 @@
 								<div class="row">
 								<div class="col-xs-12">
 								<s:if test="premiumReservedList!=null && premiumReservedList.size>0">
-								   <table   class="footable"  width="100%" >
+								   <table   class="table table-bordered"  width="100%" >
 									<thead>
 									<tr>
 										<th><s:text name="Check Box" /></th>

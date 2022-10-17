@@ -60,7 +60,7 @@
 			<div class="panel-body">
 				<div class="boxcontent">
 				<div >
-					<table class="footable" width="100%" id="newgen">
+					<table class="table table-bordered" width="100%" id="newgen">
 						<thead>
 							<tr>
 								<th width="15.8%"> <s:text name="label.journalRef" />  </th>
@@ -125,7 +125,7 @@
 								<div class="tablerow" style="margin-top: 10px; background-color: #fff; padding: 10px;">									
 									<div class="boxcontent">
 									
-									<table width="100%" class="footable">
+									<table width="100%" class="table table-bordered">
 													
 											<tbody>
 											<s:if test="tranId!=null && tranId!='' && 'edit'.equals(mode)">
@@ -233,7 +233,7 @@
 												--></tbody>
 																						
 											</table>
-											<table class="footable" width="100%" id="newgen">
+											<table class="table table-bordered" width="100%" id="newgen">
 															<tr>
 																<td  style=" vertical-align: middle;" width="40%" ><s:label key="forexDiffName"/></td>
 																<td width="12.5%"></td>

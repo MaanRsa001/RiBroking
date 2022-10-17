@@ -96,7 +96,7 @@
 												</div>
 											</div>
 											<br class="clear" />
-											<table width="100%" class="footable">
+											<table width="100%" class="table table-bordered">
 													
 											<tbody>												
 												<tr >
@@ -233,7 +233,7 @@
 									</div>
 									<div class="panel-body">
 										<div class="boxcontent">											
-											<display:table name="ReportsList" pagesize="20"	requestURI="" class="footable" uid="row" id="record">
+											<display:table name="ReportsList" pagesize="20"	requestURI="" class="table table-bordered" uid="row" id="record">
 												<display:setProperty name="paging.banner.one_item_found" value="" />
 												<display:setProperty name="paging.banner.one_items_found" value="" />
 												<display:setProperty name="paging.banner.all_items_found" value="" />

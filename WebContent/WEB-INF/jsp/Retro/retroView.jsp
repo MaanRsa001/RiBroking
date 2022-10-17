@@ -412,7 +412,7 @@
 										</s:if>
 										<hr class="clear"/>																				
 										
-										<table class="footable">
+										<table class="table table-bordered">
 											<thead>
 											<tr>
 												<th width="16.66%"></th>
@@ -1025,7 +1025,7 @@
 											</div>
 										<hr class="clear"/>
 										<s:if test='!"0".equals(noRetroCess)'>
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"> <s:text name="riskDetails.slNo" /> </th>
@@ -1116,7 +1116,7 @@
 										<div class="panel-heading"> <s:text name="All Remarks" />  </div>
 										<div class="panel-body">
 										<div class="boxcontent">									
-										<table class="footable" width="100%">
+										<table class="table table-bordered" width="100%">
 											<thead>
 												<tr>
 													<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
