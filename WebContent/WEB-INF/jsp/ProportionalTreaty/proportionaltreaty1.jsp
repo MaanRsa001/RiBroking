@@ -56,12 +56,13 @@ gap:20px;
 		dateFormat : "dd/mm/yy"
 		//yearRange: "-100:+0"
 	});
-  });	
+  });
   </script>
 	</head>
 	<body
 		onload="Commas(<s:property value="#session.mfrid" />),setCedRetType('<s:property value="cedRetenType" />')">
 		<s:set var="elayerInfo" value='%{sectionInfo}'/>
+		<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 		<div class="table0" style="width: 100%; margin: 0 auto;">
 			<div class="tablerow">
 			<s:set name="profitCommissionListVar" value="profitCommissionList"/>
@@ -70,8 +71,7 @@ gap:20px;
 					style="width: 100%; margin: 0 auto; background-color: #E5E5E5;">
 					<div class="tablerow">
 						<div style="padding: 10px; background: #F8F8F8">
-							<s:form name="proportional" id="proportional" theme="simple"
-								action="" method="post" autocomplete="off">
+							<s:form name="proportional" id="proportional" theme="simple" action="" method="post" autocomplete="off">
 								<div class="table2">
 									<div class="tablerow">
 										<span style="color: red;"><s:actionerror />
@@ -121,20 +121,29 @@ gap:20px;
 													</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-														<div class="textfield">
+														<div class="textfield33">
 															<div class="text">
 																<s:text name="label.bouquetModeYN" />
 															</div>
 															<div class="tbox">
-																<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{dislayer}"></s:radio>													
+																<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{bouquetModeYN!=null}"></s:radio>													
 															</div>
 														</div>										
-														<div class="textfield" id="bouquetid">
-															<div class="text">
-																<s:text name="label.bouquetMode" />
+														<div class="textfield33">
+															<div id="bouquetid">
+																<div class="text">
+																	<s:text name="label.bouquetMode" />
+																</div>
+																<div class="tbox">
+																	<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="%{bouquetModeYN!=null}"/>
+																</div>
 															</div>
-															<div class="tbox">
-																<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="bouquetMode" id="bouquetMode" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="%{dislayer}"/>
+														</div>
+														<div class="textfield33" >
+															<div id="bouquetpds">
+																<div class="boxcontent" align="center">
+																<input type="button"  value="Procced"   class="btn btn-sm btn-success"   onclick="procceed()" />
+																</div>
 															</div>
 														</div>
 													</div>
@@ -142,6 +151,66 @@ gap:20px;
 											</div>
 										</div>
 									</div>
+									<div id="bouquestid" style="display:none">
+									<s:if test='"Y".equals(bouquetModeYN)'>
+										<div class="boxcontent" >
+											<div class="panel panel-primary">											
+												<div class="panel-heading">
+													<s:text name="label.bouquetinfo" />
+												</div>
+												<div class="panel-body">
+													<div class="boxcontent">
+													
+														
+															<div>
+																<table width="100%" class="table table-bordered" >
+																	<thead>
+																	<tr>
+																		<th width="7%"> <s:text name="label.sno" /> </th>
+																		<th width="20%"><s:text name="label.businessType" /></th>
+																		<th width="20%"><s:text name="label.proposalNo" /></th>
+																		<th width="20%"><s:text name="label.treatyType" /></th>
+																		<th width="20%"><s:text name="label.treatyNameType" /></th>
+																		<th width="20%"><s:text name="label.newRenew" /></th>
+																		<th width="20%"><s:text name="label.existingshare" /></th>
+																	</tr>
+																	</thead>
+																	<tbody>	
+																	<s:iterator value="#ebouquetExistingList" var="list"  status="stat">									
+																	<tr>
+																		<td>
+																			<s:property value="%{#stat.count}"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.BUSINESS_TYPE"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.PROPOSAL_NO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.TREATY_TYPE"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.RSK_TREATYID"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.POLICY_STATUS"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.EXISTING_SHARE"/>
+																		</td>
+																	</tr>												
+																	</s:iterator>
+																	</tbody>
+																</table>											
+															</div> 
+														
+														
+													</div>
+												</div>
+											</div>
+											</div>
+										</s:if>
 									<div class="tablerow">
 										<div class="boxcontent">
 											<div class="panel panel-primary">
@@ -209,9 +278,7 @@ gap:20px;
 											</div>
 										</div>
 									</div>
-									<div class="tablerow">
-										<s:hidden name="nr" value="0" />
-										<div class="boxcontent">
+									<div class="boxcontent">
 											<div class="panel panel-primary">											
 												<div class="panel-heading">
 													<s:text name="label.cedentinfo" />
@@ -219,7 +286,7 @@ gap:20px;
 												<div class="panel-body">
 													<div class="textfield">
 														<div class="text">
-															<s:text name="label.cedingCompany" />&nbsp;<sup style="color: red;">#</sup>
+															<s:text name="label.cedingCompany" />&nbsp;<sup style="color: red;"></sup>
 														</div>
 														<div class="tbox">
 															<div class="input-group"> 
@@ -244,7 +311,7 @@ gap:20px;
 													</div>
 													<div class="textfield">
 															<div class="text">
-																<s:text name="label.inceptionDate" /> &nbsp; <sup style="color: red;"> # </sup>
+																<s:text name="label.inceptionDate" /> &nbsp; <sup style="color: red;">  </sup>
 															</div>
 															<div class="tbox">
 																<div class="">
@@ -254,7 +321,7 @@ gap:20px;
 														</div>
 														<div class="textfield">
 															<div class="text">
-																<s:text name="label.expiryDate" /> &nbsp; <sup style="color: red;"> # </sup>
+																<s:text name="label.expiryDate" /> &nbsp; <sup style="color: red;">  </sup>
 															</div>
 															<div class="tbox">
 																<s:if test="layerProposalNo == null || layerProposalNo == ''">
@@ -271,7 +338,7 @@ gap:20px;
 														</div>
 														<div class="textfield">
 															<div class="text">
-																<s:text name="label.uwYear" /> &nbsp; <sup style="color: red;"> # </sup>
+																<s:text name="label.uwYear" /> &nbsp; <sup style="color: red;">  </sup>
 															</div>
 															<div class="tbox" id="yearId">
 																<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" id="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(contNo != "" && contNo != null)?true:false}' onblur="getRetention();"/>
@@ -279,7 +346,7 @@ gap:20px;
 														</div>
 														<div class="textfield">
 															<div class="text">
-																<s:text name="label.uwYearto" /> &nbsp; <sup style="color:red;">#</sup>
+																<s:text name="label.uwYearto" /> &nbsp; <sup style="color:red;"></sup>
 															</div>
 															<div class="tbox" id="yearIdto">
 																<s:select  list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) ||(contNo != "" && contNo != null)?true:false}' />
@@ -397,7 +464,7 @@ gap:20px;
 																	<div class="boxcontent" id="riskid">
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.originalCurrency" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.originalCurrency" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:select list="orginalCurrencylist" listKey="CURRENCY_ID" listValue="CURRENCY_NAME" name="orginalCurrency" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetExchangeRate()" disabled='%{"Y".equals(disableStatus1)?true:false}' />
@@ -416,7 +483,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.treatyType" />&nbsp;<sup style="color: red;">#</sup>
+																				<s:text name="label.treatyType" />&nbsp;<sup style="color: red;"></sup>
 																			</div>
 																			<div class="tbox">
 																				<s:if test="RenewalMode != null">
@@ -459,6 +526,15 @@ gap:20px;
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="faclimitOrigCur" id="faclimitOrigCur" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value)" maxlength="30" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																			</div>
+																		</div>
+																		<div class="textfield" id="treatyQSper"
+																			style="display: none">
+																			<div class="text">
+																				<s:text name="label.quotesharePercent" />
+																			</div>
+																			<div class="tbox">
+																				<s:textfield name="quotesharePercent" id="quotesharePercent" cssClass="inputBox" cssStyle="text-align: right;" maxlength="20" onkeyup="middleMinusRestrictionNeg(this);negative(this.id,this.value);checkDecimals(this);allowOneDot(this);hundredCheck(this.id,this.value)" />
 																			</div>
 																		</div>
 																		<div class="textfield" id="treatyQS1"
@@ -506,7 +582,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.cleancutrunoff" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.cleancutrunoff" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:select list="proposaltypelist" listKey="TYPE" listValue="DETAIL_NAME" name="proposalType" cssClass="inputBoxS" headerKey="0" headerValue="---Select---" onchange="getRateField(this.value)" />
@@ -514,7 +590,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield" id="ratId" style="display: none;">
 																			<div class="text">
-																				<s:text name="label.rate.year" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.rate.year" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="runoffYear" id="runoffYear" cssClass="inputBox" cssStyle="text-align:right;" maxlength="26" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" />
@@ -542,7 +618,7 @@ gap:20px;
 																		<div class="boxcontent" id="brokerid">
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.broker" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.broker" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<div class="input-group">
@@ -565,7 +641,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.leadUnderWriter" />  &nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.leadUnderWriter" />  &nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
 																					<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"   onchange="getUnderwriterShare(this.value);"/>
@@ -574,7 +650,7 @@ gap:20px;
 																		<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
 																		 <div class="textfield" >
 																			<div class="text">
-																				<s:text name="label.leadUnderwritterCountry" />  &nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.leadUnderwritterCountry" />  &nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox" id="country">
 																				
@@ -589,7 +665,7 @@ gap:20px;
 																		</s:else>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.leadUnderwritterShareP" />&nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.leadUnderwritterShareP" />&nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="leader_Underwriter_share" id="leader_Underwriter_share" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="false"/>
@@ -618,7 +694,7 @@ gap:20px;
 																		<div class="boxcontent" id="coverid">
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.territoryScope" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.territoryScope" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="territoryscope" cssClass="inputBox" maxlength="500" />
@@ -634,7 +710,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.pnocDays" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.pnocDays" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:select list="PNOCDayslist" listValue="DETAIL_NAME" listKey="TYPE" name="pnoc" cssClass="select1 inputBoxS" headerKey="-1" headerValue="---Select---" />
@@ -687,7 +763,7 @@ gap:20px;
 																			</div>
 																			<div class="textfield">
 																				<div class="text">
-																					<s:text name="label.accountingPeriod" /> &nbsp; <sup style="color: red;"> # </sup>
+																					<s:text name="label.accountingPeriod" /> &nbsp; <sup style="color: red;">  </sup>
 																				</div>
 																				<div class="tbox">
 																					<s:select list="AccontPeriodlist" listValue="DETAIL_NAME" listKey="TYPE" name="accountingPeriod" cssClass="select1 inputBoxS" headerKey="0" headerValue="---Select---" disabled='%{"Y".equals(disableStatus1)?true:false}' />
@@ -695,7 +771,15 @@ gap:20px;
 																			</div>
 																			<div class="textfield">
 																				<div class="text">
-																					<s:text name="label.statementDueDays" />&nbsp; <sup style="color: red;"> # </sup>
+																					<s:text name="label.accountingPeriodNotes" />&nbsp; <sup style="color: red;">  </sup>
+																				</div>
+																				<div class="tbox">
+																					<s:textfield name="accountingPeriodNotes" cssClass="inputBox"  maxlength="200"  />
+																				</div>
+																			</div>
+																			<div class="textfield">
+																				<div class="text">
+																					<s:text name="label.statementDueDays" />&nbsp; <sup style="color: red;">  </sup>
 																				</div>
 																				<div class="tbox">
 																					<s:textfield name="receiptofStatements" cssClass="inputBox" cssStyle="text-align:right;" maxlength="3" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" />
@@ -703,7 +787,15 @@ gap:20px;
 																			</div>
 																			<div class="textfield">
 																				<div class="text">
-																					<s:text name="label.paymentDueDays" />&nbsp; <sup style="color: red;"> # </sup>
+																					<s:text name="label.statementConfirm" />&nbsp; <sup style="color: red;">  </sup>
+																				</div>
+																				<div class="tbox">
+																					<s:textfield name="statementConfirm" cssClass="inputBox"  maxlength="200"  />
+																				</div>
+																			</div>
+																			<div class="textfield">
+																				<div class="text">
+																					<s:text name="label.paymentDueDays" />&nbsp; <sup style="color: red;">  </sup>
 																				</div>
 																				<div class="tbox">
 																					<s:textfield name="receiptofPayment" cssClass="inputBox" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" cssStyle="text-align:right;" maxlength="3" />
@@ -779,7 +871,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.brokerageP" />&nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.brokerageP" />&nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:if test="(broker.toString().trim()).equalsIgnoreCase('DIRECT')">
@@ -792,7 +884,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.taxP" />&nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.taxP" />&nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="tax" id="taxIDDD" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D".equals(profit_Center) ?0.00:tax}' onblur="CalculateValue()"  maxlength="8" disabled='"Y".equals(disableStatus1) || "D".equals(profit_Center) '/>
@@ -1083,15 +1175,20 @@ gap:20px;
 																			<div class="boxcontent" id="depositid">													
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.premiumReserveP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.premiumReserveP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="premium_Reserve" cssClass="inputBox" cssStyle="text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<div class="input-group">
+																							<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="premiumResType" id="premiumResType" cssClass="select1 inputBoxS" cssStyle="width:60%;float:left;" headerKey="" headerValue="---Select---" onchange="getPremiumRes(this.value);"/>
+																							<%-- <span class="input-group-addon"> --%>
+																								<s:textfield name="premium_Reserve" id="premium_Reserve" cssClass="inputBox"   cssStyle="width:40%;float:right;text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+														     								<%-- </span> --%>
+																						</div>
 																					</div>
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.lossReserveP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.lossReserveP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="loss_reserve" cssClass="inputBox" cssStyle="text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
@@ -1099,7 +1196,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.interestP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.interestP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="interest" id="interset" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
@@ -1107,7 +1204,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.portfolioinoutLossP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.portfolioinoutLossP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="portfolio_inout_Loss" id="InoutLoss" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
@@ -1115,7 +1212,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.portfolioinoutPremiumP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.portfolioinoutPremiumP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
@@ -1145,7 +1242,7 @@ gap:20px;
 																			<div class="boxcontent" id="lossid">													
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.lossAdvicePOC" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.lossAdvicePOC" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="loss_Advise" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" />
@@ -1153,7 +1250,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.cashLossPOC" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.cashLossPOC" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="cash_Loss_Limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" />
@@ -1161,7 +1258,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.eventLimit" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.eventLimit" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="event_limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" />
@@ -1169,7 +1266,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.aggregateLimit" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.aggregateLimit" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="aggregate_Limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" />
@@ -1177,7 +1274,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.OccurrentLimit" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.OccurrentLimit" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="occurrent_Limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" />
@@ -1193,15 +1290,14 @@ gap:20px;
 														<jsp:include page="/WEB-INF/jsp/common/remarks.jsp" />
 														<div class="boxcontent" align="center">
 														<s:if test='"layer".equals(layerMode) && "layer".equals(flag)'>
+														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 														<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionUpdateOption()">Update Layer</button>
 														</s:if>
 														<s:elseif test='"layer".equals(layerMode) && "copy".equals(flag)'>
+														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 														<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add Layer</button>
 														</s:elseif>
 														<s:else>
-														<s:if test='proposal_no == null ||"".equals(proposal_no) '>
-														<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add Layer</button>
-														</s:if>
 														</s:else>
 															
 														</div>
@@ -1214,7 +1310,7 @@ gap:20px;
 																		<div class="boxcontent">
 																			<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.ceaseStatus" />&nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.ceaseStatus" />&nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
 																				<s:radio name="ceaseStatus" id="ceaseStatus" list="#{'Y':'Yes','N':'No'}" value="ceaseStatus==null?'N':ceaseStatus" />
@@ -1326,18 +1422,7 @@ gap:20px;
 													</div>
 												</div>
 											</div>
-										</div>
-										
-										
-										
-										
-										
-										
-								
-								
-								
-							</div>
-							<div id="companyModal" class="modal fade" role="dialog">
+								<div id="companyModal" class="modal fade" role="dialog">
 								  <div class="modal-dialog modal-lg">
 								    <!-- Modal content-->
 								    <div class="modal-content">
@@ -1350,22 +1435,22 @@ gap:20px;
 								      </div>
 								    </div>
 								  </div>
-								</div>
+								</div>	
 								<div id="companyModal1" class="modal fade" role="dialog">
-							  <div class="modal-dialog modal-lg">
-							    <!-- Modal content-->
-							    <div class="modal-content">
-							      <div class="modal-header">
-							        <button type="button" class="close" data-dismiss="modal">&times;</button>
-							      </div>
-							      <div class="modal-body" >
-							        <div class="container-fluid" id="companyAjaxId1">
-							        </div>
-							      </div>
-							    </div>
-							  </div>
-						</div>	
-									<div class="tablerow">
+								  <div class="modal-dialog modal-lg">
+								    <!-- Modal content-->
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+								      <div class="modal-body" >
+								        <div class="container-fluid" id="companyAjaxId1">
+								        </div>
+								      </div>
+								    </div>
+								  </div>
+							</div>		
+							<div class="tablerow">
 										<div class="boxcontent" align="center">
 											<s:if test='amend_Id_Mode ==null ||"".equals(amend_Id_Mode) '>
 												<s:if test='proposal_no == null ||"".equals(proposal_no) '>
@@ -1375,15 +1460,21 @@ gap:20px;
 															<input type="button" value="Back" class="btn btn-sm btn-danger" id="mybutton" onClick="destroyPopUps();AmendIdBack()" />
 														</s:if>
 													</s:if>
-
+													
 													<s:hidden name="ceddingcompanyBack" value="%{cedingCo}" />
-													<%-- request.setAttribute("LayerMode","Yes");  --%>
 													<s:if test='"renewal".equals(flagTest)'>
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" id="mybutton" onClick="destroyPopUps();AmendIdBack()" />
 													</s:if>
 													<s:else>
-														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
+														<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
 													</s:else>
+													<s:if test='"Y".equals(bouquetModeYN)'>	
+													<button class="btn btn-sm btn-success" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add to Bouquet</button>
+													</s:if>
+													<s:else>
+													<button class="btn btn-sm btn-success" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Save</button>
+													</s:else>
+													<input type="button"  value="Submit"   class="btn btn-sm btn-warning"   id="mybutton1" onclick="disableForm(this.form,false,'');funEditSubmit()" />
 													<!-- <input type="button" value="Save" class="btn btn-sm btn-success" onclick="disableForm(this.form,false,'');destroyPopUps();FunctionSaveOption()" />
 													<input type="button" value="Next" class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');destroyPopUps();next()" /> -->
 												</s:if>
@@ -1400,9 +1491,9 @@ gap:20px;
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionNotTakenCancel()" />
 													</s:elseif>
 													<s:else>
-														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
+														<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
 													</s:else>
-													<s:if test='!"layer".equals(flag)'>
+													<s:if test='!"layer".equals(flag) && !"copy".equals(flag)'>
 														 <input type="button"  value="Save"   class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FunctionSaveOption()" /> 
 														  <input type="button"  value="Submit"   class="btn btn-sm btn-warning"   id="mybutton1" onclick="disableForm(this.form,false,'');funEditSubmit()" />
 														</s:if>
@@ -1414,8 +1505,10 @@ gap:20px;
 												<input type="button" value="Next" class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');destroyPopUps();funAmendsubmit()" />
 											</s:else>
 										</div>
-									</div>
-								</div>
+									</div>			
+							</div>
+						</div>
+						</div>
 								<s:hidden name="layerMode" id="layerMode"/>
 								<s:hidden name="proposalNo1" id="proposalNo1"/>
 								<s:hidden name="flag" id="flag" />
@@ -1604,8 +1697,10 @@ function funsubmit(){
 }
 
 
-function FunctionEdit(){	
-	document.proportional.action="${pageContext.request.contextPath}/EditModeRiskDetails";
+function FunctionEdit(){
+	document.getElementById("flag").value='';
+	document.getElementById("layerMode").value='';
+	document.proportional.action="${pageContext.request.contextPath}/EditModeRiskDetails?multiuserMode=edit";
 	document.proportional.submit();
 }
 
@@ -1780,6 +1875,8 @@ if(val=="1"){
 		document.getElementById('treatynoofLine').value="";
 		document.getElementById('treatyLimitsurplusOC').value="";
 		//document.getElementById('treatyLimitsurplusOCPml').value="";
+		document.getElementById('treatyQSper').style.display="inline";
+		
 	}
 else if(val=="2"){
 		document.getElementById('treatyQS1').style.display="none";
@@ -1794,6 +1891,7 @@ else if(val=="2"){
 		//document.getElementById('treatyLimitsurplusOCPml').value=document.proportional.treatyLimitsurplusOCPml.value;
 		document.getElementById('factreatyQS1').style.display="none";
 		document.getElementById('faclimitOrigCur').value="";
+		document.getElementById('treatyQSper').style.display="none";
 	}
 	else if(val=="3"){
 		document.getElementById('treatyQS1').style.display="inline";
@@ -1808,6 +1906,7 @@ else if(val=="2"){
 		//document.getElementById('treatyLimitsurplusOCPml').value=document.proportional.treatyLimitsurplusOCPml.value;
 		document.getElementById('factreatyQS1').style.display="none";
 		document.getElementById('faclimitOrigCur').value="";
+		document.getElementById('treatyQSper').style.display="inline";
 	}
 	else if(val=="4" || val=="5" ){
 		document.getElementById('treatyQS1').style.display="none";
@@ -1817,6 +1916,7 @@ else if(val=="2"){
 		document.getElementById('treatynoofLine').value='';
 		document.getElementById('treatyLimitsurplusOC').value='';
 		document.getElementById('factreatyQS1').style.display="inline";
+		document.getElementById('treatyQSper').style.display="none";
 	}
 }
 function GetExchangeRate() {
@@ -2438,6 +2538,7 @@ getBouquest('<s:property value="bouquetModeYN"/>');
 function getBouquest(val){
 	if(val=="Y"){
     	document.getElementById('bouquetid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('bouquetid').style.display = 'none';
@@ -2447,6 +2548,7 @@ getRiskInfo('<s:property value="riskdetailYN"/>');
 function getRiskInfo(val){
 	if(val=="Y"){
     	document.getElementById('riskid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('riskid').style.display = 'none';
@@ -2456,6 +2558,7 @@ getBrokerInfo('<s:property value="brokerdetYN"/>');
 function getBrokerInfo(val){
 	if(val=="Y"){
     	document.getElementById('brokerid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('brokerid').style.display = 'none';
@@ -2465,6 +2568,7 @@ getCoverInfo('<s:property value="coverdetYN"/>');
 function getCoverInfo(val){
 	if(val=="Y"){
     	document.getElementById('coverid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('coverid').style.display = 'none';
@@ -2474,6 +2578,7 @@ getPremiumInfo('<s:property value="premiumdetailYN"/>');
 function getPremiumInfo(val){
 	if(val=="Y"){
     	document.getElementById('premiumid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('premiumid').style.display = 'none';
@@ -2483,6 +2588,7 @@ getAcqInfo('<s:property value="acqdetailYN"/>');
 function getAcqInfo(val){
 	if(val=="Y"){
     	document.getElementById('aquid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('aquid').style.display = 'none';
@@ -2922,6 +3028,34 @@ function funViewMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContrac
 	strOpen.focus();
 	return false;
 }
+function getPremiumRes(val){
+	if(val=='1'){
+		document.proportional.premium_Reserve.value='';
+		document.getElementById("premium_Reserve").readOnly=false;
+	}
+	else{
+		document.getElementById("premium_Reserve").readOnly=true;
+		document.proportional.premium_Reserve.value="0";
+	}
+}
+function procceed(){
+	
+	document.proportional.action="InitRiskDetails.action";
+	document.proportional.submit();
+	
+}
+<s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN)'>	
+document.getElementById('bouquestid').style.display = 'block';
+document.getElementById('bouquetModeYNY').disabled=true;
+document.getElementById('bouquetModeYNN').disabled=true;
+
+document.getElementById('bouquetpds').style.display = 'none';
+if ($("#bouquetModeYNY").prop("checked")) {
+	document.getElementById('bouquetNo').disabled=true;
+}
+$('.select1').select2({ });
+</s:if>
+
 </script>
 	</body>
 </html>

@@ -81,6 +81,15 @@
 								</div>
 								<div class="textfield">
 									<div class="text">
+									<s:text name="Bouquet No" />
+										
+									</div>
+									<div class="tbox txtB">
+									 <s:textfield name="bouquetNoSearch" id="bouquetNoSearch" cssClass="inputBox" />
+									</div>
+								</div>
+								<div class="textfield">
+									<div class="text">
 									<s:text name="Company Name" />
 										
 									</div>
@@ -106,6 +115,15 @@
 									 <s:textfield name="departmentNameSearch" id="departmentNameSearch" cssClass="inputBox" />
 									</div>
 								</div>
+								<div class="textfield">
+									<div class="text">
+									<s:text name="label.subClass" />
+										
+									</div>
+									<div class="tbox txtB">
+									 <s:textfield name="subclassSearch" id="subclassSearch" cssClass="inputBox" />
+									</div>
+								</div>
 								 <s:if test='"1".equals(#session.mfrid) '>
 								<div class="textfield">
 									<div class="text">
@@ -127,15 +145,6 @@
 									 <s:textfield name="uwYearSearch" id="uwYearSearch" cssClass="inputBox" />
 									</div>
 								</div>
-								<div class="textfield">
-									<div class="text">
-									<s:text name="Underwriter" />
-										
-									</div>
-									<div class="tbox txtB">
-									<s:textfield name="underwriterSearch" id="underwriterSearch" cssClass="inputBox" />
-									</div>
-								</div>
 								</s:if>
 								<s:else>
 								 <div class="textfield">
@@ -145,15 +154,6 @@
 									</div>
 									<div class="tbox txtB">
 									 <s:textfield name="uwYearSearch1" id="uwYearSearch1" cssClass="inputBox" />
-									</div>
-								</div>
-								<div class="textfield">
-									<div class="text">
-									<s:text name="Underwriter" />
-										
-									</div>
-									<div class="tbox txtB">
-									<s:textfield name="underwriterSearch1" id="underwriterSearch1" cssClass="inputBox" />
 									</div>
 								</div>
 								</s:else>
@@ -198,29 +198,23 @@
 												<tr>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
+													<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Company Name" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Broker Name" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="label.class" /></th>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Generated Date" /></th>
+													<th style="text-align: center; vertical-align: middle;"><s:text name="label.subClass" /></th>
+													<%-- <th style="text-align: center; vertical-align: middle;"><s:text name="Generated Date" /></th> --%>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Inception Date" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Expiry Date" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="UW Year" /></th>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="UnderWriter" /></th>
+													<%-- <th style="text-align: center; vertical-align: middle;"><s:text name="UnderWriter" /></th> --%>
 													<s:if test='"RP".equalsIgnoreCase(title)'>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Old Contract No" /></th>
 													</s:if>
-													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Edit" /></th>
-													</s:if>
-													 <s:if test='#session.MenuRights.indexOf("V")!=-1'>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="View" /></th>
-													</s:if>
-													 <s:if test='!"5".equals(#session.mfrid) '>
-													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
-													<%-- <th style="text-align: center; vertical-align: middle;"><s:text name="Duplicate Layer" /></th> --%>
-													</s:if>
-													</s:if>
+													<th style="text-align: center; vertical-align: middle;" width="150px">
+														<s:text name="Select Option" />
+													</th>
 													</tr>
 													</thead>
 													<tbody>
@@ -228,43 +222,32 @@
 													<tr>
 													<td><s:property value="#stat.count"/></td>
 													<td><s:property value="proposalNo"/></td>
+													<td><s:property value="bouquetNo"/></td>
 													<td><s:property value="ceding_Company_Name"/></td>	
 													<td><s:property value="brokerName"/></td>	
 													<td><s:property value="department_Name"/></td>	
-													<td><s:property value="quote_Gendrated_date"/></td>	
+													<td><s:property value="subClass"/></td>
+													<%-- <td><s:property value="quote_Gendrated_date"/></td>	 --%>
 													<td><s:property value="inception_Date"/></td>	
 													<td><s:property value="expiry_Date"/></td>	
 													<td><s:property value="uwYear"/></td>
-													<td><s:property value="underwritter"/></td>	
+													<%-- <td><s:property value="underwritter"/></td>	 --%>
 													<s:if test='"RP".equalsIgnoreCase(#list.title)'>
 													<td><s:property value="old_Contract"/></td>
-													</s:if>
-													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
-													<td>
-													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer '>
-													<a class="btn btn-sm btn-primary" title="Edit" style="cursor: pointer;" onclick="funEditMode('${list.proposalNo}','${list.cedding_company_id}','<s:property value="#session.mfrid" />','${list.baseLayer}','${list.contractno1}','${list.departmentId}')">Edit</a>
-													</s:if>
-													</td>
-													</s:if>
-													<s:if test='#session.MenuRights.indexOf("V")!=-1'>
-													<td>
-													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer '>
-													 <a class="btn btn-sm btn-primary" title="View" style="cursor: pointer;" onclick="funViewMode('${list.proposalNo}','<s:property value="#session.mfrid" />','${list.flag}','${list.amendId}')">View</a>
-													 </s:if>
-													</td>	
 													</s:if>
 													<s:if test='!"5".equals(#session.mfrid) '>
 													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
 													<td>
 													<s:property value="baseLayer"/>
 													</td>	
-													<%-- <td>
-													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer '>
-													<a class="btn btn-sm btn-primary" title="L" style="cursor: pointer;" onclick="funLayerMode('${list.proposalNo}','${list.cedding_company_id}','${list.layerNo}')">L</a>
 													</s:if>
-													</td> --%>
-													</s:if>
-													</s:if>					
+													</s:if>	
+													<td style="text-align: center; vertical-align: middle;">
+														<div><s:select list="buttonSelectionList"  id="buttonVal%{#stat.count-1}" cssClass="inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:70%;float:left;"/>
+														 <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="#session.mfrid" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
+													</td>
+													
+																	
 													</tr>
 													</s:iterator>
 													</tbody>
@@ -282,31 +265,26 @@
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
-												
+												<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Company Name" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Broker Name" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="label.class" /></th>
-												<th style="text-align: center; vertical-align: middle;"><s:text name="Generated Date" /></th>
+												<th style="text-align: center; vertical-align: middle;"><s:text name="label.subClass" /></th>
+												<%-- <th style="text-align: center; vertical-align: middle;"><s:text name="Generated Date" /></th> --%>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Inception Date" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Expiry Date" /></th>
 												<s:if test=' "1".equals(#session.mfrid) '>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Insured Name" /></th>
 												</s:if>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="UW Year" /></th>
-												<th style="text-align: center; vertical-align: middle;"><s:text name="UnderWriter" /></th>
+												<%-- <th style="text-align: center; vertical-align: middle;"><s:text name="UnderWriter" /></th> --%>
 												<s:if test='"RP".equalsIgnoreCase(title)'>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Old Contract No" /></th>
 												</s:if>
-												<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
-												<th style="text-align: center; vertical-align: middle;"><s:text name="Edit" /></th>
-												</s:if>
-												 <s:if test='#session.MenuRights.indexOf("V")!=-1'>
-												<th style="text-align: center; vertical-align: middle;"><s:text name="View" /></th>
-												</s:if>
-												 <s:if test='"2".equals(#session.mfrid)'>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Classes" /></th>
-												</s:if>
+												<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
+													<th style="text-align: center; vertical-align: middle;" width="150px">
+														<s:text name="Select Option" />
+													</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -314,39 +292,35 @@
 												<tr>
 												<td><s:property value="#stat.count"/></td>
 												<td><s:property value="proposalNo"/></td>
-												
+												<td><s:property value="bouquetNo"/></td>
 												<td><s:property value="ceding_Company_Name"/></td>	
 												<td><s:property value="brokerName"/></td>	
 												<td><s:property value="department_Name"/></td>	
-												<td><s:property value="quote_Gendrated_date"/></td>	
+												<td><s:property value="subClass"/></td>	
+												<%-- <td><s:property value="quote_Gendrated_date"/></td>	 --%>
 												<td><s:property value="inception_Date"/></td>	
 												<td><s:property value="expiry_Date"/></td>
 												<s:if test=' "1".equals(#session.mfrid) '>
 												<td><s:property value="insuredName" /></td>
 												</s:if>	
 												<td><s:property value="uwYear"/></td>
-												<td><s:property value="underwritter"/></td>	
+												<%-- <td><s:property value="underwritter"/></td>	 --%>
 												<s:if test='"RP".equalsIgnoreCase(#list.title)'>
 												<td><s:property value="old_Contract"/></td>
 												</s:if>
-												<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
-												<td>
-												 <a class="btn btn-sm btn-primary" title="Edit" style="cursor: pointer;" onclick="funEditMode('${list.proposalNo}','${list.cedding_company_id}','<s:property value="#session.mfrid" />','${list.baseLayer}','','${list.departmentId}')">Edit</a>
-												</td>
-												</s:if>
-												<s:if test='#session.MenuRights.indexOf("V")!=-1'>
-												<td>
-												 <a class="btn btn-sm btn-primary" title="View" style="cursor: pointer;" onclick="funViewMode('${list.proposalNo}','<s:property value="#session.mfrid" />','${list.flag}','${list.amendId}')">View</a> 
-												</td>	
-												</s:if>
+												
 												<s:if test='"2".equals(#session.mfrid)'>
 													<td><s:property value="baseLayer" /></td>
-													<td>
+													<%-- <td>
 													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer'>
 													<input type="button" class="btn btn-sm btn-info" value="CS" style="cursor: pointer;" onclick="funClassMode('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalNo" />')" />
 													</s:if>
-													</td>
+													</td> --%>
 												</s:if>
+												<td style="text-align: center; vertical-align: middle;">
+														<div><s:select list="buttonSelectionList"  id="buttonVal%{#stat.count-1}" cssClass="inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:70%;float:left;"/>
+														 <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="#session.mfrid" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
+													</td>
 												</tr>
 												</s:iterator>
 												</tbody>
@@ -556,6 +530,47 @@ var flag = document.getElementById("flag").value;
 	  document.FirstPageForm.action="${pageContext.request.contextPath}/InitPortfolio.action?SearchType="+mode;
 	  document.FirstPageForm.submit();
 	 }
+}
+function ButtonAction(contractno,ceddingcompanyid,proposalno,baseLayer,deptId,flag,amendId,layerNo,inception_Date,ceding_Company_Name,brokerName,flag,row){	var sel = document.getElementById("buttonVal"+row).value;
+	if("E"==sel){
+	funEditMode(contractno,ceddingcompanyid,proposalno,baseLayer,deptId);
+	}
+	else if("V"==sel){
+	funViewMode(proposalno,amendId,flag,baseLayer);
+	}
+	else if("PL"==sel){
+		funplacingMode(proposalno,amendId,flag,baseLayer);
+	}
+	
+	
+
+}
+function funplacingMode(proposalno,mfrid,flag,amendId)
+{
+	document.getElementById("amendId").value=amendId;
+   document.getElementById("flag").value=flag;
+   document.getElementById("proposal_no").value=proposalno;
+  if(mfrid==2) 
+   {
+       document.FirstPageForm.action="ViewMethodRiskDetails.action"
+       document.FirstPageForm.submit();
+   }
+   else if(mfrid==3 ||mfrid==5)
+   {
+   	document.FirstPageForm.action="ViewMethodXol.action"
+       document.FirstPageForm.submit();
+   }
+   else if(mfrid==4 )
+   {
+   	document.FirstPageForm.action="ViewMethodRetro.action"
+       document.FirstPageForm.submit();
+   }
+   else
+   {
+       document.FirstPageForm.action="ViewMethodFacultative.action"
+       document.FirstPageForm.submit();
+  
+   }
 }
    </script>
 </html>

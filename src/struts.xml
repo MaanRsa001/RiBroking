@@ -110,6 +110,7 @@
 				<result name="admindocupload" type="tiles">admindocupload</result>
 				<result name="pdfReport">\WEB-INF\jsp\Reports\pdfReport.jsp</result>
 				<result name="viewPDF">${fileName}</result>
+				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
 
 			</action>
 

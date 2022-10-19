@@ -3292,4 +3292,36 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		}
 	}
 
+	public List<Map<String, Object>> getBouquetList(String branchCode) {
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		try{
+			String query="";
+			query=getQuery("GET_BOUQUET_LIST");
+			logger.info("Select Query==> " + query);
+			logger.info("Arg[0]==> " + branchCode);
+			list=this.mytemplate.queryForList(query, new Object[]{branchCode});
+		}
+		catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+		}
+		return list;
+	}
+
+	public List<Map<String, Object>> getBouquetExistingList(String branchCode, String bouquetNo,String bouquetYN) {
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		try{
+			if(StringUtils.isNotBlank(bouquetNo) && "Y".equals(bouquetYN)) {
+			String query="";
+			query=getQuery("GET_EXISTING_BOUQUET");
+			logger.info("Select Query==> " + query);
+			logger.info("Arg[0]==> " + branchCode);
+			list=this.mytemplate.queryForList(query, new Object[]{branchCode,bouquetNo});
+			}
+		}
+		catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+		}
+		return list;
+	}
+
 }

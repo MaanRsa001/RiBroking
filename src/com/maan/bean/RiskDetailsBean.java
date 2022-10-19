@@ -489,7 +489,7 @@ public class RiskDetailsBean  {
 	private String minPremiumOSDC;
 
 	private String bouquetModeYN;
-	private String bouquetMode;
+	private String bouquetNo;
 	private String uwYearTo;
 	private String paymentPartner;
 	private String rateOnLine;
@@ -2198,9 +2198,12 @@ public class RiskDetailsBean  {
 	private String mapingAmendId;
 	private String treatyTypeName;
 	private String anualAggregateLiabilityTemp;
-	
-	
-	
+	private List<Map<String,Object>> premiumReserveList;
+	private List<Map<String,Object>> bouquetList;
+	private String quotesharePercent;
+	private String accountingPeriodNotes;
+	private String statementConfirm;
+	private String premiumResType;
 	
 	public List<Map<String, Object>> getYearToList() {
 		return yearToList;
@@ -5251,11 +5254,12 @@ public class RiskDetailsBean  {
 	public void setBouquetModeYN(String bouquetModeYN) {
 		this.bouquetModeYN = bouquetModeYN;
 	}
-	public String getBouquetMode() {
-		return bouquetMode;
+	
+	public String getBouquetNo() {
+		return bouquetNo;
 	}
-	public void setBouquetMode(String bouquetMode) {
-		this.bouquetMode = bouquetMode;
+	public void setBouquetNo(String bouquetNo) {
+		this.bouquetNo = bouquetNo;
 	}
 	public String getUwYearTo() {
 		return uwYearTo;
@@ -5420,6 +5424,43 @@ public class RiskDetailsBean  {
 	public void setScsubSeqCalculation(String scsubSeqCalculation) {
 		this.scsubSeqCalculation = scsubSeqCalculation;
 	}
+	public List<Map<String, Object>> getPremiumReserveList() {
+		return premiumReserveList;
+	}
+	public void setPremiumReserveList(List<Map<String, Object>> premiumReserveList) {
+		this.premiumReserveList = premiumReserveList;
+	}
+	public String getQuotesharePercent() {
+		return quotesharePercent;
+	}
+	public void setQuotesharePercent(String quotesharePercent) {
+		this.quotesharePercent = quotesharePercent;
+	}
+	public String getAccountingPeriodNotes() {
+		return accountingPeriodNotes;
+	}
+	public void setAccountingPeriodNotes(String accountingPeriodNotes) {
+		this.accountingPeriodNotes = accountingPeriodNotes;
+	}
+	public String getStatementConfirm() {
+		return statementConfirm;
+	}
+	public void setStatementConfirm(String statementConfirm) {
+		this.statementConfirm = statementConfirm;
+	}
+	public String getPremiumResType() {
+		return premiumResType;
+	}
+	public void setPremiumResType(String premiumResType) {
+		this.premiumResType = premiumResType;
+	}
+	public List<Map<String, Object>> getBouquetList() {
+		return bouquetList;
+	}
+	public void setBouquetList(List<Map<String, Object>> bouquetList) {
+		this.bouquetList = bouquetList;
+	}
+	
 	
 
 	

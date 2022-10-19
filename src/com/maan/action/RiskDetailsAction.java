@@ -139,6 +139,9 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 	public List<Map<String,Object>> getLOCIssuesedList(){
 		return dropDownController.getTypeList("39",branchCode);
 	}
+	public List<Map<String,Object>> getBouquetExistingList(){
+		return dropDownController.getBouquetExistingList(branchCode,bean.getBouquetNo(),bean.getBouquetModeYN());
+	}
 	
 	public String UnderwritingLimit(){
 		//bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, (String)session.get("DepartmentId")));
@@ -185,6 +188,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			 bean.setPaymentPartnerlist(dropDownController.getPaymentPartnerlist(branchCode,bean.getCedingCo(),bean.getBroker()));
 			// bean.setNo_Insurer("1");
 			//bean.setMaxLimit_Product(dropDownController.getUWLimmit((String)session.get("UserId"),(String)session.get("processId"),pid, "0"));
+			
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 		}
@@ -299,7 +303,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				resetRemarks();
 				resetCedentRetention();
 			}
-			if(StringUtils.isNotBlank(bean.getProposalNo()) && ("layer".equals(bean.getLayerMode()) || StringUtils.isNotBlank(bean.getSectionNo()))) {
+			if(StringUtils.isNotBlank(bean.getProposalNo()) /*&& ("layer".equals(bean.getLayerMode()) || StringUtils.isNotBlank(bean.getSectionNo()))*/) {
 				bean.setProposal_no(bean.getProposalNo());
 			}
 		} catch (Exception e) {
@@ -1521,10 +1525,6 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			}
 			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
 				addActionError(getText("error.bouquetModeYn.required"));
-			}else if("Y".equalsIgnoreCase(bean.getBouquetMode())) {
-				if(StringUtils.isBlank(bean.getBouquetMode())) {
-					addActionError(getText("error.bouquetMode.required"));
-				}
 			}
 			if (StringUtils.isBlank(bean.getCedingCo())) {
 				addActionError(getText("error.cedingCo.required"));
@@ -2178,6 +2178,9 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		session.put("Product", pid);
 		if(CollectionUtils.isEmpty(bean.getPaymentPartnerlist()))
 		bean.setPaymentPartnerlist(dropDownController.getPaymentPartnerlist(branchCode,bean.getCedingCo(),bean.getBroker()));
+		bean.setPremiumReserveList(dropDownController.getConstantDropDown("51"));
+		bean.setBouquetList(dropDownController.getBouquetList(branchCode));    
+		
 	}
 
 	private void getContractListVal() {

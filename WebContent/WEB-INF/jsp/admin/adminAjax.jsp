@@ -2637,4 +2637,97 @@ alert("This action is not allowed because a previous transaction is pending for 
 			</tbody>
 		</table>
 </s:elseif>
+<s:elseif test='"contact".equalsIgnoreCase(dropDown)'>
+<table class="table table-bordered" width="100%" id="newgen">
+	<thead>
+		<tr>
+		<th width="2.8%"> <s:text name="label.serialnumber" /></th>
+		<th width="15.8%"> <s:text name="label.departmentName" /></th>
+		<th width="15.8%"> <s:text name="label.subdepartmentName" /></th>
+		<th width="15.8%"> <s:text name="label.emailaddress" /></th>
+		<th width="15.8%"> <s:text name="label.telephonenumber" /></th>
+		<th width="15.8%"> <s:text name="label.faxnumber" /> </th>
+		<th width="5.8%"> <s:text name="Delete" /> </th>
+		</tr>
+	</thead>
+	<tbody>
+		<s:iterator value="contactList" var="list" status="stat">
+			<tr>
+				<td><s:textfield name="contactSNo[%{#stat.count-1}]" id="contactSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/></td>
+				<td>
+				<s:select  list="departList"  name="departmentCD[%{#stat.count-1}]" id="departmentCD%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CATEGORY_DETAIL_ID" listValue="DETAIL_NAME" theme="simple"/>
+				</td>
+				<td>
+				<s:textfield name="subdepartmentCD[%{#stat.count-1}]" id="subdepartmentCD[%{#stat.count-1}]" cssClass="inputBox"  theme="simple"/>
+				</td>
+				<td>
+				<s:textfield name="emailaddress[%{#stat.count-1}]" id="emailaddress[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
+				</td>
+				<td>
+				<s:textfield name="telephonenumber[%{#stat.count-1}]" id="telephonenumber[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
+				</td>
+				<td>
+				<s:textfield name="faxnumber[%{#stat.count-1}]" id="faxnumber[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
+				</td>
+				<td align="center">
+					<s:if test='0!=(#stat.count-1)'>
+					<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');deleteRow('<s:property value="%{#stat.count-1}"/>')" theme="simple"/>
+					</s:if>
+				</td>
+				</tr>
+			</s:iterator>
+	</tbody>
+</table>
+</s:elseif>
+<s:elseif test='"bankid".equalsIgnoreCase(dropDown)'>
+<table class="table table-bordered" width="100%" id="newgen1">
+	<thead>
+		<tr>
+			<th width="2.8%"> <s:text name="label.serialnumber" /></th>
+			<th width="15.8%"> <s:text name="label.bankcurrency" /></th>
+			<th width="15.8%"> <s:text name="label.bankaccountnumber" /></th>
+			<th width="15.8%"> <s:text name="label.bankname" /></th>
+			<th width="15.8%"> <s:text name="label.accountname" /></th>
+			<th width="15.8%"> <s:text name="label.swiftcode" /> </th>
+			<th width="15.8%"> <s:text name="label.coresondentbank" /> </th>
+			<th width="15.8%"> <s:text name="label.remarks" /> </th>
+			<th width="5.8%"> <s:text name="Delete" /> </th>
+		</tr>
+	</thead>
+	<tbody>
+		<s:iterator value="currencyList" var="list" status="stat">
+			<tr>
+				<td><s:textfield name="bankSNo[%{#stat.count-1}]" id="bankSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/></td>
+			
+				<td>
+					<s:select  list="bankCurrencyList"  name="bankCurrency[%{#stat.count-1}]" id="bankCurrency%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CURRENCY_ID"  listValue="CURRENCY_NAME" theme="simple"/>
+				</td>
+				<td>
+					<s:textfield name="bankaccountnumber[%{#stat.count-1}]" id="bankaccountnumber[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" theme="simple"/>
+				</td>
+				<td>
+					<s:textfield name="bankname[%{#stat.count-1}]" id="bankname[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" theme="simple"/>
+				</td>
+				<td>
+					<s:textfield name="accountname[%{#stat.count-1}]" id="accountname[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" theme="simple"/>
+				</td>
+				<td>
+					<s:textfield name="swiftcode[%{#stat.count-1}]" id="swiftcode[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" theme="simple"/>
+				</td>
+				<td>
+					<s:textarea name="corespondentbank[%{#stat.count-1}]" id="corespondentbank[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" theme="simple"/>
+				</td>
+				<td>
+					<s:textarea name="bankRemarks[%{#stat.count-1}]" id="remarks[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" theme="simple"/>
+				</td>
+				<td align="center">
+						<s:if test='0!=(#stat.count-1)'>
+						<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');deleteRow1('<s:property value="%{#stat.count-1}"/>')" theme="simple"/>
+						</s:if>
+					</td>
+				</tr>
+			</s:iterator>
+	</tbody>
+</table>
+</s:elseif>
 							

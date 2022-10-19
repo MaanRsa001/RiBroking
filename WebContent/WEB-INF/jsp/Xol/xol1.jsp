@@ -65,6 +65,7 @@ gap:20px;
 </head>
 <body onload="Commas(<s:property value="#session.mfrid" />),setCedRetType('<s:property value="cedRetenType" />')">
 <s:set var="elayerInfo" value='%{layerInfo}'/>
+<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 <s:set var="dislayer" value="%{'layer'.equals(layerMode)}"/>
 <div class="table0" style="width: 100%; margin: 0 auto;">
 	<div class="tablerow">
@@ -121,28 +122,97 @@ gap:20px;
 											&nbsp;&nbsp;&nbsp;
 										</div>
 									<div class="panel-body">
-										<div class="boxcontent">
-											<div class="textfield">
-												<div class="text">
-													<s:text name="label.bouquetModeYN" />
+											<div class="boxcontent">
+												<div class="textfield33">
+													<div class="text">
+														<s:text name="label.bouquetModeYN" />
+													</div>
+													<div class="tbox">
+														<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{bouquetModeYN!=null}"></s:radio>													
+													</div>
+												</div>										
+												<div class="textfield33">
+													<div id="bouquetid">
+														<div class="text">
+															<s:text name="label.bouquetMode" />
+														</div>
+														<div class="tbox">
+															<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="%{bouquetModeYN!=null}"/>
+														</div>
+													</div>
 												</div>
-												<div class="tbox">
-													<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{dislayer}"></s:radio>													
-												</div>
-											</div>										
-											<div class="textfield" id="bouquetid">
-												<div class="text">
-													<s:text name="label.bouquetMode" />
-												</div>
-												<div class="tbox">
-													<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="bouquetMode" id="bouquetMode" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="%{dislayer}"/>
+												<div class="textfield33" >
+													<div id="bouquetpds">
+														<div class="boxcontent" align="center">
+														<input type="button"  value="Procced"   class="btn btn-sm btn-success"   onclick="procceed()" />
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
 								</div>
 							</div>
 						</div>
+						<div id="bouquestid" style="display:none">
+							<s:if test='"Y".equals(bouquetModeYN)'>
+							<div class="boxcontent" >
+								<div class="panel panel-primary">											
+									<div class="panel-heading">
+										<s:text name="label.bouquetinfo" />
+									</div>
+									<div class="panel-body">
+										<div class="boxcontent">
+										
+											
+												<div>
+													<table width="100%" class="table table-bordered" >
+														<thead>
+														<tr>
+															<th width="7%"> <s:text name="label.sno" /> </th>
+															<th width="20%"><s:text name="label.businessType" /></th>
+															<th width="20%"><s:text name="label.proposalNo" /></th>
+															<th width="20%"><s:text name="label.treatyType" /></th>
+															<th width="20%"><s:text name="label.treatyNameType" /></th>
+															<th width="20%"><s:text name="label.newRenew" /></th>
+															<th width="20%"><s:text name="label.existingshare" /></th>
+														</tr>
+														</thead>
+														<tbody>	
+														<s:iterator value="#ebouquetExistingList" var="list"  status="stat">									
+														<tr>
+															<td>
+																<s:property value="%{#stat.count}"/>
+															</td>
+															<td>
+																<s:property value="#list.BUSINESS_TYPE"/>
+															</td>
+															<td>
+																<s:property value="#list.PROPOSAL_NO"/>
+															</td>
+															<td>
+																<s:property value="#list.TREATY_TYPE"/>
+															</td>
+															<td>
+																<s:property value="#list.RSK_TREATYID"/>
+															</td>
+															<td>
+																<s:property value="#list.POLICY_STATUS"/>
+															</td>
+															<td>
+																<s:property value="#list.EXISTING_SHARE"/>
+															</td>
+														</tr>												
+														</s:iterator>
+														</tbody>
+													</table>											
+												</div> 
+											
+											
+										</div>
+									</div>
+								</div>
+								</div>
+							</s:if>
 						<div class="tablerow">
 							<div class="boxcontent">
 								<div class="panel panel-primary">
@@ -167,35 +237,7 @@ gap:20px;
 													<s:textfield name="contNo" cssClass="inputBox" disabled="true" />
 												</div>
 											</div>
-											<div class="textfield">
-												<div class="text">
-													<s:text name="label.departmentClass" />
-												</div>
-												<div class="tbox">
-													<s:if test="RenewalMode != null ">
-														<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
-													</s:if>
-													<s:else>
-														<s:if test="'Layer'.equals(proposalReference)">
-															<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();" />
-														</s:if>
-														<s:else>
-															<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{ dislayer|| "Renewal".equals(proposalReference)||(proposal_no!=null && proposal_no!="")?true:false}' onchange="getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();" />
-														</s:else>
-													</s:else>
-												</div>
-											</div>
-											<div class="textfield">
-												<div class="text">
-													<%--<s:text name="label.subClass" />--%>
-												</div>
-												<div class="tbox" >
-													<s:hidden name="subProfit_center" id="subProfit_center" value="D"/>
-													<s:hidden name="profit_Center" id="profit_Center" value="D"/>
-													<%--<s:select list="subProfitList" listKey="TMAS_SPFC_ID" listValue="TMAS_SPFC_NAME" name="subProfit_center" id="subProfit_center" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{contNo != null && contNo != ""?true:RenewalMode!=null?false:"Y".equals(disableStatus)?true:false}'/>
-													 <s:select list="subProfitList" name="subProfit_center" cssClass="select1 inputBoxS" id="subProfit_center" headerKey="ALL" headerValue="ALL" multiple="true"  listKey="TMAS_SPFC_ID" listValue="TMAS_SPFC_NAME" disabled='%{contNo != null && contNo != ""?true:RenewalMode!=null?false:"Y".equals(disableStatus)?true:false}' onclick="getSubDepatmentCover();" />	--%>											
-												</div>
-											</div>
+											
 											<br class="clear"></br>
 										</div>
 									</div>
@@ -473,6 +515,36 @@ gap:20px;
 																<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 															</s:else>
 															</div>
+															</div>
+														</div>
+														<div class="textfield">
+															<div class="text">
+																<s:text name="label.departmentClass" />
+															</div>
+															<div class="tbox">
+																<s:if test="RenewalMode != null ">
+																	<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
+																</s:if>
+																<s:else>
+																	<s:if test="'Layer'.equals(proposalReference)">
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass');"/>
+																	</s:if>
+																	<s:else>
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{ dislayer|| "Renewal".equals(proposalReference)||(proposal_no!=null && proposal_no!="")?true:false}' onchange="getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass');" />
+																	</s:else>
+																</s:else>
+															</div>
+														</div>
+														<div class="textfield">
+															<div class="text">
+																<s:text name="label.subClass" />
+															</div>
+															<div class="tbox"  id="subclass">
+																<s:select list="subProfitList" listKey="TMAS_SPFC_ID" listValue="TMAS_SPFC_NAME" multiple="true" name="subProfit_center" id="subProfit_center"  cssClass="inputBoxS" disabled='%{(contNo != "" && contNo != null)?true:false}' headerKey="ALL" headerValue="ALL" />
+																
+																<s:hidden name="profit_Center" id="profit_Center" value="D"/>
+																<%--<s:select list="subProfitList" listKey="TMAS_SPFC_ID" listValue="TMAS_SPFC_NAME" name="subProfit_center" id="subProfit_center" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{contNo != null && contNo != ""?true:RenewalMode!=null?false:"Y".equals(disableStatus)?true:false}'/>
+																 <s:hidden name="subProfit_center" id="subProfit_center" value="D"/>--%>											
 															</div>
 														</div>
 														<div class="textfield">
@@ -1036,16 +1108,14 @@ gap:20px;
 										<jsp:include page="/WEB-INF/jsp/common/remarks.jsp" />
 										<div class="boxcontent" align="center">
 										<s:if test='"layer".equals(layerMode) && "layer".equals(flag)'>
+										<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 										<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionUpdateOption()">Update Layer</button>
 										</s:if>
 										<s:elseif test='"layer".equals(layerMode) && "copy".equals(flag)'>
+										<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 										<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add Layer</button>
 										</s:elseif>
-										<s:else>
-										<s:if test='proposal_no == null ||"".equals(proposal_no) '>
-										<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add Layer</button>
-										</s:if>
-										</s:else>
+										
 											
 										</div>
 									</div>
@@ -1141,8 +1211,15 @@ gap:20px;
 											<input type="button"  value="Cancel"  class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
 										</s:if>
 										<s:else>
-											 <input type="button"  value="Cancel"  class="btn btn-sm btn-danger" id="mybutton" onClick="FunctionEditCancel()" />
+											 <input type="button"  value="Back"  class="btn btn-sm btn-danger" id="mybutton" onClick="FunctionEditCancel()" />
 										</s:else>
+										<s:if test='"Y".equals(bouquetModeYN)'>	
+											<button class="btn btn-sm btn-success" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add to Bouquet</button>
+										</s:if>
+										<s:else>
+											<button class="btn btn-sm btn-success" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Save</button>
+										</s:else>
+										<input type="button"  value="Submit"   class="btn btn-sm btn-warning"   id="mybutton1" onclick="disableForm(this.form,false,'');funEditSubmit()" />
 										<!-- <input type="button"  value="Save"   class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FunctionSaveOption()"  /> -->
 							 			<!-- <input type="button"  value="Next"    class="btn btn-sm btn-warning"  id="mybutton1"  onclick="disableForm(this.form,false,'');next()" /> -->
 									</s:if>
@@ -1158,9 +1235,9 @@ gap:20px;
 											<input type="button"  value="Cancel"  class="btn btn-sm btn-danger" id="mybutton" onClick="FunctionNotTakenCancel()" />
 										</s:elseif>
 										<s:else>
-											<input type="button"  value="Cancel"  class="btn btn-sm btn-danger" id="mybutton"   onClick="FunctionEditCancel()" />
+											<input type="button"  value="Back"  class="btn btn-sm btn-danger" id="mybutton"   onClick="FunctionEditCancel()" />
 										</s:else>	
-										<s:if test='!"layer".equals(flag)'>
+										<s:if test='!"layer".equals(flag)  && !"copy".equals(flag)'>
 										 <input type="button"  value="Save"   class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FunctionSaveOption()" /> 
 										  <input type="button"  value="Submit"   class="btn btn-sm btn-warning"   id="mybutton1" onclick="disableForm(this.form,false,'');funEditSubmit()" />
 										</s:if>
@@ -1175,6 +1252,7 @@ gap:20px;
 							</div>
 						</div>
 																			
+					</div>
 					</div>
 					<s:hidden name="proposalNo1" id="proposalNo1"/>
 					<s:hidden name="manufactureID" id="manufactureID"/>
@@ -1265,58 +1343,83 @@ function getAjax(value,id)
 	var URL='${pageContext.request.contextPath}/ajaxValueXol.action?departId='+value+'&dropDown=subclass';
 	postRequest(URL,'subclass');
 }
-<%-- function getAjax(value,id)
-{
-	 $.ajax({
-        type: "POST",
-        url: '${pageContext.request.contextPath}/ajaxValueXol.action?departId='+value+'&dropDown=subclass',
-        //data:'src_type_id='+val,
-        success: function(data){
-            $('#' + id).html(data);
-            $('#subProfit_center').multiselect({ 
-      			includeSelectAllOption: false,
-        		enableFiltering:true,
-        		numberDisplayed: 0,
-        		onChange: function(element, checked) {
-          		var val = $('#subProfit_center').val();
-          		if (val != null && val[0]=='ALL') {
-          		$("#subProfit_center").multiselect('clearSelection');
-          		$("#subProfit_center").val('ALL');
-          	 	$("#subProfit_center").multiselect("refresh");
+function getAjax(value,id) {
+    $.ajax({
+    type: "POST",
+    url: '${pageContext.request.contextPath}/ajaxValueRiskDetails.action?departId='+value+'&dropDown=subclass',
+    //data:'src_type_id='+val,
+    success: function(data){
+        $('#' + id).html(data);
+        $('#subProfit_center').multiselect({ 
+  			includeSelectAllOption: false,
+    		enableFiltering:true,
+    		numberDisplayed: 0,
+    		enableCaseInsensitiveFiltering: true,
+    		onChange: function(element, checked) {
+      		  var val = $('#subProfit_center').val();
+	          var val1 =document.getElementById("preVal").value;
+	          if(val1!= null && val1=='ALL' && val !=null && val[1]!=undefined ){
+	          $("#subProfit_center").multiselect('clearSelection');
+	          val = removeElementsWithValue(val, 'ALL');
+	          $("#subProfit_center").val(val);
+	           $("#subProfit_center").multiselect("refresh");
+	           document.getElementById("preVal").value = '';
+	          }
+	          else if (val !=null && val[0]=='ALL' ) {
+	          	$("#subProfit_center").multiselect('clearSelection');
+	          	$("#subProfit_center").val('ALL');
+	          	 $("#subProfit_center").multiselect("refresh");
+	          	 document.getElementById("preVal").value = 'ALL';
+	          }
+	          else if(val== null || val[0]==''){
+	          $("#subProfit_center").multiselect('clearSelection');
+	          $("#subProfit_center").multiselect("refresh");
+	          document.getElementById("preVal").value = '';
+      }
+      }                   
+});
+    }
+    });
+}
+$(document).ready(function() {     
+    $('#subProfit_center').multiselect({ 
+      	includeSelectAllOption: false,
+        enableFiltering:true,
+        numberDisplayed: 0,
+        enableCaseInsensitiveFiltering: true,
+        onChange: function(element, checked) {
+          var val = $('#subProfit_center').val();
+          var val1 =document.getElementById("preVal").value;
+          if(val1!= null && val1=='ALL' && val !=null && val[1]!=undefined ){
+          $("#subProfit_center").multiselect('clearSelection');
+          val = removeElementsWithValue(val, 'ALL');
+          $("#subProfit_center").val(val);
+           $("#subProfit_center").multiselect("refresh");
+           document.getElementById("preVal").value = '';
+          }
+          else if (val !=null && val[0]=='ALL' ) {
+          	$("#subProfit_center").multiselect('clearSelection');
+          	$("#subProfit_center").val('ALL');
+          	 $("#subProfit_center").multiselect("refresh");
+          	 document.getElementById("preVal").value = 'ALL';
+          }
+          else if(val== null || val[0]==''){
+          $("#subProfit_center").multiselect('clearSelection');
+          $("#subProfit_center").multiselect("refresh");
+          document.getElementById("preVal").value = '';
           }
       	}                     
-    });
-        }
-        });
-       // getAjaxCover(value,'coverdepartid0','0');
-}
-function getAjaxCover(value,id,count)
-{
-alert();
-	 $.ajax({
-        type: "POST",
-        url: '${pageContext.request.contextPath}/ajaxValueXol.action?departId='+value+'&dropDown=coversubclass&id='+count,
-        //data:'src_type_id='+val,
-        success: function(data){
-            $('#' + id).html(data);
-            $('#coversubdepartId'+count).multiselect({ 
-      			includeSelectAllOption: false,
-        		enableFiltering:true,
-        		numberDisplayed: 0,
-        		onChange: function(element, checked) {
-          		var val = $('#coversubdepartId'+count).val();
-          		if (val != null && val[0]=='ALL') {
-          		$("#coversubdepartId"+count).multiselect('clearSelection');
-          		$("#coversubdepartId"+count).val('ALL');
-          	 	$("#coversubdepartId"+count).multiselect("refresh");
-          }
-      	}                     
-    });
-        }
-        });
-        
-}
---%>
+    }); 
+    
+     <s:if test='subProfit_center!=null && !"".equals(subProfit_center)'>	
+ 		var uwgrade='<s:property value="subProfit_center"/>';
+		 var data=uwgrade.replace(/ /g,'');	
+	   	 var dataArray=data.split(",");   	 
+	   	$("#subProfit_center").val(dataArray);
+		 $("#subProfit_center").multiselect("refresh");
+	</s:if>    
+           
+});
 function getAjaxCoverClass(){
 var drop = "";
 var id="";
@@ -1442,8 +1545,9 @@ function funsubmit()
 }
 
 function FunctionEdit()
-{	
-	document.xol1.action="${pageContext.request.contextPath}/EditModeRiskDetails";
+{	document.getElementById("flag").value='';
+	document.getElementById("layerMode").value='';
+	document.xol1.action="${pageContext.request.contextPath}/EditModeRiskDetails?multiuserMode=edit";
 	document.xol1.submit();
 }
 
@@ -2914,6 +3018,7 @@ getRiskInfo('<s:property value="riskdetailYN"/>');
 function getRiskInfo(val){
 	if(val=="Y"){
     	document.getElementById('riskid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('riskid').style.display = 'none';
@@ -2923,6 +3028,7 @@ getBrokerInfo('<s:property value="brokerdetYN"/>');
 function getBrokerInfo(val){
 	if(val=="Y"){
     	document.getElementById('brokerid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('brokerid').style.display = 'none';
@@ -2932,6 +3038,7 @@ getPremiumInfo('<s:property value="premiumdetailYN"/>');
 function getPremiumInfo(val){
 	if(val=="Y"){
     	document.getElementById('premiumid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('premiumid').style.display = 'none';
@@ -2941,6 +3048,7 @@ getInstallInfo('<s:property value="installYN"/>');
 function getInstallInfo(val){
 	if(val=="Y"){
     	document.getElementById('insid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('insid').style.display = 'none';
@@ -2950,6 +3058,7 @@ getAcqInfo('<s:property value="acqdetailYN"/>');
 function getAcqInfo(val){
 	if(val=="Y"){
     	document.getElementById('aquid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('aquid').style.display = 'none';
@@ -2959,6 +3068,7 @@ getReinsInfo('<s:property value="acqdetailYN"/>');
 function getReinsInfo(val){
 	if(val=="Y"){
     	document.getElementById('reinsid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('reinsid').style.display = 'none';
@@ -2968,6 +3078,7 @@ getBouquest('<s:property value="bouquetModeYN"/>');
 function getBouquest(val){
 	if(val=="Y"){
     	document.getElementById('bouquetid').style.display = 'block';
+    	$('.select1').select2({ });
    	} 
    	else{
    	 	document.getElementById('bouquetid').style.display = 'none';
@@ -3659,6 +3770,23 @@ function funCopyMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContrac
     }
     document.xol1.submit();
 }
+function procceed(){
+	
+	document.xol1.action="InitXol.action";
+	document.xol1.submit();
+	
+}
+<s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN)'>	
+document.getElementById('bouquestid').style.display = 'block';
+document.getElementById('bouquetModeYNY').disabled=true;
+document.getElementById('bouquetModeYNN').disabled=true;
+
+document.getElementById('bouquetpds').style.display = 'none';
+if ($("#bouquetModeYNY").prop("checked")) {
+	document.getElementById('bouquetNo').disabled=true;
+}
+$('.select1').select2({ });
+</s:if>
 </script>		
 </body>
 </html>

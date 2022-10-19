@@ -6,7 +6,7 @@ import com.maan.bean.PortfolioBean;
 
 public interface PortfolioDAO 
 {
-	List<PortfolioBean> getPendingList(final PortfolioBean beanObj);
+	List<PortfolioBean> getPendingList(final PortfolioBean beanObj, Object menuRights);
 	List<PortfolioBean> getAutoPendingList(final PortfolioBean beanObj);
 	List<PortfolioBean> getContractsList(final PortfolioBean beanObj, Object menuRights);
 	List<PortfolioBean> getRejectedList(final PortfolioBean beanObj);

@@ -239,7 +239,7 @@ public class AdminBean {
 	private String ratingAgency;
 	private String lastRating;
 	private String attachedUW;
-	
+	private String dropDown;
 	
 	public String getAttachedUW() {
 		return attachedUW;
@@ -2244,6 +2244,14 @@ public class AdminBean {
 
 	public void setContactSNo(List<String> contactSNo) {
 		this.contactSNo = contactSNo;
+	}
+
+	public String getDropDown() {
+		return dropDown;
+	}
+
+	public void setDropDown(String dropDown) {
+		this.dropDown = dropDown;
 	}
 
 

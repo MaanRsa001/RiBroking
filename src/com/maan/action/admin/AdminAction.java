@@ -2967,7 +2967,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 		Date date=new Date();
 		bean.setInceptionDate(sformat.format(date));
 		if(bean.getCurrencyList()==null){
-			List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(5);
+			List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(3);
 			for(int i=0;i<3;i++){
 				Map<String,Object> doubleMap = new HashMap<String,Object>();
 				List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
@@ -2978,7 +2978,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 			bean.setCurrencyList(currencyList1);
 		}
 		if(bean.getContactList()==null){
-			List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(5);
+			List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(3);
 			for(int i=0;i<3;i++){
 				Map<String,Object> doubleMap = new HashMap<String,Object>();
 				List<Map<String,Object>> cntList=new ArrayList<Map<String,Object>>();
@@ -3005,10 +3005,11 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 			bean.setBankCurrencyList(service.getbankCurrencyList(bean));
 			bean.setTdsTypeList(service.gettdsTypeList(bean,"36"));
 			bean.setClientList(service.gettdsTypeList(bean,"38"));
+			bean.setDepartList(service.gettdsTypeList(bean,"50"));
 			bean.setBrokercountryList(new DropDownControllor().getCountryDropDown(branchCode));
 			bean.setBroGroupList(service.getbroGroupList(bean));
 			if(bean.getCurrencyList()==null){
-				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(5);
+				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(3);
 				for(int i=0;i<3;i++){
 					Map<String,Object> doubleMap = new HashMap<String,Object>();
 					List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
@@ -3019,8 +3020,8 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 				bean.setCurrencyList(currencyList1);
 			}
 			if(bean.getContactList()==null){
-				List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(5);
-				for(int i=0;i<5;i++){
+				List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(3);
+				for(int i=0;i<3;i++){
 					Map<String,Object> doubleMap = new HashMap<String,Object>();
 					List<Map<String,Object>> cntList=new ArrayList<Map<String,Object>>();
 					doubleMap.put("one",new Double(1.0));
@@ -3060,10 +3061,11 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 			bean.setBankCurrencyList(service.getbankCurrencyList(bean));
 			bean.setTdsTypeList(service.gettdsTypeList(bean,"36"));
 			bean.setClientList(service.gettdsTypeList(bean,"38"));
+			bean.setDepartList(service.gettdsTypeList(bean,"50"));
 			bean.setBrokercountryList(new DropDownControllor().getCountryDropDown(branchCode));
 			bean.setBroGroupList(service.getbroGroupList(bean));
 			if(bean.getCurrencyList()==null){
-				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(5);
+				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>(3);
 				for(int i=0;i<3;i++){
 					Map<String,Object> doubleMap = new HashMap<String,Object>();
 					List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
@@ -3074,8 +3076,8 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 				bean.setCurrencyList(currencyList1);
 			}
 			if(bean.getContactList()==null){
-				List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(5);
-				for(int i=0;i<5;i++){
+				List<List<Map<String,Object>>> contactList1=new ArrayList<List<Map<String,Object>>>(3);
+				for(int i=0;i<3;i++){
 					Map<String,Object> doubleMap = new HashMap<String,Object>();
 					List<Map<String,Object>> cntList=new ArrayList<Map<String,Object>>();
 					doubleMap.put("one",new Double(1.0));
@@ -3138,7 +3140,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 			//addActionError(getText("error.isBlank.FaxNo"));
 		}
 		List<String> list=new ArrayList<String>();
-		for(int i=0;i<3;i++){
+		for(int i=0;i<bean.getBankSNo().size();i++){
 			if(StringUtils.isBlank(bean.getBankCurrency().get(i))){
 				list.add(getText("error.bankcurrency") +" in Bank Details row number  "+(i+1));
 			}
@@ -3151,7 +3153,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 			if(StringUtils.isBlank(bean.getAccountname().get(i))){
 				list.add(getText("error.accountname")+" in Bank Details row number "+(i+1));
 			}
-			if(StringUtils.isBlank(bean.getSwiftcode().get(i)) && StringUtils.isBlank(bean.getIfsccode().get(i))){
+			if(StringUtils.isBlank(bean.getSwiftcode().get(i))){
 				list.add(getText("error.swiftcode")+" in Bank Details row number "+(i+1));
 			
 			}
@@ -3178,7 +3180,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 					if(bean.getSwiftcode().get(i).contains(",")){
 						list.add(getText("error.comma")+" in Bank Details row number "+(i+1));
 					}
-					if(bean.getIfsccode().get(i).contains(",")){
+					if(bean.getCorespondentbank().get(i).contains(",")){
 						list.add(getText("error.comma")+" in Bank Details row number "+(i+1));
 					}
 					if(bean.getBankRemarks().get(i).contains(",")){
@@ -3196,7 +3198,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 
 		List<String> cdList=new ArrayList<String>();
 		List<String> cdList1=new ArrayList<String>();
-		for(int i=0;i<5;i++){
+		for(int i=0;i<bean.getContactSNo().size();i++){
 			if(StringUtils.isBlank(bean.getDepartmentCD().get(i))){
 				cdList.add(getText("error.Blank.department")+" in Contact Details row number "+(i+1));
 			}
@@ -3489,8 +3491,9 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 		return "admindocupload";
 	}
 	
-	public String removeRowCurrency(){
+	public String removeRowBank(){
 		
+		List<String> bankCurrency=new ArrayList<String>();
 		List<String> bankaccountnumber=new ArrayList<String>();
 		List<String> bankname=new ArrayList<String>();
 		List<String> accountname=new ArrayList<String>();
@@ -3514,6 +3517,7 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 		for(int k=0;k<bean.getBankSNo().size();k++){
 			int value=Integer.parseInt(bean.getDeleteId());
 			if(k<value){
+				bankCurrency.add(bean.getBankCurrency().get(k));
 				bankaccountnumber.add(bean.getBankaccountnumber().get(k));
 				bankname.add(bean.getBankname().get(k));
 				accountname.add(bean.getAccountname().get(k));
@@ -3522,6 +3526,9 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 				bankRemarks.add(bean.getBankRemarks().get(k));
 			}
 			else{
+			if(StringUtils.isNotBlank(bean.getBankCurrency().get(j))){
+				bankCurrency.add(bean.getBankCurrency().get(j));
+			}
 			if(StringUtils.isNotBlank(bean.getBankaccountnumber().get(j))){
 				bankaccountnumber.add(bean.getBankaccountnumber().get(j));
 			}
@@ -3544,6 +3551,7 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 			}
 			j++;
 		}
+		bean.setBankCurrency(bankCurrency);
 		bean.setBankaccountnumber(bankaccountnumber);
 		bean.setBankname(bankname);
 		bean.setAccountname(accountname);
@@ -3551,6 +3559,7 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 		bean.setCorespondentbank(corespondentbank);
 		bean.setBankRemarks(bankRemarks);
 		bean.setCurrencyList(currencyList1);
+		bean.setBankCurrencyList(service.getbankCurrencyList(bean));
 		return "dropdownajax";
 	}
 public String removeRowcontact(){
@@ -3574,7 +3583,7 @@ public String removeRowcontact(){
 		}
 		int j=1;
 		
-		for(int k=0;k<bean.getBankSNo().size();k++){
+		for(int k=0;k<bean.getContactSNo().size();k++){
 			int value=Integer.parseInt(bean.getDeleteId());
 			if(k<value){
 				departmentCD.add(bean.getDepartmentCD().get(k));
@@ -3610,6 +3619,7 @@ public String removeRowcontact(){
 		bean.setTelephonenumber(telephonenumber);
 		bean.setFaxnumber(faxnumber);
 		bean.setContactList(currencyList1);
+		bean.setDepartList(service.gettdsTypeList(bean,"50"));
 		return "dropdownajax";
 	}
 

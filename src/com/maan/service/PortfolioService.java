@@ -16,9 +16,9 @@ public class PortfolioService
     private FaculPremiumService faculPremiumService = new FaculPremiumService();
     private RiskDetailsService riskService = new RiskDetailsService();
     private ProportionalPremiumService proportionalPremiumService = new ProportionalPremiumService();
-    public List<PortfolioBean> getPendingList(final PortfolioBean beanObj)
+    public List<PortfolioBean> getPendingList(final PortfolioBean beanObj, Object MenuRights)
     {
-        return portfolioDAO.getPendingList(beanObj);
+        return portfolioDAO.getPendingList(beanObj,MenuRights);
 
     }
     public List<PortfolioBean> getAutoPendingList(final PortfolioBean beanObj,String countryId)

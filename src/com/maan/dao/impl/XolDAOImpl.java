@@ -1128,7 +1128,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				}
 			}
 			//}
-			instalMentPremium(beanObj);
+			/*instalMentPremium(beanObj);
 			if("3".equalsIgnoreCase(productId)){
 				//insertRetroContracts(beanObj,productId);
 			}
@@ -1138,7 +1138,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			reInstatementMainInsert(beanObj);
 			insertCrestaMaintable(beanObj);
 			insertBonusDetails(beanObj);
-			InsertRemarkDetails(beanObj);
+			InsertRemarkDetails(beanObj);*/
 			
 		}catch(Exception e){
 			logger.debug("Exception @ {" + e + "}");
@@ -2329,13 +2329,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		{
 			obj[11] =beanObj.getProStatus().trim();
 		}
-		obj[12] = beanObj.getBroker();
+		obj[12] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		obj[13] = StringUtils.isBlank(beanObj.getRetroType())?"":beanObj.getRetroType();
 		obj[14] = beanObj.getLoginId();
 		obj[15] = "";
 		obj[16] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
 		obj[17] = beanObj.getBouquetModeYN();
-		obj[18] = beanObj.getBouquetMode();
+		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
 		obj[20] = beanObj.getProposal_no();
 		obj[21] = beanObj.getAmendId();
@@ -2577,13 +2577,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 
 	public String[] getFirstPageSaveModeAruguments(final RiskDetailsBean beanObj, final String pid,String endNo) {
 		String[] args=null;
-		args = new String[53];
+		args = new String[55];
 		args[0] = beanObj.getDepartId();
 		args[1] = beanObj.getProfit_Center();
 		args[2] = beanObj.getSubProfit_center();
 		args[3] = beanObj.getPolBr();
 		args[4] = beanObj.getCedingCo();
-		args[5] = beanObj.getBroker();
+		args[5] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		args[6] = beanObj.getTreatyName_type();
 		args[7] = beanObj.getMonth();
 		args[8] = beanObj.getUwYear();
@@ -2631,10 +2631,12 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		args[47] = "";
 		args[48]="";
 		args[49]=StringUtils.isEmpty(beanObj.getRetentionYN()) ? ""	:beanObj.getRetentionYN();
-		args[50] = beanObj.getProposal_no();
+		args[50] = StringUtils.isEmpty(beanObj.getAccountingPeriodNotes())?"":beanObj.getAccountingPeriodNotes();
+		args[51] =StringUtils.isEmpty(beanObj.getStatementConfirm())?"":beanObj.getStatementConfirm();
+		args[52] = beanObj.getProposal_no();
 		//args[30] = beanObj.getProposal_no();
-		args[51]=endNo;
-		args[52] = StringUtils.isEmpty(beanObj.getLayerNo())?"0":beanObj.getLayerNo();
+		args[53]=endNo;
+		args[54] = StringUtils.isEmpty(beanObj.getLayerNo())?"0":beanObj.getLayerNo();
 		logger.info("Args[]=>" + StringUtils.join(args,","));
 		return args;
 	}
@@ -3100,7 +3102,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		}
 		obj[15] = StringUtils.isNotBlank(beanObj.getBaseLoginID())?beanObj.getBaseLoginID():beanObj.getLoginId();
 		obj[17] = StringUtils.isEmpty(beanObj.getLayerProposalNo()) ?StringUtils.isEmpty(beanObj.getRenewal_contract_no()) ? "" : beanObj.getRenewal_contract_no():"";
-		obj[19] = beanObj.getBroker();
+		obj[19] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		obj[20] = beanObj.getBranchCode();
 		obj[21] = StringUtils.isBlank(beanObj.getRetroType())?"":beanObj.getRetroType();
 		obj[22] = beanObj.getLoginId();
@@ -3108,7 +3110,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[24] = "";
 		obj[25] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
 		obj[26] = beanObj.getBouquetModeYN();
-		obj[27] = beanObj.getBouquetMode();
+		obj[27] = beanObj.getBouquetNo();
 		obj[28] = beanObj.getUwYearTo();
 		obj[29] = beanObj.getSectionNo();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
@@ -3215,13 +3217,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		}else{
 			obj[11] = "P";
 		}
-		obj[12] = beanObj.getBroker();
+		obj[12] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		obj[13] = StringUtils.isBlank(beanObj.getRetroType())?"":beanObj.getRetroType();
 		obj[14] = beanObj.getLoginId();
 		obj[15] = "";
 		obj[16] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
 		obj[17] = beanObj.getBouquetModeYN();
-		obj[18] = beanObj.getBouquetMode();
+		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
 		obj[20] = beanObj.getProposal_no();
 		obj[21] = maxAmdId;
@@ -3372,7 +3374,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
 				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
 				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
-				beanObj.setBouquetMode(resMap.get("Bouquet_Mode")==null?"":resMap.get("Bouquet_Mode").toString());
+				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
 				if(!"Layer".equalsIgnoreCase(beanObj.getProposalReference())){
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
@@ -3561,13 +3563,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 
 	public String[] getFirstPageEditSaveModeAruguments(final RiskDetailsBean beanObj, final String pid,String endNo) {
 		String[] args=null;
-		args = new String[53];
+		args = new String[55];
 		args[0] = StringUtils.isEmpty(beanObj.getDepartId()) ? "0" : beanObj.getDepartId();
 		args[1] = StringUtils.isEmpty(beanObj.getProfit_Center()) ? "0" : beanObj.getProfit_Center();
 		args[2] = StringUtils.isEmpty(beanObj.getSubProfit_center()) ? "0" : beanObj.getSubProfit_center();
 		args[3] = StringUtils.isEmpty(beanObj.getPolBr()) ? "0" : beanObj.getPolBr();
 		args[4] = StringUtils.isEmpty(beanObj.getCedingCo()) ? "0" : beanObj.getCedingCo();
-		args[5] = StringUtils.isEmpty(beanObj.getBroker()) ? "0" : beanObj.getBroker();
+		args[5] = StringUtils.isEmpty(beanObj.getBroker()) ? "63" : beanObj.getBroker();
 		args[6] = StringUtils.isEmpty(beanObj.getTreatyName_type()) ? "" : beanObj.getTreatyName_type();
 		args[7] = StringUtils.isEmpty(beanObj.getMonth()) ? "" : beanObj.getMonth();
 		args[8] = StringUtils.isEmpty(beanObj.getUwYear()) ? "0" : beanObj.getUwYear();
@@ -3614,16 +3616,18 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		args[47] = "";
 		args[48]="";
 		args[49]=StringUtils.isEmpty(beanObj.getRetentionYN()) ? ""	:beanObj.getRetentionYN();
-		args[50] = beanObj.getProposal_no();
+		args[50] = beanObj.getAccountingPeriodNotes();
+		args[51] =beanObj.getStatementConfirm();
+		args[52] = beanObj.getProposal_no();
 		//args[30] = beanObj.getProposal_no();
-		args[51]=endNo;
-		args[52] = StringUtils.isEmpty(beanObj.getLayerNo())?"0":beanObj.getLayerNo();
+		args[53]=endNo;
+		args[54] = StringUtils.isEmpty(beanObj.getLayerNo())?"0":beanObj.getLayerNo();
 		logger.info("Args[]=>" + StringUtils.join(args,","));
 		return args;
 	}
 
 	public String[] getFirstPageInsertAruguments(final RiskDetailsBean beanObj, final String pid, final boolean amendId) {
-		String[] args= new String[57];
+		String[] args= new String[59];
 		if (amendId) {
 			args[0] = beanObj.getProposal_no();
 			args[1] =(Integer.parseInt(getMaxAmednId(beanObj.getProposal_no()))+1)+"";
@@ -3647,7 +3651,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		args[6] = StringUtils.isEmpty(beanObj.getSubProfit_center()) ? "0" : beanObj.getSubProfit_center();
 		args[7] = StringUtils.isEmpty(beanObj.getPolBr()) ? "0" : beanObj.getPolBr();
 		args[8] = StringUtils.isEmpty(beanObj.getCedingCo()) ? "0" : beanObj.getCedingCo();
-		args[9] = StringUtils.isEmpty(beanObj.getBroker()) ? "0" : beanObj.getBroker();
+		args[9] = StringUtils.isEmpty(beanObj.getBroker()) ? "63" : beanObj.getBroker();
 		args[10] = StringUtils.isEmpty(beanObj.getTreatyName_type()) ? "" : beanObj.getTreatyName_type();
 		args[11] = StringUtils.isEmpty(beanObj.getMonth()) ? "" : beanObj.getMonth();
 		args[12] = StringUtils.isEmpty(beanObj.getUwYear()) ? "0" : beanObj.getUwYear();
@@ -3690,6 +3694,8 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		args[54]="";
 		args[55]="";
 		args[56]=StringUtils.isEmpty(beanObj.getRetentionYN()) ? ""	:beanObj.getRetentionYN();
+		args[57] = beanObj.getAccountingPeriodNotes();
+		args[58] =beanObj.getStatementConfirm();
 		logger.info("Args[]=>" +StringUtils.join(args,","));
 		return args;	
 	}
@@ -3707,7 +3713,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		boolean updateStatus = true;
 		int res=0;
 		String query=getQuery("UPDATE_RISK_PROPOSAL_DETAILS");
-		Object[] obj= new Object[54];
+		Object[] obj= new Object[55];
 		try {
 			obj[0] = StringUtils.isEmpty(beanObj.getEvent_limit()) ? "": beanObj.getEvent_limit();
 			obj[1] = StringUtils.isEmpty(beanObj.getEvent_limit())	|| StringUtils.isEmpty(beanObj.getExchRate()) ? "0"	: getDesginationCountry(beanObj.getEvent_limit(), beanObj.getExchRate());
@@ -3768,8 +3774,9 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			obj[49] = beanObj.getInstallYN();
 			obj[50] = beanObj.getReinstdetailYN();
 			obj[51] = beanObj.getRateOnLine();
-			obj[52] = beanObj.getProposal_no();
-			obj[53]=endNo;
+			obj[52] =StringUtils.isEmpty(beanObj.getQuotesharePercent()) ? "0": beanObj.getQuotesharePercent();
+			obj[53] = beanObj.getProposal_no();
+			obj[54]=endNo;
 			logger.info("Args[]=>" + StringUtils.join(obj,","));
 			logger.info("updateQry " + query);
 			res=this.mytemplate.update(query, obj);
@@ -4148,8 +4155,14 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		if(StringUtils.isBlank(bean.getAmendId())){
 			bean.setAmendId("0");
 		}
+		 if(StringUtils.isBlank(bean.getProposal_no()) && StringUtils.isBlank(bean.getReferenceNo())) {
+	        	String referenceNo="";
+	        	String query=getQuery("GET_REFERENCE_NO_SEQ");
+	        	referenceNo=this.mytemplate.queryForObject(query, String.class);
+	        	bean.setReferenceNo(referenceNo);
+	        }
 		 String query =getQuery("INSERT_REINSTATEMENT_MAIN");
-	    Object args[] = new Object[14];
+	    Object args[] = new Object[15];
 			args[0] = "";
 			args[1] = "";
 			args[2] = "";
@@ -4164,12 +4177,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			args[11] = StringUtils.isEmpty(bean.getLayerNo()) ? ""	: bean.getLayerNo();
 			args[12] ="";
 			args[13] = "A";
+			args[14]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(args, ","));
 			this.mytemplate.update(query,args);
 			getClassLimitDetails(bean);
 			query =getQuery("INSERT_REINSTATEMENT_MAIN_B");
-			Object args1[] = new Object[10];
+			Object args1[] = new Object[11];
 			for(int i=0;i<bean.getCoverdepartId().size();i++){
 				args1[0] = bean.getCoverdepartId().get(i);
 				args1[1] = bean.getCoverLimitOC().get(i).replaceAll(",", "");
@@ -4181,6 +4195,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				args1[7] = bean.getProduct_id();
 				args1[8] = StringUtils.isEmpty(bean.getLayerNo()) ? "0"	: bean.getLayerNo();
 				args1[9] = "B";
+				args[10]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
 				logger.info("Query=>"+query);
 				logger.info("Args=>"+StringUtils.join(args1, ","));
 				this.mytemplate.update(query,args1);
@@ -4513,8 +4528,14 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		           bean.setEndorsmentno(this.mytemplate.queryForObject(query,args, String.class))	;
 			}
 			deleteMaintable(bean);
+			if(StringUtils.isBlank(bean.getProposal_no()) && StringUtils.isBlank(bean.getReferenceNo())) {
+	        	String referenceNo="";
+	        	String query=getQuery("GET_REFERENCE_NO_SEQ");
+	        	referenceNo=this.mytemplate.queryForObject(query, String.class);
+	        	bean.setReferenceNo(referenceNo);
+	        }
 			String query =getQuery("BONUS_MAIN_INSERT");
-			Object args[]=new Object[14];
+			Object args[]=new Object[15];
 		           args[0] =bean.getProposal_no();
 		           args[1] = bean.getContractno();
 		           args[2] = bean.getProduct_id();
@@ -4529,6 +4550,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		           args[11] = bean.getAmendId();
 		           args[12] = bean.getDepartmentId();
 		           args[13] = StringUtils.isEmpty(bean.getLayerNo())?"0":bean.getLayerNo();
+		           args[14] = StringUtils.isEmpty(bean.getReferenceNo())?"0":bean.getReferenceNo();
 		           logger.info("Query=>"+query);
 		           logger.info("Args=>"+StringUtils.join(args, ","));
 				   this.mytemplate.update(query,args);

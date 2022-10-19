@@ -507,7 +507,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 		boolean updateStatus = true;
 		int res=0;
 		String query=getQuery("UPDATE_RISK_PROPOSAL_DETAILS");
-		Object[] obj= new Object[54];
+		Object[] obj= new Object[55];
 		try {
 			obj[0] = StringUtils.isEmpty(beanObj.getEvent_limit()) ? "": beanObj.getEvent_limit();
 			obj[1] = StringUtils.isEmpty(beanObj.getEvent_limit())	|| StringUtils.isEmpty(beanObj.getExchRate()) ? "0"	: getDesginationCountry(beanObj.getEvent_limit(), beanObj.getExchRate());
@@ -576,8 +576,9 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			obj[49] = beanObj.getInstallYN();
 			obj[50] = beanObj.getReinstdetailYN();
 			obj[51] = beanObj.getRateOnLine();
-			obj[52] = beanObj.getProposal_no();
-			obj[53]=endNo;
+			obj[52] =StringUtils.isEmpty(beanObj.getQuotesharePercent()) ? "0": beanObj.getQuotesharePercent();
+			obj[53] = beanObj.getProposal_no();
+			obj[54]=endNo;
 			logger.info("Args[]=>" + StringUtils.join(obj,","));
 			logger.info("updateQry " + query);
 			res=this.mytemplate.update(query, obj);
@@ -645,7 +646,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
 				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
 				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
-				beanObj.setBouquetMode(resMap.get("Bouquet_Mode")==null?"":resMap.get("Bouquet_Mode").toString());
+				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
 				beanObj.setIncepDate(resMap.get("RSK_INCEPTION_DATE")==null?"":resMap.get("RSK_INCEPTION_DATE").toString());
 				beanObj.setExpDate(resMap.get("RSK_EXPIRY_DATE")==null?"":resMap.get("RSK_EXPIRY_DATE").toString());
@@ -731,6 +732,9 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			beanObj.setDocdetailYN(resMap.get("DOC_DET_YN")==null?"":resMap.get("DOC_DET_YN").toString());
 			beanObj.setPaymentPartner(resMap.get("PAYMENT_PARTNER")==null?"":resMap.get("PAYMENT_PARTNER").toString());
 			beanObj.setSectionNo(resMap.get("SECTION_NO")==null?"":resMap.get("SECTION_NO").toString());
+			beanObj.setQuotesharePercent(resMap.get("QUOTESHARE_PERCENT")==null?"":resMap.get("QUOTESHARE_PERCENT").toString());
+			beanObj.setAccountingPeriodNotes(resMap.get("RSK_ACCOUNT_PERIOD_NOTICE")==null?"":resMap.get("RSK_ACCOUNT_PERIOD_NOTICE").toString());
+			beanObj.setStatementConfirm(resMap.get("RSK_STATEMENT_CONFIRM")==null?"":resMap.get("RSK_STATEMENT_CONFIRM").toString());
 			GetRemarksDetails(beanObj);
 			getGetRetDetails(beanObj);
 			beanObj.setAmendId(new DropDownControllor().getRiskComMaxAmendId(beanObj.getProposal_no()));
@@ -1044,7 +1048,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setSubpc(resMap.get("RSK_PRO_SUB_PFO_COM")==null?"":resMap.get("RSK_PRO_SUB_PFO_COM").toString());
 				beanObj.setSubSeqCalculation(resMap.get("RSK_PRO_SUB_SEQ_CAL")==null?"":resMap.get("RSK_PRO_SUB_SEQ_CAL").toString());
 				beanObj.setLocRate(resMap.get("RSK_RATE")==null?"":resMap.get("RSK_RATE").toString());
-
+				beanObj.setPremiumResType(resMap.get("RSK_PREMIUM_RES_TYPE")==null?"":resMap.get("RSK_PREMIUM_RES_TYPE").toString());
 				if (resMap.get("RSK_OTHER_COST") != null) {
 					beanObj.setOthercost(resMap.get("RSK_OTHER_COST").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_OTHER_COST").toString());
 				}else{
@@ -2437,14 +2441,14 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		else{
 			obj[11] =beanObj.getProStatus().trim();
 		}
-		obj[12] = beanObj.getBroker();
+		obj[12] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		obj[13] = StringUtils.isBlank(beanObj.getRetroType())?"":beanObj.getRetroType();
 		obj[14] = beanObj.getLoginId();
 		obj[15]="";
 		
 		obj[16] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
 		obj[17] = beanObj.getBouquetModeYN();
-		obj[18] = beanObj.getBouquetMode();
+		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
 		obj[20] = beanObj.getProposal_no();
 		obj[21] = beanObj.getAmendId();
@@ -2533,7 +2537,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] secondPageCommissionSaveAruguments(final RiskDetailsBean beanObj, final String productId) {
 		Object[] obj=null;
-		obj = new Object[67];
+		obj = new Object[68];
 		obj[0] = beanObj.getProposal_no();
 		obj[1] = "0";
 		obj[2] = "0";
@@ -2626,6 +2630,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 		obj[65] =StringUtils.isEmpty(beanObj.getDocStatus())?"":beanObj.getDocStatus();
 		obj[66] =StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
+		obj[67] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2670,7 +2675,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] secondPageCommissionAruguments(final RiskDetailsBean beanObj, final String productId) {
 		Object[] obj=null;
-		obj = new Object[67];
+		obj = new Object[68];
 		obj[0] = beanObj.getProposal_no();
 		obj[1] = "0";
 		obj[2] = beanObj.getLayerNo();
@@ -2761,6 +2766,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		}
 		obj[65] =StringUtils.isEmpty(beanObj.getDocStatus())?"":beanObj.getDocStatus();
 		obj[66] =StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
+		obj[67] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2827,13 +2833,13 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		}else{
 			obj[11] = "P";
 		}
-		obj[12] = beanObj.getBroker();
+		obj[12] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		obj[13] = StringUtils.isBlank(beanObj.getRetroType())?"":beanObj.getRetroType();
 		obj[14] = beanObj.getLoginId();
 		obj[15] = "";
 		obj[16] =  StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
 		obj[17] = beanObj.getBouquetModeYN();
-		obj[18] = beanObj.getBouquetMode();
+		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
 		obj[20] = beanObj.getProposal_no();
 		obj[21] = maxAmdId;
@@ -2842,7 +2848,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] savemodeUpdateRiskDetailsSecondFormSecondTable(final RiskDetailsBean beanObj, final String productId, final String endNo) {
 		Object[] obj=new Object[0];
-		obj = new Object[63];
+		obj = new Object[64];
 		obj[0] = StringUtils.isEmpty(beanObj.getBrokerage()) ? "0": beanObj.getBrokerage();
 		obj[1] = StringUtils.isEmpty(beanObj.getTax()) ? "0" : beanObj.getTax();
 		obj[2] = StringUtils.isEmpty(beanObj.getShare_Profit_Commission()) ? "0": beanObj.getShare_Profit_Commission();
@@ -2926,8 +2932,9 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 		obj[59] = StringUtils.isEmpty(beanObj.getDocStatus())? "" :beanObj.getDocStatus();
 		obj[60] = StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
-		obj[61] = beanObj.getProposal_no();
-		obj[62] = endNo;
+		obj[61] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
+		obj[62] = beanObj.getProposal_no();
+		obj[63] = endNo;
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2973,7 +2980,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	public Object[] updateRiskDetailsSecondFormSecondTable(final RiskDetailsBean beanObj, final String productId, final String endNo) {
 		Object[] obj=null;
 		if (productId.equalsIgnoreCase("2")) {
-			obj = new Object[63];
+			obj = new Object[64];
 			obj[0] = StringUtils.isEmpty(beanObj.getBrokerage()) ? "0": beanObj.getBrokerage();
 			obj[1] = beanObj.getTax();
 			obj[2] = beanObj.getShare_Profit_Commission();
@@ -3057,21 +3064,22 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 			obj[59] = StringUtils.isEmpty(beanObj.getDocStatus())? "" :beanObj.getDocStatus();
 			obj[60] = StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
-			obj[61] = beanObj.getProposal_no();
-			obj[62] = endNo;
+			obj[61] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
+			obj[62] = beanObj.getProposal_no();
+			obj[63] = endNo;
 		} 
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
 	public String[] getFirstPageSaveModeAruguments(final RiskDetailsBean beanObj, final String pid,String endNo) {
 		String[] args=null;
-		args = new String[52];
+		args = new String[54];
 		args[0] = beanObj.getDepartId();
 		args[1] = beanObj.getProfit_Center();
 		args[2] = beanObj.getSubProfit_center();
 		args[3] = beanObj.getPolBr();
 		args[4] = beanObj.getCedingCo();
-		args[5] = beanObj.getBroker();
+		args[5] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		args[6] = beanObj.getTreatyName_type();
 		args[7] = beanObj.getMonth();
 		args[8] = beanObj.getUwYear();
@@ -3116,8 +3124,10 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		args[47] = "";
 		args[48]="";
 		args[49]=StringUtils.isEmpty(beanObj.getRetentionYN()) ? ""	:beanObj.getRetentionYN();
-		args[50] = beanObj.getProposal_no();
-		args[51]=endNo;
+		args[50] = beanObj.getAccountingPeriodNotes();
+		args[51] =beanObj.getStatementConfirm();
+		args[52] = beanObj.getProposal_no();
+		args[53]=endNo;
 		logger.info("Args[]=>" + StringUtils.join(args,","));
 		return args;
 	}
@@ -3235,7 +3245,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		return obj;
 	}
 	public String[] getFirstPageInsertAruguments(final RiskDetailsBean beanObj, final String pid,final boolean amendId) {
-		String[] args= new String[57];
+		String[] args= new String[59];
 		if (amendId) {
 			args[0] = beanObj.getProposal_no();
 			args[1] =(Integer.parseInt(getMaxAmednId(beanObj.getProposal_no()))+1)+"";
@@ -3257,7 +3267,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		args[6] = StringUtils.isEmpty(beanObj.getSubProfit_center()) ? "0": beanObj.getSubProfit_center();
 		args[7] = StringUtils.isEmpty(beanObj.getPolBr()) ? "0" : beanObj.getPolBr();
 		args[8] = StringUtils.isEmpty(beanObj.getCedingCo()) ? "0" : beanObj.getCedingCo();
-		args[9] = StringUtils.isEmpty(beanObj.getBroker()) ? "0" : beanObj.getBroker();
+		args[9] = StringUtils.isEmpty(beanObj.getBroker()) ? "63" : beanObj.getBroker();
 		args[10] = StringUtils.isEmpty(beanObj.getTreatyName_type()) ? "": beanObj.getTreatyName_type();
 		args[11] = StringUtils.isEmpty(beanObj.getMonth()) ? "" : beanObj.getMonth();
 		args[12] = StringUtils.isEmpty(beanObj.getUwYear()) ? "0" : beanObj.getUwYear();
@@ -3300,19 +3310,21 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		args[54]="";
 		args[55]="";
 		args[56]=StringUtils.isEmpty(beanObj.getRetentionYN()) ? ""	:beanObj.getRetentionYN();
+		args[57] = beanObj.getAccountingPeriodNotes();
+		args[58] =beanObj.getStatementConfirm();
 		logger.info("Args[]=>" +StringUtils.join(args,","));
 		return args;
 	}
 
 	public String[] getFirstPageEditSaveModeAruguments(final RiskDetailsBean beanObj, final String pid,String endNo) {
 		String[] args=null;
-		args = new String[52];
+		args = new String[54];
 		args[0] = StringUtils.isEmpty(beanObj.getDepartId()) ? "0" : beanObj.getDepartId();
 		args[1] = StringUtils.isEmpty(beanObj.getProfit_Center()) ? "0"	: beanObj.getProfit_Center();
 		args[2] = StringUtils.isEmpty(beanObj.getSubProfit_center()) ? "0": beanObj.getSubProfit_center();
 		args[3] = StringUtils.isEmpty(beanObj.getPolBr()) ? "0" : beanObj.getPolBr();
 		args[4] = StringUtils.isEmpty(beanObj.getCedingCo()) ? "0" : beanObj.getCedingCo();
-		args[5] = StringUtils.isEmpty(beanObj.getBroker()) ? "0" : beanObj.getBroker();
+		args[5] = StringUtils.isEmpty(beanObj.getBroker()) ? "63" : beanObj.getBroker();
 		args[6] = StringUtils.isEmpty(beanObj.getTreatyName_type()) ? "": beanObj.getTreatyName_type();
 		args[7] = StringUtils.isEmpty(beanObj.getMonth()) ? "" : beanObj.getMonth();
 		args[8] = StringUtils.isEmpty(beanObj.getUwYear()) ? "0" : beanObj.getUwYear();
@@ -3357,8 +3369,10 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		args[47] = "";
 		args[48]="";
 		args[49]=StringUtils.isEmpty(beanObj.getRetentionYN()) ? ""	:beanObj.getRetentionYN();
-		args[50] = beanObj.getProposal_no();
-		args[51]=endNo;
+		args[50] = beanObj.getAccountingPeriodNotes();
+		args[51] =beanObj.getStatementConfirm();
+		args[52] = beanObj.getProposal_no();
+		args[53]=endNo;
 		logger.info("Args[]=>" + StringUtils.join(args,","));
 		return args;
 	}
@@ -3566,13 +3580,18 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 
 	public Object[] insertHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid,	final Object args2, final boolean amendId,String renewalStatus) {
-		String sectionNo="";
+		String sectionNo="",bouquetno="";
 		if("2".equals(beanObj.getProduct_id())) {
 			//if(StringUtils.isBlank(beanObj.getSectionNo())) {
 				String query=getQuery("GET_MAX_SECTION_NO");
 				sectionNo=this.mytemplate.queryForObject(query, String.class, new Object[] {beanObj.getProposalNo()});
 				beanObj.setSectionNo(sectionNo);
 			//}
+		}
+		if(StringUtils.isBlank(beanObj.getBouquetNo()) && "Y".equals(beanObj.getBouquetModeYN())) {
+			String query=getQuery("GET_BOUQUET_NO_SEQ");
+			bouquetno=this.mytemplate.queryForObject(query, String.class);
+			beanObj.setBouquetNo(bouquetno);
 		}
 		Object[] obj = new Object[30];
 		if (amendId) {
@@ -3607,7 +3626,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[15] = StringUtils.isNotBlank(beanObj.getBaseLoginID())?beanObj.getBaseLoginID():beanObj.getLoginId();
 		//obj[17] = StringUtils.isEmpty(beanObj.getRenewal_contract_no()) ? "": beanObj.getRenewal_contract_no();
 		obj[17] = StringUtils.isEmpty(beanObj.getLayerProposalNo()) ?StringUtils.isEmpty(beanObj.getRenewal_contract_no()) ? "" : beanObj.getRenewal_contract_no():"";
-		obj[19] = beanObj.getBroker();
+		obj[19] = StringUtils.isBlank(beanObj.getBroker())?"63":beanObj.getBroker();
 		obj[20] = beanObj.getBranchCode();
 		obj[21] = StringUtils.isBlank(beanObj.getRetroType())?"":beanObj.getRetroType();
 		obj[22] = beanObj.getLoginId();
@@ -3615,7 +3634,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[24] = "";
 		obj[25] = StringUtils.isEmpty(beanObj.getContractListVal())?"":beanObj.getContractListVal();
 		obj[26] = beanObj.getBouquetModeYN();
-		obj[27] = beanObj.getBouquetMode();
+		obj[27] = beanObj.getBouquetNo();
 		obj[28] = beanObj.getUwYearTo();
 		obj[29] = beanObj.getSectionNo();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
@@ -3950,7 +3969,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 			deleteMaintable(bean);
 			String query =getQuery("BONUS_MAIN_INSERT_PTTY");
-			Object args[]=new Object[21];
+			Object args[]=new Object[22];
 					args[0] =bean.getProposal_no();
 					args[1] = bean.getContractNo();
 					args[2] = bean.getProduct_id();
@@ -3977,6 +3996,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		           args[18] ="";
 		           args[19] ="";
 		           args[20] ="";
+		           args[21]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
 		           logger.info("Query=>"+query);
 		           logger.info("Args=>"+StringUtils.join(args, ","));
 				   this.mytemplate.update(query,args);

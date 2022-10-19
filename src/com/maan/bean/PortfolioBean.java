@@ -132,8 +132,9 @@ public class PortfolioBean
 	private String transactionError;
 	private String attachedUW;
 	private String acceptenceDate;
-	
-	
+	private String bouquetNoSearch;
+	private String subclassSearch;
+	private String bouquetNo;
 	
 	public String getAttachedUW() {
 		return attachedUW;
@@ -943,6 +944,24 @@ public void setEndorsmentTypeName(String endorsmentTypeName) {
 	}
 	public void setCombinedClassCount(String combinedClassCount) {
 		this.combinedClassCount = combinedClassCount;
+	}
+	public String getBouquetNoSearch() {
+		return bouquetNoSearch;
+	}
+	public void setBouquetNoSearch(String bouquetNoSearch) {
+		this.bouquetNoSearch = bouquetNoSearch;
+	}
+	public String getSubclassSearch() {
+		return subclassSearch;
+	}
+	public void setSubclassSearch(String subclassSearch) {
+		this.subclassSearch = subclassSearch;
+	}
+	public String getBouquetNo() {
+		return bouquetNo;
+	}
+	public void setBouquetNo(String bouquetNo) {
+		this.bouquetNo = bouquetNo;
 	}
     
 }

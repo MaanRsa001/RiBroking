@@ -16,7 +16,7 @@ import java.util.*;
 public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
     final org.slf4j.Logger logger = LogUtil.getLogger(PortfolioDAOImpl.class);
 
-    public List<PortfolioBean> getPendingList(final PortfolioBean beanObj) {
+    public List<PortfolioBean> getPendingList(final PortfolioBean beanObj,Object MenuRights) {
         List<PortfolioBean> finalList = new ArrayList<PortfolioBean>();
         try {
             String query = "";
@@ -77,6 +77,14 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
             		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getDepartmentNameSearch() + "%")});
             		 query += " AND UPPER(B.TMAS_DEPARTMENT_NAME) LIKE UPPER(?)";
             	}
+        		if(StringUtils.isNotBlank(beanObj.getBouquetNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getBouquetNoSearch() + "%")});
+            		 query += " AND UPPER(A.Bouquet_No) LIKE UPPER(?)";
+            	}
+        		if(StringUtils.isNotBlank(beanObj.getSubclassSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getSubclassSearch() + "%")});
+            		 query += " AND UPPER((select RTRIM(XMLAGG(XMLELEMENT(E,TMAS_SPFC_NAME,',')).EXTRACT('//text()'),',')  from TMAS_SPFC_MASTER SPFC where SPFC.TMAS_SPFC_ID in(select * from table(SPLIT_TEXT_FN(replace(E.RSK_SPFCID,' ', '')))) AND  SPFC.TMAS_PRODUCT_ID = E.RSK_PRODUCTID AND SPFC.BRANCH_CODE = E.BRANCH_CODE)) LIKE UPPER(?)";
+            	}
             	if("1".equalsIgnoreCase(beanObj.getProductId())){
         		if(StringUtils.isNotBlank(beanObj.getInsuredNameSearch())){
             		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getInsuredNameSearch() + "%")});
@@ -134,9 +142,11 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 Map<String, Object> tempMap = list.get(i);
                 PortfolioBean tempBean = new PortfolioBean();
                 tempBean.setProposalNo(tempMap.get("PROPOSAL_NO") == null ? "" : tempMap.get("PROPOSAL_NO").toString());
+                tempBean.setBouquetNo(tempMap.get("Bouquet_No") == null ? "" : tempMap.get("Bouquet_No").toString());
                 tempBean.setAmendId(tempMap.get("AMEND_ID") == null ? "" : tempMap.get("AMEND_ID").toString());
                 tempBean.setCeding_Company_Name(tempMap.get("COMPANY_NAME") == null ? "" : tempMap.get("COMPANY_NAME").toString());
                 tempBean.setDepartment_Name(tempMap.get("TMAS_DEPARTMENT_NAME") == null ? "" : tempMap.get("TMAS_DEPARTMENT_NAME").toString());
+                tempBean.setSubClass(tempMap.get("TMAS_SPFC_NAME") == null ? "" : tempMap.get("TMAS_SPFC_NAME").toString());
                 tempBean.setDepartmentId(tempMap.get("TMAS_DEPARTMENT_ID") == null ? "" : tempMap.get("TMAS_DEPARTMENT_ID").toString());
                 tempBean.setInception_Date(tempMap.get("INCEPTION_DATE") == null ? "" : tempMap.get("INCEPTION_DATE").toString());
                 tempBean.setExpiry_Date(tempMap.get("EXPIRY_DATE") == null ? "" : tempMap.get("EXPIRY_DATE").toString());
@@ -169,6 +179,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 tempBean.setUnderwritter(tempMap.get("UNDERWRITTER") == null ? "" : tempMap.get("UNDERWRITTER").toString());
                 tempBean.setBrokerName(tempMap.get("BROKER_NAME") == null ? "" : tempMap.get("BROKER_NAME").toString());
                 tempBean.setOld_Contract(tempMap.get("OLD_CONTRACTNO") == null ? "" : "0".equals(tempMap.get("OLD_CONTRACTNO")) == true ? "" : tempMap.get("OLD_CONTRACTNO").toString());
+                tempBean.setButtonSelectionList(getPendingButtonList(tempBean,MenuRights));
                 finalList.add(tempBean);
             }
         } catch (Exception e) {
@@ -532,7 +543,36 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
         }
         return finalList;
     }
-
+    private List<Map<String, Object>> getPendingButtonList(PortfolioBean tempBean, Object menuRights) {
+    	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Map<String,Object> map=new HashMap<String,Object>();
+		try{
+			if(StringUtils.isBlank(tempBean.getBaseLayer())) {
+			if( menuRights.toString().contains("EN") ){//&&"N".equalsIgnoreCase(tempBean.getEditMode())&&!"".equalsIgnoreCase(tempBean.getEditMode())){
+				map.put("TYPE","E");
+				map.put("DETAIL_NAME","Edit");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			if( menuRights.toString().contains("V")){
+				map.put("TYPE","V");
+				map.put("DETAIL_NAME","View");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+		}
+			if( menuRights.toString().contains("V")){
+				map.put("TYPE","PL");
+				map.put("DETAIL_NAME","Placing");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
     private List<Map<String, Object>> getButtonList(PortfolioBean tempBean, Object menuRights) {
     	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		Map<String,Object> map=new HashMap<String,Object>();
@@ -546,6 +586,12 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 			if( menuRights.toString().contains("V")){
 				map.put("TYPE","V");
 				map.put("DETAIL_NAME","View");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			if( menuRights.toString().contains("V")){
+				map.put("TYPE","PL");
+				map.put("DETAIL_NAME","Placing");
 				list.add(map);
 				map=new HashMap<String,Object>();
 			}

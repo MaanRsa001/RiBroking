@@ -86,6 +86,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 	public List<Map<String,Object>> getDocType(){
     	return dropDownController.getDocType(branchCode,pid,"RDS");
     }
+	public List<Map<String,Object>> getBouquetExistingList(){
+		return dropDownController.getBouquetExistingList(branchCode,bean.getBouquetNo(),bean.getBouquetModeYN());
+	}
 	public String UnderwritingLimit(){
 		//bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, (String)session.get("DepartmentId")));
 		bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, "0"));
@@ -321,7 +324,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				resetRemarks();
 				resetIntallment();
 			}
-			if("layer".equals(bean.getLayerMode()) || StringUtils.isNotBlank(bean.getLayerLayerNo())) {
+			if(StringUtils.isNotBlank(bean.getProposalNo()) /*&&("layer".equals(bean.getLayerMode()) || StringUtils.isNotBlank(bean.getLayerLayerNo()))*/) {
 				bean.setProposal_no(bean.getProposalNo());
 			}
 		} catch (Exception e) {
@@ -1406,6 +1409,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		}
 		bean.setPremiumBasicList(dropDownController.getConstantDropDown("31"));
 		bean.setCoverDepartmentList(dropDownController.getCoverDEpartmentDropDown(branchCode,pid,StringUtils.isBlank(bean.getDepartId())?"":bean.getDepartId()));
+		bean.setBouquetList(dropDownController.getBouquetList(branchCode));   
 		session.put("Product", pid);
 	}
 
@@ -1421,10 +1425,6 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			}
 			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
 				addActionError(getText("error.bouquetModeYn.required"));
-			}else if("Y".equalsIgnoreCase(bean.getBouquetMode())) {
-				if(StringUtils.isBlank(bean.getBouquetMode())) {
-					addActionError(getText("error.bouquetMode.required"));
-				}
 			}
 			if (val.isSelect(bean.getDepartId()).equalsIgnoreCase("")) {
 				addActionError(getText("error.departId.required"));
@@ -2014,15 +2014,8 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			}
 			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
 				addActionError(getText("error.bouquetModeYn.required"));
-			}else if("Y".equalsIgnoreCase(bean.getBouquetMode())) {
-				if(StringUtils.isBlank(bean.getBouquetMode())) {
-					addActionError(getText("error.bouquetMode.required"));
-				}
 			}
 			
-			if (val.isSelect(bean.getDepartId()).equalsIgnoreCase("")) {
-				addActionError(getText("error.departId.required"));
-			}
 			if (val.isSelect(bean.getCedingCo()).equalsIgnoreCase("")) {
 				addActionError(getText("error.cedingCo.required"));
 			}
@@ -2094,6 +2087,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				}
 				if(StringUtils.isBlank(bean.getBusinessType())){
 					addActionError(getText("error.BusinessType.required"));
+				}
+				if (val.isSelect(bean.getDepartId()).equalsIgnoreCase("")) {
+					addActionError(getText("error.departId.required"));
 				}
 				if (StringUtils.isBlank(bean.getBasis())) {
 					addActionError(getText("error.basic.required"));

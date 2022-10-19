@@ -9,6 +9,7 @@ import com.maan.common.util.LogUtil;
 import com.maan.dao.admin.AdminDAO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
+import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -4833,24 +4834,24 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[5]=bean.getCity();
 			args[6]=bean.getCountry();
 			args[7]=bean.getZipcode();
-			args[8]=bean.getEmail()+","+bean.getEmailaddress().get(0)+","+bean.getEmailaddress().get(1)+","+bean.getEmailaddress().get(2)+","+bean.getEmailaddress().get(3)+","+bean.getEmailaddress().get(4);;
-			args[9]=bean.getTelephone()+","+bean.getTelephonenumber().get(0)+","+bean.getTelephonenumber().get(1)+","+bean.getTelephonenumber().get(2)+","+bean.getTelephonenumber().get(3)+","+bean.getTelephonenumber().get(4);;
+			args[8]=bean.getEmail();
+			args[9]=bean.getTelephone();
 			args[10]=bean.getMobile();
-			args[11]=bean.getFaxNo()+","+bean.getFaxnumber().get(0)+","+bean.getFaxnumber().get(1)+","+bean.getFaxnumber().get(2)+","+bean.getFaxnumber().get(3)+","+bean.getFaxnumber().get(4);;
+			args[11]=bean.getFaxNo();
 			args[12]=bean.getPanNo();
 			args[13]=bean.getIsIndividual();
 			args[14]=bean.getIsNonResident();
 			args[15]=bean.getSpecialRate();
 			args[16]=bean.getActive();
 			args[17]=bean.getClientRemarks();
-			args[18]=bean.getDepartmentCD().get(0)+","+bean.getDepartmentCD().get(1)+","+bean.getDepartmentCD().get(2)+","+bean.getDepartmentCD().get(3)+","+bean.getDepartmentCD().get(4);
-			args[19]=bean.getBankCurrency().get(0)+","+bean.getBankCurrency().get(1)+","+bean.getBankCurrency().get(2);
-			args[20]=bean.getBankaccountnumber().get(0)+","+bean.getBankaccountnumber().get(1)+","+bean.getBankaccountnumber().get(2);
-			args[21]=bean.getBankname().get(0)+","+bean.getBankname().get(1)+","+bean.getBankname().get(2);
-			args[22]=bean.getAccountname().get(0)+","+bean.getAccountname().get(1)+","+bean.getAccountname().get(2);
-			args[23]=bean.getSwiftcode().get(0)+","+bean.getSwiftcode().get(1)+","+bean.getSwiftcode().get(2);
-			args[24]=bean.getIfsccode().get(0)+","+bean.getIfsccode().get(1)+","+bean.getIfsccode().get(2);
-			args[25]=bean.getBankRemarks().get(0)+","+bean.getBankRemarks().get(1)+","+bean.getBankRemarks().get(2);
+			args[18]="";
+			args[19]="";
+			args[20]="";
+			args[21]="";
+			args[22]="";
+			args[23]="";
+			args[24]="";
+			args[25]="";
 			args[26]=StringUtils.isBlank(bean.getBroGroup())?"":bean.getBroGroup();
 			args[27]="0";
 			args[28]=maxId;
@@ -4863,10 +4864,76 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[35]=StringUtils.isBlank(bean.getRatingAgency())?"":bean.getRatingAgency();
 			args[36]=StringUtils.isBlank(bean.getLastRating())?"":bean.getLastRating();
 			args[37]=bean.getFirstName();
+			LOGGER.info("query =>" + query);
+			LOGGER.info("Arg[]=>"+StringUtils.join(args,","));
 			this.mytemplate.update(query,args);
+			bean.setBranchCode(branchCode);
+			InsertPersonalContact(bean,"0");
+			InsertPersonalBank(bean,"0");
+			
 		}
 		catch(Exception exception){
 			exception.printStackTrace();
+		}
+	}
+	private void InsertPersonalBank(AdminBean bean, String amendid) {
+		try {
+			Object args[] =null;
+			if(bean.getBankSNo()!=null) {
+				String query=getQuery("DELETE_PERSONAL_BANK_INFO");
+				this.mytemplate.update(query,new Object[] {bean.getCustomerId(),amendid});
+				query=getQuery("INSERT_PERSONAL_BANK_INFO");
+				for(int i=0;i<bean.getBankSNo().size();i++) {
+					if(StringUtils.isNotBlank(bean.getBankCurrency().get(i))) {
+					args= new Object[11];
+					args[0]=bean.getBankSNo().get(i);
+					args[1]=bean.getBankCurrency().get(i);
+					args[2]=bean.getBankaccountnumber().get(i);
+					args[3]=bean.getBankname().get(i);
+					args[4]=bean.getAccountname().get(i);
+					args[5]=bean.getSwiftcode().get(i);
+					args[6]=bean.getCorespondentbank().get(i);
+					args[7]=bean.getBankRemarks().get(i);
+					args[8]=bean.getCustomerId();
+					args[9]=bean.getBranchCode();
+					args[10]=amendid;
+					LOGGER.info("query =>" + query);
+					LOGGER.info("Arg[]=>"+StringUtils.join(args,","));
+					this.mytemplate.update(query,args);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void InsertPersonalContact(AdminBean bean, String amendid) {
+		try {
+			Object args[] =null;
+			if(bean.getContactSNo()!=null) {
+				String query=getQuery("DELETE_PERSONAL_CONTACT_INFO");
+				this.mytemplate.update(query,new Object[] {bean.getCustomerId(),amendid});
+				query=getQuery("INSERT_PERSONAL_CONTACT_INFO");
+				for(int i=0;i<bean.getContactSNo().size();i++) {
+					if(StringUtils.isNotBlank(bean.getDepartmentCD().get(i))) {
+					args= new Object[9];
+					args[0]=bean.getContactSNo().get(i);
+					args[1]=bean.getDepartmentCD().get(i);
+					args[2]=bean.getSubdepartmentCD().get(i);
+					args[3]=bean.getEmailaddress().get(i);
+					args[4]=bean.getTelephonenumber().get(i);
+					args[5]=bean.getFaxnumber().get(i);
+					args[6]=bean.getCustomerId();
+					args[7]=bean.getBranchCode();
+					args[8]=amendid;
+					LOGGER.info("query =>" + query);
+					LOGGER.info("Arg[]=>"+StringUtils.join(args,","));
+					this.mytemplate.update(query,args);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	public void getEditClientMaster(AdminBean bean,String branchCode) {
@@ -4909,106 +4976,99 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 				bean.setRating(map.get("RATING")==null?"":map.get("RATING").toString());
 				bean.setRatingAgency(map.get("RATING_AGENCY")==null?"":map.get("RATING_AGENCY").toString());
 				bean.setLastRating(map.get("LAST_RATING")==null?"":map.get("LAST_RATING").toString());
-				List<String> email= new ArrayList<String>();
-				List<String> department= new ArrayList<String>();
-				List<String> fax= new ArrayList<String>();
-				List<String> telephone= new ArrayList<String>();
-				String contemail=map.get("EMAIL")==null?"":map.get("EMAIL").toString();
-				String[] email1=contemail.split(",");
-				if(email1.length>0){
-				bean.setEmail(email1[0]==null?"":email1[0]);
-				for(int i=1;i<email1.length;i++){
-					email.add(email1[i]);
-				}
-				}
-				bean.setEmailaddress(email);
-				String contdept=map.get("CON_DEPARTMENT")==null?"":map.get("CON_DEPARTMENT").toString();
-				String[] dept1=contdept.split(",");
-				for(int i=0;i<dept1.length;i++){
-					department.add(dept1[i]);
 				
-				}
-				bean.setDepartmentCD(department);
-				String contfax=map.get("FAX")==null?"":map.get("FAX").toString();
-				String[] fax1=contfax.split(",");
-				if(fax1.length>0){
-				bean.setFaxNo(fax1[0]==null?"":fax1[0]);
-				for(int i=1;i<fax1.length;i++){
-					fax.add(fax1[i]);
-				}
-				}
-				else{
-					bean.setFaxNo("");
-				}
-				bean.setFaxnumber(fax);
-				String conttelephone=map.get("TELEPHONE")==null?"":map.get("TELEPHONE").toString();
-				String[] telph=conttelephone.split(",");
-				if(fax1.length>0){
-				bean.setTelephone(telph[0]==null?"":telph[0]);
-				for(int i=1;i<telph.length;i++){
-					telephone.add(telph[i]);
-				}
-				}
-				else{
-					bean.setTelephone("");
-				}
-				bean.setTelephonenumber(telephone);
-
-				List<String> bankcurrency= new ArrayList<String>();
-				List<String> bankAccno = new ArrayList<String>();
-				List<String> bankname = new ArrayList<String>();
-				List<String> accName = new ArrayList<String>();
-				List<String> swiftCode = new ArrayList<String>();
-				List<String> ifscCode= new ArrayList<String>();
-				List<String> remarks= new ArrayList<String>();
-				String bcurrency=map.get("BANK_CURRENCY")==null?"":map.get("BANK_CURRENCY").toString();
-				String[] bankcurr=bcurrency.split(",");
-				for(int i=0;i<bankcurr.length;i++){
-					bankcurrency.add(bankcurr[i]);
-				}
-				bean.setBankCurrency(bankcurrency);
-				String baccno=map.get("BANK_ACC_NO")==null?"":map.get("BANK_ACC_NO").toString();
-				String[] bankaccnum=baccno.split(",");
-				for(int i=0;i<bankaccnum.length;i++){
-					bankAccno.add(bankaccnum[i]);
-				}
-				bean.setBankaccountnumber(bankAccno);
-				String bname=map.get("BANK_NAME")==null?"":map.get("BANK_NAME").toString();
-				String[] bkname=bname.split(",");
-				for(int i=0;i<bkname.length;i++){
-					bankname.add(bkname[i]);
-				}
-				bean.setBankname(bankname);
-				String bankaccname=map.get("BANK_ACC_NAME")==null?"":map.get("BANK_ACC_NAME").toString();
-				String[] bkaccname=bankaccname.split(",");
-				for(int i=0;i<bkaccname.length;i++){
-					accName.add(bkaccname[i]);
-				}
-				bean.setAccountname(accName);
-				String scode=map.get("SWIFT_CODE")==null?"":map.get("SWIFT_CODE").toString();
-				String[] swtcode=scode.split(",");
-				for(int i=0;i<swtcode.length;i++){
-					swiftCode.add(swtcode[i]);
-				}
-				bean.setSwiftcode(swiftCode);
-				String ifcode=map.get("IFSC_CODE")==null?"":map.get("IFSC_CODE").toString();
-				String[] ifscode=ifcode.split(",");
-				for(int i=0;i<ifscode.length;i++){
-					ifscCode.add(ifscode[i]);
-				}
-				bean.setIfsccode(ifscCode);
-				String bremarks=map.get("BANK_REMARKS")==null?"":map.get("BANK_REMARKS").toString();
-				String[] bkremarks=bremarks.split(",");
-				for(int i=0;i<bkremarks.length;i++){
-					remarks.add(bkremarks[i]);
-				}
-				bean.setBankRemarks(remarks);
 			}
-
+			GetContactInfo(bean,branchCode);
+			GetBankInfo(bean,branchCode);
+			
 		}catch(Exception exception){
 			exception.printStackTrace();
 		}
 
+	}
+	private void GetBankInfo(AdminBean bean, String branchCode) {
+		try {
+			String query=getQuery("GET_PERSONAL_BANK_INFO");
+			Object obj[] = new Object[2];
+			obj[0]=bean.getCustomerId();
+			obj[1]=branchCode;
+			List list=this.mytemplate.queryForList(query,obj);
+			if(list!=null && list.size()>0) {
+				List<String> bankCurrency=new ArrayList<String>();
+				List<String> bankaccountnumber=new ArrayList<String>();
+				List<String> bankname=new ArrayList<String>();
+				List<String> accountname=new ArrayList<String>();
+				List<String> swiftcode=new ArrayList<String>();
+				List<String> corespondentbank=new ArrayList<String>();
+				List<String> bankRemarks=new ArrayList<String>();
+				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>();
+				for(int i=0;i<list.size();i++) {
+					Map<String,Object>map=(Map<String, Object>) list.get(i);
+					bankCurrency.add(map.get("BANK_CURRENCY")==null?"":map.get("BANK_CURRENCY").toString());
+					bankaccountnumber.add(map.get("BANK_ACC_NO")==null?"":map.get("BANK_ACC_NO").toString());
+					bankname.add(map.get("BANK_NAME")==null?"":map.get("BANK_NAME").toString());
+					accountname.add(map.get("BANK_ACC_NAME")==null?"":map.get("BANK_ACC_NAME").toString());
+					swiftcode.add(map.get("SWIFT_CODE")==null?"":map.get("SWIFT_CODE").toString());
+					corespondentbank.add(map.get("CORESPONDENT_BANK")==null?"":map.get("CORESPONDENT_BANK").toString());
+					bankRemarks.add(map.get("BANK_REMARKS")==null?"":map.get("BANK_REMARKS").toString());
+					Map<String,Object> doubleMap = new HashMap<String,Object>();
+					List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
+					doubleMap.put("one",new Double(1.0));
+					creList.add(doubleMap);
+					currencyList1.add(creList);
+				}
+				bean.setBankCurrency(bankCurrency);
+				bean.setBankaccountnumber(bankaccountnumber);
+				bean.setBankname(bankname);
+				bean.setAccountname(accountname);
+				bean.setSwiftcode(swiftcode);
+				bean.setCorespondentbank(corespondentbank);
+				bean.setBankRemarks(bankRemarks);
+				bean.setCurrencyList(currencyList1);
+				bean.setContactList(currencyList1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void GetContactInfo(AdminBean bean,String branchCode) {
+		try {
+			String query=getQuery("GET_PERSONAL_CONTACT_INFO");
+			Object obj[] = new Object[2];
+			obj[0]=bean.getCustomerId();
+			obj[1]=branchCode;
+			List list=this.mytemplate.queryForList(query,obj);
+			if(list!=null && list.size()>0) {
+				List<String> departmentCD=new ArrayList<String>();
+				List<String> subdepartmentCD=new ArrayList<String>();
+				List<String> emailaddress=new ArrayList<String>();
+				List<String> telephonenumber=new ArrayList<String>();
+				List<String> faxnumber=new ArrayList<String>();
+				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>();
+				for(int i=0;i<list.size();i++) {
+					Map<String,Object>map=(Map<String, Object>) list.get(i);
+					departmentCD.add(map.get("DEPARTMENT")==null?"":map.get("DEPARTMENT").toString());
+					subdepartmentCD.add(map.get("SUB_DEPARTMENT")==null?"":map.get("SUB_DEPARTMENT").toString());
+					emailaddress.add(map.get("EMAIL")==null?"":map.get("EMAIL").toString());
+					telephonenumber.add(map.get("TELEPHONE")==null?"":map.get("TELEPHONE").toString());
+					faxnumber.add(map.get("FAX_NUMBER")==null?"":map.get("FAX_NUMBER").toString());
+					Map<String,Object> doubleMap = new HashMap<String,Object>();
+					List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
+					doubleMap.put("one",new Double(1.0));
+					creList.add(doubleMap);
+					currencyList1.add(creList);
+				}
+				bean.setDepartmentCD(departmentCD);
+				bean.setSubdepartmentCD(subdepartmentCD);
+				bean.setEmailaddress(emailaddress);
+				bean.setTelephonenumber(telephonenumber);
+				bean.setFaxnumber(faxnumber);
+				bean.setContactList(currencyList1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	public void getupdateClientMaster(AdminBean bean,String branchCode) {
 		String query="";
@@ -5034,24 +5094,24 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[5]=bean.getCity();
 			args[6]=bean.getCountry();
 			args[7]=bean.getZipcode();
-			args[8]=bean.getEmail()+","+bean.getEmailaddress().get(0)+","+bean.getEmailaddress().get(1)+","+bean.getEmailaddress().get(2)+","+bean.getEmailaddress().get(3)+","+bean.getEmailaddress().get(4);;
-			args[9]=bean.getTelephone()+","+bean.getTelephonenumber().get(0)+","+bean.getTelephonenumber().get(1)+","+bean.getTelephonenumber().get(2)+","+bean.getTelephonenumber().get(3)+","+bean.getTelephonenumber().get(4);;
+			args[8]=bean.getEmail();
+			args[9]=bean.getTelephone();
 			args[10]=bean.getMobile();
-			args[11]=bean.getFaxNo()+","+bean.getFaxnumber().get(0)+","+bean.getFaxnumber().get(1)+","+bean.getFaxnumber().get(2)+","+bean.getFaxnumber().get(3)+","+bean.getFaxnumber().get(4);;
+			args[11]=bean.getFaxNo();
 			args[12]=bean.getPanNo();
 			args[13]=bean.getIsIndividual();
 			args[14]=bean.getIsNonResident();
 			args[15]=bean.getSpecialRate();
 			args[16]=bean.getActive();
 			args[17]=bean.getClientRemarks();
-			args[18]=bean.getDepartmentCD().get(0)+","+bean.getDepartmentCD().get(1)+","+bean.getDepartmentCD().get(2)+","+bean.getDepartmentCD().get(3)+","+bean.getDepartmentCD().get(4);
-			args[19]=bean.getBankCurrency().get(0)+","+bean.getBankCurrency().get(1)+","+bean.getBankCurrency().get(2);
-			args[20]=bean.getBankaccountnumber().get(0)+","+bean.getBankaccountnumber().get(1)+","+bean.getBankaccountnumber().get(2);
-			args[21]=bean.getBankname().get(0)+","+bean.getBankname().get(1)+","+bean.getBankname().get(2);
-			args[22]=bean.getAccountname().get(0)+","+bean.getAccountname().get(1)+","+bean.getAccountname().get(2);
-			args[23]=bean.getSwiftcode().get(0)+","+bean.getSwiftcode().get(1)+","+bean.getSwiftcode().get(2);
-			args[24]=bean.getIfsccode().get(0)+","+bean.getIfsccode().get(1)+","+bean.getIfsccode().get(2);
-			args[25]=bean.getBankRemarks().get(0)+","+bean.getBankRemarks().get(1)+","+bean.getBankRemarks().get(2);
+			args[18]="";
+			args[19]="";
+			args[20]="";
+			args[21]="";
+			args[22]="";
+			args[23]="";
+			args[24]="";
+			args[25]="";
 			args[26]=StringUtils.isBlank(bean.getBroGroup())?"":bean.getBroGroup();
 			args[27]=maxId;
 			args[28]=bean.getCustomerId();
@@ -5064,11 +5124,16 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[35]=StringUtils.isBlank(bean.getRatingAgency())?"":bean.getRatingAgency();
 			args[36]=StringUtils.isBlank(bean.getLastRating())?"":bean.getLastRating();
 			args[37]=bean.getFirstName();
+			LOGGER.info("query =>" + query);
+			LOGGER.info("Arg[]=>"+StringUtils.join(args,","));
 			this.mytemplate.update(query,args);
+			bean.setBranchCode(branchCode);
+			InsertPersonalContact(bean,maxId);
+			InsertPersonalBank(bean,maxId);
 		}
 
 		catch(Exception exception){
-			exception.printStackTrace();
+			exception.printStackTrace(); 
 		}
 
 	}

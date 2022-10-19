@@ -233,6 +233,7 @@ jQuery(function ($) {
 								<div class="panel-body">
 									<div class="boxcontent">
 			     					 <div class="panel-body">
+			     					 <div id="bankid">
 										<table class="table table-bordered" width="100%" id="newgen1">
 											<thead>
 												<tr>
@@ -271,7 +272,7 @@ jQuery(function ($) {
 															<s:textarea name="corespondentbank[%{#stat.count-1}]" id="corespondentbank[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" />
 														</td>
 														<td>
-															<s:textfield name="bankRemarks[%{#stat.count-1}]" id="remarks[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})"/>
+															<s:textarea name="bankRemarks[%{#stat.count-1}]" id="remarks[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})"/>
 														</td>
 														<td align="center">
 																<s:if test='0!=(#stat.count-1)'>
@@ -282,6 +283,7 @@ jQuery(function ($) {
 													</s:iterator>
 											</tbody>
 										</table>
+										</div>
 									  </div>
 									  <div class="boxcontent" align="center">
 											<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="insRow1('newgen1');" />
@@ -300,6 +302,7 @@ jQuery(function ($) {
 								<div class="panel-body">
 									<div class="boxcontent">
 										<div class="panel-body">
+											<div id="contact">
 											<table class="table table-bordered" width="100%" id="newgen">
 												<thead>
 													<tr>
@@ -340,6 +343,7 @@ jQuery(function ($) {
 														</s:iterator>
 												</tbody>
 											</table>
+											</div>
 										</div>
 										<div class="boxcontent" align="center">
 											<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="insRow('newgen');" />
@@ -752,15 +756,13 @@ function populateCoverdept(objSelect){
 			</s:iterator>
  }
 function deleteRow(val){
-	var scale=document.getElementById("pageFor").value;
 	if(val==0){
 		alert("First row can't be deleted");
 	}
 	else{
 		var status=confirm("Do you want to delete specified row");
 		if(status){
-			document.client.action="${pageContext.request.contextPath}/docUploadAdmin.action?flag=client&customerId="+id+"&firstName="+name;
-			document.client.submit();
+			postFormRequest("${pageContext.request.contextPath}/removeRowcontactAdmin.action?dropDown=contact&deleteId="+val, "contact", "client");
 			}
 		}
 }
@@ -820,15 +822,15 @@ var table = document.getElementById(tableID);
 			cell6.appendChild(element5); 
 			
 			var cell7 = row.insertCell(6);
-			var element6 = document.createElement("input");
-			element6.type = "textarea";
+			var element6 = document.createElement("textarea");
+			element6.type = "text";
 			element6.name = "corespondentbank["+(rowCount-1)+"]";
       		element6.id = "corespondentbank"+(rowCount-1);
 			element6.className = "inputBox";
 			cell7.appendChild(element6); 
 			
 			var cell8 = row.insertCell(7);
-			var element7 = document.createElement("input");
+			var element7 = document.createElement("textarea");
 			element7.type = "text";
 			element7.name = "bankRemarks["+(rowCount-1)+"]";
       		element7.id = "bankRemarks"+(rowCount-1);
@@ -881,8 +883,7 @@ function deleteRow1(val){
 	else{
 		var status=confirm("Do you want to delete specified row");
 		if(status){
-			document.client.action="${pageContext.request.contextPath}/docUploadAdmin.action?flag=client&customerId="+id+"&firstName="+name;
-			document.client.submit();
+			postFormRequest("${pageContext.request.contextPath}/removeRowBankAdmin.action?dropDown=bankid&deleteId="+val, "bankid", "client");
 			}
 		}
 }

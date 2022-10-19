@@ -221,7 +221,7 @@ public class PortfolioAction extends ActionSupport implements
 					Mode = "NTU";// Not Taken Up
 				else if ("RP".equals(bean.getFlag()))
 					Mode = "RP";// Renewal Pending
-				portfoloioList = portfoloibusiness.getPendingList(bean);
+				portfoloioList = portfoloibusiness.getPendingList(bean,session.get("MenuRights"));
 				// bean.setTilte(Mode);
 				bean.setTitle(Mode);
 			} else if ("C".equalsIgnoreCase(bean.getFlag())
@@ -318,7 +318,7 @@ public class PortfolioAction extends ActionSupport implements
 				bean.setUserType(userType);
 				bean.setLoginId(userId);
 				bean.setDeptId(bean.getDepartmentId());
-				portfoloioList = service.getPendingList(bean);
+				portfoloioList = service.getPendingList(bean,session.get("MenuRights"));
 				bean.setPortfolioList(portfoloioList);
 				// new
 				// DropDownControllor().getRenewalCopyQuote("NewCancel",bean.getProductId(),
