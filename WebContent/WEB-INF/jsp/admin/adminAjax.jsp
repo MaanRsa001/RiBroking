@@ -343,6 +343,7 @@
 			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.coverLimitPoc" />  </th>
 			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.deductiblePoc" /> </th>
 			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.egnpiasperoffer" /> </th>
+			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="Net Max Retention - 100% - OC" /> </th>
 			<th width="10.8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
 		</tr>
 	</thead>
@@ -368,6 +369,9 @@
 				</td>
 				<td>
 					<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30"  theme="simple"/>
+				</td>
+				<td>
+				<s:textfield name="netMaxRetentPer[%{#stat.count-1}]" id="netMaxRetentPer%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30" theme="simple" />
 				</td>
 				<td align="center">
 				<s:if test='0!=(#stat.count-1)'>
@@ -2573,7 +2577,6 @@ alert("This action is not allowed because a previous transaction is pending for 
 				<th width="30%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Ratio From"/> </th>
 				<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Ratio To "/> </th>
 				<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Sliding Scale Commission %" /> </th>
-				<th width="8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
 			</tr>
 		</thead>
 			<tbody>
@@ -2591,11 +2594,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 					<td >
 					<s:textfield name="scaleLowClaimBonus[%{#stat.count-1}]" id="scaleLowClaimBonus[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="26" theme="simple"/>
 					</td>
-					<td>
-					<s:if test='0!=(#stat.count-1)'>
-					<INPUT type="button" value="Delete" class="btn btn-sm btn-info"   onclick="scaleremoveRow('<s:property value="%{#stat.count-1}"/>')" />
-					</s:if>
-					</td>
+					
 				</tr>
 			</s:iterator>
 			</tbody>

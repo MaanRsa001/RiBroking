@@ -45,4 +45,5 @@ public interface RiskDetailsDAO {
 		void CancelProposal(RiskDetailsBean bean, String oldProNo);
 		boolean GetShareValidation(RiskDetailsBean bean);
 		void getRetentionDetails(RiskDetailsBean bean);
+		void getcalculateSC(RiskDetailsBean bean);
 }

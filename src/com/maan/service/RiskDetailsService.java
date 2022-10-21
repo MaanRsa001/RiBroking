@@ -204,6 +204,10 @@ public class RiskDetailsService {
 	public void getRetentionDetails(RiskDetailsBean bean) {
 		dao.getRetentionDetails( bean);
 	}
+	public void getcalculateSC(RiskDetailsBean bean) {
+		dao.getcalculateSC(bean);
+		
+	}
 	
 
 	

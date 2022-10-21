@@ -241,6 +241,7 @@ public class RiskDetailsBean  {
 	private List<String> scaleFrom ;
     private List<String> scaleTo ;
     private List<String> scaleLowClaimBonus ;
+    private List<String> scalemaxpartpercent ;
     private List<String> scaleSNo;
     private List<String> errorList;
     private String scaleTypeId;
@@ -512,6 +513,21 @@ public class RiskDetailsBean  {
 	private String scsubProfitMonth;
 	private String scsubSeqCalculation;
 	private String referenceNo;
+	private String fpcType;
+	private String fpcfixedDate;
+	private  String pcfpcType;
+	private String pcfixedDate;
+	private String scaleminRatio;
+	private String scalemaxRatio;
+	private String scalecombine;
+	private String scalebanding;
+	private String scaledigit;
+	private String scalelossratioFrom;
+	private String scalelossratioTo;
+	private String scaledeltalossratio;
+	private String scaledeltacommission;
+	private String provisionCom;
+	private String scalementhod;
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -5459,6 +5475,102 @@ public class RiskDetailsBean  {
 	}
 	public void setBouquetList(List<Map<String, Object>> bouquetList) {
 		this.bouquetList = bouquetList;
+	}
+	public List<String> getScalemaxpartpercent() {
+		return scalemaxpartpercent;
+	}
+	public void setScalemaxpartpercent(List<String> scalemaxpartpercent) {
+		this.scalemaxpartpercent = scalemaxpartpercent;
+	}
+	public String getFpcType() {
+		return fpcType;
+	}
+	public void setFpcType(String fpcType) {
+		this.fpcType = fpcType;
+	}
+	public String getFpcfixedDate() {
+		return fpcfixedDate;
+	}
+	public void setFpcfixedDate(String fpcfixedDate) {
+		this.fpcfixedDate = fpcfixedDate;
+	}
+	public String getPcfpcType() {
+		return pcfpcType;
+	}
+	public void setPcfpcType(String pcfpcType) {
+		this.pcfpcType = pcfpcType;
+	}
+	public String getPcfixedDate() {
+		return pcfixedDate;
+	}
+	public void setPcfixedDate(String pcfixedDate) {
+		this.pcfixedDate = pcfixedDate;
+	}
+	public String getScaleminRatio() {
+		return scaleminRatio;
+	}
+	public void setScaleminRatio(String scaleminRatio) {
+		this.scaleminRatio = scaleminRatio;
+	}
+	public String getScalemaxRatio() {
+		return scalemaxRatio;
+	}
+	public void setScalemaxRatio(String scalemaxRatio) {
+		this.scalemaxRatio = scalemaxRatio;
+	}
+	public String getScalecombine() {
+		return scalecombine;
+	}
+	public void setScalecombine(String scalecombine) {
+		this.scalecombine = scalecombine;
+	}
+	public String getScalebanding() {
+		return scalebanding;
+	}
+	public void setScalebanding(String scalebanding) {
+		this.scalebanding = scalebanding;
+	}
+	public String getScaledigit() {
+		return scaledigit;
+	}
+	public void setScaledigit(String scaledigit) {
+		this.scaledigit = scaledigit;
+	}
+	public String getScalelossratioFrom() {
+		return scalelossratioFrom;
+	}
+	public void setScalelossratioFrom(String scalelossratioFrom) {
+		this.scalelossratioFrom = scalelossratioFrom;
+	}
+	public String getScalelossratioTo() {
+		return scalelossratioTo;
+	}
+	public void setScalelossratioTo(String scalelossratioTo) {
+		this.scalelossratioTo = scalelossratioTo;
+	}
+	public String getScaledeltalossratio() {
+		return scaledeltalossratio;
+	}
+	public void setScaledeltalossratio(String scaledeltalossratio) {
+		this.scaledeltalossratio = scaledeltalossratio;
+	}
+	public String getScaledeltacommission() {
+		return scaledeltacommission;
+	}
+	public void setScaledeltacommission(String scaledeltacommission) {
+		this.scaledeltacommission = scaledeltacommission;
+	}
+	public String getProvisionCom() {
+		return provisionCom;
+	}
+	public void setProvisionCom(String provisionCom) {
+		this.provisionCom = provisionCom;
+	}
+	public String getScalementhod() {
+		return scalementhod;
+	}
+	public void setScalementhod(String scalementhod) {
+		this.scalementhod = scalementhod;
 	}
 	
 	

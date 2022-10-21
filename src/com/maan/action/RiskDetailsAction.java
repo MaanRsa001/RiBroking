@@ -142,7 +142,15 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 	public List<Map<String,Object>> getBouquetExistingList(){
 		return dropDownController.getBouquetExistingList(branchCode,bean.getBouquetNo(),bean.getBouquetModeYN());
 	}
-	
+	public List<Map<String,Object>> getSlidingScaleMethodList(){
+		return dropDownController.getConstantDropDown("52");
+	}
+	public List<Map<String,Object>> getSlidingScalePeriodList(){
+		return dropDownController.getConstantDropDown("53");
+	}
+	public List<Map<String,Object>> getLossRationList(){
+		return dropDownController.getConstantDropDown("54");
+	}
 	public String UnderwritingLimit(){
 		//bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, (String)session.get("DepartmentId")));
 		bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, "0"));
@@ -1938,14 +1946,17 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 						addActionError(getText("error.super.pro.com"));
 					}else{
 						if("Y".equalsIgnoreCase(bean.getSuperProfitCommission())){
-							if(StringUtils.isBlank(bean.getProfitPopUp())){
-								addActionError(getText("error.profit.recheck"));
-							}else{
-								int count = service.CommissionTypeCount(bean);
-								if(count<=0){
-									addActionError(getText("error.commission.schedule"));
-								}
-						}
+							
+							 if(StringUtils.isBlank(bean.getProfitPopUp())){
+							 //addActionError(getText("error.profit.recheck")); 
+							 }
+							 else{
+								 int count = service.CommissionTypeCount(bean); 
+							 if(count<=0){
+							  addActionError(getText("error.commission.schedule"));
+							  } 
+							 }
+							 
 						}
 					}
 					}
@@ -2907,7 +2918,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			if(res){
 			service.insertCrestaDetails(bean);
 			}
-			String value="<script type='text/javascript'>window.close();</script>";
+			String value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value="+(StringUtils.isBlank(bean.getReferenceNo())?"0":bean.getReferenceNo())+"</script>";
 			byte[] byteArray = value.getBytes();
 			inputStream=new ByteArrayInputStream(byteArray);
 		}
@@ -3099,6 +3110,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		List<String> from=new ArrayList<String>();
 		List<String> to=new ArrayList<String>();
 		List<String> per=new ArrayList<String>();
+		 List<String> scalemaxpartpercent = new ArrayList<String>();
 		if("commission".equalsIgnoreCase(bean.getFlag())){
 			bean.getCommissionSNo().remove(bean.getDeleteId());
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
@@ -3151,6 +3163,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				from.add(bean.getScaleFrom().get(k));
 				to.add(bean.getScaleTo().get(k));
 				per.add(bean.getScaleLowClaimBonus().get(k));
+				scalemaxpartpercent.add(bean.getScalemaxpartpercent().get(k));
+				
 			}
 			else{
 			if(StringUtils.isNotBlank(bean.getScaleFrom().get(j))){
@@ -3162,12 +3176,16 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			if(StringUtils.isNotBlank(bean.getScaleFrom().get(j))){
 				per.add(bean.getScaleLowClaimBonus().get(j));
 			}
+			if(StringUtils.isNotBlank(bean.getScalemaxpartpercent().get(j))){
+				scalemaxpartpercent.add(bean.getScalemaxpartpercent().get(j));
+			}
 			}
 			j++;
 		}
 		bean.setScaleFrom(from);
 		bean.setScaleTo(to);
 		bean.setScaleLowClaimBonus(per);
+		 bean.setScalemaxpartpercent(scalemaxpartpercent);
 		bean.setScaleCommissionList(list);
 
 		}
@@ -3255,7 +3273,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			bean.setProduct_id(pid);
 			bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 			String result = service.ScaleCommissionInsert(bean);
-			String value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value="+bean.getReferenceNo()+"</script>";
+			String value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value="+(StringUtils.isBlank(bean.getReferenceNo())?"0":bean.getReferenceNo())+"</script>";
 			byte[] byteArray = value.getBytes();
 			inputStream=new ByteArrayInputStream(byteArray);
 		}
@@ -3390,46 +3408,52 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		 list1.add(getText("error.scale.quota.share"));
 		 }
 		 }
-		if(StringUtils.isBlank(bean.getScfistpc())){
-		if("scale".equalsIgnoreCase(bean.getPageFor())){
-		list1.add(getText("error.scale.firstpc"));
+		if(StringUtils.isNotBlank(bean.getFpcType()) && "P".equals(bean.getFpcType())) {
+			if(StringUtils.isBlank(bean.getScfistpc())){
+				if("scale".equalsIgnoreCase(bean.getPageFor())){
+					list1.add(getText("error.scale.firstpc"));
+				}
+				else{
+					list1.add(getText("error.loss.firstpc"));
+				}
+			}
+			if(StringUtils.isBlank(bean.getScprofitMont())){
+				if("scale".equalsIgnoreCase(bean.getPageFor())){
+					list1.add(getText("error.scale.profitmonth"));
+				}
+				else{
+					list1.add(getText("error.loss.profitmonth"));
+				}
+			}
+			
+		}else{
+			if(StringUtils.isBlank(bean.getFpcfixedDate())) {
+				if("scale".equalsIgnoreCase(bean.getPageFor())){
+					list1.add(getText("error.scale.firstfixeddate"));
+				}
+				else{
+					list1.add(getText("error.loss.firstfixeddate"));
+				}
+			}
 		}
-		else{
-		list1.add(getText("error.loss.firstpc"));
-		}
-		}
-		if(StringUtils.isBlank(bean.getScprofitMont())){
-		if("scale".equalsIgnoreCase(bean.getPageFor())){
-		list1.add(getText("error.scale.profitmonth"));
-		}
-		else{
-		list1.add(getText("error.loss.profitmonth"));
-		}
-		}
-		if(StringUtils.isBlank(bean.getScsubpc())){
-		if("scale".equalsIgnoreCase(bean.getPageFor())){
-		list1.add(getText("error.scale.subpc"));
-		}
-		else{
-		list1.add(getText("error.loss.subpc"));
-		}
-		}
-		if(StringUtils.isBlank(bean.getScsubProfitMonth())){
-		if("scale".equalsIgnoreCase(bean.getPageFor())){
-
-		list1.add(getText("error.scale.sub.profit.month"));
-		}
-		else{
-		list1.add(getText("error.loss.sub.profit.month"));
-		}
-		}
-		if(StringUtils.isBlank(bean.getSubSeqCalculation())){
-		if("scale".equalsIgnoreCase(bean.getPageFor())){
-		list1.add(getText("error.scale.sub.seq.month"));
-		}
-		else{
-		list1.add(getText("error.loss.sub.seq.month"));
-		}
+		if("N".equals(bean.getScsubSeqCalculation())) {
+			if(StringUtils.isBlank(bean.getScsubpc())){
+				if("scale".equalsIgnoreCase(bean.getPageFor())){
+					list1.add(getText("error.scale.subpc"));
+				}
+				else{
+					list1.add(getText("error.loss.subpc"));
+				}
+			}
+			if(StringUtils.isBlank(bean.getScsubProfitMonth())){
+				if("scale".equalsIgnoreCase(bean.getPageFor())){
+		
+				list1.add(getText("error.scale.sub.profit.month"));
+				}
+				else{
+				list1.add(getText("error.loss.sub.profit.month"));
+				}
+			}
 		}
 		bean.setErrorList(list1);
 		}
@@ -3615,7 +3639,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			if(bean.getErrorList().size()<=0){
 				String result = service.insertProfitCommission(bean);
 				forward="streamResult";
-				String value="<script type='text/javascript'>window.close();</script>";
+				String value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value='"+(StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo())+"';</script>";
 				byte[] byteArray = value.getBytes();
 				inputStream=new ByteArrayInputStream(byteArray);
 				}
@@ -4373,6 +4397,41 @@ public String sectionView() {
 	ShowDropDown();
 	return "sectionview";
 	
+}
+public String calculateSC() {
+	validateSCCalculate(bean);
+	if(CollectionUtils.isEmpty(bean.getErrorList())) {
+	service.getcalculateSC(bean);
+	}
+	return "scalePopUp";
+	
+}
+private void validateSCCalculate(RiskDetailsBean bean) {
+	List<String> list=new ArrayList<String>();
+	if(StringUtils.isBlank(bean.getScalementhod())) {
+		list.add(getText("error.scale.method"));
+	}
+	if(StringUtils.isBlank(bean.getScaleminRatio())) {
+		list.add(getText("error.scale.minratio"));
+	}
+	if(StringUtils.isBlank(bean.getScalemaxRatio())) {
+		list.add(getText("error.scale.maxratio"));
+	}
+	if(StringUtils.isBlank(bean.getScalecombine())) {
+		list.add(getText("error.scale.combinedratio"));
+	}
+	if(StringUtils.isBlank(bean.getScalebanding())) {
+		list.add(getText("error.scale.banding"));
+	}
+	if(StringUtils.isBlank(bean.getScaledigit())) {
+		list.add(getText("error.scale.digit"));
+	}
+	if(StringUtils.isNotBlank(bean.getScalecombine()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
+		if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
+			list.add(getText("error.scale.max.cobine.valid"));
+		}
+	}
+	bean.setErrorList(list);
 }
 }
 

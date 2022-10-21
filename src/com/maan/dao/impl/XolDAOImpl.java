@@ -3071,6 +3071,12 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		return obj;
 	}
 	public Object[] insertHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid, final Object args2, final boolean amendId,String renewalStatus) {
+		String sectionNo="",bouquetno="";
+		if(StringUtils.isBlank(beanObj.getBouquetNo()) && "Y".equals(beanObj.getBouquetModeYN())) {
+			String query=getQuery("GET_BOUQUET_NO_SEQ");
+			bouquetno=this.mytemplate.queryForObject(query, String.class);
+			beanObj.setBouquetNo(bouquetno);
+		}
 		Object[] obj = new Object[30];
 		if (amendId) {
 			obj[1] = beanObj.getContNo();
@@ -3079,7 +3085,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		} else {
 			obj[1] = "0";
 			obj[2] = "0";
-			obj[16] = beanObj.getLayerProposalNo();
+			obj[16] = StringUtils.isBlank(beanObj.getBaseLayer())?beanObj.getLayerProposalNo():beanObj.getBaseLayer();
 		}
 		obj[0] = beanObj.getProposal_no();
 		obj[3] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();

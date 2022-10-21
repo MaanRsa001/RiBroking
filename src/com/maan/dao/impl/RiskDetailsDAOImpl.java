@@ -1049,6 +1049,8 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setSubSeqCalculation(resMap.get("RSK_PRO_SUB_SEQ_CAL")==null?"":resMap.get("RSK_PRO_SUB_SEQ_CAL").toString());
 				beanObj.setLocRate(resMap.get("RSK_RATE")==null?"":resMap.get("RSK_RATE").toString());
 				beanObj.setPremiumResType(resMap.get("RSK_PREMIUM_RES_TYPE")==null?"":resMap.get("RSK_PREMIUM_RES_TYPE").toString());
+				beanObj.setPcfpcType(resMap.get("FPC_TYPE")==null?"":resMap.get("FPC_TYPE").toString());
+				beanObj.setPcfixedDate(resMap.get("FPC_FIXED_DATE")==null?"":resMap.get("FPC_FIXED_DATE").toString());
 				if (resMap.get("RSK_OTHER_COST") != null) {
 					beanObj.setOthercost(resMap.get("RSK_OTHER_COST").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_OTHER_COST").toString());
 				}else{
@@ -1597,11 +1599,11 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 			//}
 			//insertRetroContracts(beanObj,productId);
-			insertCrestaMaintable(beanObj);
+			//insertCrestaMaintable(beanObj);
 			beanObj.setProduct_id(productId);
-			insertBonusDetails(beanObj,"scale");
-			insertBonusDetails(beanObj,"lossparticipate");
-			insertProfitCommissionMain(beanObj,"main");
+			//insertBonusDetails(beanObj,"scale");
+			//insertBonusDetails(beanObj,"lossparticipate");
+			//insertProfitCommissionMain(beanObj,"main");
 			//InsertRemarkDetails(beanObj);
 		}catch(Exception e){
 			logger.debug("Exception @ {" + e + "}");	
@@ -2537,7 +2539,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] secondPageCommissionSaveAruguments(final RiskDetailsBean beanObj, final String productId) {
 		Object[] obj=null;
-		obj = new Object[68];
+		obj = new Object[70];
 		obj[0] = beanObj.getProposal_no();
 		obj[1] = "0";
 		obj[2] = "0";
@@ -2631,6 +2633,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[65] =StringUtils.isEmpty(beanObj.getDocStatus())?"":beanObj.getDocStatus();
 		obj[66] =StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
 		obj[67] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
+		obj[68] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
+		obj[69] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2675,7 +2679,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] secondPageCommissionAruguments(final RiskDetailsBean beanObj, final String productId) {
 		Object[] obj=null;
-		obj = new Object[68];
+		obj = new Object[70];
 		obj[0] = beanObj.getProposal_no();
 		obj[1] = "0";
 		obj[2] = beanObj.getLayerNo();
@@ -2767,6 +2771,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[65] =StringUtils.isEmpty(beanObj.getDocStatus())?"":beanObj.getDocStatus();
 		obj[66] =StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
 		obj[67] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
+		obj[68] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
+		obj[69] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2848,7 +2854,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] savemodeUpdateRiskDetailsSecondFormSecondTable(final RiskDetailsBean beanObj, final String productId, final String endNo) {
 		Object[] obj=new Object[0];
-		obj = new Object[64];
+		obj = new Object[66];
 		obj[0] = StringUtils.isEmpty(beanObj.getBrokerage()) ? "0": beanObj.getBrokerage();
 		obj[1] = StringUtils.isEmpty(beanObj.getTax()) ? "0" : beanObj.getTax();
 		obj[2] = StringUtils.isEmpty(beanObj.getShare_Profit_Commission()) ? "0": beanObj.getShare_Profit_Commission();
@@ -2933,8 +2939,10 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[59] = StringUtils.isEmpty(beanObj.getDocStatus())? "" :beanObj.getDocStatus();
 		obj[60] = StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
 		obj[61] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
-		obj[62] = beanObj.getProposal_no();
-		obj[63] = endNo;
+		obj[62] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
+		obj[63] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
+		obj[64] = beanObj.getProposal_no();
+		obj[65] = endNo;
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2980,7 +2988,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	public Object[] updateRiskDetailsSecondFormSecondTable(final RiskDetailsBean beanObj, final String productId, final String endNo) {
 		Object[] obj=null;
 		if (productId.equalsIgnoreCase("2")) {
-			obj = new Object[64];
+			obj = new Object[66];
 			obj[0] = StringUtils.isEmpty(beanObj.getBrokerage()) ? "0": beanObj.getBrokerage();
 			obj[1] = beanObj.getTax();
 			obj[2] = beanObj.getShare_Profit_Commission();
@@ -3044,6 +3052,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			obj[56] = StringUtils.isEmpty(beanObj.getSubpc())?"":beanObj.getSubpc();
 			obj[57] = StringUtils.isEmpty(beanObj.getSubSeqCalculation())?"":beanObj.getSubSeqCalculation();
 			obj[58] = StringUtils.isEmpty(beanObj.getProfitCommission())?"":beanObj.getProfitCommission();
+			
+			
 			}
 			else{
 				obj[44] = "";
@@ -3065,8 +3075,10 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			obj[59] = StringUtils.isEmpty(beanObj.getDocStatus())? "" :beanObj.getDocStatus();
 			obj[60] = StringUtils.isEmpty(beanObj.getLocRate())? "" :beanObj.getLocRate();
 			obj[61] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
-			obj[62] = beanObj.getProposal_no();
-			obj[63] = endNo;
+			obj[62] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
+			obj[63] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
+			obj[64] = beanObj.getProposal_no();
+			obj[65] = endNo;
 		} 
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
@@ -3583,7 +3595,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		String sectionNo="",bouquetno="";
 		if("2".equals(beanObj.getProduct_id())) {
 			//if(StringUtils.isBlank(beanObj.getSectionNo())) {
-				String query=getQuery("GET_MAX_SECTION_NO");
+				String query=getQuery("GET_MAX_SECTION_NO_DET");
 				sectionNo=this.mytemplate.queryForObject(query, String.class, new Object[] {beanObj.getProposalNo()});
 				beanObj.setSectionNo(sectionNo);
 			//}
@@ -3601,7 +3613,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		} else {
 			obj[1] = "0";
 			obj[2] = "0";
-			obj[16] = beanObj.getLayerProposalNo();
+			obj[16] = StringUtils.isBlank(beanObj.getBaseLayer())?beanObj.getLayerProposalNo():beanObj.getBaseLayer();
 		}
 		obj[0] = beanObj.getProposal_no();
 		obj[3] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();
@@ -3877,18 +3889,16 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
          List<String> bonusTo = new ArrayList<String>();
          String proposalNo = bean.getProposal_no();
          List<String> bonusLowClaimBonus = new ArrayList<String>();
+         List<String> scalemaxpartpercent = new ArrayList<String>();
          Object args[]=null;
          int count =0;
 		try{
-				args = new Object[3];
-				args[0] = proposalNo;
-				args[1] = bean.getBranchCode();
 				 if("scale".equalsIgnoreCase(bean.getPageFor())){
-		        	   args[2] ="SSC";
-		           }
-		           else{
-		        	   args[2]="LPC";
-		           }
+					 args = new Object[4];
+						args[0] = proposalNo;
+						args[1] = bean.getBranchCode();
+						args[2] ="SSC";
+						args[3] ="SSC2";
 					query =getQuery("BONUS_MAIN_SELECT");
 					result = this.mytemplate.queryForList(query,args);
 					if(CollectionUtils.isEmpty(result)) {
@@ -3896,32 +3906,91 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 						query =getQuery("BONUS_MAIN_SELECT_REFERENCE");
 						result = this.mytemplate.queryForList(query,args);
 					}
+				 }else {
+					 args = new Object[3];
+						args[0] = proposalNo;
+						args[1] = bean.getBranchCode();
+						args[2] ="LPC";
+					
+					 query =getQuery("BONUS_MAIN_SELECT_LPC");
+						result = this.mytemplate.queryForList(query,args);
+						if(CollectionUtils.isEmpty(result)) {
+							args[0] = bean.getReferenceNo();
+							query =getQuery("BONUS_MAIN_SELECT_REFERENCE_LPC");
+							result = this.mytemplate.queryForList(query,args);
+						}
+				 }
 					//}
 				for(int i=0;i<result.size();i++){
 		               Map<String,Object> tempMap = result.get(i);
 		               bonusSno.add(tempMap.get("LCB_ID")==null?"":tempMap.get("LCB_ID").toString());
-		               bonusFrom.add(tempMap.get("LCB_FROM")==null?"":DropDownControllor.formatter(tempMap.get("LCB_FROM").toString()));
-		               bonusTo.add(tempMap.get("LCB_TO")==null?"":DropDownControllor.formatter(tempMap.get("LCB_TO").toString()));
+		               bonusFrom.add(tempMap.get("LCB_FROM")==null?"":DropDownControllor.formattereight(tempMap.get("LCB_FROM").toString()));
+		               bonusTo.add(tempMap.get("LCB_TO")==null?"":DropDownControllor.formattereight(tempMap.get("LCB_TO").toString()));
 		               bonusLowClaimBonus.add(tempMap.get("LCB_PERCENTAGE")==null?"":DropDownControllor.formatter(tempMap.get("LCB_PERCENTAGE").toString()));
+		               scalemaxpartpercent.add(tempMap.get("SCALE_MAX_PART_PERCENT")==null?"":DropDownControllor.formatter(tempMap.get("SCALE_MAX_PART_PERCENT").toString()));
+		               if(!"scale".equalsIgnoreCase(bean.getPageFor())){
 		               bean.setBonusTypeId(tempMap.get("LCB_TYPE")==null?"":tempMap.get("LCB_TYPE").toString());
+		               }
 		               bean.setQuotaShare(tempMap.get("QUOTA_SHARE")==null?"":tempMap.get("QUOTA_SHARE").toString());
 		               bean.setBonusremarks(tempMap.get("REMARKS")==null?"":tempMap.get("REMARKS").toString());
 		               bean.setScfistpc(tempMap.get("FIRST_PROFIT_COMM")==null?"":tempMap.get("FIRST_PROFIT_COMM").toString());
 		               bean.setScprofitMont(tempMap.get("FPC_DURATION_TYPE")==null?"":tempMap.get("FPC_DURATION_TYPE").toString());
 		               bean.setScsubpc(tempMap.get("SUB__PROFIT_COMM")==null?"":tempMap.get("SUB__PROFIT_COMM").toString());
 		               bean.setScsubProfitMonth(tempMap.get("SPC_DURATION_TYPE")==null?"":tempMap.get("SPC_DURATION_TYPE").toString());
-		               bean.setSubSeqCalculation(tempMap.get("SUB_SEC_CAL")==null?"":tempMap.get("SUB_SEC_CAL").toString());
+		               bean.setScsubSeqCalculation(tempMap.get("SUB_SEC_CAL")==null?"":tempMap.get("SUB_SEC_CAL").toString());
+		               bean.setFpcType(tempMap.get("FPC_TYPE")==null?"":tempMap.get("FPC_TYPE").toString());
+		               bean.setFpcfixedDate(tempMap.get("FPC_FIXED_DATE")==null?"":tempMap.get("FPC_FIXED_DATE").toString());
 				}
 	               bean.setScaleSNo(bonusSno);
 	               bean.setScaleFrom(bonusFrom);
 	               bean.setScaleTo(bonusTo);
 	               bean.setScaleLowClaimBonus(bonusLowClaimBonus);
-	           
+	               bean.setScalemaxpartpercent(scalemaxpartpercent);
+	           GetSlidingScaleMethodInfo(bean);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private void GetSlidingScaleMethodInfo(RiskDetailsBean bean) {
+		 Object args[]=null;
+			List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+			String query="";
+		try {
+			args = new Object[4];
+			args[0] = bean.getProposal_no();
+			args[1] = bean.getBranchCode();
+			args[2] ="SSC";
+			args[3] ="SSC1";
+			
+				query =getQuery("SELECT_SLIDING_SCALE_METHOD_INFO");
+				result = this.mytemplate.queryForList(query,args);
+				if(CollectionUtils.isEmpty(result)) {
+					args[0] = bean.getReferenceNo();
+					query =getQuery("SELECT_SLIDING_SCALE_METHOD_INFO_REF");
+					result = this.mytemplate.queryForList(query,args);
+				}
+				//}
+			for(int i=0;i<result.size();i++){
+			       Map<String,Object> tempMap = result.get(i);
+
+			       bean.setProvisionCom(tempMap.get("PROVISIONAL_COMMISIION")==null?"":tempMap.get("PROVISIONAL_COMMISIION").toString());
+	               bean.setScalementhod(tempMap.get("SC_METHOD_TYPE")==null?"":tempMap.get("SC_METHOD_TYPE").toString());
+	               bean.setScaleminRatio(tempMap.get("SC_MIN_LOSS_RATIO")==null?"":tempMap.get("SC_MIN_LOSS_RATIO").toString());
+	               bean.setScalemaxRatio(tempMap.get("SC_MAX_LOSS_RATIO")==null?"":tempMap.get("SC_MAX_LOSS_RATIO").toString());
+	               bean.setScalecombine(tempMap.get("SC_COMBINE_LOSS_RATIO")==null?"":tempMap.get("SC_COMBINE_LOSS_RATIO").toString());
+	               bean.setScalebanding(tempMap.get("SC_BANDING_STEP")==null?"":tempMap.get("SC_BANDING_STEP").toString());
+	               bean.setScaledigit(tempMap.get("SC_NO_OF_DIGIT")==null?"":tempMap.get("SC_NO_OF_DIGIT").toString());
+	               bean.setScalelossratioFrom(tempMap.get("LCB_FROM")==null?"":tempMap.get("LCB_FROM").toString());
+	               bean.setScalelossratioTo(tempMap.get("LCB_TO")==null?"":tempMap.get("LCB_TO").toString());
+	               bean.setScaledeltalossratio(tempMap.get("DELTA_LOSS_RATIO")==null?"":tempMap.get("DELTA_LOSS_RATIO").toString());
+	               bean.setScaledeltacommission(tempMap.get("LCB_PERCENTAGE")==null?"":tempMap.get("LCB_PERCENTAGE").toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String ScaleCommissionInsert(RiskDetailsBean bean) {
@@ -4017,25 +4086,35 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
         	referenceNo=this.mytemplate.queryForObject(query, String.class);
         	bean.setReferenceNo(referenceNo);
         }
+       
         String query =getQuery("BONUS_MAIN_INSERT_PTTY");
-		Object args[]=new Object[22];
+		Object args[]=new Object[25];
 		for(int i=0;i<bean.getScaleFrom().size();i++){
-			if(StringUtils.isNotBlank(bean.getScaleFrom().get(i)) && StringUtils.isNotBlank(bean.getScaleTo().get(i)) &&StringUtils.isNotBlank(bean.getScaleLowClaimBonus().get(i)) ){
+			if("MB".equals(bean.getScalementhod()) || (StringUtils.isNotBlank(bean.getScaleFrom().get(i)) && StringUtils.isNotBlank(bean.getScaleTo().get(i)) &&StringUtils.isNotBlank(bean.getScaleLowClaimBonus().get(i)) )){
 		           args[0] =bean.getProposal_no();
 		           args[1] = bean.getContractNo();
 		           args[2] = bean.getProduct_id();
 		           if("scale".equalsIgnoreCase(bean.getPageFor())){
-		        	   args[3] = "";
+		        	   args[3] = "SSC2";
 		           }
 		           else{
 		        	   args[3] = bean.getBonusTypeId();  
 		           }
+		           if(!"MB".equals(bean.getScalementhod())) {
+		           args[9] = bean.getScaleSNo().get(i).replace(",", "");
 		           args[4] = bean.getScaleFrom().get(i).replace(",", "");
 		           args[5] = bean.getScaleTo().get(i).replace(",", "");
 		           args[6] =bean.getScaleLowClaimBonus().get(i).replace(",", "");
+		           }else {
+		        	   args[9] = "";
+			           args[4] = "";
+			           args[5] = "";
+			           args[6] ="";
+		           }
+		        	   
 		           args[7] = bean.getLoginId();
 		           args[8] = bean.getBranchCode();
-		           args[9] = bean.getScaleSNo().get(i).replace(",", "");
+		         
 		           if("scale".equalsIgnoreCase(bean.getPageFor())){
 		        	   args[10] ="SSC";
 		           }
@@ -4058,13 +4137,72 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		           args[19] =StringUtils.isEmpty(bean.getScsubProfitMonth()) ? "" :bean.getScsubProfitMonth();
 		           args[20] =StringUtils.isEmpty(bean.getScsubSeqCalculation()) ? "" :bean.getScsubSeqCalculation();
 		           args[21]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
+		           if("scale".equalsIgnoreCase(bean.getPageFor())){
+		        	   args[22]="";
+		           }
+		           else{
+		        	   args[22] =bean.getScalemaxpartpercent().get(i); 
+		           }
+		           args[23] =bean.getFpcType();
+		           args[24] =bean.getFpcfixedDate();
 		           logger.info("Query=>"+query);
 		           logger.info("Args=>"+StringUtils.join(args, ","));
 				   this.mytemplate.update(query,args);
+				   if("MB".equals(bean.getScalementhod())) {
+					   break;
+				   }
 				}
-			
-	}
+	
+        }
+		 if("scale".equalsIgnoreCase(bean.getPageFor())){
+			  InsertSlidingScaleMentodInfo(bean);
+		  }
 		
+	}
+	
+	
+	private void InsertSlidingScaleMentodInfo(RiskDetailsBean bean) {
+		try {
+			 String query =getQuery("INSERT_SC_METHOD_INFO");
+			 Object args[]=new Object[23];
+			   args[0] =bean.getProposal_no();
+	           args[1] = bean.getContractNo();
+	           args[2] = bean.getProduct_id();
+	           args[3] = "SSC1";  
+	           args[4] = bean.getProvisionCom();
+	           args[5] = bean.getScalementhod();
+	           args[6] = bean.getScaleminRatio();
+	           args[7] = bean.getScalemaxRatio();
+	           args[8] = bean.getScalecombine();
+	           args[9] = bean.getScalebanding();
+	           args[10] = bean.getScaledigit();
+	           args[11] = bean.getLoginId();
+	           args[12] = bean.getBranchCode();
+	           args[13] ="SSC";
+	           args[14] = bean.getAmendId();
+	           args[15] = bean.getDepartmentId();
+	           args[16] = StringUtils.isEmpty(bean.getLayerNo()) ? "0" : bean.getLayerNo();
+	           args[17]="";
+	           args[18]=StringUtils.isBlank(bean.getReferenceNo())?"":bean.getReferenceNo();
+	           if("MB".equals(bean.getScalementhod())) {
+	        	   args[19]=bean.getScalelossratioFrom();
+	        	   args[20]=bean.getScalelossratioTo();
+	        	   args[21]=bean.getScaledeltalossratio();
+	        	   args[22]=bean.getScaledeltacommission();
+	        	   
+	           }else {
+	        	   args[19]="";
+	        	   args[20]="";
+	        	   args[21]="";
+	        	   args[22]="";
+	           }
+	           logger.info("Query=>"+query);
+	           logger.info("Args=>"+StringUtils.join(args, ","));
+			   this.mytemplate.update(query,args);
+			 
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void deleteMaintable(RiskDetailsBean bean) {
@@ -4845,6 +4983,79 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		}
 		return code;
 		
+	}
+
+	@Override
+	public void getcalculateSC(RiskDetailsBean bean) {
+        List<String> bonusFrom = new ArrayList<String>();
+        List<String> bonusTo = new ArrayList<String>();
+        List<String> bonusLowClaimBonus = new ArrayList<String>();
+        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		try {
+			int j=0;
+			double bandToprevious=0;
+			String bandToNext="";
+			//bean.setScaleminRatio("40");
+			//bean.setScalemaxRatio("60");
+			//bean.setScalebanding("5");
+			//bean.setScalecombine("61");
+			//bean.setScaledigit("4");
+				String bandFrom="0",bandTo="",slidingScaleCom="";
+				int a=Integer.parseInt(bean.getScaleminRatio());int b=Integer.parseInt(bean.getScalemaxRatio());int c=Integer.parseInt(bean.getScalebanding()),d=Integer.parseInt(bean.getScaledigit()),e=Integer.parseInt(bean.getScalecombine()),f=999;
+				bonusFrom.add(bandFrom);
+				bonusTo.add(bean.getScaleminRatio());
+				bonusLowClaimBonus.add(String.valueOf((e-(a+0))));
+				Map<String,Object> string = new HashMap<String,Object>();
+				string.put("1","1");
+				list.add(string);
+				j++;
+			for(int i=a;i<=b;i+=c) {
+				if(j==1) {
+					bandToprevious=a;
+					bandToNext=String.valueOf(((i+c)));	
+					
+				}else {
+					bandToprevious=Double.parseDouble(bandTo);
+					bandToNext=String.valueOf(((Double.parseDouble(bandTo)+c)));	
+				}
+				
+				if(bandTo.equals(DropDownControllor.formattereight(String.valueOf(f)))) {
+					bandFrom="";
+				}else {
+					bandFrom=String.valueOf((bandToprevious)+(1/Math.pow(10, d)));
+					System.out.println(j+"A==>"+DropDownControllor.formattereight(bandFrom));
+				}
+				
+				
+				if(((Double.parseDouble(bandToNext)))>b) {
+					bandTo=DropDownControllor.formattereight(String.valueOf(f));
+					
+				}else {
+					bandTo=DropDownControllor.formattereight(bandToNext);
+				}
+				System.out.println(j+"B==>"+bandTo);
+				if(e<(i+c)) {
+					slidingScaleCom=String.valueOf((e-b));
+				}else {
+					slidingScaleCom=String.valueOf((e-((i+c))));
+				}
+				System.out.println(j+"C==>"+slidingScaleCom);
+				bonusFrom.add(bandFrom);
+				bonusTo.add(bandTo);
+				bonusLowClaimBonus.add(slidingScaleCom);
+				string = new HashMap<String,Object>();
+				string.put("1","1");
+				list.add(string);
+				j++;
+			}
+			
+			bean.setScaleFrom(bonusFrom);
+			bean.setScaleTo(bonusTo);
+			bean.setScaleLowClaimBonus(bonusLowClaimBonus);
+			bean.setScaleCommissionList(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

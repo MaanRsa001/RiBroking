@@ -56,6 +56,13 @@ gap:20px;
 		dateFormat : "dd/mm/yy"
 		//yearRange: "-100:+0"
 	});
+	$( "#periodDate" ).datepicker({
+		changeMonth : true,
+		changeYear : true,
+		dateFormat : "dd/mm/yy"
+		//yearRange: "-100:+0"
+	});
+	
   });
   </script>
 	</head>
@@ -963,10 +970,10 @@ gap:20px;
 																					<div class="tbox">	
 																						<div class="reinsstyle">												
 																						<div><s:radio name="share_Profit_Commission" list="#{'1':'Yes','2':'No'}" value="share_Profit_Commission==null ||share_Profit_Commission==''?'2':share_Profit_Commission" onclick="ShareProfitCommission(this.value)" disabled='%{"Y".equals(disableStatus1)?true:false}'/></div>
-																						<div id="pc" style="display:none"><button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal2" >
+																						<%-- <div id="pc" style="display:none"><button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal2" >
 																					 			     <s:text name="label.enterDetails" />
 																					 		</button>
-																					 		</div>	
+																					 		</div>	 --%>
 																					 	</div>												
 																																			
 																					</div>
@@ -976,16 +983,8 @@ gap:20px;
 																	</div>
 																</div>
 															</div>
-															<div id="companyModal2" class="modal fade" role="dialog">
-																  <div class="modal-dialog modal-lg">
-																    <!-- Modal content-->
-																    <div class="modal-content">
-																      <div class="modal-header">
-																        <button type="button" class="close" data-dismiss="modal">&times;</button>
-																      </div>
-																      <div class="modal-body" >
-																        <div class="container-fluid" id="companyAjaxId2">
-																        	<div class="boxcontent">
+															
+															<div class="boxcontent" id="pc">
 																			<div class="panel panel-primary">											
 																				<div class="panel-heading">
 																					<s:text name="Profit Commission"></s:text>
@@ -1005,7 +1004,7 @@ gap:20px;
 																								<s:text name="label.comtype" /> 
 																							</div>
 																							<div class="tbox">												
-																							<s:select  list="commissionTypeList"  name="commissionType" id="commissionType" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getCommissionField(this.value);getpopupenable()"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>
+																							<s:select  list="commissionTypeList"  name="commissionType" id="commissionType" cssClass="select1 inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getCommissionField(this.value);getpopupenable()"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>
 																							</div>
 																						</div>
 																						<div class="textfield" id="supcom" style="display:none;">
@@ -1017,10 +1016,11 @@ gap:20px;
 																									<div  id="compoptype" style="display:none;">
 																										<s:if test='"Y"==profitCommissionEnable || "Y".equals(disableStatus1)'>
 																											&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-info btn-rounded btn-xs" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="baseLayer"/>')"><s:text name="label.viewDetails" /></a>
-																											<%-- <a href="#" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="baseLayer"/>')"><s:text name="label.enterDetails" /></a>--%><br/>	
 																										</s:if>
 																										<s:else>
-																											&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="layerProposalNo"/>')"><s:text name="label.enterDetails" /></a><br/>	
+																										<button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal1" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="layerProposalNo"/>')">
+																								 			     <s:text name="label.enterDetails" />
+																								 		</button>
 																										</s:else>
 																									</div>		
 																							</div>
@@ -1053,7 +1053,7 @@ gap:20px;
 																								<s:text name="label.lossCarFordType" /> 
 																							</div>
 																							<div class="tbox">												
-																							<s:select  list="typeYearListVar"  name="lossCarried" id="lossCarried" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getLossYear(this.value)"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																							<s:select  list="typeYearListVar"  name="lossCarried" id="lossCarried" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getLossYear(this.value)"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
 																							</div>
 																						</div>
 																						<div class="textfield" >
@@ -1071,7 +1071,7 @@ gap:20px;
 																								<s:text name="label.profitCarFordType" /> 
 																							</div>
 																							<div class="tbox">												
-																							<s:select  list="typeYearListVar"  name="profitCarried" id="profitCarried" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getProfitYear(this.value)"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																							<s:select  list="typeYearListVar"  name="profitCarried" id="profitCarried" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getProfitYear(this.value)"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
 																							</div>
 																						</div>
 																						<div class="textfield" >
@@ -1084,7 +1084,16 @@ gap:20px;
 																								</div>
 																							</div>
 																						</div>
+																						
 																						<div class="textfield">
+																							<div class="text">
+																								<s:text name="label.fpcType" />
+																							</div>
+																							<div class="tbox">
+																									<s:select  list="slidingScalePeriodList"  name="pcfpcType" id="pcfpcType" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="TYPE"  listValue="DETAIL_NAME"   onchange="getPcscalePeriod(this.value);"/>
+																							</div>
+																						</div>
+																						<div class="textfield" id="pcscfiid">
 																							<div class="text">
 																								<s:text name="label.firstprofitcom" />
 																							</div>
@@ -1092,14 +1101,32 @@ gap:20px;
 																									<s:textfield name="fistpc" id="fistpc"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
 																							</div>
 																						</div>	
-																						<div class="textfield" >
+																						<div class="textfield" id="pcperiodid" style="display:none">
+																							<div class="text">
+																								<s:text name="label.fpcfixedDate" />
+																							</div>
+																							<div class="tbox">
+																									<s:textfield name="pcfixedDate" id="periodDate"  cssClass="inputBox"  />
+																							</div>
+																						</div>
+																						
+																						<div class="textfield" id="pcscseid">
 																							<div class="text">
 																								<s:text name="label.period" />
 																							</div>
 																							<div class="tbox">
-																									<s:select  list="profitCommissionListVar"  name="profitMont" id="profitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																									<s:select  list="profitCommissionListVar"  name="profitMont" id="profitMont" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
 																							</div>
 																						</div>	
+																						<div class="textfield" >
+																							<div class="text">
+																								<s:text name="label.subseqcal" />
+																							</div>
+																							<div class="tbox">
+																								<s:radio list="#{'Y':'Yes','N':'No'}" name="subSeqCalculation" value="subSeqCalculation==null || subSeqCalculation==''?'N':subSeqCalculation"   disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false' onchange="getSubseqCal(this.value)"></s:radio><br/>	
+																							</div>
+																						</div>
+																						<div id="subseqcalid">
 																						<div class="textfield" >
 																							<div class="text">
 																								<s:text name="label.subprofitcom" />
@@ -1113,16 +1140,9 @@ gap:20px;
 																								<s:text name="label.period" />
 																							</div>
 																							<div class="tbox">
-																									<s:select  list="profitCommissionListVar"  name="subProfitMonth" id="subProfitMonth" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false' /><br/>
+																									<s:select  list="profitCommissionListVar"  name="subProfitMonth" id="subProfitMonth" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false' /><br/>
 																							</div>
 																						</div>	
-																						<div class="textfield" >
-																							<div class="text">
-																								<s:text name="label.subseqcal" />
-																							</div>
-																							<div class="tbox">
-																								<s:radio list="#{'Y':'Yes','N':'No'}" name="subSeqCalculation" value="subSeqCalculation==null || subSeqCalculation==''?'N':subSeqCalculation"   disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'></s:radio><br/>	
-																							</div>
 																						</div>	
 																						<div class="textfield" >
 																							<div class="text">
@@ -1135,7 +1155,7 @@ gap:20px;
 																								<s:text name="label.notes" />
 																							</div>
 																							<div class="tbox">
-																									<s:textarea rows="3" name="profitCommission" id="profitCommission" cssClass="inputBoxA" cssStyle="width: 90%;" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																									<s:textarea rows="2" name="profitCommission" id="profitCommission" cssClass="inputBoxA" cssStyle="width: 90%;" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
 																								<br/>
 																							</div>
 																						</div>
@@ -1144,13 +1164,19 @@ gap:20px;
 																													
 																							
 																					</div>
-																					<br class="clear"/>
-																							<div class="boxcontent" align="center">
-																									<input type="button" value="Submit" data-dismiss="modal" class="btn btn-sm btn-success" />
-																									<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-																							</div>	
+																					
 																				</div>
 																			</div>
+															<div id="companyModal2" class="modal fade" role="dialog">
+																  <div class="modal-dialog modal-lg">
+																    <!-- Modal content-->
+																    <div class="modal-content">
+																      <div class="modal-header">
+																        <button type="button" class="close" data-dismiss="modal">&times;</button>
+																      </div>
+																      <div class="modal-body" >
+																        <div class="container-fluid" id="companyAjaxId2">
+																        	
 																        </div>
 																      </div>
 																    </div>
@@ -2704,6 +2730,15 @@ function getLossYear(id){
 		document.getElementById('lossyear').style.display = 'none';
      }
 }
+getProfitYear('<s:property value="profitCarried"/>');
+function getProfitYear(id){
+		if(id!="TE"){
+     		document.getElementById('profityear').style.display = 'block';
+       		} 
+       	else{
+			document.getElementById('profityear').style.display = 'none';
+     		  }
+}
 //DocScript('<s:property value="docStatus"/>');
 function DocScript(id){
     var amendId = document.proportional.amendId.value;
@@ -2752,9 +2787,25 @@ function getPopUpDetails(pageFor,contractNo,endorsmentno,proposalNo,flag,renewal
 	 }else if("profitCommission"==pageFor){
 	  document.getElementById("profitPopUp").value = "Y";
 	 }
+	 $.ajax({
+	        type: "POST",
+	        url: "${pageContext.request.contextPath}/viewScaleCommissionPopUpRiskDetails.action?pageFor="+pageFor+"&proposal_no="+proposalNo+"&amendId="+endorsmentno+"&contractNo="+contractNo+"&flag="+flag+"&layerProposalNo="+renewalProposalNo+"&commissionType="+type+"&treatyType="+treatyType+"&referenceNo="+referenceNo,
+	        //data:'src_type_id='+val,
+	        success: function(data){
+	            $('#companyAjaxId1').html(data);
+	           
+	    			$( "#periodDate" ).datepicker({
+	    				changeMonth : true,
+	    				changeYear : true,
+	    				dateFormat : "dd/mm/yy"
+	    				//yearRange: "-100:+0"
+	    			});
+	    		
+	        }
+	        });
+	//var URL ="${pageContext.request.contextPath}/viewScaleCommissionPopUpRiskDetails.action?pageFor="+pageFor+"&proposal_no="+proposalNo+"&amendId="+endorsmentno+"&contractNo="+contractNo+"&flag="+flag+"&layerProposalNo="+renewalProposalNo+"&commissionType="+type+"&treatyType="+treatyType+"&referenceNo="+referenceNo;
+	//postRequest(URL, 'companyAjaxId1');	
 	
-	var URL ="${pageContext.request.contextPath}/viewScaleCommissionPopUpRiskDetails.action?pageFor="+pageFor+"&proposal_no="+proposalNo+"&amendId="+endorsmentno+"&contractNo="+contractNo+"&flag="+flag+"&layerProposalNo="+renewalProposalNo+"&commissionType="+type+"&treatyType="+treatyType+"&referenceNo="+referenceNo;
-	postRequest(URL, 'companyAjaxId1');	
 }
 function CalculateValue() {
 	var ouracqCost =0;
@@ -2939,6 +2990,12 @@ function scaleremoveRow(val){
 			}
 		}
 }
+function scalecalculate(){
+	var scale=document.getElementById("pageFor").value;
+postFormRequest("${pageContext.request.contextPath}/calculateSCRiskDetails.action?dropDown="+scale, "companyAjaxId1", "proportional");
+			
+}
+
 function scaleinsRow(tableID)
 {
 	var table = document.getElementById(tableID);
@@ -2992,13 +3049,24 @@ function scaleinsRow(tableID)
 			cell4.appendChild(element4);
 			
 			var cell5 = row.insertCell(4);
+			//cell4.setAttribute('style','background-color:#C6E2FF;');
 			var element5 = document.createElement("input");
-			element5.type = "button";
-			element5.value="Delete";
-			//element5.setAttribute("onclick", "deleteRow('bonusTbl','"+(rowCount)+"')");
-			element5.setAttribute("onclick", "scaleremoveRow('"+(rowCount-1)+"')");
-			element5.className="btn btn-sm btn-info"
+			element5.type = "text";
+			element5.name = "scalemaxpartpercent["+(rowCount-1)+"]";
+      		element5.id = "scalemaxpartpercent["+(rowCount-1)+"]";
+			element5.className = "inputBox";
+			element5.setAttribute("style", "text-align:right;");
+			element5.setAttribute("onkeyup", "allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)");
 			cell5.appendChild(element5);
+			
+			var cell6 = row.insertCell(5);
+			var element6 = document.createElement("input");
+			element6.type = "button";
+			element6.value="Delete";
+			//element5.setAttribute("onclick", "deleteRow('bonusTbl','"+(rowCount)+"')");
+			element6.setAttribute("onclick", "scaleremoveRow('"+(rowCount-1)+"')");
+			element6.className="btn btn-sm btn-info"
+			cell6.appendChild(element6);
 			 document.getElementById("loopcount").value =parseInt(rowCount);
 			// }
 }
@@ -3056,6 +3124,160 @@ if ($("#bouquetModeYNY").prop("checked")) {
 $('.select1').select2({ });
 </s:if>
 
+function getMethod(val){
+	if (val=='MA') {
+         document.getElementById('methodida').style.display = 'block';
+         document.getElementById('methodidb').style.display = 'none';
+         document.getElementById('scalegrid').style.display = 'block';
+         
+     }
+     else {
+    	 document.getElementById('methodida').style.display = 'none';
+         document.getElementById('methodidb').style.display = 'block';
+         document.getElementById('scalegrid').style.display = 'none';
+     }
+    
+}
+<s:if test='subSeqCalculation!=null && !"".equals(subSeqCalculation)'>
+getSubseqCal('<s:property value="subSeqCalculation"/>')
+</s:if>
+function getSubseqCal(val){
+	if (val=='Y') {
+         document.getElementById('subseqcalid').style.display = 'none';
+     }
+     else {
+         document.getElementById('subseqcalid').style.display = 'block';
+     }
+    
+}
+function getScSubseqCal(val){
+	if (val=='Y') {
+         document.getElementById('scsubseqcalid').style.display = 'none';
+     }
+     else {
+         document.getElementById('scsubseqcalid').style.display = 'block';
+     }
+    
+}
+function getscalePeriod(val){
+	if (val=='P') {
+         document.getElementById('scfiid').style.display = 'block';
+         document.getElementById('periodid').style.display = 'none';
+         document.getElementById('scseid').style.display = 'block';
+     }
+     else {
+         document.getElementById('periodid').style.display = 'block';
+         document.getElementById('scfiid').style.display = 'none';
+         document.getElementById('scseid').style.display = 'none';
+     }
+    
+}
+<s:if test='pcfpcType!=null && !"".equals(pcfpcType)'>
+getPcscalePeriod('<s:property value="pcfpcType"/>')
+</s:if>
+
+function getPcscalePeriod(val){
+	if (val=='P') {
+         document.getElementById('pcscfiid').style.display = 'block';
+         document.getElementById('pcperiodid').style.display = 'none';
+         document.getElementById('pcscseid').style.display = 'block';
+     }
+     else {
+         document.getElementById('pcperiodid').style.display = 'block';
+         document.getElementById('pcscfiid').style.display = 'none';
+         document.getElementById('pcscseid').style.display = 'none';
+     }
+    
+}
+function getLossRatio(val){
+	var header=document.getElementById(val).value;
+	$("#claimrfid").html(header);
+	$("#claimrtid").html(header);
+	$("#lossparid").html(header);
+	$("#lossparmaxid").html(header);
+//	$("#claimrfid").html(header);
+	
+    
+}
+
+function fnSubmitPC(){
+	postFormRequest('${pageContext.request.contextPath}/insProfieCommissionRiskDetails.action', "companyAjaxId1", "proportional");
+}
+function commissionremoveRow(val){
+	var scale=document.getElementById("pageFor").value;
+	if(val==0){
+		alert("First row can't be deleted");
+	}
+	else{
+		var status=confirm("Do you want to delete specified row");
+		if(status){
+			postFormRequest("${pageContext.request.contextPath}/removeRowRiskDetails.action?mode=delete&deleteId="+val+"&dropDown="+scale, "tb2", "proportional");
+			}
+		}
+}
+function commissioninsRow(tableID)
+{
+	var table = document.getElementById(tableID);
+
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+			
+			var cell1 = row.insertCell(0)
+			var element1 = document.createElement("input");
+			element1.type = "text";
+      	 	element1.name = "commissionSNo["+(rowCount-1)+"]";
+       		element1.id = "commissionSNo["+(rowCount-1)+"]";
+ 			element1.value = rowCount;
+ 			element1.className = "inputBox";
+ 			//element1.innerHTML = rowCount;
+			element1.setAttribute("readonly",true);
+       		cell1.appendChild(element1);
+       		
+			
+			var cell2 = row.insertCell(1);
+			//cell2.setAttribute('style','background-color:#C6E2FF;');
+			var element2 = document.createElement("input");
+			element2.type = "text";
+			element2.name = "commissionFrom["+(rowCount-1)+"]";
+      		element2.id = "commissionFrom["+(rowCount-1)+"]";
+			element2.className = "inputBox";
+			element2.setAttribute("style", "text-align:right;");
+			element2.setAttribute("onkeyup", "allow2DigitDecValues(this);javascript:this.value=Comma(this.value)");
+			cell2.appendChild(element2);
+			
+			var cell3 = row.insertCell(2);
+			//cell3.setAttribute('style','background-color:#C6E2FF;');
+			var element3 = document.createElement("input");
+			element3.type = "text";
+			element3.name = "commissionTo["+(rowCount-1)+"]";
+      		element3.id = "commissionTo["+(rowCount-1)+"]";
+			element3.className = "inputBox";
+			element3.setAttribute("style", "text-align:right;");
+			element3.setAttribute("onkeyup", "allow2DigitDecValues(this);javascript:this.value=Comma(this.value)");
+			cell3.appendChild(element3);
+			
+			var cell4 = row.insertCell(3);
+			//cell4.setAttribute('style','background-color:#C6E2FF;');
+			var element4 = document.createElement("input");
+			element4.type = "text";
+			element4.name = "commissionPer["+(rowCount-1)+"]";
+      		element4.id = "commissionPer["+(rowCount-1)+"]";
+			element4.className = "inputBox";
+			element4.setAttribute("style", "text-align:right;");
+			element4.setAttribute("onkeyup", "allow2DigitDecValues(this);javascript:this.value=Comma(this.value)");
+			cell4.appendChild(element4);
+			
+			var cell5 = row.insertCell(4);
+			var element5 = document.createElement("input");
+			element5.type = "button";
+			element5.value="Delete";
+			//element5.setAttribute("onclick", "deleteRow('bonusTbl','"+(rowCount)+"')");
+			element5.setAttribute("onclick", "commissionremoveRow('"+(rowCount-1)+"')");
+			element5.className="btn btn-sm btn-info"
+			cell5.appendChild(element5);
+			 document.getElementById("loopcount").value =parseInt(rowCount);
+			// }
+}
 </script>
 	</body>
 </html>

@@ -48,7 +48,10 @@ body {
 	float:left;
 	width: 75%;
 }
-
+.textfieldA100 {
+	float:left;
+	width: 100%;
+}
 .text
 {				
 	float: left;
@@ -61,7 +64,11 @@ body {
 	float: left;
 	width: 50%;					
 }
-
+.tbox25
+{
+	float: left;
+	width: 25%;					
+}
 .tboxA
 {
 	float: left;

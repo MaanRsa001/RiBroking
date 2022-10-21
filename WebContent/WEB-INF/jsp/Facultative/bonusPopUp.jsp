@@ -17,6 +17,7 @@
 		.button5 {background-color: #555555;} /* Black */
 </style>
 </head>
+
 <body>
 <s:if test="'scale'.equals(pageFor)">
 <s:set name="profitCommissionListVar" value="profitCommissionList"/>
@@ -164,7 +165,7 @@
 						<s:if test='"1".equals(treatyType) || "2".equals(treatyType)||"3".equals(treatyType)'>
 						<div class="panel panel-primary">
 	                    	<div class="panel-body">
-									<div class="textfield">
+								<div class="textfield">
 									<div class="text">
 										<s:text name="label.quotaShare" />
 									</div>
@@ -175,9 +176,114 @@
 							</div>
 	                    </div>
 	                    </s:if>
-						<div class="panel panel-primary">
+	                    <div class="panel panel-primary">
 	                    	<div class="panel-body">
-	                    	<div id="tb1">
+								<div class="textfield">
+									<div class="text">
+										<s:text name="label.provisionCom" />
+									</div>
+									<div class="tbox">
+										<s:textfield name="provisionCom" id="provisionCom" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+									</div>
+								</div>
+								<div class="textfield">
+									<div class="text">
+										<s:text name="label.scalementhod" />
+									</div>
+									<div class="tbox">
+										<s:select  list="slidingScaleMethodList"  name="scalementhod" id="scalementhod" cssClass="inputBox"   headerKey="" headerValue="---Select---" listValue="DETAIL_NAME"  listKey="TYPE"  onchange="getMethod(this.value);"/>
+									</div>
+								</div>
+								</div>
+								</div>
+								<div class="panel panel-primary">
+	                    		<div class="panel-body">	
+								<div id="methodida">
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scalemin" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scaleminRatio" id="scaleminRatio" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scalemax" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scalemaxRatio" id="scalemaxRatio" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scalecombine" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scalecombine" id="scalecombine" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scalebanding" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scalebanding" id="scalebanding" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scaledigit" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scaledigit" id="scaledigit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>	
+								</div> 
+								<div id="methodidb" style="display:none">
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scalelossratioFrom" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scalelossratioFrom" id="scalelossratioFrom" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scalelossratioTo" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scalelossratioTo" id="scalelossratioTo" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scaledeltalossratio" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scaledeltalossratio" id="scaledeltalossratio" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+									<div class="textfield">
+										<div class="text">
+											<s:text name="label.scaledeltacommission" />
+										</div>
+										<div class="tbox">
+											<s:textfield name="scaledeltacommission" id="scaledeltacommission" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										</div>
+									</div>
+								</div>                    	
+							</div>
+							<div class="boxcontent" align="center">
+								<input type="button"  value="Calculate"  class="btn btn-sm btn-primary" onclick="scalecalculate();" /><s:property value="scaleCommissionListVar.size()"/>
+							</div>
+							<br/>
+	                    </div>
+	                    <s:if test="scaleCommissionList!=null">
+						<div class="panel panel-primary"  id="scalegrid">
+	                    	<div class="panel-body">
+	                    	<div id="tb1" >
 							<table class="table table-bordered" id="bonusTbl" width="100%" >										
 								<thead>
 									<tr>
@@ -185,11 +291,11 @@
 										<th width="30%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Ratio From"/> </th>
 										<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Ratio To "/> </th>
 										<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Sliding Scale Commission %" /> </th>
-										<th width="8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
+										<%-- <th width="8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th> --%>
 									</tr>
 								</thead>
 									<tbody>
-									<s:iterator value="scaleCommissionListVar" var="list" status="stat">
+									<s:iterator value="scaleCommissionList" var="list" status="stat">
 										<tr>
 											<td>
 						 					<s:textfield name="scaleSNo[%{#stat.count-1}]" id="scaleSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/> 
@@ -203,20 +309,20 @@
 											<td >
 											<s:textfield name="scaleLowClaimBonus[%{#stat.count-1}]" id="scaleLowClaimBonus[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="26" theme="simple"/>
 											</td>
-											<td>
+											<%-- <td>
 											<s:if test='0!=(#stat.count-1)'>
 											<INPUT type="button" value="Delete" class="btn btn-sm btn-info"   onclick="scaleremoveRow('<s:property value="%{#stat.count-1}"/>')" />
 											</s:if>
-											</td>
+											</td> --%>
 										</tr>
 									</s:iterator>
 									</tbody>
 							</table>
 							</div>
 					
-					<div class="boxcontent" align="right">
+					<!-- <div class="boxcontent" align="right">
 						<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="scaleinsRow('bonusTbl');" />
-					</div>
+					</div> -->
 					
 					<div class="boxcontent" align="left">
 					<b>Note :</b> Please enter the slabs in ascending order
@@ -235,19 +341,37 @@
 					</div>
 					</div>
 					</div>
+					</s:if>
 					<div class="panel panel-primary">
 					<div class="panel-body">
 					
-						<div class="textfield">
-							<div class="text">
+						<div class=textfieldA100>
+							<div class="text" style="float: left;width: 25%;">
 								<s:text name="label.firstslideprofitcom" />
 							</div>
-							<div class="tbox">
-									<s:textfield name="scfistpc" id="scfistpc"  cssClass="inputBox" cssStyle="text-align: right;width: 45%; float:left;" onkeyup="middleMinusRestriction(this);checkNumbers(this);"  />
-							<s:select  list="profitCommissionListVar"  name="scprofitMont" id="scprofitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 45%; float:left;"/>
+							<div style="float: left;width: 75%;">
+							<s:select  list="slidingScalePeriodList"  name="fpcType" id="fpcType" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="TYPE"  listValue="DETAIL_NAME"   cssStyle="width: 33.3%; float:left;" onchange="getscalePeriod(this.value);"/>
+							<div id="scfiid" >
+							<s:textfield name="scfistpc" id="scfistpc"  cssClass="inputBox" cssStyle="text-align: right;width: 33.3%; float:left;" onkeyup="middleMinusRestriction(this);checkNumbers(this);"  />
 							</div>
-						</div>	
+							<div id="periodid" style="display:none"> 
+							<s:textfield name="fpcfixedDate" id="periodDate"  cssClass="inputBox" cssStyle="width: 33.3%; float:left;"   />
+							</div>
+							<div id="scseid" >
+							<s:select  list="profitCommissionListVar"  name="scprofitMont" id="scprofitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 33.3%; float:right;"/>
+							</div>
+							</div>
+						</div>
+						<br/>	
 						<div class="textfield" >
+							<div class="text">
+								<s:text name="label.subseqcal" />
+							</div>
+							<div class="tbox">
+								<s:radio list="#{'Y':'Yes','N':'No'}" name="scsubSeqCalculation" value="scsubSeqCalculation==null || scsubSeqCalculation==''?'N':scsubSeqCalculation" onchange="getScSubseqCal(this.value);" ></s:radio><br/>	
+							</div>
+						</div>
+						<div class="textfield"  id="scsubseqcalid">
 							<div class="text">
 								<s:text name="label.subpsliderofitcom" />
 							</div>
@@ -256,14 +380,7 @@
 									<s:select  list="profitCommissionListVar"  name="scsubProfitMonth" id="scsubProfitMonth" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 45%; float:left;"/>
 							</div>
 						</div>
-						<div class="textfield" >
-							<div class="text">
-								<s:text name="label.subseqcal" />
-							</div>
-							<div class="tbox">
-								<s:radio list="#{'Y':'Yes','N':'No'}" name="scsubSeqCalculation" value="scsubSeqCalculation==null || scsubSeqCalculation==''?'N':scsubSeqCalculation"  ></s:radio><br/>	
-							</div>
-						</div>	
+							
 						</div>
 					</div>
 					<div class="boxcontent" align="center">
@@ -326,7 +443,7 @@
 	                    <div class="panel-body">
 		                   <div>
 								<div class="text" style="width: 20%">
-									<s:text name="Type" />
+									<s:text name="Ratio Type" />
 								</div>
 								<div class="tbox" style="width: 80%">
 									<s:radio name="bonusTypeId" id="bonusTypeId" list="#{'LC':'Loss Corridor','LP':'Loss Participation '}"  disabled="true" />													
@@ -430,10 +547,13 @@
                    	 <div class="panel-body">
 		                    <div>
 								<div class="text" style="width: 20%">
-									<s:text name="Type" />
+									<s:text name="Ratio Type" />
 								</div>
 								<div class="tbox" style="width: 80%">
-									<s:radio name="bonusTypeId" id="bonusTypeId" list="#{'LC':'Loss Corridor','LP':'Loss Participation'}" />
+									<s:select  name="bonusTypeId" id="bonusTypeId" list="lossRationList" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="TYPE"  listValue="DETAIL_NAME"   cssStyle="width: 33.3%; float:left;" onchange="getLossRatio(this.value);"/>
+									<s:iterator value="lossRationList" var="lossDetail">
+										<s:hidden name="%{#lossDetail.TYPE}" id="%{#lossDetail.TYPE}" value="%{#lossDetail.DETAIL_NAME}"/>
+									</s:iterator>
 								</div>
 							</div>
                     	</div>
@@ -446,9 +566,10 @@
 										<thead>
 											<tr>
 												<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
-												<th width="30%" style="text-align: center; vertical-align: middle;"> <s:text name="Claims Ratio From"/> </th>
-												<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Claims Ratio To "/> </th>
-												<th width="16.5%" style="text-align: center; vertical-align: middle;"> <s:text name="Loss Participation of the Cedant %" /> </th>
+												<th width="30%" style="text-align: center; vertical-align: middle;"><span id="claimrfid"></span> <s:text name="From"/> </th>
+												<th width="16.5%" style="text-align: center; vertical-align: middle;"><span id="claimrtid"></span> <s:text name="To "/> </th>
+												<th width="16.5%" style="text-align: center; vertical-align: middle;"><span id="lossparid"></span> <s:text name="Loss Participation of the Cedant %" /> </th>
+												<th width="16.5%" style="text-align: center; vertical-align: middle;"><span id="lossparmaxid"></span> <s:text name="Maximum Participation of Cedant%" /> </th>
 												<th width="8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
 											</tr>
 										</thead>
@@ -466,6 +587,9 @@
 														</td>
 														<td >
 														<s:textfield name="scaleLowClaimBonus[%{#stat.count-1}]" id="scaleLowClaimBonus[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="26" theme="simple"/>
+														</td>
+														<td >
+														<s:textfield name="scalemaxpartpercent[%{#stat.count-1}]" id="scalemaxpartpercent[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="26" theme="simple"/>
 														</td>
 														<td >
 														<s:if test='0!=(#stat.count-1)'>
@@ -500,17 +624,33 @@
 					<div class="panel panel-primary">
 					<div class="panel-body">
 					
-						<div class="textfield">
+						<div class=textfieldA100>
+							<div class="text" style="float: left;width: 25%;">
+								<s:text name="label.firstslideprofitcom" />
+							</div>
+							<div style="float: left;width: 75%;">
+							<s:select  list="slidingScalePeriodList"  name="fpcType" id="fpcType" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="TYPE"  listValue="DETAIL_NAME"   cssStyle="width: 33.3%; float:left;" onchange="getscalePeriod(this.value);"/>
+							<div id="scfiid" >
+							<s:textfield name="scfistpc" id="scfistpc"  cssClass="inputBox" cssStyle="text-align: right;width: 33.3%; float:left;" onkeyup="middleMinusRestriction(this);checkNumbers(this);"  />
+							</div>
+							<div id="periodid" style="display:none">
+							<s:textfield name="fpcfixedDate" id="periodDate"  cssClass="inputBox" cssStyle="width: 33.3%; float:left;"   />
+							</div>
+							<div id="scseid" >
+							<s:select  list="profitCommissionListVar"  name="scprofitMont" id="scprofitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 33.3%; float:right;"/>
+							</div>
+							</div>
+						</div>
+						<br/>	
+						<div class="textfield" >
 							<div class="text">
-								<s:text name="label.firstlossprofitcom" />
+								<s:text name="label.subseqcal" />
 							</div>
 							<div class="tbox">
-									<s:textfield name="scfistpc" id="scfistpc"  cssClass="inputBox" cssStyle="text-align: right;width: 45%; float:left;" onkeyup="middleMinusRestriction(this);checkNumbers(this);"  />
-							<s:select  list="profitCommissionListVar"  name="scprofitMont" id="scprofitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 45%; float:left;"/>
+								<s:radio list="#{'Y':'Yes','N':'No'}" name="scsubSeqCalculation" value="scsubSeqCalculation==null || scsubSeqCalculation==''?'N':scsubSeqCalculation"    onchange="getScSubseqCal(this.value);"></s:radio><br/>	
 							</div>
 						</div>	
-						
-						<div class="textfield" >
+						<div class="textfield" id="scsubseqcalid">
 							<div class="text">
 								<s:text name="label.sublossprofitcom" />
 							</div>
@@ -519,14 +659,7 @@
 									<s:select  list="profitCommissionListVar"  name="scsubProfitMonth" id="scsubProfitMonth" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 45%; float:left;"/>
 							</div>
 						</div>
-						<div class="textfield" >
-							<div class="text">
-								<s:text name="label.subseqcal" />
-							</div>
-							<div class="tbox">
-								<s:radio list="#{'Y':'Yes','N':'No'}" name="scsubSeqCalculation" value="scsubSeqCalculation==null || scsubSeqCalculation==''?'N':scsubSeqCalculation"   ></s:radio><br/>	
-							</div>
-						</div>	
+						
 						
 						
 						</div>
@@ -720,7 +853,18 @@
 </s:else>
 <script type="text/javascript">
 
-
+<s:if test='fpcType!=null && !"".equals(fpcType)'>
+getscalePeriod('<s:property value="fpcType"/>')
+</s:if>
+<s:if test='scsubSeqCalculation!=null && !"".equals(scsubSeqCalculation)'>
+getScSubseqCal('<s:property value="scsubSeqCalculation"/>')
+</s:if>
+<s:if test='bonusTypeId!=null && !"".equals(bonusTypeId)'>
+getLossRatio('<s:property value="bonusTypeId"/>')
+</s:if>
+<s:if test='scalementhod!=null && !"".equals(scalementhod)'>
+getMethod('<s:property value="scalementhod"/>')
+</s:if>
 </script>
 
 	</body>

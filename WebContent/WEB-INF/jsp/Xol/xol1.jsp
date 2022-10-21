@@ -558,7 +558,7 @@ gap:20px;
 															</div>
 														</div>
 														<br class="clear"></br>
-														<div id="stoplossno" style="display:none;">
+														<div id="stoplossno" style="display:block;">
 															<div id="newgenid">
 																<table class="table table-bordered" width="100%" id="newgen">
 																	<thead>
@@ -569,6 +569,7 @@ gap:20px;
 																			--><th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.coverLimitPoc" />  </th>
 																			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.deductiblePoc" /> </th>
 																			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.egnpiasperoffer" /> </th>
+																			<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="Net Max Retention - 100% - OC" /> </th>
 																			<th width="10.8%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
 																		</tr>
 																	</thead>
@@ -600,6 +601,9 @@ gap:20px;
 																				</td>
 																				<td>
 																				<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30"  />
+																				</td>
+																				<td>
+																				<s:textfield name="netMaxRetentPer[%{#stat.count-1}]" id="netMaxRetentPer%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30"  />
 																				</td>
 																				<td align="center">
 																				<s:if test='0!=(#stat.count-1)'>

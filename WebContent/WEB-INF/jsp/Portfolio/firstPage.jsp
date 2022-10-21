@@ -531,9 +531,10 @@ var flag = document.getElementById("flag").value;
 	  document.FirstPageForm.submit();
 	 }
 }
-function ButtonAction(contractno,ceddingcompanyid,proposalno,baseLayer,deptId,flag,amendId,layerNo,inception_Date,ceding_Company_Name,brokerName,flag,row){	var sel = document.getElementById("buttonVal"+row).value;
+function ButtonAction(proposalno,ceddingcompanyid,productId,baseLayer,deptId,flag,amendId,layerNo,inception_Date,ceding_Company_Name,brokerName,flag,row){	
+	var sel = document.getElementById("buttonVal"+row).value;
 	if("E"==sel){
-	funEditMode(contractno,ceddingcompanyid,proposalno,baseLayer,deptId);
+		funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,'',deptId)
 	}
 	else if("V"==sel){
 	funViewMode(proposalno,amendId,flag,baseLayer);

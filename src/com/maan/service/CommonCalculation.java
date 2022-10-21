@@ -511,5 +511,54 @@ public class CommonCalculation {
 		}
 		return result;
 	}
+	public static void main(String args[])  //static method  
+	{  int j=0;
+	double h=0;
+	String val1="";
+		String A="",B="",C="";
+		int a=40;int b=60;int c=5,d=4,e=61,f=999;
+		System.out.println(j+"A==>"+DropDownControllor.formattereight("0"));
+		System.out.println(j+"B==>"+DropDownControllor.formattereight(String.valueOf(a)));
+		System.out.println(j+"C==>"+(e-(a+0)));
+		j++;
+	for(int i=a;i<=b;i+=c) {
+		if(j==1) {
+			h=a;
+			val1=String.valueOf(((i+c)));	
+			
+			
+			
+			
+			
+		}else {
+			h=Double.parseDouble(B);
+			val1=String.valueOf(((Double.parseDouble(B)+c)));	
+		}
+		
+		if(B.equals(DropDownControllor.formattereight(String.valueOf(f)))) {
+			A="";
+		}else {
+		String val=String.valueOf((h)+(1/Math.pow(10, d)));
+		System.out.println(j+"A==>"+DropDownControllor.formattereight(val));
+		}
+		
+		
+		if(((Double.parseDouble(val1)))>b) {
+			 B=DropDownControllor.formattereight(String.valueOf(f));
+			
+		}else {
+			 B=DropDownControllor.formattereight(val1);
+		}
+		System.out.println(j+"B==>"+B);
+		if(e<(i+c)) {
+			C=String.valueOf((e-b));
+		}else {
+			C=String.valueOf((e-((i+c))));
+		}
+		System.out.println(j+"C==>"+C);
+		
+		j++;
+	}
+	}  
 	
 }
