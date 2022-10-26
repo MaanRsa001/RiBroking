@@ -633,6 +633,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				dropDownController.updateRenewalEditMode(bean.getProposal_no(),Status,bean.getProposal_no());
 			}
 			dropDownController.updateEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getProposal_no());
+			if(StringUtils.isNotBlank(bean.getBouquetNo()))
+			dropDownController.updateBqEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getBouquetNo());
+			
 			if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
 				String proposal = dropDownController.getBaseProposal(bean.getProposal_no());
 				dropDownController.updateEditMode(proposal,"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"SR":"SE",bean.getProposal_no());

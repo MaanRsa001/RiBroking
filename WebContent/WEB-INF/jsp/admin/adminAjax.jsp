@@ -2729,4 +2729,201 @@ alert("This action is not allowed because a previous transaction is pending for 
 	</tbody>
 </table>
 </s:elseif>
-							
+<s:elseif test='"reinsurerid".equalsIgnoreCase(dropDown)'>
+<table width="100%" class="table table-bordered" id="reinsTbl">
+	<thead>
+	<tr>
+		<th width="7%"> <s:text name="label.sno" /> </th>
+		<th width="20%"><s:text name="label.reinsureName" /></th>
+		<th width="20%"><s:text name="label.placingBroker" /></th>
+		<th width="20%"><s:text name="label.shareOffer" /></th>
+		<th width="15%" > <s:text name="Delete Row" /> </th>
+	</tr>
+	</thead>
+	<tbody>	
+	<s:iterator value="reinsurerInfoList" var="list"  status="stat">									
+	<tr>
+		<td>
+			<s:textfield name="reinsSNo[%{#stat.count-1}]" id="reinsSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/>
+		</td>
+		<td>
+			<s:select list="reinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  theme="simple"/>
+		</td>
+		<td>
+			<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  theme="simple"/>
+		</td>
+		<td>
+			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" theme="simple"/>
+		</td>
+		<td align="center">
+			<s:if test='0!=(#stat.count-1)'>
+			<input type="button" value="Delete" class="btn btn-sm btn-info"   onclick="deleteRow('<s:property value="%{#stat.count-1}"/>')" />
+			</s:if>
+		</td>
+	</tr>												
+	</s:iterator>
+	</tbody>
+</table>
+</s:elseif>	
+<s:elseif test='"statusChange".equalsIgnoreCase(dropDown)'>
+<table width="100%" class="table table-bordered" >
+	<thead>
+	<tr>
+		<th width="3%"> <s:text name="label.sno" /> </th>
+		<th width="10%"><s:text name="label.proposalNo" /></th>
+		<th width="10%"><s:text name="label.cedingCompany" /></th>
+		<th width="10%"><s:text name="label.reinsureName" /></th>
+		<th width="10%"><s:text name="label.placingBroker" /></th>
+		<th width="10%"><s:text name="label.shareOffer" /></th>
+		<s:if test='"A".equals(newStatus) || "RO".equals(newStatus) || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="10%"><s:text name="label.written" /></th>
+		</s:if>
+		<s:if test='"A".equals(newStatus)'>
+		<th width="10%"><s:text name="label.writtenvaliditydate" /></th>
+		<th width="10%"><s:text name="label.writtenvalidityRemarks" /></th>
+		</s:if>
+		<s:if test='"RO".equals(newStatus) || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="10%"><s:text name="label.proposedWL" /></th>
+		</s:if>
+		<s:if test='"RO".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="10%"><s:text name="label.signedLine" /></th>
+		</s:if>
+		<s:if test='"SL".equals(newStatus)'>
+		<th width="10%"><s:text name="label.signedLineValidity" /></th>
+		<th width="10%"><s:text name="label.signedLineRemarks" /></th>
+		</s:if>
+		<s:if test='"RO".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="10%"><s:text name="label.proposedSL" /></th>
+		</s:if>
+		<s:if test='"RO".equals(newStatus)'>
+		<th width="10%"><s:text name="label.reoffer" /></th>
+		</s:if>
+		<s:if test='"PWL".equals(newStatus)  || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="10%"><s:text name="label.tqrBrokerageAmt" /></th>
+		</s:if>
+		<s:if test='"A".equals(newStatus)  || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="5%"><s:text name="label.brokerage" /></th>
+		</s:if>
+		<s:if test='"P".equals(newStatus) || "D".equals(newStatus) || "NPWL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+		<th width="5%"><s:text name="label.emailStatus" /></th>
+		<th width="5%"><s:text name="label.previewsendmail" /></th>
+		</s:if>
+	</tr>
+	</thead>
+	<tbody>	
+	<s:iterator value="placementeditInfo" var="list"  status="stat">									
+		<tr>
+			<td>
+				<s:property value="%{#stat.count}"/>
+			</td>
+			<td>
+				<s:property value="#list.PROPOSAL_NO"/>
+				<s:hidden name="proposalNos[%{#stat.count-1}]"/>
+				<s:hidden name="reinsurerIds[%{#stat.count-1}]"/>
+				<s:hidden name="brokerIds[%{#stat.count-1}]"/>
+			</td>
+			<td>
+				<s:property value="#list.CEDING_COMPANY_ID"/>
+			</td>
+			<td>
+				<s:property value="#list.REINSURER_NAME"/>
+			</td>
+			<td>
+				<s:property value="#list.BROKER_NAME"/>
+			</td>
+			<td>
+				<s:textfield name="shareOffered[%{#stat.count-1}]" id="shareOffered[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			<s:if test='"A".equals(newStatus) || "RO".equals(newStatus) || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:textfield name="writtenLine[%{#stat.count-1}]" id="writtenLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="writtenLine[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"A".equals(newStatus)'>
+			<td>
+				<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
+			</td>
+			<td>
+				<s:textfield name="writtenvalidityRemarks[%{#stat.count-1}]" id="writtenvalidityRemarks[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="writtenvaliditydate[%{#stat.count-1}]"/>
+			<s:hidden name="writtenvalidityRemarks[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"RO".equals(newStatus) || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:textfield name="proposedWL[%{#stat.count-1}]" id="proposedWL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="proposedWL[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"RO".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:textfield name="signedLine[%{#stat.count-1}]" id="signedLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="signedLine[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"SL".equals(newStatus)'>
+			<td>
+				<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			<td>
+				<s:textfield name="signedLineRemarks[%{#stat.count-1}]" id="signedLineRemarks[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="signedLineValidity[%{#stat.count-1}]"/>
+			<s:hidden name="signedLineRemarks[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"RO".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:textfield name="proposedSL[%{#stat.count-1}]" id="proposedSL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="proposedSL[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"RO".equals(newStatus)'>
+			<td>
+				<s:textfield name="reoffer[%{#stat.count-1}]" id="reoffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="reoffer[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"PWL".equals(newStatus)  || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:textfield name="tqrBrokerageAmt[%{#stat.count-1}]" id="tqrBrokerageAmt[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="tqrBrokerageAmt[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"A".equals(newStatus)  || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:textfield name="brokerage[%{#stat.count-1}]" id="brokerage[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+			</td>
+			</s:if>
+			<s:else>
+			<s:hidden name="brokerage[%{#stat.count-1}]"/>
+			</s:else>
+			<s:if test='"P".equals(newStatus) || "D".equals(newStatus) || "NPWL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
+			<td>
+				<s:property value="#list.EMAIL_STATUS"/>
+			</td>
+			<td>
+				<input type="button" value="Update" class="btn btn-sm btn-info"   onclick="FnUpdate('<s:property value="%{#stat.count-1}"/>')" theme="simple"/>
+			</td>
+			</s:if>
+		</tr>												
+		</s:iterator>
+	</tbody>
+</table>
+</s:elseif>							

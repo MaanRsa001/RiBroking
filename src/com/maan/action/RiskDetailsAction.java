@@ -372,6 +372,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 						dropDownController.updateRenewalEditMode(bean.getProposal_no(),Status,bean.getProposal_no());
 					}else{
 					dropDownController.updateEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BRF":"BEF",bean.getProposal_no());
+					
 					if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
 						dropDownController.updateEditMode(bean.getBaseLayer(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"SRF":"SEF",bean.getProposal_no());
 						dropDownController.updateSubEditMode(bean.getBaseLayer(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"SRF":"SEF",bean.getProposal_no());
@@ -380,6 +381,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 						dropDownController.updateSubEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BRF":"BEF",bean.getProposal_no());
 					}
 					}
+					if(StringUtils.isNotBlank(bean.getBouquetNo()))
+						dropDownController.updateBqEditMode(bean.getBouquetNo(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getProposal_no()); 
 					forward="protreaty2";
 				} else {
 					ShowDropDown();
@@ -1332,7 +1335,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			else{
 				dropDownController.updateSubEditMode(bean.getProposal_no(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getProposal_no());
 			}
-			
+			if(StringUtils.isNotBlank(bean.getBouquetNo()))
+				dropDownController.updateBqEditMode(bean.getBouquetNo(),"Renewal".equalsIgnoreCase(bean.getRenewalEditMode()) ?"BR":"BE",bean.getProposal_no()); 
 			if(bean.getRetList()==null){
 				getCedentRetention();
 			}
@@ -4371,6 +4375,9 @@ public String EditSection(){
 	if("layer".equals(bean.getLayerMode())) {
 		bean.setProposal_no(bean.getProposalNo());
 	}
+	if("copy".equals(bean.getFlag())) {
+		bean.setSectionNo("");
+	}
 	} catch (Exception e) {
 		logger.debug("Exception @ {" + e + "}");
 
@@ -4428,6 +4435,16 @@ private void validateSCCalculate(RiskDetailsBean bean) {
 	}
 	if(StringUtils.isNotBlank(bean.getScalecombine()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
 		if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
+			list.add(getText("error.scale.max.cobine.valid"));
+		}
+	}
+	if(StringUtils.isNotBlank(bean.getScaleminRatio()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
+		if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
+			list.add(getText("error.scale.max.cobine.valid"));
+		}
+		Double minus=(Double.parseDouble(bean.getScalemaxRatio())-Double.parseDouble(bean.getScaleminRatio()))/Double.parseDouble(bean.getScalebanding());
+		boolean result = (minus - Math.floor(minus)) != 0; 
+		if(result) {
 			list.add(getText("error.scale.max.cobine.valid"));
 		}
 	}

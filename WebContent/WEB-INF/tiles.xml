@@ -506,4 +506,16 @@
 	<definition name="claimAuth" template="/WEB-INF/jsp/Claim/claimAuth.jsp">
 		<put-attribute name="title" value="Re-Insurance - Facutative" />
 	</definition>
+	<definition name="placement" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Placement" />
+        <put-attribute name="body" value="/WEB-INF/jsp/placement/placement.jsp" />
+    </definition>
+    <definition name="placementList" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Placement" />
+        <put-attribute name="body" value="/WEB-INF/jsp/placement/placementList.jsp" />
+    </definition>
+     <definition name="placementStatus" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Placement" />
+        <put-attribute name="body" value="/WEB-INF/jsp/placement/placementStatus.jsp" />
+    </definition>
 </tiles-definitions>

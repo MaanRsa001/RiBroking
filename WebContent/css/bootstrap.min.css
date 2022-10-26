@@ -1453,8 +1453,11 @@ table {
 }
 
 th {
-	text-align: left;
+	text-align: center;
 	font-weight: 600;
+	font-size: 12px;
+    background-color: #60c0dc;
+    color: block;
 }
 
 .table {
@@ -1471,7 +1474,7 @@ th {
 }
 
 .table>thead>tr>th {
-	vertical-align: bottom;
+	vertical-align: middle;
 	border-bottom: 2px solid #ddd
 }
 

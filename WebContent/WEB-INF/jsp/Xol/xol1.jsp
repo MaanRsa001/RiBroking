@@ -137,14 +137,14 @@ gap:20px;
 															<s:text name="label.bouquetMode" />
 														</div>
 														<div class="tbox">
-															<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="%{bouquetModeYN!=null}"/>
+															<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}"/>
 														</div>
 													</div>
 												</div>
 												<div class="textfield33" >
 													<div id="bouquetpds">
 														<div class="boxcontent" align="center">
-														<input type="button"  value="Procced"   class="btn btn-sm btn-success"   onclick="procceed()" />
+														<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
 														</div>
 													</div>
 												</div>
@@ -155,64 +155,81 @@ gap:20px;
 						</div>
 						<div id="bouquestid" style="display:none">
 							<s:if test='"Y".equals(bouquetModeYN)'>
-							<div class="boxcontent" >
-								<div class="panel panel-primary">											
-									<div class="panel-heading">
-										<s:text name="label.bouquetinfo" />
-									</div>
-									<div class="panel-body">
-										<div class="boxcontent">
-										
+								<div class="boxcontent" >
+									<div class="panel panel-primary">											
+										<div class="panel-heading">
+											<s:text name="label.bouquetinfo" />
+										</div>
+										<div class="panel-body">
+											<div class="boxcontent">
 											
-												<div>
-													<table width="100%" class="table table-bordered" >
-														<thead>
-														<tr>
-															<th width="7%"> <s:text name="label.sno" /> </th>
-															<th width="20%"><s:text name="label.businessType" /></th>
-															<th width="20%"><s:text name="label.proposalNo" /></th>
-															<th width="20%"><s:text name="label.treatyType" /></th>
-															<th width="20%"><s:text name="label.treatyNameType" /></th>
-															<th width="20%"><s:text name="label.newRenew" /></th>
-															<th width="20%"><s:text name="label.existingshare" /></th>
-														</tr>
-														</thead>
-														<tbody>	
-														<s:iterator value="#ebouquetExistingList" var="list"  status="stat">									
-														<tr>
-															<td>
-																<s:property value="%{#stat.count}"/>
-															</td>
-															<td>
-																<s:property value="#list.BUSINESS_TYPE"/>
-															</td>
-															<td>
-																<s:property value="#list.PROPOSAL_NO"/>
-															</td>
-															<td>
-																<s:property value="#list.TREATY_TYPE"/>
-															</td>
-															<td>
-																<s:property value="#list.RSK_TREATYID"/>
-															</td>
-															<td>
-																<s:property value="#list.POLICY_STATUS"/>
-															</td>
-															<td>
-																<s:property value="#list.EXISTING_SHARE"/>
-															</td>
-														</tr>												
-														</s:iterator>
-														</tbody>
-													</table>											
-												</div> 
-											
-											
+												
+													<div>
+														<table width="100%" class="table table-bordered" >
+															<thead>
+															<tr>
+																<th width="4%"> <s:text name="label.sno" /> </th>
+																<th width="15%"><s:text name="label.businessType" /></th>
+																<th width="10%"><s:text name="label.baseproposal" /></th>
+																<th width="10%"><s:text name="label.proposalNo" /></th>
+																<th width="10%"><s:text name="label.sectionNoLayer" /></th>
+																<th width="15%"><s:text name="label.departmentClass" /></th>
+																<th width="15%"><s:text name="label.treatyType" /></th>
+																<th width="15%"><s:text name="label.treatyNameType" /></th>
+																<th width="10%"><s:text name="label.newRenew" /></th>
+																<%-- <th width="10%"><s:text name="label.existingshare" /></th> --%>
+															</tr>
+															</thead>
+															<tbody>	
+															<s:iterator value="#ebouquetExistingList" var="list"  status="stat">									
+															<tr>
+																<td>
+																	<s:property value="%{#stat.count}"/>
+																</td>
+																<td>
+																	<s:property value="#list.BUSINESS_TYPE"/>
+																</td>
+																<td>
+																	<s:property value="#list.BASE_LAYER"/>
+																</td>
+																<td>
+																	<s:property value="#list.PROPOSAL_NO"/>
+																</td>
+																<td>
+																<s:if test='2==(#list.PRODUCT_ID)'>
+																	<s:property value="#list.SECTION_NO"/>
+																</s:if>
+																<s:else>
+																<s:property value="#list.LAYER_NO"/>
+																</s:else>
+																</td>
+																<td>
+																	<s:property value="#list.TMAS_DEPARTMENT_NAME"/>
+																</td>
+																<td>
+																	<s:property value="#list.TREATY_TYPE"/>
+																</td>
+																<td>
+																	<s:property value="#list.RSK_TREATYID"/>
+																</td>
+																<td>
+																	<s:property value="#list.POLICY_STATUS"/>
+																</td>
+																<%-- <td>
+																	<s:property value="#list.EXISTING_SHARE"/>
+																</td> --%>
+															</tr>												
+															</s:iterator>
+															</tbody>
+														</table>											
+													</div> 
+												
+												
+											</div>
 										</div>
 									</div>
-								</div>
-								</div>
-							</s:if>
+									</div>
+								</s:if>
 						<div class="tablerow">
 							<div class="boxcontent">
 								<div class="panel panel-primary">
@@ -374,63 +391,72 @@ gap:20px;
 								</div>
 							</div>
 							<s:if test='!"layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)'>
-							<div class="boxcontent" id="laydet">
-								<div class="panel panel-primary">											
-									<div class="panel-heading">
-										<s:text name="label.layerinfo" />
-									</div>
-									<div class="panel-body">
-										<div class="boxcontent">
-										
-											<s:if test="#elayerInfo!=null && #elayerInfo.size()>0">
-												<div>
-													<table width="100%" class="table table-bordered" >
-														<thead>
-														<tr>
-															<th width="7%"> <s:text name="label.sno" /> </th>
-															<th width="20%"><s:text name="label.proposalNo" /></th>
-															<th width="20%"><s:text name="label.layerNo" /></th>
-															<th width="20%"><s:text name="label.edit" /></th>
-															<th width="20%"><s:text name="label.copy" /></th>
-															<th width="15%" > <s:text name="Delete Row" /> </th>
-														</tr>
-														</thead>
-														<tbody>	
-														<s:iterator value="#elayerInfo" var="list"  status="stat">									
-														<tr>
-															<td>
-																<s:property value="%{#stat.count}"/>
-															</td>
-															<td>
-																<s:property value="#list.PROPOSAL_NO"/>
-															</td>
-															<td>
-																<s:property value="#list.LAYER_NO"/>
-															</td>
-															<td>
-																<button type="button"  class="btn btn-sm btn-info"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
-															</td>
-															<td>
-															<%--  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');"  --%>
-																<button type="button"  class="btn btn-sm btn-info"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
-															</td>
-															<td align="center">
-																<s:if test='0!=(#stat.count-1)'>
-																<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
-																</s:if>
-															</td>
-														</tr>												
-														</s:iterator>
-														</tbody>
-													</table>											
-												</div> 
-											</s:if>
+								<div class="boxcontent" id="laydet">
+									<div class="panel panel-primary">											
+										<div class="panel-heading">
+											<s:text name="label.layerinfo" />
+										</div>
+										<div class="panel-body">
+											<div class="boxcontent" style="width:75%">
 											
+												<s:if test="#elayerInfo!=null && #elayerInfo.size()>0">
+													<div>
+														<table width="75%" class="table table-bordered" >
+															<thead>
+															<tr>
+															
+																<th width="10%"><s:text name="label.proposalNo" /></th>
+																<th width="10%"><s:text name="label.layerNo" /></th>
+																<th width="15%"><s:text name="label.departmentClass" /></th>
+																<th width="15%"><s:text name="label.treatyType" /></th>
+																<th width="15%"><s:text name="label.treatyNameType" /></th>
+																<th width="10%"><s:text name="label.edit" /></th>
+																<th width="10%"><s:text name="label.copy" /></th>
+																<th width="10%" > <s:text name="Delete" /> </th>
+															</tr>
+															</thead>
+															<tbody>	
+															<s:iterator value="#elayerInfo" var="list"  status="stat">									
+															<tr>
+																<td>
+																	<s:property value="#list.PROPOSAL_NO"/>
+																</td>
+																<td>
+																	<s:property value="#list.LAYER_NO"/>
+																</td>
+																<td>
+																	<s:property value="#list.TMAS_DEPARTMENT_NAME"/>
+																</td>
+																<td>
+																	<s:property value="#list.TREATY_TYPE"/>
+																</td>
+																<td>
+																	<s:property value="#list.RSK_TREATYID"/>
+																</td>
+																<td align="center">
+																	<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
+																</td>
+																<td align="center">
+																	<button type="button"  class="btn btn-sm btn-warning"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
+																</td>
+																<td align="center">
+																	<s:if test='0!=(#stat.count-1)'>
+																	<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
+																	</s:if>
+																</td>
+															</tr>												
+															</s:iterator>
+															</tbody>
+														</table>											
+													</div> 
+												</s:if>
+												
+											</div>
 										</div>
 									</div>
-								</div>
-								</div>
+									</div>
 								</s:if>
+							<div id="sectionid" >
 							<div class="boxcontent">
 								<div class="panel panel-primary subpannel">											
 									<div class="panel-heading">
@@ -1197,6 +1223,7 @@ gap:20px;
 						      </div>
 						    </div>
 						  </div>
+						</div>
 						</div>					
 						<div class="tablerow">							
 							<div class="boxcontent" align="center">
@@ -1241,10 +1268,10 @@ gap:20px;
 										<s:else>
 											<input type="button"  value="Back"  class="btn btn-sm btn-danger" id="mybutton"   onClick="FunctionEditCancel()" />
 										</s:else>	
-										<s:if test='!"layer".equals(flag)  && !"copy".equals(flag)'>
+										<%-- <s:if test='!"layer".equals(flag)  && !"copy".equals(flag)'>
 										 <input type="button"  value="Save"   class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FunctionSaveOption()" /> 
 										  <input type="button"  value="Submit"   class="btn btn-sm btn-warning"   id="mybutton1" onclick="disableForm(this.form,false,'');funEditSubmit()" />
-										</s:if>
+										</s:if> --%>
 							 			
 									</s:else>
 								</s:if>
@@ -1309,7 +1336,12 @@ gap:20px;
 	</div>
 </div>
 <script type="text/javascript">
-
+<s:if test='("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no))'>
+document.getElementById("sectionid").style.display = "inline";
+</s:if>
+<s:else>
+document.getElementById("sectionid").style.display = "none";
+</s:else>
 $('.select1').select2({ });
 
 var mtbChildWin = new Array();
@@ -1551,7 +1583,8 @@ function funsubmit()
 function FunctionEdit()
 {	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
-	document.xol1.action="${pageContext.request.contextPath}/EditModeRiskDetails?multiuserMode=edit";
+	document.getElementById("multiuserMode").value='edit';
+	document.xol1.action="${pageContext.request.contextPath}/EditModeXol.action";
 	document.xol1.submit();
 }
 
@@ -1665,6 +1698,7 @@ function FunctionAmendSaveOption()
 function FunctionEditCancel()
 {
 	destroyPopUps();
+	document.getElementById("flag").value='P';
 	document.xol1.action ="${pageContext.request.contextPath}/commonListPortfolio.action";
 	document.xol1.submit();
 }

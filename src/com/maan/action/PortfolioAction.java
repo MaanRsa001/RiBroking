@@ -66,6 +66,7 @@ public class PortfolioAction extends ActionSupport implements
 		String forward = "";
 		if (null != bean.getProposalNo() && StringUtils.isNotBlank(bean.getProposalNo())) {
 			new DropDownControllor().updateEditMode(bean.getProposalNo(), "N","");
+			new DropDownControllor().updateBqEditMode(bean.getBouquetNo(),"N","");
 			// if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
 			String proposal = new DropDownControllor().getBaseProposal(bean.getProposalNo());
 			new DropDownControllor().updateEditMode(proposal, "N","");
@@ -167,6 +168,7 @@ public class PortfolioAction extends ActionSupport implements
 			}
 			if (null != bean.getProposalNo() && StringUtils.isNotBlank(bean.getProposalNo())) {
 				new DropDownControllor().updateEditMode(bean.getProposalNo(),"N","");
+				new DropDownControllor().updateBqEditMode(bean.getBouquetNo(),"N","");
 						
 				// if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
 				String proposal = new DropDownControllor().getBaseProposal(bean.getProposalNo());
@@ -275,6 +277,7 @@ public class PortfolioAction extends ActionSupport implements
 			if (null != bean.getProposalNo() && StringUtils.isNotBlank(bean.getProposalNo())) {
 				new DropDownControllor().updateEditMode(bean.getProposalNo(),
 						"N","");
+				new DropDownControllor().updateBqEditMode(bean.getBouquetNo(),"N","");
 				// if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
 				String proposal = new DropDownControllor().getBaseProposal(bean
 						.getProposalNo());

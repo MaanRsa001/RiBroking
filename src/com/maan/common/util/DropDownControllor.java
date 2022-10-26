@@ -3323,5 +3323,49 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		}
 		return list;
 	}
+	public  List<Map<String, Object>> getStatusDropDown(String branchCode) {
+		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
+		try{
+			String query=getQuery("GET_STATUS_DROP_DOWN");
+			logger.info("Select Query==> " + query);
+			logger.info("Args[0]==> " + branchCode);
+			logger.info("Args[1]==> " + "Y");
+			statusList=this.mytemplate.queryForList(query,new Object[]{branchCode,"Y"});
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");	
+		}
+
+		return statusList;
+	}
+	public  List<Map<String, Object>> getSubStatusDropDown(String branchCode,String statusCode) {
+		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
+		try{
+			String query=getQuery("GET_SUBSTATUS_DROP_DOWN");
+			logger.info("Select Query==> " + query);
+			logger.info("Args[0]==> " + branchCode);
+			logger.info("Args[1]==> " + "Y");
+			statusList=this.mytemplate.queryForList(query,new Object[]{branchCode,"Y",statusCode});
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");	
+		}
+		return statusList;
+	}
+
+	public void updateBqEditMode(String proposalNo, String val, String updateProposalNo) {
+		try{
+			String query=getQuery("POS_MAS_BQ_MODE_UPDT");
+			Object args[] = new Object[2];
+			if(!"N".equalsIgnoreCase(val)){
+				args[0] = val +"-"+ updateProposalNo;
+				}
+				else{
+					args[0] = val;	
+				}
+			args[1] = proposalNo;
+			this.mytemplate.update(query,args);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -496,7 +496,12 @@
 			<result name="retroManualAdjView" type="tiles">retroManualAdjView</result>
 			<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
 			</action>
-			
+			<action name="*Placement" class="com.maan.action.PlacementAction" method="{1}">
+				<result name="placement" type="tiles">placement</result>
+				<result name="placementList" type="tiles">placementList</result>
+				<result name="placementStatus" type="tiles">placementStatus</result>
+				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+			</action>
 		
 		</package>
 	</struts>

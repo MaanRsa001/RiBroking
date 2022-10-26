@@ -197,8 +197,8 @@
 												<thead>
 												<tr>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
+													<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Company Name" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Broker Name" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="label.class" /></th>
@@ -221,8 +221,8 @@
 													<s:iterator value="portfolioList" var="list" status="stat">
 													<tr>
 													<td><s:property value="#stat.count"/></td>
-													<td><s:property value="proposalNo"/></td>
 													<td><s:property value="bouquetNo"/></td>
+													<td><s:property value="proposalNo"/></td>
 													<td><s:property value="ceding_Company_Name"/></td>	
 													<td><s:property value="brokerName"/></td>	
 													<td><s:property value="department_Name"/></td>	
@@ -264,8 +264,8 @@
 											<thead>
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
-												<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
+												<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Company Name" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Broker Name" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="label.class" /></th>
@@ -291,8 +291,8 @@
 												<s:iterator value="portfolioList" var="list" status="stat">
 												<tr>
 												<td><s:property value="#stat.count"/></td>
-												<td><s:property value="proposalNo"/></td>
 												<td><s:property value="bouquetNo"/></td>
+												<td><s:property value="proposalNo"/></td>
 												<td><s:property value="ceding_Company_Name"/></td>	
 												<td><s:property value="brokerName"/></td>	
 												<td><s:property value="department_Name"/></td>	
@@ -332,6 +332,7 @@
 									</s:else>
 							</div>
 					<s:hidden name="proposal_no" id="proposal_no"/>
+					<s:hidden name="proposalNo" id="proposalNo"/>
 					<s:hidden name="CustomerId" id="CustomerId"/>
 					<s:hidden name="baseLayer" id="baseLayer"/>
 					<s:hidden name="mode" id="mode"/>
@@ -549,29 +550,13 @@ function ButtonAction(proposalno,ceddingcompanyid,productId,baseLayer,deptId,fla
 function funplacingMode(proposalno,mfrid,flag,amendId)
 {
 	document.getElementById("amendId").value=amendId;
-   document.getElementById("flag").value=flag;
-   document.getElementById("proposal_no").value=proposalno;
-  if(mfrid==2) 
-   {
-       document.FirstPageForm.action="ViewMethodRiskDetails.action"
-       document.FirstPageForm.submit();
-   }
-   else if(mfrid==3 ||mfrid==5)
-   {
-   	document.FirstPageForm.action="ViewMethodXol.action"
-       document.FirstPageForm.submit();
-   }
-   else if(mfrid==4 )
-   {
-   	document.FirstPageForm.action="ViewMethodRetro.action"
-       document.FirstPageForm.submit();
-   }
-   else
-   {
-       document.FirstPageForm.action="ViewMethodFacultative.action"
+    document.getElementById("flag").value=flag;
+    document.getElementById("proposalNo").value=proposalno;
+ 
+       document.FirstPageForm.action="initPlacement.action"
        document.FirstPageForm.submit();
   
-   }
+   
 }
    </script>
 </html>
