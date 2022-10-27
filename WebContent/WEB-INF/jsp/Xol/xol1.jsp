@@ -553,10 +553,10 @@ gap:20px;
 																</s:if>
 																<s:else>
 																	<s:if test="'Layer'.equals(proposalReference)">
-																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass');"/>
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getAjaxCoverClass();getAjax(this.value,'subclass');"/>
 																	</s:if>
 																	<s:else>
-																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{ dislayer|| "Renewal".equals(proposalReference)||(proposal_no!=null && proposal_no!="")?true:false}' onchange="getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass');" />
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="getAjaxCoverClass();getAjax(this.value,'subclass');" /><!-- getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass') -->
 																	</s:else>
 																</s:else>
 															</div>
@@ -1329,6 +1329,7 @@ gap:20px;
 					   <s:hidden name="multiuserMode" id="multiuserMode"/>
 					   <s:hidden name="editMode" id="editMode"></s:hidden>
 					   <s:hidden name="referenceNo" id="referenceNo"></s:hidden>
+					   <s:hidden name="preVal" id="preVal"/>
 					</s:form>
 				</div>
 			</div>
@@ -1643,6 +1644,7 @@ function FunctionUpdateOption()
 	document.xol1.deduc_hunPercent.value=document.getElementById("deductableLimitAmount[0]").value;
 	}
 	document.getElementById("flag").value='';
+	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value=document.xol1.layerProposalNo.value;
 	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct');
 	document.xol1.action="FirstPageSaveMethodXol.action";

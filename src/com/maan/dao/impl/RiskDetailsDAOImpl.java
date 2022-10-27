@@ -1049,6 +1049,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setSubSeqCalculation(resMap.get("RSK_PRO_SUB_SEQ_CAL")==null?"":resMap.get("RSK_PRO_SUB_SEQ_CAL").toString());
 				beanObj.setLocRate(resMap.get("RSK_RATE")==null?"":resMap.get("RSK_RATE").toString());
 				beanObj.setPremiumResType(resMap.get("RSK_PREMIUM_RES_TYPE")==null?"":resMap.get("RSK_PREMIUM_RES_TYPE").toString());
+				beanObj.setPortfolioType(resMap.get("RSK_PORTFOLIO_TYPE")==null?"":resMap.get("RSK_PORTFOLIO_TYPE").toString());
 				beanObj.setPcfpcType(resMap.get("FPC_TYPE")==null?"":resMap.get("FPC_TYPE").toString());
 				beanObj.setPcfixedDate(resMap.get("FPC_FIXED_DATE")==null?"":resMap.get("FPC_FIXED_DATE").toString());
 				if (resMap.get("RSK_OTHER_COST") != null) {
@@ -2539,7 +2540,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] secondPageCommissionSaveAruguments(final RiskDetailsBean beanObj, final String productId) {
 		Object[] obj=null;
-		obj = new Object[70];
+		obj = new Object[71];
 		obj[0] = beanObj.getProposal_no();
 		obj[1] = "0";
 		obj[2] = "0";
@@ -2635,6 +2636,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[67] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
 		obj[68] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
 		obj[69] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
+		obj[70] = StringUtils.isEmpty(beanObj.getPortfolioType())?"":beanObj.getPortfolioType();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2679,7 +2681,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] secondPageCommissionAruguments(final RiskDetailsBean beanObj, final String productId) {
 		Object[] obj=null;
-		obj = new Object[70];
+		obj = new Object[71];
 		obj[0] = beanObj.getProposal_no();
 		obj[1] = "0";
 		obj[2] = beanObj.getLayerNo();
@@ -2773,6 +2775,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[67] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
 		obj[68] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
 		obj[69] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
+		obj[70] = StringUtils.isEmpty(beanObj.getPortfolioType())?"":beanObj.getPortfolioType();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2854,7 +2857,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 	public Object[] savemodeUpdateRiskDetailsSecondFormSecondTable(final RiskDetailsBean beanObj, final String productId, final String endNo) {
 		Object[] obj=new Object[0];
-		obj = new Object[66];
+		obj = new Object[67];
 		obj[0] = StringUtils.isEmpty(beanObj.getBrokerage()) ? "0": beanObj.getBrokerage();
 		obj[1] = StringUtils.isEmpty(beanObj.getTax()) ? "0" : beanObj.getTax();
 		obj[2] = StringUtils.isEmpty(beanObj.getShare_Profit_Commission()) ? "0": beanObj.getShare_Profit_Commission();
@@ -2941,8 +2944,9 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[61] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
 		obj[62] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
 		obj[63] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
-		obj[64] = beanObj.getProposal_no();
-		obj[65] = endNo;
+		obj[64] = StringUtils.isEmpty(beanObj.getPortfolioType())?"":beanObj.getPortfolioType();
+		obj[65] = beanObj.getProposal_no();
+		obj[66] = endNo;
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -2988,7 +2992,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	public Object[] updateRiskDetailsSecondFormSecondTable(final RiskDetailsBean beanObj, final String productId, final String endNo) {
 		Object[] obj=null;
 		if (productId.equalsIgnoreCase("2")) {
-			obj = new Object[66];
+			obj = new Object[67];
 			obj[0] = StringUtils.isEmpty(beanObj.getBrokerage()) ? "0": beanObj.getBrokerage();
 			obj[1] = beanObj.getTax();
 			obj[2] = beanObj.getShare_Profit_Commission();
@@ -3077,8 +3081,9 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			obj[61] =StringUtils.isEmpty(beanObj.getPremiumResType())? "" :beanObj.getPremiumResType();
 			obj[62] = StringUtils.isEmpty(beanObj.getPcfpcType())?"":beanObj.getPcfpcType();
 			obj[63] = StringUtils.isEmpty(beanObj.getPcfixedDate())?"":beanObj.getPcfixedDate();
-			obj[64] = beanObj.getProposal_no();
-			obj[65] = endNo;
+			obj[64] = StringUtils.isEmpty(beanObj.getPortfolioType())?"":beanObj.getPortfolioType();
+			obj[65] = beanObj.getProposal_no();
+			obj[66] = endNo;
 		} 
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;

@@ -84,7 +84,7 @@ public class CedingMasterBean {
 	
 	private String loginIdList;
 	private String editMode;
-	
+	private String bouquetNo;
 	
 	
 	public String getEditMode() {
@@ -669,6 +669,14 @@ public class CedingMasterBean {
 
 	public void setSpecialRate(String specialRate) {
 		this.specialRate = specialRate;
+	}
+
+	public String getBouquetNo() {
+		return bouquetNo;
+	}
+
+	public void setBouquetNo(String bouquetNo) {
+		this.bouquetNo = bouquetNo;
 	}
 	
 }

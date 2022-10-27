@@ -922,7 +922,7 @@ gap:20px;
 																						<s:text name="label.taxP" />&nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="tax" id="taxIDDD" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D".equals(profit_Center) ?0.00:tax}' onblur="CalculateValue()"  maxlength="8" disabled='"Y".equals(disableStatus1) || "D".equals(profit_Center) '/>
+																						<s:textfield name="tax" id="taxIDDD" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D".equals(profit_Center) ?0.00:tax}' onblur="CalculateValue()"  maxlength="8" disabled='"Y".equals(disableStatus1)'/>
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -1233,10 +1233,10 @@ gap:20px;
 																						<s:text name="label.premiumReserveP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<div class="input-group">
-																							<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="premiumResType" id="premiumResType" cssClass="select1 inputBoxS" cssStyle="width:60%;float:left;" headerKey="" headerValue="---Select---" onchange="getPremiumRes(this.value);"/>
+																						<div class="input-group" style="display: flex;">
+																							<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="premiumResType" id="premiumResType" cssClass="inputBoxS" cssStyle="width:50%;" headerKey="" headerValue="---Select---" />
 																							<%-- <span class="input-group-addon"> --%>
-																								<s:textfield name="premium_Reserve" id="premium_Reserve" cssClass="inputBox"   cssStyle="width:40%;float:right;text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																								<s:textfield name="premium_Reserve" id="premium_Reserve" cssClass="inputBox"   cssStyle="width:40%;text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 														     								<%-- </span> --%>
 																						</div>
 																					</div>
@@ -1269,8 +1269,14 @@ gap:20px;
 																					<div class="text">
 																						<s:text name="label.portfolioinoutPremiumP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
+																					
 																					<div class="tbox">
-																						<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<div class="input-group" style="display: flex;">
+																						<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="portfolioType" id="portfolioType" cssClass="inputBoxS" cssStyle="width:50%;" headerKey="" headerValue="---Select---" />
+																						<%-- <span class="input-group-addon"> --%>
+																							<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="width:40%;text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+													     								<%-- </span> --%>
+																					</div>
 																					</div>
 																				</div>
 																				<br class="clear"/>
@@ -1796,7 +1802,7 @@ function FunctionAddLayer()
 function FunctionUpdateOption()
 {
 	document.getElementById("flag").value='';
-	document.getElementById("layerMode").value='layer';
+	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value=document.proportional.layerProposalNo.value;
 	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 	document.proportional.action="FirstPageSaveMethodRiskDetails.action";

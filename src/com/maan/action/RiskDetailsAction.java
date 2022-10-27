@@ -296,6 +296,10 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 					addActionError(getText("error.insererror.error"));
 				}
 			} else {
+				if(StringUtils.isNotBlank(bean.getProposal_no())) {
+				bean.setFlag("layer");
+				bean.setLayerMode("layer");
+				}
 				logger.info("##########Validation Message Start###########");
 				Iterator<String> error = getActionErrors().iterator();
 				while(error.hasNext()){
@@ -836,7 +840,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				}
 			}
 			}
-			if (validation.isNull(bean.getAcquisition_Cost())
+			/*if (validation.isNull(bean.getAcquisition_Cost())
 					.equalsIgnoreCase("")) {
 				addActionError(getText("errors.acquisition_Cost.second"));
 			} else {
@@ -852,7 +856,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 						bean.setAcquisition_Cost(ans);
 					}
 				}
-			}
+			}*/
 			final int LoopCount = Integer.parseInt(bean.getNo_Insurer());
 			double totPer = 0.0;
 			boolean flag = true;
@@ -1640,7 +1644,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				if (val.isSelect(bean.getProfit_Center()).equalsIgnoreCase("")) {
 					addActionError(getText("error.Profit_Center.required"));
 				}
-				if (val.isNull(bean.getCedRetenType()).equalsIgnoreCase("")) {
+				/*if (val.isNull(bean.getCedRetenType()).equalsIgnoreCase("")) {
 					addActionError(getText("error.cedRentType.required"));
 					cedflag = false;
 				} else {
@@ -1661,7 +1665,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 							}
 						}
 					}
-				}
+				}*/
 				if (bean.getProposalType().equalsIgnoreCase("0")) {
 					addActionError(getText("error.cleancutoff.required"));
 				}else if("R".equalsIgnoreCase(bean.getProposalType()) || "H".equalsIgnoreCase(bean.getProposalType())){
@@ -1880,7 +1884,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 						"greater")) {
 					addActionError(getText("errors.othercost.secondgreater"));
 				}
-				if (val.isNull(bean.getAcquisition_Cost()).equalsIgnoreCase("")) {
+				/*if (val.isNull(bean.getAcquisition_Cost()).equalsIgnoreCase("")) {
 					addActionError(getText("errors.acquisition_Cost.second"));
 				} else {
 					bean.setAcquisition_Cost((bean.getAcquisition_Cost()).replaceAll(",", ""));
@@ -1895,7 +1899,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 							bean.setAcquisition_Cost(ans);
 						}
 					}
-				}
+				}*/
 			}
 			if(StringUtils.isBlank(bean.getCommissiondetailYN())) {
 				addActionError(getText("error.alldetails.required"));

@@ -374,7 +374,7 @@ public class RiskDetailsBean  {
     private List<String> retroDupVal;
     private List<String> gnpiAsPOSlide;
     private List<String> gnpiAsPO;
-    
+    private List<String> netMaxRetentPer;
     
     private List<Map<String,Object>> lowClaimBonusList;
     private String proposalReference;
@@ -528,6 +528,7 @@ public class RiskDetailsBean  {
 	private String scaledeltacommission;
 	private String provisionCom;
 	private String scalementhod;
+	private String portfolioType;
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -5571,6 +5572,18 @@ public class RiskDetailsBean  {
 	}
 	public void setScalementhod(String scalementhod) {
 		this.scalementhod = scalementhod;
+	}
+	public String getPortfolioType() {
+		return portfolioType;
+	}
+	public void setPortfolioType(String portfolioType) {
+		this.portfolioType = portfolioType;
+	}
+	public List<String> getNetMaxRetentPer() {
+		return netMaxRetentPer;
+	}
+	public void setNetMaxRetentPer(List<String> netMaxRetentPer) {
+		this.netMaxRetentPer = netMaxRetentPer;
 	}
 	
 	

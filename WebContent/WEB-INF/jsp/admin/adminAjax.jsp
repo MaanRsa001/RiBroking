@@ -2766,40 +2766,66 @@ alert("This action is not allowed because a previous transaction is pending for 
 </table>
 </s:elseif>	
 <s:elseif test='"statusChange".equalsIgnoreCase(dropDown)'>
+<style type="text/css">
+ .tableColWidth {
+ 	min-width: 200px;
+ 	max-width: 750px;
+ 	width: 200px;
+ 	white-space: normal;
+ }
+ 
+  .tableColWidth1 {
+ 	min-width: 80px;
+ 	max-width: 750px;
+ 	width: 450px;
+ 	white-space: normal;
+ }
+ 
+ .tableColNoWrap {
+ 	min-width: 100px;
+ 	max-width: 750px;
+ 	width: 100px;
+ 	white-space: nowrap;
+ }
+ .table-overflow{
+    overflow: scrollX;
+ }
+ </style>
+<div  class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;overflow-y: visible;">
 <table width="100%" class="table table-bordered" >
 	<thead>
 	<tr>
 		<th width="3%"> <s:text name="label.sno" /> </th>
-		<th width="10%"><s:text name="label.proposalNo" /></th>
-		<th width="10%"><s:text name="label.cedingCompany" /></th>
-		<th width="10%"><s:text name="label.reinsureName" /></th>
-		<th width="10%"><s:text name="label.placingBroker" /></th>
-		<th width="10%"><s:text name="label.shareOffer" /></th>
+		<th class="tableColWidth"><s:text name="label.proposalNo" /></th>
+		<th class="tableColWidth"><s:text name="label.cedingCompany" /></th>
+		<th class="tableColWidth"><s:text name="label.reinsureName" /></th>
+		<th class="tableColWidth"><s:text name="label.placingBroker" /></th>
+		<th class="tableColWidth"><s:text name="label.shareOffer" /></th>
 		<s:if test='"A".equals(newStatus) || "RO".equals(newStatus) || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="10%"><s:text name="label.written" /></th>
+		<th class="tableColWidth"><s:text name="label.written" /></th>
 		</s:if>
 		<s:if test='"A".equals(newStatus)'>
-		<th width="10%"><s:text name="label.writtenvaliditydate" /></th>
-		<th width="10%"><s:text name="label.writtenvalidityRemarks" /></th>
+		<th class="tableColWidth"><s:text name="label.writtenvaliditydate" /></th>
+		<th class="tableColWidth"><s:text name="label.writtenvalidityRemarks" /></th>
 		</s:if>
 		<s:if test='"RO".equals(newStatus) || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="10%"><s:text name="label.proposedWL" /></th>
+		<th class="tableColWidth"><s:text name="label.proposedWL" /></th>
 		</s:if>
 		<s:if test='"RO".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="10%"><s:text name="label.signedLine" /></th>
+		<th class="tableColWidth"><s:text name="label.signedLine" /></th>
 		</s:if>
 		<s:if test='"SL".equals(newStatus)'>
-		<th width="10%"><s:text name="label.signedLineValidity" /></th>
-		<th width="10%"><s:text name="label.signedLineRemarks" /></th>
+		<th class="tableColWidth"><s:text name="label.signedLineValidity" /></th>
+		<th class="tableColWidth"><s:text name="label.signedLineRemarks" /></th>
 		</s:if>
 		<s:if test='"RO".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="10%"><s:text name="label.proposedSL" /></th>
+		<th class="tableColWidth"><s:text name="label.proposedSL" /></th>
 		</s:if>
 		<s:if test='"RO".equals(newStatus)'>
-		<th width="10%"><s:text name="label.reoffer" /></th>
+		<th class="tableColWidth"><s:text name="label.reoffer" /></th>
 		</s:if>
 		<s:if test='"PWL".equals(newStatus)  || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="10%"><s:text name="label.tqrBrokerageAmt" /></th>
+		<th class="tableColWidth"><s:text name="label.tqrBrokerageAmt" /></th>
 		</s:if>
 		<s:if test='"A".equals(newStatus)  || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
 		<th width="5%"><s:text name="label.brokerage" /></th>
@@ -2926,4 +2952,5 @@ alert("This action is not allowed because a previous transaction is pending for 
 		</s:iterator>
 	</tbody>
 </table>
+</div>
 </s:elseif>							

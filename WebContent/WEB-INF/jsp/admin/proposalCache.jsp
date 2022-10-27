@@ -110,7 +110,7 @@
 																		<td>${EDIT_MODE}</td>
 																		<td>
 																		<s:if test='#list.PROPOSAL_NO==(#list.EDIT_PROPOSAL)'>
-																		<input type="button"  value="Fix"   class="btn btn-sm btn-info" id="mybutton" onclick="getFix('${PROPOSAL_NO}','${CONTRACT_NO}','${BASE_LAYER}','${EDIT_STATUS}')" />
+																		<input type="button"  value="Fix"   class="btn btn-sm btn-info" id="mybutton" onclick="getFix('${PROPOSAL_NO}','${CONTRACT_NO}','${BASE_LAYER}','${EDIT_STATUS}','${BOUQUET_NO}')" />
 																		
 																		</s:if>
 																		</td>
@@ -131,8 +131,8 @@
 		</div>
 	</body>
 <script type="text/javascript">
-function getFix(proposal,contract,baseLayer,editMode){
-document.cache.action='${pageContext.request.contextPath}/updateEditModeCeding.action?proposalNo='+proposal+'&contractNo='+contract+'&baseLayer='+baseLayer+'&editMode='+editMode; 
+function getFix(proposal,contract,baseLayer,editMode,bouquetNo){
+document.cache.action='${pageContext.request.contextPath}/updateEditModeCeding.action?proposalNo='+proposal+'&contractNo='+contract+'&baseLayer='+baseLayer+'&editMode='+editMode+'&bouquetNo='+bouquetNo; 
 document.cache.submit();
 }
 

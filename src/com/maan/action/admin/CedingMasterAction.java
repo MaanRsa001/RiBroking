@@ -108,6 +108,9 @@ public class CedingMasterAction extends ActionSupport implements ModelDriven<Ced
 				new DropDownControllor().updateSubEditMode(bean.getProposalNo(), "N","");
 				new DropDownControllor().updateRenewalEditMode(bean.getProposalNo(),"N","");
 			}
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				new DropDownControllor().updateBqEditMode(bean.getBouquetNo(),"N","");
+			}
 			if("BR".equalsIgnoreCase(bean.getEditMode()) ||"BRF".equalsIgnoreCase(bean.getEditMode())){
 				new DropDownControllor().UpdateRenewalStatus(bean.getProposalNo());
 			}

@@ -140,6 +140,7 @@
 												</div>
 												<div class="panel-body">
 													<div id="statusChange">
+													<div  class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;overflow-y: visible;">
 																<table width="100%" class="table table-bordered" >
 																	<thead>
 																	<tr>
@@ -301,7 +302,7 @@
 																	</tbody>
 																</table>											
 															</div> 
-													
+													</div>
 													<%-- <div class="boxcontent">
 														<div class="textfield" style="display:table;">
 															<div class="text txtB">

@@ -308,6 +308,10 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					}
 				}
 			} else {
+				if(StringUtils.isNotBlank(bean.getProposal_no())) {
+					bean.setFlag("layer");
+					bean.setLayerMode("layer");
+				}
 				logger.info("##########Validation Message Start###########");
 				Iterator<String> error = getActionErrors().iterator();
 				while(error.hasNext()){

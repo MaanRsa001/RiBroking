@@ -3809,7 +3809,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			String query=getQuery("INSERT_CLASS_LIMIT");
 			if(!"5".equalsIgnoreCase(beanObj.getBusinessType())){
 			for(int i=0;i<beanObj.getCoverLimitOC().size();i++){
-				Object[] obj= new Object[14];
+				Object[] obj= new Object[15];
 				obj[0]=beanObj.getProposal_no();
 				obj[1]=(getMaxAmednId(beanObj.getProposal_no()))+"";
 				obj[2]=beanObj.getContNo();
@@ -3824,6 +3824,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				obj[11]=i+1;
 				obj[12]=beanObj.getEgnpiAsPerOff().get(i).replace(",", "");
 				obj[13]=beanObj.getGnpiAsPO()==null?"0":beanObj.getGnpiAsPO().get(i).replace(",", "");
+				obj[14]=beanObj.getNetMaxRetentPer().get(i).replace(",", "");
 				logger.info("Args[]=>" + StringUtils.join(obj,","));
 				this.mytemplate.update(query, obj);
 				String val = beanObj.getCoverLimitOC().get(i).replace(",", "");
@@ -3846,6 +3847,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					obj[11]=i+1;
 					obj[12]=beanObj.getEgnpiAsPerOffSlide().get(i).replace(",", "");
 					obj[13]=beanObj.getGnpiAsPOSlide().get(i).replace(",", "");
+					obj[14]="";
 					logger.info("Args[]=>" + StringUtils.join(obj,","));
 					this.mytemplate.update(query, obj);
 				
@@ -3877,6 +3879,8 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				List<String> coverLimitPercent = new ArrayList<String>();
 				List<String> deductableLimitAmount = new ArrayList<String>();
 				List<String> deductableLimitPercent = new ArrayList<String>();
+				List<String> netMaxRetentPer = new ArrayList<String>();
+				
 				//SList<List<Map<String,Object>>> coversubdeptList=new ArrayList<List<Map<String,Object>>>();
 				List<String> egnpi = new ArrayList<String>();
 				List<String> gnpi = new ArrayList<String>();
@@ -3891,7 +3895,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					egnpi.add(insMap.get("RSK_EGNPI_AS_OFF")==null?"0.00":DropDownControllor.formatter(insMap.get("RSK_EGNPI_AS_OFF").toString()));
 					gnpi.add(insMap.get("RSK_GNPI_AS_OFF")==null?"0.00":DropDownControllor.formatter(insMap.get("RSK_GNPI_AS_OFF").toString()));
 					//ScoversubdeptList.add(new DropDownControllor().getSubProfitCentreDropDown(insMap.get("RSK_COVER_CLASS")==null?"":insMap.get("RSK_COVER_CLASS").toString(),beanObj.getBranchCode(),beanObj.getProduct_id()));
-
+					netMaxRetentPer.add(insMap.get("RSK_NET_MAX_RETENT_PERCENT")==null?"0.00":DropDownControllor.formatter(insMap.get("RSK_NET_MAX_RETENT_PERCENT").toString()));
 				}
 				
 				
@@ -3907,6 +3911,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					beanObj.setDeductableLimitOC(deductableLimitAmount);
 					beanObj.setEgnpiAsPerOff(egnpi);
 					beanObj.setGnpiAsPO(gnpi);
+					beanObj.setNetMaxRetentPer(netMaxRetentPer);
 					//SbeanObj.setCoversubDepartList(coversubdeptList);
 					beanObj.setLoopcount(Integer.toString(result.size()));
 				}else{
@@ -3918,6 +3923,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					beanObj.setDeductableLimitPercent(deductableLimitPercent);
 					beanObj.setEgnpiAsPerOffSlide(egnpi);
 					beanObj.setGnpiAsPOSlide(gnpi);
+					beanObj.setNetMaxRetentPer(netMaxRetentPer);
 					//SbeanObj.setCoversubDepartList(coversubdeptList);
 					
 					beanObj.setCount(Integer.toString(result.size()));
