@@ -19,7 +19,7 @@ public class PlacementDAO extends MyJdbcTemplate{
 private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
 
-	public void proposalInfo(PlacementBean bean) {
+	public List<Map<String,Object>> proposalInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		try {
 			String query=getQuery("GET_EXISTING_PROPOSAL");
@@ -48,6 +48,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return list;
 	}
 
 
@@ -302,7 +303,108 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			e.printStackTrace();
 		}
 	}
+
+
+	public void getMailTemplate(PlacementBean bean) {
+		
+		List<Map<String,Object>>result=null;
+		String query=getQuery("GET_MAIL_TEMPLATE");
+		Object[] obj=new Object[1];
+		obj[0]=bean.getMailType();
+		
+		logger.info("Query=>"+query);
+		logger.info("Args=>"+StringUtils.join(obj, ","));
+		result=this.mytemplate.queryForList(query, obj);
+		if(!CollectionUtils.isEmpty(result)) {
+			Map<String,Object>map=result.get(0);
+			bean.setMailSubject(map.get("MAIL_SUBJECT")==null?"":map.get("MAIL_SUBJECT").toString());
+			bean.setMailBody(map.get("MAIL_BODY")==null?"":map.get("MAIL_BODY").toString());
+			bean.setMailTo(map.get("EMAIL_TO")==null?"":map.get("EMAIL_TO").toString());
+			bean.setMailCC(map.get("EMAIL_CC")==null?"":map.get("EMAIL_CC").toString());
+			
+	}
+		GetMailBodyFrame(bean);
+	}
+
+
+	private void GetMailBodyFrame(PlacementBean bean) {
+		String mailbody=bean.getMailBody(),mailsub=bean.getMailSubject();
+		List<Map<String,Object>>list=proposalInfo(bean);
+		if(!CollectionUtils.isEmpty(list)) {
+			Map<String,Object>map=list.get(0);
+			for (Map.Entry entry: map.entrySet()) {
+				if(mailbody.contains(entry.getKey().toString()) == true) {
+					mailbody = mailbody.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
+					
+				}
+				if(mailsub.contains(entry.getKey().toString()) == true) {
+					mailsub = mailsub.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
+				}
+			}
+		}
+		mailbody+=BodyTableFrame(bean);
+		bean.setMailBody(mailbody);
+		bean.setMailSubject(mailsub);
+	}
+
+
+	private String BodyTableFrame(PlacementBean bean) {
+		List<Map<String,Object>>list=MailproposalInfo(bean);
+		String msg=getTableMsg(list,bean);
+		return msg;
+	}
+	private List<Map<String, Object>> MailproposalInfo(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		try {
+			String query=getQuery("GET_MAILTEPLATE_PROPOSAL");
+			Object[] obj=new Object[2];
+			obj[0]=bean.getBranchCode();
+			obj[1]=bean.getProposalNo();
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	private String getTableMsg(List<Map<String, Object>> agentWiseReport, PlacementBean bean) {
+		String messageContent ="";
+		messageContent="<table width=\"100%\" class=\"table table-bordered\"> <thead> <tr> <th width=\"10%\">TQR Bouquet Ref </th>" + 
+				"<th width=\"10%\">TQR Offer Ref</th>" + 
+				"<th width=\"10%\">Business Type</th>" + 
+				"<th width=\"10%\">Main Class</th>" + 
+				"<th width=\"10%\">Sub Class</th>" + 
+				"<th width=\"10%\">Treaty Type</th>" + 
+				"<th width=\"10%\">Treaty Name</th>" + 
+				"<th width=\"10%\">Inception Date</th>" + 
+				"<th width=\"10%\">Expiry Date</th>" + 
+				"<th width=\"10%\">Max Share Offer %</th>" + 
+				"</tr> </thead> <tbody>" ;
+		
+		
+		for(int i=0;i<agentWiseReport.size();i++) {
+			Map<String,Object>map=agentWiseReport.get(i);
+				messageContent+="<tr>"+
+			"<td >"+(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString())+"</td>" + 
+			"<td >"+(map.get("BASE_LAYER")==null?"":map.get("BASE_LAYER").toString())+"</td>" + 
+			"<td >"+(map.get("BUSINESS_TYPE")==null?"":map.get("BUSINESS_TYPE").toString())+"</td>" + 
+			"<td >"+(map.get("CLASS")==null?"":map.get("CLASS").toString())+"</td>" + 
+			"<td >"+(map.get("SUB_CLASS")==null?"":map.get("SUB_CLASS").toString())+"</td>" + 
+			"<td >"+(map.get("TREATY_TYPE")==null?"":map.get("TREATY_TYPE").toString())+"</td>" + 
+			"<td >"+(map.get("TREATYTYPE")==null?"":map.get("TREATYTYPE").toString())+"</td>" + 
+			"<td >"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
+			"<td >"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
+			"<td >"+(map.get("SAHRE_MAX")==null?bean.getMaxSharePercent():map.get("SAHRE_MAX").toString())+"</td>" + 
+			"</tr>"+
+			"</table>" ;
+		}
+		
 	
+	return messageContent.toString();
+	}
 }
 	
 

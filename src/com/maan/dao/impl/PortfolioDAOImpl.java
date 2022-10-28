@@ -547,7 +547,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
     	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		Map<String,Object> map=new HashMap<String,Object>();
 		try{
-			if(StringUtils.isBlank(tempBean.getBaseLayer())) {
+			
 			if( menuRights.toString().contains("EN") ){//&&"N".equalsIgnoreCase(tempBean.getEditMode())&&!"".equalsIgnoreCase(tempBean.getEditMode())){
 				map.put("TYPE","E");
 				map.put("DETAIL_NAME","Edit");
@@ -560,7 +560,6 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 				list.add(map);
 				map=new HashMap<String,Object>();
 			}
-		}
 			if( menuRights.toString().contains("V")){
 				map.put("TYPE","PL");
 				map.put("DETAIL_NAME","Placing");

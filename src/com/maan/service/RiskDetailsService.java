@@ -208,6 +208,10 @@ public class RiskDetailsService {
 		dao.getcalculateSC(bean);
 		
 	}
+	public void getSectionEditMode(RiskDetailsBean bean) {
+		dao.getSectionEditMode(bean);
+		
+	}
 	
 
 	

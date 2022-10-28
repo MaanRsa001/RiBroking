@@ -501,6 +501,7 @@
 				<result name="placementList" type="tiles">placementList</result>
 				<result name="placementStatus" type="tiles">placementStatus</result>
 				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
+				<result name="mailtemplate" >/WEB-INF/jsp/placement/mailTemplate.jsp</result>
 			</action>
 		
 		</package>

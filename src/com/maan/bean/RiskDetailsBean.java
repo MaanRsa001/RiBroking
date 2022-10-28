@@ -529,6 +529,7 @@ public class RiskDetailsBean  {
 	private String provisionCom;
 	private String scalementhod;
 	private String portfolioType;
+	private String sectionMode;
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -5584,6 +5585,12 @@ public class RiskDetailsBean  {
 	}
 	public void setNetMaxRetentPer(List<String> netMaxRetentPer) {
 		this.netMaxRetentPer = netMaxRetentPer;
+	}
+	public String getSectionMode() {
+		return sectionMode;
+	}
+	public void setSectionMode(String sectionMode) {
+		this.sectionMode = sectionMode;
 	}
 	
 	

@@ -39,7 +39,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public String init() {
 		String forward="placement";
 		service.proposalInfo(bean);
-		bean.setPlacementInfoList(service.getPlacingInfo(bean));
+		//bean.setPlacementInfoList(service.getPlacingInfo(bean));
 		if(!CollectionUtils.isEmpty(bean.getPlacementInfoList())) {
 			 forward="placementList";
 		}else {
@@ -55,6 +55,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 				bean.setMode("placing");
 			}else {
 				bean.setMode("mail");
+				//bean.setMailType("PLACING");
+				//service.getMailTemplate(bean);
 			}
 		}
 		return forward;
@@ -161,5 +163,11 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public String getStatusChange() {
 		bean.setPlacementeditInfo(service.editPlacingDetails(bean));
 		return "dropdownajax";
+	}
+	public String getMailTemplate() {
+		bean.setMode("template");
+		service.getMailTemplate(bean);
+		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
+		return "placement";
 	}
 }

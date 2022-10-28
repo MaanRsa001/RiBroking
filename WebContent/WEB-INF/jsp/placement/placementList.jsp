@@ -133,7 +133,7 @@
 																			<s:property value="#list.STATUS"/>
 																		</td>
 																		<td>
-																			<input type="button" value="Update" class="btn btn-sm btn-info"   onclick="FnUpdate('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
+																			<input type="button" value="Update" class="btn btn-sm btn-warning"   onclick="FnUpdate('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
 																		</td>
 																	</tr>												
 																	</s:iterator>

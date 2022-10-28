@@ -58,8 +58,12 @@ public class PlacementBean {
 	private List<String> proposalNos;
 	private List<String> reinsurerIds;
 	private List<String> brokerIds;
-	
-	
+	private String mailType;
+	private String mailSubject;
+	private String mailBody;
+	private String mailTo;
+	private String mailCC;
+	private String maxSharePercent;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -365,6 +369,43 @@ public class PlacementBean {
 	}
 	public void setBrokerIds(List<String> brokerIds) {
 		this.brokerIds = brokerIds;
+	}
+	public String getMailType() {
+		return mailType;
+	}
+	public void setMailType(String mailType) {
+		this.mailType = mailType;
+	}
+	public String getMailSubject() {
+		return mailSubject;
+	}
+	public void setMailSubject(String mailSubject) {
+		this.mailSubject = mailSubject;
+	}
+	
+	public String getMailBody() {
+		return mailBody;
+	}
+	public void setMailBody(String mailBody) {
+		this.mailBody = mailBody;
+	}
+	public String getMailTo() {
+		return mailTo;
+	}
+	public void setMailTo(String mailTo) {
+		this.mailTo = mailTo;
+	}
+	public String getMailCC() {
+		return mailCC;
+	}
+	public void setMailCC(String mailCC) {
+		this.mailCC = mailCC;
+	}
+	public String getMaxSharePercent() {
+		return maxSharePercent;
+	}
+	public void setMaxSharePercent(String maxSharePercent) {
+		this.maxSharePercent = maxSharePercent;
 	}
 	
 	

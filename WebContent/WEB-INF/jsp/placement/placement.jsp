@@ -41,6 +41,7 @@
 		});
 	  });	
 	  </script>		
+	  <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 </head>
 <body>
 <div class="table0" style="width: 100%; margin: 0 auto;">
@@ -300,7 +301,7 @@
 																<s:property value="mailStatus[#stat.count-1]"/>
 																</td>
 																<td align="center">
-																	<input type="button" value="Send Mail" class="btn btn-sm btn-primary"   data-toggle="modal" data-target="#companyModal" />
+																	<input type="button" value="Send Mail" class="btn btn-sm btn-primary"    onclick="getMailTemplate('PLACING','<s:property value="shareOffer[#stat.count-1]"/>');"/>
 																</td>
 															</tr>												
 															</s:iterator>
@@ -322,9 +323,9 @@
 										      <div class="modal-header">
 										        <button type="button" class="close" data-dismiss="modal">&times;</button>
 										      </div>
-										      <div class="modal-body" >
+										      <div class="modal-body" style="min-height:70vh">
 										        <div class="container-fluid" id="companyAjaxId2">
-										        	<s:include value="mailTemplate.jsp"></s:include>
+										        	<%-- <s:include value="mailTemplate.jsp"></s:include>  --%>
 										        </div>
 										      </div>
 										    </div>
@@ -334,6 +335,21 @@
 									</div>
 									
 									</s:if>
+									<s:else>
+									<div class="boxcontent" >
+									<div class="panel panel-primary">											
+										<div class="panel-heading">
+											<s:text name="label.Reinsureinfo" />
+										</div>
+										<div class="panel-body">
+											<div class="boxcontent">
+											<s:include value="mailTemplate.jsp"></s:include>
+											</div>
+										</div>
+									</div>
+									</div>
+									
+									</s:else>
 									</div>
 									<br class="clear"/>									
 									
@@ -350,14 +366,17 @@
 							
 							
 								<input type="button"  value="Cancel"  class="btn btn-sm btn-danger"  onclick="FnCancel()" />
+								<s:if test='"placing".equals(mode)'>
 								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="FnNext()" />	
-								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnSumbit()" />											
+								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnSumbit()" />
+								</s:if>											
 							</div>
 						</div>	
 						
 						<s:hidden name="size" />
 						<s:hidden name="proposalNo" id="proposalNo"></s:hidden>
-						
+						<s:hidden name="mailType" id="mailType"></s:hidden>
+						<s:hidden name="maxSharePercent" id="maxSharePercent"></s:hidden>
 					</div>	
 					<div id="premiumSubmit">
 					</div>									
@@ -489,6 +508,21 @@ function FnSumbit(){
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.placement.submit();
 }
-</script>		
+function sendEmail(){
+	document.getElementById('mailBody').value= document.getElementById("editor").innerHTML;
+	postFormRequest('${pageContext.request.contextPath}/sendMailPlacement.action', "companyAjaxId2", "placement");
+}
+function getMailTemplate(mailType,share){
+	document.getElementById('mailType').value=mailType
+	document.getElementById('maxSharePercent').value=share;
+	document.placement.action='${pageContext.request.contextPath}/getMailTemplatePlacement.action';
+	document.placement.submit();
+}
+function cancelEmail(){
+	document.placement.action='${pageContext.request.contextPath}/initPlacement.action';
+	document.placement.submit();
+}
+</script>	
+	
 </body>
 </html>

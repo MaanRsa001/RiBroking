@@ -628,28 +628,32 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			if(res!=null && res.size()>0)
 				resMap = (Map<String, Object>)res.get(0);
 			if (resMap!=null) {
-				beanObj.setContractListVal(resMap.get("DATA_MAP_CONT_NO")==null?"":resMap.get("DATA_MAP_CONT_NO").toString());
+				
+				beanObj.setCedingCo(resMap.get("RSK_CEDINGID")==null?"":resMap.get("RSK_CEDINGID").toString());
+				beanObj.setIncepDate(resMap.get("RSK_INCEPTION_DATE")==null?"":resMap.get("RSK_INCEPTION_DATE").toString());
+				beanObj.setExpDate(resMap.get("RSK_EXPIRY_DATE")==null?"":resMap.get("RSK_EXPIRY_DATE").toString());
+				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
+				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
+				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
+				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setProposal_no(resMap.get("RSK_PROPOSAL_NUMBER")==null?"":resMap.get("RSK_PROPOSAL_NUMBER").toString());
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
 				beanObj.setEndorsmentno(resMap.get("RSK_ENDORSEMENT_NO")==null?"":resMap.get("RSK_ENDORSEMENT_NO").toString());
 				beanObj.setContNo(resMap.get("RSK_CONTRACT_NO")==null?"":resMap.get("RSK_CONTRACT_NO").toString());
 				beanObj.setLayerNo(resMap.get("RSK_LAYER_NO")==null?"":resMap.get("RSK_LAYER_NO").toString());
 				beanObj.setProduct_id(resMap.get("RSK_PRODUCTID")==null?"":resMap.get("RSK_PRODUCTID").toString());
-				beanObj.setDepartId(resMap.get("RSK_DEPTID")==null?"":resMap.get("RSK_DEPTID").toString());
+				
+				
+				if(StringUtils.isBlank(beanObj.getSectionMode())) {
+				beanObj.setDepartId(resMap.get("RSK_DEPTID")==null?"":resMap.get("RSK_DEPTID").toString());	
+				beanObj.setContractListVal(resMap.get("DATA_MAP_CONT_NO")==null?"":resMap.get("DATA_MAP_CONT_NO").toString());
 				beanObj.setProfit_Center(resMap.get("RSK_PFCID")==null?"":resMap.get("RSK_PFCID").toString());
 				beanObj.setSubProfit_center(resMap.get("RSK_SPFCID")==null?"":resMap.get("RSK_SPFCID").toString());
 				beanObj.setPolBr(resMap.get("RSK_POLBRANCH")==null?"":resMap.get("RSK_POLBRANCH").toString());
-				beanObj.setCedingCo(resMap.get("RSK_CEDINGID")==null?"":resMap.get("RSK_CEDINGID").toString());
 				beanObj.setBroker(resMap.get("RSK_BROKERID")==null?"":resMap.get("RSK_BROKERID").toString());
 				beanObj.setTreatyName_type(resMap.get("RSK_TREATYID")==null?"":resMap.get("RSK_TREATYID").toString());
 				beanObj.setMonth(resMap.get("RSK_MONTH")==null?"":resMap.get("RSK_MONTH").toString());
-				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
-				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
-				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
-				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
-				beanObj.setIncepDate(resMap.get("RSK_INCEPTION_DATE")==null?"":resMap.get("RSK_INCEPTION_DATE").toString());
-				beanObj.setExpDate(resMap.get("RSK_EXPIRY_DATE")==null?"":resMap.get("RSK_EXPIRY_DATE").toString());
 				beanObj.setAccDate(resMap.get("RSK_ACCOUNT_DATE")==null?"":resMap.get("RSK_ACCOUNT_DATE").toString());
 				beanObj.setOrginalCurrency(resMap.get("RSK_ORIGINAL_CURR")==null?"":resMap.get("RSK_ORIGINAL_CURR").toString());
 				beanObj.setExchRate(resMap.get("RSK_EXCHANGE_RATE")==null?"":resMap.get("RSK_EXCHANGE_RATE").toString().equalsIgnoreCase("0") ? "0"	: resMap.get("RSK_EXCHANGE_RATE")==null?"":resMap.get("RSK_EXCHANGE_RATE").toString());
@@ -715,7 +719,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setLimitOrigCur(resMap.get("RSK_LIMIT_OC")==null?"0":resMap.get("RSK_LIMIT_OC").toString().equalsIgnoreCase("0") ? "0" : resMap.get("RSK_LIMIT_OC").toString()==null?"":resMap.get("RSK_LIMIT_OC").toString());
 				}
 				saveFlag = true;
-			}
+			
 			if(StringUtils.isNotBlank(beanObj.getContNo())&&!"0".equals(beanObj.getContNo())){
 				beanObj.setPrclFlag(new DropDownControllor().getPLCLCountStatus(beanObj.getContNo(), "0"));
 			}else{
@@ -738,6 +742,100 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			GetRemarksDetails(beanObj);
 			getGetRetDetails(beanObj);
 			beanObj.setAmendId(new DropDownControllor().getRiskComMaxAmendId(beanObj.getProposal_no()));
+			}
+			else {
+				beanObj.setDepartId("");
+				beanObj.setContractListVal("");
+				beanObj.setProfit_Center("");
+				beanObj.setSubProfit_center("");
+				beanObj.setPolBr("");
+				beanObj.setBroker("");
+				beanObj.setTreatyName_type("");
+				beanObj.setMonth("");
+				beanObj.setUnderwriter("");
+				beanObj.setAccDate("");
+				beanObj.setOrginalCurrency("");
+				beanObj.setExchRate("");
+				beanObj.setBasis("");
+				beanObj.setPnoc("");
+				beanObj.setRiskCovered("");
+				beanObj.setTerritoryscope("");
+				beanObj.setTerritory(""); //24
+				beanObj.setProStatus("");
+				
+				beanObj.setEpi_origCur("");
+				beanObj.setPerilCovered("");
+				if(beanObj.getProduct_id().equalsIgnoreCase("2")){
+					beanObj.setOurEstimate("");
+				}
+				if(beanObj.getProduct_id().equalsIgnoreCase("2")){
+					beanObj.setEpi("");
+				}
+				beanObj.setXlCost("");
+				if(beanObj.getProduct_id().equalsIgnoreCase("2")){
+					beanObj.setCedReten("");
+				}
+				beanObj.setShareWritt("");
+				beanObj.setSharSign("");
+				beanObj.setProposalType("");
+				beanObj.setAccountingPeriod("");
+				beanObj.setReceiptofStatements("");
+				beanObj.setReceiptofPayment("");
+				if("2".equalsIgnoreCase(beanObj.getProduct_id())){
+					beanObj.setCedRetenType("");
+					beanObj.setSpRetro("");
+					beanObj.setNo_Insurer("");
+					beanObj.setLimitPerVesselOC("");
+					beanObj.setLimitPerLocationOC("");
+					beanObj.setCountryIncludedList("");
+					beanObj.setCountryExcludedList("");
+					beanObj.setTreatynoofLine("");
+					beanObj.setLimitOrigCurPml("");
+					beanObj.setTreatyLimitsurplusOCPml("");
+					beanObj.setEpipml("");
+				}
+				
+				beanObj.setEndorsmenttype("");
+				beanObj.setPml("");
+				beanObj.setPmlPercent("");
+				beanObj.setMaxLimit_Product("");
+				beanObj.setRenewal_contract_no("");
+				beanObj.setBaseLoginID("");
+				beanObj.setTreatyLimitsurplusOC("");
+				beanObj.setInwardType("");
+				beanObj.setTreatyType("");
+				beanObj.setLOCIssued("");
+				beanObj.setRunoffYear("");
+				beanObj.setLocBankName("");
+				beanObj.setLocCreditPrd("");
+				beanObj.setLocCreditAmt("");
+				beanObj.setLocBeneficerName("");
+				beanObj.setRetentionYN("");
+				beanObj.setFaclimitOrigCur("");
+				beanObj.setLimitOrigCur("");
+				beanObj.setPrclFlag(false);
+			
+			beanObj.setRiskdetailYN("N");
+			beanObj.setBrokerdetYN("N");
+			beanObj.setCoverdetYN("N");
+			beanObj.setPremiumdetailYN("N");
+			beanObj.setAcqdetailYN("N");
+			beanObj.setCommissiondetailYN("N");
+			beanObj.setDepositdetailYN("N");
+			beanObj.setLossdetailYN("N");
+			beanObj.setDocdetailYN("N");
+			beanObj.setPaymentPartner("");
+			beanObj.setSectionNo("");
+			beanObj.setQuotesharePercent("");
+			beanObj.setAccountingPeriodNotes("");
+			beanObj.setStatementConfirm("");
+			List<Map<String,Object>>result=new ArrayList<Map<String,Object>>();
+			Map<String,Object> doubleMap = new HashMap<String,Object>();
+			 doubleMap.put("one",new Double(1.0));
+			 result.add(doubleMap);
+			 beanObj.setRemarkList(result);
+			}
+			}
 			String proposalno="";
 			if (StringUtils.isNotEmpty(beanObj.getLayerProposalNo())) {
 				proposalno = beanObj.getLayerProposalNo();
@@ -745,6 +843,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				proposalno = beanObj.getProposal_no();
 			}
 			this.showSecondpageEditItems(beanObj, beanObj.getProduct_id(), proposalno);
+			 
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 
@@ -916,6 +1015,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 	private boolean showSecondpageEditItems(RiskDetailsBean beanObj,final String pid, final String proposalNo){
 		boolean savFlg = false;
 		try{
+			if(StringUtils.isBlank(beanObj.getSectionMode())) {
 			String selectQry="";
 			Object[] args = new Object[3];
 			args[0] = proposalNo;
@@ -1096,7 +1196,83 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setIncepDate(beanObj.getIncepDate());
 				beanObj.setRetroUwyear(getRetroContractDetailsList(beanObj,1,""));
 			}
-		} catch (Exception e) {
+		} else {
+			
+			beanObj.setLimitOurShare("");
+			beanObj.setLimitOSViewOC("");
+			beanObj.setEpiAsPerOffer("");
+			beanObj.setEpiOSViewOC("");
+			beanObj.setEpiAsPerShare("");
+			beanObj.setEpiOSOEViewOC("");
+			beanObj.setXlcostOurShare("");
+			beanObj.setXlCostViewOC("");
+			beanObj.setLimitOSViewDC("");
+			beanObj.setEpiOSViewDC("");
+			beanObj.setEpiOSOEViewDC("");
+			beanObj.setXlCostViewDC("");
+			beanObj.setCommissionQ_S("");
+			beanObj.setCommission_surp("");
+			beanObj.setOverRidder("");
+			beanObj.setBrokerage("");
+			beanObj.setTax("");
+			beanObj.setAcquisition_Cost("");
+			beanObj.setShare_Profit_Commission("2");
+			beanObj.setPremium_Reserve("");
+			beanObj.setLoss_reserve("");
+			beanObj.setInterest("");
+			beanObj.setCash_Loss_Limit("");
+			beanObj.setPortfolio_inout_Premium("");
+			beanObj.setPortfolio_inout_Loss("");
+			beanObj.setLoss_Advise("");
+			beanObj.setLeader_Underwriter("");
+			beanObj.setLeader_Underwriter_share("");
+			beanObj.setAccounts("");
+			beanObj.setCrestaStatus("");
+			beanObj.setEvent_limit("");
+			beanObj.setAggregate_Limit("");
+			beanObj.setOccurrent_Limit("");
+			beanObj.setExclusion("");
+			beanObj.setRemarks("");
+			beanObj.setUnderwriter_Recommendations("");
+			beanObj.setGms_Approval("");
+			beanObj.setSlideScaleCommission("");
+			beanObj.setLossParticipants("");
+			beanObj.setCommissionSubClass("");
+			beanObj.setLeader_Underwriter_country("");
+			beanObj.setOrginalacqcost("");
+			beanObj.setOurassessmentorginalacqcost("");
+			beanObj.setOuracqCost("");
+			beanObj.setProfitCommission("");
+			beanObj.setLosscommissionSubClass("");
+			beanObj.setSlidecommissionSubClass("");
+			beanObj.setCrestacommissionSubClass("");
+			beanObj.setManagementExpenses("");
+			beanObj.setCommissionType("");
+			beanObj.setProfitCommissionPer("");
+			beanObj.setSetup("");
+			beanObj.setSuperProfitCommission("");
+			beanObj.setLossCarried("");
+			beanObj.setLossyear("");
+			beanObj.setProfitCarried("");
+			beanObj.setProfitCarriedForYear("");
+			beanObj.setFistpc("");
+			beanObj.setProfitMont("");
+			beanObj.setSubProfitMonth("");
+			beanObj.setSubpc("");
+			beanObj.setSubSeqCalculation("");
+			beanObj.setLocRate("");
+			beanObj.setPremiumResType("");
+			beanObj.setPortfolioType("");
+			beanObj.setPcfpcType("");
+			beanObj.setPcfixedDate("");
+			beanObj.setOthercost("0");
+			beanObj.setAcqCostPer("");
+			beanObj.setPremiumQuotaShare("");
+			beanObj.setPremiumSurplus("");
+			beanObj.setCommissionQ_SAmt("");
+			beanObj.setCommission_surpAmt("");
+		}
+		}catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 
 		}
@@ -5059,6 +5235,42 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			bean.setScaleLowClaimBonus(bonusLowClaimBonus);
 			bean.setScaleCommissionList(list);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void getSectionEditMode(RiskDetailsBean beanObj) {
+		try {
+			Object[] args = new Object[3];
+		
+				args[0] = beanObj.getProposalNo1();
+				args[1] = beanObj.getProposalNo1();
+				args[2] = beanObj.getProposalNo1();
+			logger.info("Args[0]..[2]"+args[0]);
+			List<Map<String, Object>> res = this.mytemplate.queryForList(GetRiskDetailsEditQuery(false),args);
+			logger.info("List<Map<String, Object>> Size=>"+res.size());
+			Map<String, Object> resMap = null;
+			if(res!=null && res.size()>0)
+				resMap = (Map<String, Object>)res.get(0);
+			if (resMap!=null) {
+				beanObj.setCedingCo(resMap.get("RSK_CEDINGID")==null?"":resMap.get("RSK_CEDINGID").toString());
+				beanObj.setIncepDate(resMap.get("RSK_INCEPTION_DATE")==null?"":resMap.get("RSK_INCEPTION_DATE").toString());
+				beanObj.setExpDate(resMap.get("RSK_EXPIRY_DATE")==null?"":resMap.get("RSK_EXPIRY_DATE").toString());
+				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
+				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
+				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
+				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
+				beanObj.setProposal_no(resMap.get("RSK_PROPOSAL_NUMBER")==null?"":resMap.get("RSK_PROPOSAL_NUMBER").toString());
+				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
+				beanObj.setEndorsmentno(resMap.get("RSK_ENDORSEMENT_NO")==null?"":resMap.get("RSK_ENDORSEMENT_NO").toString());
+				beanObj.setContNo(resMap.get("RSK_CONTRACT_NO")==null?"":resMap.get("RSK_CONTRACT_NO").toString());
+				beanObj.setLayerNo(resMap.get("RSK_LAYER_NO")==null?"":resMap.get("RSK_LAYER_NO").toString());
+				beanObj.setProduct_id(resMap.get("RSK_PRODUCTID")==null?"":resMap.get("RSK_PRODUCTID").toString());
+				beanObj.setDepartId(resMap.get("RSK_DEPTID")==null?"":resMap.get("RSK_DEPTID").toString());
+				 
+			}
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

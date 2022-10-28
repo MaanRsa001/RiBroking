@@ -382,8 +382,8 @@ gap:20px;
 										<s:if test='!"layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)'>
 										<div class="boxcontent" id="laydet">
 											<div class="panel panel-primary">											
-												<div class="panel-heading">
-													<s:text name="label.sectioninfo" />
+												<div class="panel-heading" style="display: flex;justify-content: space-between;">
+													<div><s:text name="label.sectioninfo" /></div><div><button type="button"  class="btn btn-sm btn-success"  onclick="funNewMode('<s:property value='proposal_no'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','new');" tabindex="1"> New </button></div>
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent" style="width:75%">
@@ -423,7 +423,7 @@ gap:20px;
 																			<s:property value="#list.RSK_TREATYID"/>
 																		</td>
 																		<td align="center">
-																			<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
+																			<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','');" tabindex="1"> Edit </button>
 																		</td>
 																		<td align="center">
 																			<button type="button"  class="btn btn-sm btn-warning"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
@@ -1610,6 +1610,7 @@ gap:20px;
 								<s:hidden name="profitPopUp" id="profitPopUp"/>
 								 <s:hidden name="editMode" id="editMode"></s:hidden>
 								 <s:hidden name="referenceNo" id="referenceNo"></s:hidden>
+								 <s:hidden name="sectionMode" id="sectionMode"></s:hidden>
 								 
 							</s:form>
 						</div>
@@ -3042,6 +3043,19 @@ function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContrac
     document.getElementById("baseLayer").value=baseLayer;
     document.getElementById("layerMode").value='layer';
 	document.getElementById("flag").value='layer';
+    document.proportional.action="EditSectionRiskDetails.action?departmentId="+deptId;
+    
+    document.proportional.submit();
+}
+function funNewMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId,secMode) {
+	
+	document.getElementById("laydet").style.display = "none";
+    document.getElementById("proposalNo1").value=proposalno;
+   // document.getElementById("CustomerId").value=ceddingcompanyid;
+    document.getElementById("baseLayer").value=baseLayer;
+    document.getElementById("layerMode").value='layer';
+	document.getElementById("flag").value='copy';
+	document.getElementById("sectionMode").value=secMode;
     document.proportional.action="EditSectionRiskDetails.action?departmentId="+deptId;
     
     document.proportional.submit();

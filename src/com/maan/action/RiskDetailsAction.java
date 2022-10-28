@@ -4285,6 +4285,7 @@ public String EditSection(){
 	bean.setLayerProposalNo(bean.getProposalNo1());
 	bean.setProposal_no(bean.getProposalNo1());
 	bean.setProposalNo1("");
+	
 	ShowDropDown();
 	bean.setBranchCode(branchCode);
 	bean.setShortname(service.getShortname(bean));

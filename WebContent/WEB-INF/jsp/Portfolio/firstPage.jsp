@@ -198,6 +198,7 @@
 												<tr>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
+													<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Company Name" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Broker Name" /></th>
@@ -211,7 +212,6 @@
 													<s:if test='"RP".equalsIgnoreCase(title)'>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Old Contract No" /></th>
 													</s:if>
-													<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
 													<th style="text-align: center; vertical-align: middle;" width="150px">
 														<s:text name="Select Option" />
 													</th>
@@ -222,6 +222,13 @@
 													<tr>
 													<td><s:property value="#stat.count"/></td>
 													<td><s:property value="bouquetNo"/></td>
+													<s:if test='!"5".equals(#session.mfrid) '>
+													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
+													<td>
+													<s:property value="baseLayer"/>
+													</td>	
+													</s:if>
+													</s:if>
 													<td><s:property value="proposalNo"/></td>
 													<td><s:property value="ceding_Company_Name"/></td>	
 													<td><s:property value="brokerName"/></td>	
@@ -235,13 +242,7 @@
 													<s:if test='"RP".equalsIgnoreCase(#list.title)'>
 													<td><s:property value="old_Contract"/></td>
 													</s:if>
-													<s:if test='!"5".equals(#session.mfrid) '>
-													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
-													<td>
-													<s:property value="baseLayer"/>
-													</td>	
-													</s:if>
-													</s:if>	
+														
 													<td style="text-align: center; vertical-align: middle;">
 														<div><s:select list="buttonSelectionList"  id="buttonVal%{#stat.count-1}" cssClass="inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:70%;float:left;"/>
 														 <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="#session.mfrid" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
@@ -265,6 +266,7 @@
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
+												<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Company Name" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Broker Name" /></th>
@@ -281,7 +283,7 @@
 												<s:if test='"RP".equalsIgnoreCase(title)'>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Old Contract No" /></th>
 												</s:if>
-												<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
+												
 													<th style="text-align: center; vertical-align: middle;" width="150px">
 														<s:text name="Select Option" />
 													</th>
@@ -292,6 +294,14 @@
 												<tr>
 												<td><s:property value="#stat.count"/></td>
 												<td><s:property value="bouquetNo"/></td>
+												<s:if test='"2".equals(#session.mfrid)'>
+													<td><s:property value="baseLayer" /></td>
+													<%-- <td>
+													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer'>
+													<input type="button" class="btn btn-sm btn-info" value="CS" style="cursor: pointer;" onclick="funClassMode('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalNo" />')" />
+													</s:if>
+													</td> --%>
+												</s:if>
 												<td><s:property value="proposalNo"/></td>
 												<td><s:property value="ceding_Company_Name"/></td>	
 												<td><s:property value="brokerName"/></td>	
@@ -309,14 +319,7 @@
 												<td><s:property value="old_Contract"/></td>
 												</s:if>
 												
-												<s:if test='"2".equals(#session.mfrid)'>
-													<td><s:property value="baseLayer" /></td>
-													<%-- <td>
-													<s:if test='"".equals(#list.baseLayer) || null==#list.baseLayer'>
-													<input type="button" class="btn btn-sm btn-info" value="CS" style="cursor: pointer;" onclick="funClassMode('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalNo" />')" />
-													</s:if>
-													</td> --%>
-												</s:if>
+												
 												<td style="text-align: center; vertical-align: middle;">
 														<div><s:select list="buttonSelectionList"  id="buttonVal%{#stat.count-1}" cssClass="inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:70%;float:left;"/>
 														 <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="#session.mfrid" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
@@ -358,7 +361,8 @@
       	document.FirstPageForm.submit();
      }
      function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId) {
-	      document.getElementById("proposal_no").value=proposalno;
+	      //document.getElementById("proposal_no").value=proposalno;
+	      document.getElementById("proposal_no").value=baseLayer;
 	      document.getElementById("CustomerId").value=ceddingcompanyid;
 	      document.getElementById("baseLayer").value=baseLayer;
 	      document.getElementById("mode").value='edit';

@@ -36,5 +36,10 @@ public List<Map<String, Object>> editPlacingDetails(PlacementBean bean) {
 public void updatePlacement(PlacementBean bean) {
 	dao.updatePlacement(bean);
 }
+
+public void getMailTemplate(PlacementBean bean) {
+dao.getMailTemplate(bean);
+	
+}
 	
 }

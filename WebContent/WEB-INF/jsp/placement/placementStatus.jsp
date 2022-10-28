@@ -101,31 +101,40 @@
 																<s:select list="subStatusList" listKey="SUB_STATUS_CODE" listValue="SUB_STATUS_NAME" name="newStatus" id="newStatus" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getStatuschange(this.value);"/>
 															</div>
 														</div>
-														<div class="textfield">
-															<div class="text txtB">
+														<div class="boxcontent">
+															<div class="textfieldA25">
 																<s:text name="label.cedentCorrespondent" />
-															</div> 
-															<div class="tbox">
-																<s:textarea name="cedentCorrespondent" id="cedentCorrespondent" cssClass="inputBox" />
 															</div>
-														</div>
-														<div class="textfield">
-															<div class="text txtB">
-																<s:text name="label.reinsurerCorrespondent" />
-															</div> 
-															<div class="tbox">
-																<s:textarea name="reinsurerCorrespondent" id="reinsurerCorrespondent" cssClass="inputBox" />
+															<div class="textfieldA75">
+																<s:textarea name="cedentCorrespondent" id="cedentCorrespondent" rows="3" cssClass="inputBoxA" cssStyle="width: 100%;" />
+																<br/>
+																<%-- <span class="textAreaRemaining"><label id="exclusion_left"></label> &nbsp; <s:text name="Characters Remaining" /> </span> --%>
 															</div>
-														</div>
-														<div class="textfield">
-															<div class="text txtB">
-																<s:text name="label.tqrCorrespondent" />
-															</div> 
-															<div class="tbox">
-																<s:textarea name="tqrCorrespondent" id="tqrCorrespondent" cssClass="inputBox" />
-															</div>
-														</div>
 															<br class="clear"/>
+														</div>
+														<div class="boxcontent">
+															<div class="textfieldA25">
+																<s:text name="label.reinsurerCorrespondent" />
+															</div>
+															<div class="textfieldA75">
+																<s:textarea name="reinsurerCorrespondent" id="reinsurerCorrespondent" rows="3" cssClass="inputBoxA" cssStyle="width: 100%;" />
+																<br/>
+																<%-- <span class="textAreaRemaining"><label id="exclusion_left"></label> &nbsp; <s:text name="Characters Remaining" /> </span> --%>
+															</div>
+															<br class="clear"/>
+														</div>
+														<div class="boxcontent">
+															<div class="textfieldA25">
+																<s:text name="label.tqrCorrespondent" />
+															</div>
+															<div class="textfieldA75">
+																<s:textarea name="tqrCorrespondent" id="tqrCorrespondent" rows="3" cssClass="inputBoxA" cssStyle="width: 100%;" />
+																<br/>
+																<%-- <span class="textAreaRemaining"><label id="exclusion_left"></label> &nbsp; <s:text name="Characters Remaining" /> </span> --%>
+															</div>
+															<br class="clear"/>
+														</div>
+														<br class="clear"/>
 													</div>
 												</div>
 										</div>
@@ -473,7 +482,7 @@
 							
 							
 								<input type="button"  value="Back"  class="btn btn-sm btn-danger"  onclick="FnBack()" />
-								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnSumbit()" />											
+								<input type="button"  value="Submit"  class="btn btn-sm btn-success"  onclick="FnSumbit()" />											
 							</div>
 						</div>	
 						

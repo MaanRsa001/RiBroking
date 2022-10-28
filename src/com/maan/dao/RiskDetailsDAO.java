@@ -46,4 +46,5 @@ public interface RiskDetailsDAO {
 		boolean GetShareValidation(RiskDetailsBean bean);
 		void getRetentionDetails(RiskDetailsBean bean);
 		void getcalculateSC(RiskDetailsBean bean);
+		void getSectionEditMode(RiskDetailsBean bean);
 }
