@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import com.maan.bean.ClaimBean;
 import com.maan.bean.FaculPremiumBean;
 import com.maan.bean.FaculitivesBean;
+import com.maan.bean.PlacementBean;
 import com.maan.bean.RiskDetailsBean;
 import com.maan.bean.TreasuryBean;
 import com.maan.bean.admin.CedingMasterBean;
@@ -1452,11 +1453,18 @@ public class DropDownControllor extends MyJdbcTemplate {
 	}
 	public void updateSubClass(String proposalNo, String type) {
 		try {
-			String query = "call UPDATE_SUB(?,?)";
+			//String query = "call UPDATE_SUB(?,?)";
+			String query = getQuery("UPDATE_SUB_LAYER_INFO");
 			logger.info("Endorsement==>"+query);
 			logger.info("Args[0]==>" +proposalNo );
 			
-			int result = this.mytemplate.update(query,new Object[]{proposalNo,type});
+			int result = this.mytemplate.update(query,new Object[]{proposalNo,proposalNo});
+			query = getQuery("UPDATE_SUB_LAYER_RISK");
+			logger.info("Endorsement==>"+query);
+			logger.info("Args[0]==>" +proposalNo );
+			
+			result = this.mytemplate.update(query,new Object[]{proposalNo,proposalNo});
+			
 			System.out.println(result);
 		}
 		catch(Exception e) {
@@ -3368,4 +3376,40 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		}
 	}
 
+	public List<Map<String, Object>> getPlacedProposalList(PlacementBean bean) {
+		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
+		String query="";
+		try{
+			if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+				query=getQuery("GET_PLACED_PROPOSAL_BOUQUET");
+				
+			}else {
+				query=getQuery("GET_PLACED_PROPOSAL_BOUQUET_SINGLE");
+			}
+			logger.info("Select Query==> " + query);
+			
+			statusList=this.mytemplate.queryForList(query,new Object[]{bean.getBranchCode(),bean.getBouquetNo()});
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");	
+		}
+		return statusList;
+	}
+	public List<Map<String, Object>> getNotPlacedProposalList(PlacementBean bean) {
+		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
+		String query="";
+		try{
+			if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+				query=getQuery("GET_NOTPLACED_PROPOSAL_BOUQUET");
+				
+			}else {
+				query=getQuery("GET_NOTPLACED_PROPOSAL_BOUQUET_SINGLE");
+			}
+			logger.info("Select Query==> " + query);
+			
+			statusList=this.mytemplate.queryForList(query,new Object[]{bean.getBranchCode(),bean.getBouquetNo()});
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");	
+		}
+		return statusList;
+	}
 }

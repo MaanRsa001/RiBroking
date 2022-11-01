@@ -2733,11 +2733,12 @@ alert("This action is not allowed because a previous transaction is pending for 
 <table width="100%" class="table table-bordered" id="reinsTbl">
 	<thead>
 	<tr>
-		<th width="7%"> <s:text name="label.sno" /> </th>
+		<th width="10%"> <s:text name="label.sno" /> </th>
 		<th width="20%"><s:text name="label.reinsureName" /></th>
 		<th width="20%"><s:text name="label.placingBroker" /></th>
 		<th width="20%"><s:text name="label.shareOffer" /></th>
-		<th width="15%" > <s:text name="Delete Row" /> </th>
+		<th width="20%" > <s:text name="Mail Status" /> </th>
+		<th width="10%" > <s:text name="Delete Row" /> </th>
 	</tr>
 	</thead>
 	<tbody>	
@@ -2755,9 +2756,12 @@ alert("This action is not allowed because a previous transaction is pending for 
 		<td>
 			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" theme="simple"/>
 		</td>
+		<td>
+			<s:property value="#list.MAIL_STATUS"/>
+		</td>
 		<td align="center">
-			<s:if test='0!=(#stat.count-1)'>
-			<input type="button" value="Delete" class="btn btn-sm btn-info"   onclick="deleteRow('<s:property value="%{#stat.count-1}"/>')" />
+			<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
+			<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count-1}"/>')" />
 			</s:if>
 		</td>
 	</tr>												
@@ -2828,11 +2832,11 @@ alert("This action is not allowed because a previous transaction is pending for 
 		<th class="tableColWidth"><s:text name="label.tqrBrokerageAmt" /></th>
 		</s:if>
 		<s:if test='"A".equals(newStatus)  || "PWL".equals(newStatus) || "NPWL".equals(newStatus) || "SL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="5%"><s:text name="label.brokerage" /></th>
+		<th class="tableColWidth"><s:text name="label.brokerage" /></th>
 		</s:if>
 		<s:if test='"P".equals(newStatus) || "D".equals(newStatus) || "NPWL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
-		<th width="5%"><s:text name="label.emailStatus" /></th>
-		<th width="5%"><s:text name="label.previewsendmail" /></th>
+		<th class="tableColWidth"><s:text name="label.emailStatus" /></th>
+		<th class="tableColWidth"><s:text name="label.previewsendmail" /></th>
 		</s:if>
 	</tr>
 	</thead>
@@ -2942,7 +2946,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 			</s:else>
 			<s:if test='"P".equals(newStatus) || "D".equals(newStatus) || "NPWL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
 			<td>
-				<s:property value="#list.EMAIL_STATUS"/>
+				<s:property value="#list.MAIL_STATUS"/>
 			</td>
 			<td>
 				<input type="button" value="Update" class="btn btn-sm btn-info"   onclick="FnUpdate('<s:property value="%{#stat.count-1}"/>')" theme="simple"/>

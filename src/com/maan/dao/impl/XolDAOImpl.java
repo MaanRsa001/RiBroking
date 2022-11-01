@@ -1572,7 +1572,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	public boolean getLayerDuplicationCheck(RiskDetailsBean  formObj) {
 		boolean result=false;
 		try{
-			if(StringUtils.isNotBlank(formObj.getBaseLayer())&&StringUtils.isNotBlank(formObj.getLayerNo()) && "Yes".equalsIgnoreCase(formObj.getLayerMode())){
+			if (StringUtils.isNotBlank(formObj.getBaseLayer()) && StringUtils.isNotBlank(formObj.getLayerNo()) /* && "Yes".equalsIgnoreCase(formObj.getLayerMode()) */){
 				String query= getQuery(DBConstants.RISK_SELECT_LAYERDUPCHECKBYBASELAYER);
 				logger.info("Select Query=>"+query);
 				logger.info("Args[0]=>"+formObj.getLayerNo());
@@ -3242,7 +3242,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		try{
 			//String query;
 			//if("06".equalsIgnoreCase(branchCode)){
-				result=new DropDownControllor().getSequence("Proposal","3".equalsIgnoreCase(pid)?pid:"6",deptId, branchCode,"","");
+				result=new DropDownControllor().getSequence("Proposal","3".equalsIgnoreCase(pid)?pid:"6","", branchCode,"","");
 			/*}else
 			result=new DropDownControllor().getPolicyNo("1",pid,branchCode);*/
 		}catch(Exception e){

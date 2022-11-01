@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
 import org.slf4j.Logger;
+import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.FaculitivesBean;
 import com.maan.bean.RiskDetailsBean;
@@ -239,12 +240,13 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				forward="retroxol1";
 			}
 			bean.setRskCountCheck("Yes");
-			if("A".equalsIgnoreCase(bean.getProStatus())|| "5".equalsIgnoreCase(pid)){
+			validateoffer();
+			/*if("A".equalsIgnoreCase(bean.getProStatus())|| "5".equalsIgnoreCase(pid)){
 				validatenext();
 			}
 			else{
 				validatesave();
-			}
+			}*/
 			if (!hasActionErrors()) {
 				bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 				boolean  SaveFlag=false;
@@ -292,11 +294,12 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 						dropDownController.updateSubEditMode(bean.getProposal_no(),"N","");
 					}
 					
-					ShowDropDown("edit");
-					EditMode();
-					forward="xol1";
 					if("S".equals(bean.getEditMode())) {
 						forward="SucusssFac";
+					}else {
+						ShowDropDown("edit");
+						EditMode();
+						forward="xol1";
 					}
 				} else {
 					ShowDropDown("");
@@ -310,6 +313,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			} else {
 				if(StringUtils.isNotBlank(bean.getProposal_no())) {
 					bean.setFlag("layer");
+					bean.setLayerMode("layer");
+				}else if(StringUtils.isNotBlank(bean.getProposalNo())) {
+					bean.setFlag("copy");
 					bean.setLayerMode("layer");
 				}
 				logger.info("##########Validation Message Start###########");
@@ -338,6 +344,86 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		return forward;
 	}
 
+	private void validateoffer() {
+		try {
+			final Validation val = new Validation();
+			Map<String, Object> map = null;
+			List<Map<String, Object>> list = service.getValidation(bean);
+			if (list != null && list.size() > 0) {
+				map = (Map<String, Object>) list.get(0);
+			}
+			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
+				addActionError(getText("error.bouquetModeYn.required"));
+			}
+			
+			if (val.isSelect(bean.getCedingCo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.cedingCo.required"));
+			}
+			if (val.isNull(bean.getIncepDate()).equalsIgnoreCase("")) {
+				addActionError(getText("error.incepDate.required"));
+			} else if (val.checkDate(bean.getIncepDate()).equalsIgnoreCase("INVALID")) {
+				addActionError(getText("error.incepDate.check"));
+			} else if (StringUtils.isNotBlank((bean.getRenewal_contract_no()))&& !"0".equals(bean.getRenewal_contract_no())&& map != null) {
+				if ("Invalid".equalsIgnoreCase(val.getDateValidate((String) map.get("EXPIRY_DATE"), bean.getIncepDate()))) {
+					addActionError(getText("errors.InceptionDate.invalid"));
+				}else {
+					bean.setRenewalFlag("NEWCONTNO");
+				}
+			}
+			if (val.isNull(bean.getExpDate()).equalsIgnoreCase("")) {
+				addActionError(getText("error.expDate.required"));
+			} else if (val.checkDate(bean.getExpDate()).equalsIgnoreCase("INVALID")) {
+				addActionError(getText("errors.ExpiryDate.Error"));
+			}
+			if (!bean.getIncepDate().equalsIgnoreCase("")&& !bean.getExpDate().equalsIgnoreCase("")) {
+				if (Validation.ValidateTwo(bean.getIncepDate(),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
+					addActionError(getText("error.expDate.check"));
+				}
+			}
+			if (val.isSelect(bean.getUwYear()).equalsIgnoreCase("")) {
+				addActionError(getText("error.uwYear.required"));
+			}if (val.isSelect(bean.getUwYearTo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.uwYearTo.required"));
+			}
+			if (StringUtils.isNotBlank(bean.getIncepDate())&& StringUtils.isNotBlank(bean.getExpDate())) {
+				if (Validation.ValidateTwo(bean.getIncepDate(),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
+					addActionError(getText("error.accDate.check1"));
+				}
+			}
+			if (val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
+				addActionError(getText("error.layerNo.required"));
+			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
+				addActionError(getText("error.layerNo.error"));
+			}
+			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
+				if (service.getLayerDuplicationCheck(bean)) {
+					logger.info("// PMD Changes");
+					addActionError(getText("error.layer.duplicate"));
+				}
+			}
+			if(StringUtils.isBlank(bean.getRiskdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getBrokerdetYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getPremiumdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getInstallYN())) {
+					addActionError(getText("error.InstallYN.required"));
+			}
+			if(StringUtils.isBlank(bean.getAcqdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getReinstdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+		} catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+			e.printStackTrace();
+		}
+	}
 	public String check() {
 		String forward="";
 		if("5".equalsIgnoreCase(pid)){
@@ -4320,7 +4406,8 @@ public String EditLayer(){
 	}else{
 		forward="xol1";
 	}
-	bean.setLayerProposalNo(bean.getProposalNo());
+	//bean.setLayerProposalNo(bean.getProposalNo()); 
+	bean.setLayerProposalNo(bean.getProposalNo1());
 	bean.setProposal_no(bean.getProposalNo1());
 		if(StringUtils.isBlank(bean.getMode())|| "edit".equalsIgnoreCase(bean.getMode())) {
 			if(StringUtils.isNotBlank(bean.getContractno())){
@@ -4335,7 +4422,11 @@ public String EditLayer(){
 		bean.setProduct_id(pid);
 		service.riskEditMode(bean, false);
 		bean.setYearList(getYearList());
-		
+		if(CollectionUtils.isEmpty(bean.getInstalList())) {
+			 List<String> inslist=new ArrayList<String>();
+			 inslist.add("");
+			 bean.setInstalList(inslist);
+		}
 		bean.setSubProfitList(dropDownController.getSubProfitCentreDropDown(bean.getDepartId(),branchCode,pid));
 		//RdsCalculation.SecondPageCaculation(bean,pid);
 		bean.setAnualAggregateLiability(service.getSumOfCover(bean,pid));
@@ -4362,6 +4453,9 @@ public String EditLayer(){
 	}
 	if("copy".equals(bean.getFlag())) {
 		bean.setLayerNo("");
+		bean.setTreatyName_type("");
+		bean.setDepartId("");
+		bean.setSubProfit_center("");
 	}
 	} catch (Exception e) {
 		logger.debug("Exception @ {" + e + "}");

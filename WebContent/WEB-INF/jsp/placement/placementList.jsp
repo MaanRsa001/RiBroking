@@ -172,6 +172,7 @@
 						
 						<s:hidden name="size" />
 						<s:hidden name="proposalNo" id="proposalNo"></s:hidden>
+						<s:hidden name="eproposalNo" id="eproposalNo"></s:hidden>
 						<s:hidden name="reinsurerId" id="reinsurerId"></s:hidden>
 						<s:hidden name="brokerId" id="brokerId"></s:hidden>
 					</div>	
@@ -190,7 +191,7 @@ function FnCancel(){
 	document.placement.submit();
 }
 function FnUpdate(val,val1,val2){
-	document.getElementById('proposalNo').value=val;
+	document.getElementById('eproposalNo').value=val;
 	document.getElementById('reinsurerId').value=val1;
 	document.getElementById('brokerId').value=val2;
 	document.placement.action='${pageContext.request.contextPath}/updateInfoPlacement.action'

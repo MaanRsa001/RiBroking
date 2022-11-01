@@ -187,9 +187,10 @@ public class LogInService {
     	return msg.toString();
     }
     
-    public void sendResponseMail(final String SMTP_HOST_NAME, final String user,  final String pwd, final String SMTP_MAIL_FROM, final String subject,
+    public String sendResponseMail(final String SMTP_HOST_NAME, final String user,  final String pwd, final String SMTP_MAIL_FROM, final String subject,
     		final String message, final String[] toAddress, final String[] ccAddress, final String SMTP_SHORT_ADDRESS,final String SMTP_PORT){
     	 logger.info("Enter sendResponseMail");
+    	 String status="";
     	SMTP_AUTH_USER = user;
     	SMTP_AUTH_PWD = pwd;
     	try{
@@ -231,10 +232,13 @@ public class LogInService {
 			System.out.println(msg1);
 			logger.info("Mail msg"+msg1);
 			Transport.send(msg1);
+			status="Success";
 		}catch(Exception e){
 			System.out.println(e);
+			status="Failed";
 		}
     	logger.info("Exit sendResponseMail");
+    	return status;
     }
     
     private class SMTPAuthenticator extends javax.mail.Authenticator{

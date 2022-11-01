@@ -33,35 +33,10 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	@Override
 	public PlacementBean getModel() {
 		bean.setBranchCode(branchCode);
+		bean.setUserId(userId);
 		return bean;
 	}
 	DropDownControllor dropDownController=new DropDownControllor();
-	public String init() {
-		String forward="placement";
-		service.proposalInfo(bean);
-		//bean.setPlacementInfoList(service.getPlacingInfo(bean));
-		if(!CollectionUtils.isEmpty(bean.getPlacementInfoList())) {
-			 forward="placementList";
-		}else {
-			bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
-			if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
-				List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-				for(int i=0;i<2;i++){
-				Map<String,Object> string = new HashMap<String,Object>();
-				string.put("1","1");
-				list.add(string);
-				}
-				bean.setReinsurerInfoList(list);
-				bean.setMode("placing");
-			}else {
-				bean.setMode("mail");
-				//bean.setMailType("PLACING");
-				//service.getMailTemplate(bean);
-			}
-		}
-		return forward;
-		
-	}
 	public List<Map<String,Object>>getReinsurerList(){
 		return dropDownController.getPersonalInfoDropDown(branchCode,"R",pid);
 	}
@@ -80,6 +55,41 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public List<Map<String,Object>>getSubStatusList(){
 		return dropDownController.getSubStatusDropDown(branchCode,bean.getCurrentStatus());
 	}
+	public List<Map<String,Object>>getPlacedProposalList(){
+		return dropDownController.getPlacedProposalList(bean);
+	}
+	public List<Map<String,Object>>getNotPlacedProposalList(){
+		return dropDownController.getNotPlacedProposalList(bean);
+	}
+	public String init() {
+		String forward="placement";
+		service.proposalInfo(bean);
+		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
+		//bean.setExreinsurerInfoList(service.getExReinsurerInfo(bean));
+		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
+			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+			for(int i=0;i<2;i++){
+			Map<String,Object> string = new HashMap<String,Object>();
+			string.put("1","1");
+			list.add(string);
+			}
+			bean.setReinsurerInfoList(list);
+			bean.setMode("placing");
+		}else {
+			bean.setMode("placing");
+			
+		}
+		
+		return forward;
+		
+	}
+	public String summary() {
+		String forward="placementList";
+		service.proposalInfo(bean);
+		bean.setPlacementInfoList(service.getPlacingInfo(bean));
+		return forward;
+	}
+	
 	public String removeRow(){
 		String forward = "dropdownajax";
 		List<String> reinsureName=new ArrayList<String>();
@@ -125,6 +135,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		validatePlacing();
 		if(!hasActionErrors()) {
 			service.savePlacing(bean);
+			//bean.setExreinsurerInfoList(service.getPlacingInfo(bean));
 			bean.setReinsurerInfoList(service.getPlacingInfo(bean));
 			bean.setMode("mail");
 		}else {
@@ -137,8 +148,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		
 	}
 	public String updateInfo() {
-		bean.setCurrentStatus("O");
-		service.proposalInfo(bean);
+		//bean.setCurrentStatus("O");
+		//service.proposalInfo(bean);
 		bean.setPlacementeditInfo(service.editPlacingDetails(bean));
 		return "placementStatus";
 		 
@@ -167,7 +178,35 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public String getMailTemplate() {
 		bean.setMode("template");
 		service.getMailTemplate(bean);
-		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
+		//bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
 		return "placement";
+	}
+	public String sendMail() {
+		bean.setMode("mail");
+		service.proposalInfo(bean);
+		service.sendMail(bean);
+		//bean.setExreinsurerInfoList(service.getPlacingInfo(bean));
+		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+		
+		return "placement";
+	}
+	public String getreinsurerInfo() { 
+		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
+		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
+			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+			for(int i=0;i<2;i++){
+			Map<String,Object> string = new HashMap<String,Object>();
+			string.put("1","1");
+			list.add(string);
+			}
+			bean.setReinsSNo(new ArrayList<String>());
+			bean.setReinsureName(new ArrayList<String>());
+			bean.setPlacingBroker(new ArrayList<String>());
+			bean.setShareOffer(new ArrayList<String>());
+			bean.setMailStatus(new ArrayList<String>());
+			bean.setProposalNos(new ArrayList<String>());
+			bean.setReinsurerInfoList(list);
+		}
+		return "dropdownajax";
 	}
 }

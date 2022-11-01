@@ -542,16 +542,29 @@ function ButtonAction(proposalno,ceddingcompanyid,productId,baseLayer,deptId,fla
 		funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,'',deptId)
 	}
 	else if("V"==sel){
-	funViewMode(proposalno,amendId,flag,baseLayer);
+		funViewMode(proposalno,productId,flag,amendId);
 	}
 	else if("PL"==sel){
 		funplacingMode(proposalno,amendId,flag,baseLayer);
+	}else if("RI"==sel){
+		funReinsurerMode(proposalno,amendId,flag,baseLayer);
 	}
 	
 	
 
 }
 function funplacingMode(proposalno,mfrid,flag,amendId)
+{
+	document.getElementById("amendId").value=amendId;
+    document.getElementById("flag").value=flag;
+    document.getElementById("proposalNo").value=proposalno;
+ 
+       document.FirstPageForm.action="summaryPlacement.action"
+       document.FirstPageForm.submit();
+  
+   
+}
+function funReinsurerMode(proposalno,mfrid,flag,amendId)
 {
 	document.getElementById("amendId").value=amendId;
     document.getElementById("flag").value=flag;

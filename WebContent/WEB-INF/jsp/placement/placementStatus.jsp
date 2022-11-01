@@ -300,7 +300,7 @@
 																		</s:else>
 																		<s:if test='"P".equals(newStatus) || "D".equals(newStatus) || "NPWL".equals(newStatus) || "PSL".equals(newStatus) || "CSL".equals(newStatus)'>
 																		<td>
-																			<s:property value="#list.EMAIL_STATUS"/>
+																			<s:property value="#list.MAIL_STATUS"/>
 																		</td>
 																		<td>
 																			<input type="button" value="Update" class="btn btn-sm btn-info"   onclick="FnUpdate('<s:property value="%{#stat.count-1}"/>')" />
@@ -488,6 +488,7 @@
 						
 						<s:hidden name="size" />
 						<s:hidden name="proposalNo" id="proposalNo"></s:hidden>
+						<s:hidden name="eproposalNo" id="eproposalNo"></s:hidden>
 						<s:hidden name="reinsurerId" id="reinsurerId"></s:hidden>
 						<s:hidden name="brokerId" id="brokerId"></s:hidden>
 						
@@ -504,7 +505,7 @@
 $('.select1').select2({ });
 
 function FnBack(){
-	document.placement.action='${pageContext.request.contextPath}/initPlacement.action';
+	document.placement.action='${pageContext.request.contextPath}/summaryPlacement.action';
 	document.placement.submit();
 }
 

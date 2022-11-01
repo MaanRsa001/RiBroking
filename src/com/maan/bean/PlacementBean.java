@@ -30,11 +30,12 @@ public class PlacementBean {
 	private String sectionNo;
 	private String mode;
 	private List<Map<String,Object>>reinsurerInfoList;
+	private List<Map<String,Object>>exreinsurerInfoList;
 	private List<Map<String,Object>>placementInfoList;
 	private List<Map<String,Object>>placementeditInfo;
 	private String emailBy;
 	private String updateDate;
-	
+	private String mailrecordNo;
 	private String currentStatus;
 	private String newStatus;
 	private String cedentCorrespondent;
@@ -64,6 +65,10 @@ public class PlacementBean {
 	private String mailTo;
 	private String mailCC;
 	private String maxSharePercent;
+	private String userId;
+	private String eproposalNo;
+	private String placementMode;
+	private String placementDisabled;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -406,6 +411,42 @@ public class PlacementBean {
 	}
 	public void setMaxSharePercent(String maxSharePercent) {
 		this.maxSharePercent = maxSharePercent;
+	}
+	public String getMailrecordNo() {
+		return mailrecordNo;
+	}
+	public void setMailrecordNo(String mailrecordNo) {
+		this.mailrecordNo = mailrecordNo;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getEproposalNo() {
+		return eproposalNo;
+	}
+	public void setEproposalNo(String eproposalNo) {
+		this.eproposalNo = eproposalNo;
+	}
+	public String getPlacementMode() {
+		return placementMode;
+	}
+	public void setPlacementMode(String placementMode) {
+		this.placementMode = placementMode;
+	}
+	public List<Map<String, Object>> getExreinsurerInfoList() {
+		return exreinsurerInfoList;
+	}
+	public void setExreinsurerInfoList(List<Map<String, Object>> exreinsurerInfoList) {
+		this.exreinsurerInfoList = exreinsurerInfoList;
+	}
+	public String getPlacementDisabled() {
+		return placementDisabled;
+	}
+	public void setPlacementDisabled(String placementDisabled) {
+		this.placementDisabled = placementDisabled;
 	}
 	
 	

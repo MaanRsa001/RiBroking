@@ -561,8 +561,14 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 				map=new HashMap<String,Object>();
 			}
 			if( menuRights.toString().contains("V")){
+				map.put("TYPE","RI");
+				map.put("DETAIL_NAME","Reinsurer");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			if( menuRights.toString().contains("V")){
 				map.put("TYPE","PL");
-				map.put("DETAIL_NAME","Placing");
+				map.put("DETAIL_NAME","Placement");
 				list.add(map);
 				map=new HashMap<String,Object>();
 			}

@@ -341,7 +341,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 		String result="";
 		try{
 			//if("06".equalsIgnoreCase(branchCode)){
-				result=new DropDownControllor().getSequence("Proposal",pid,deptId, branchCode,"","");
+				result=new DropDownControllor().getSequence("Proposal",pid,"0", branchCode,"","");
 			/*}else
 			result=new DropDownControllor().getPolicyNo("1",pid,branchCode);*/
 		}catch(Exception e){

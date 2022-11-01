@@ -66,7 +66,7 @@ gap:20px;
 <body onload="Commas(<s:property value="#session.mfrid" />),setCedRetType('<s:property value="cedRetenType" />')">
 <s:set var="elayerInfo" value='%{layerInfo}'/>
 <s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
-<s:set var="dislayer" value="%{'layer'.equals(layerMode)}"/>
+<s:set var="dislayer" value="%{baseLayer!=null && !''.equals(baseLayer)}"/>
 <div class="table0" style="width: 100%; margin: 0 auto;">
 	<div class="tablerow">
 		<div class="table1" style="width: 100%; margin: 0 auto; background-color: #E5E5E5; ">
@@ -76,6 +76,11 @@ gap:20px;
 					<div class="table2">
 						<div class="tablerow">
 							<span style="color:red;"><s:actionerror/></span>
+							<strong> 
+							<s:if test='!"".equals(contractGendration) && null!=contractGendration'>
+							   <font color="blue"> <s:property value="status" /> </font>
+							</s:if>
+							</strong>
 						</div>						
 						<div class="tablerow" align="center">
 							<span class="pageHeading">							
@@ -440,7 +445,7 @@ gap:20px;
 																	<button type="button"  class="btn btn-sm btn-warning"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
 																</td>
 																<td align="center">
-																	<s:if test='0!=(#stat.count-1)'>
+																	<s:if test='(#list.PROPOSAL_NO!=#list.BASE_LAYER)'>
 																	<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
 																	</s:if>
 																</td>
@@ -481,10 +486,10 @@ gap:20px;
 															<div class="tbox">
 															<s:if test='"Renewal".equals(proposalReference) || "Layer".equals(proposalReference)'>
 															<%--<s:textfield name="layerNo" cssClass="inputBox" cssStyle="text-align: right;" readonly="%{(proposal_no!='' && proposal_no!=null)?true:false}" disabled='%{("Y".equals(disableStatus1))?true:false}' onkeyup="checkNumbers(this);"/>--%>
-																<s:textfield name="layerNo" id="layerNo" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);"/>
+																<s:textfield name="layerNo" id="layerNo" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);"/>
 															</s:if>
 															<s:else>
-																<s:textfield name="layerNo" id="layerNo" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);"/>
+																<s:textfield name="layerNo" id="layerNo" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);"/>
 															</s:else>
 															
 															</div>
@@ -619,7 +624,7 @@ gap:20px;
 																				</s:if>
 																				</td>
 																				 --%><td>
-																				<s:textfield name="coverLimitOC[%{#stat.count-1}]" id="coverLimitOC[%{#stat.count-1}]"  cssClass = "inputBox"  cssStyle="text-align:right;"  onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30"  disabled='%{"Y".equals(disableStatus1)?true:false}'  />
+																				<s:textfield name="coverLimitOC[%{#stat.count-1}]" id="coverLimitOC[%{#stat.count-1}]"  cssClass = "inputBox"  cssStyle="text-align:right;"  onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);"  maxlength="30"  disabled='%{"Y".equals(disableStatus1)?true:false}'  />
 																				
 																				</td>
 																				<td>
@@ -789,7 +794,7 @@ gap:20px;
 																<s:text name="label.leadUnderWriter" /> 
 															</div>
 															<div class="tbox">
-																	<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"   onchange="getUnderwriterShare(this.value);"/>
+																	<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"   /><!-- onchange="getUnderwriterShare(this.value);" -->
 															</div>
 														</div>
 														<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
@@ -893,7 +898,7 @@ gap:20px;
 																<s:text name="label.epiPoc1" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="epi" id="epi" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this); middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);"/>
+																<s:textfield name="epi" id="epi" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this); middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);getRateOnline(this.value);"/>
 															</div>
 														</div>
 														<div class="textfield">
@@ -1060,14 +1065,15 @@ gap:20px;
 															</div>
 															
 														</div>									
-														<div class="textfield">
+														<%-- <div class="textfield">
 															<div class="text">
 																<s:text name="label.acqCostAmount" />
 															</div>
 															<div class="tbox">
 																<s:textfield name="acquisition_Cost" readonly="true" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="middleMinusRestriction(this);javascript:this.value=Comma(this.value)" />
 															</div>
-														</div>	
+														</div>	 --%>
+														<s:hidden name="acquisition_Cost" value="0" />
 														<s:hidden name="share_Profit_Commission" value="0" />
 														<br class="clear"></br>
 														</div>
@@ -1212,7 +1218,7 @@ gap:20px;
 												<s:text name="label.newLayer" />
 											</div>
 											<div class="tbox">
-												<s:textfield name="layerLayerNo" id="layerLayerNo" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="negative(this.id,this.value)" maxlength="5"/>													
+												<s:textfield name="layerLayerNo" id="layerLayerNo" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="negative(this.id,this.value);hundredCheck(this.id,this.value);" maxlength="5"/>													
 											</div>
 										</div>
 										<div class="textfield">
@@ -1330,6 +1336,7 @@ gap:20px;
 					   <s:hidden name="editMode" id="editMode"></s:hidden>
 					   <s:hidden name="referenceNo" id="referenceNo"></s:hidden>
 					   <s:hidden name="preVal" id="preVal"/>
+					   <s:hidden name="coverlimitTot" id="coverlimitTot"/>
 					</s:form>
 				</div>
 			</div>
@@ -1375,7 +1382,7 @@ function getSubDepatmentCover()
 	 //$("#coversubdepartId0").val(data);
 	 //$("#coversubdepartId0").multiselect("refresh");
 }
-function getAjax(value,id)
+function getAjax1(value,id)
 {
 	var URL='${pageContext.request.contextPath}/ajaxValueXol.action?departId='+value+'&dropDown=subclass';
 	postRequest(URL,'subclass');
@@ -1482,7 +1489,7 @@ document.getElementById("mode").value = "class";
         //CalculateEGNPI();
         getDepatmentCover('our');
         if(proposal_no!=''){
-        document.getElementById('departId').disabled = true;
+      //  document.getElementById('departId').disabled = true;
         }
         }
 			});
@@ -1497,7 +1504,7 @@ document.getElementById("mode").value = "class";
         //CalculateEGNPI('our');
         getDepatmentCover();
         if(proposal_no!=''){
-        document.getElementById('departId').disabled = true;
+       // document.getElementById('departId').disabled = true;
         }
         }
 			});
@@ -3827,6 +3834,24 @@ if ($("#bouquetModeYNY").prop("checked")) {
 }
 $('.select1').select2({ });
 </s:if>
+function getRateOnline(val1){
+	var total=0;
+	<s:iterator value="CoverList"  var="list" status="stat">
+	 var i = <s:property value="%{#stat.count-1}"/>;
+	 var val= document.getElementById("coverLimitOC["+(i)+"]").value;
+	 if(val==''){
+	 val ="0";
+	 }else{
+	 val=val.replace(new RegExp(',', 'g'),'');
+	 }
+	 total=parseInt(total)+parseInt(val);
+	 </s:iterator>
+	 val1=val1.replace(new RegExp(',', 'g'),'');
+	 var finalvalue=(parseFloat(total)/parseFloat(val1))*100;
+	 document.getElementById("rateOnLine").value=Comma(finalvalue.toFixed(2));	 
+	
+}
+
 </script>		
 </body>
 </html>

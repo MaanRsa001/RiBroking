@@ -69,6 +69,7 @@ gap:20px;
 	<body
 		onload="Commas(<s:property value="#session.mfrid" />),setCedRetType('<s:property value="cedRetenType" />')">
 		<s:set var="elayerInfo" value='%{sectionInfo}'/>
+		<s:set var="dislayer" value="%{'layer'.equals(layerMode)}"/>
 		<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 		<div class="table0" style="width: 100%; margin: 0 auto;">
 			<div class="tablerow">
@@ -83,6 +84,11 @@ gap:20px;
 									<div class="tablerow">
 										<span style="color: red;"><s:actionerror />
 										</span>
+										<STRONG> 
+										<s:if test='!"".equals(contractGendration) && null!=contractGendration'>
+										   <font color="blue"> <s:property value="status" /> </font>
+										</s:if>
+										</strong>
 									</div>
 									<div class="tablerow" align="center">
 										<span class="pageHeading"> <s:text
@@ -323,7 +329,7 @@ gap:20px;
 													 			    </span>
 																</s:if>
 																<s:else>
-																	<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Y".equals(disableStatus1)?true:false}' onchange="getRetention();"/>
+																	<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();"/>
 																	<span class="input-group-addon">
 																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
 													 			     	<span class="glyphicon glyphicon-list"></span>
@@ -339,7 +345,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<div class="">
-																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null)?true:false}' />
+																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer)?true:false}' />
 																</div>
 															</div>
 														</div>
@@ -350,12 +356,12 @@ gap:20px;
 															<div class="tbox">
 																<s:if test="layerProposalNo == null || layerProposalNo == ''">
 																	<div class="">
-																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" readonly="%{layerProposalNo!=null?true:false}" onchange="functionEDate();"/>
+																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" disabled="%{(layerProposalNo!=null) || (#dislayer)?true:false}" onchange="functionEDate();"/>
 																	</div>
 																</s:if>
 																<s:else>
 																	<div class="">
-																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" readonly="%{layerProposalNo!=null?true:false}" onchange="functionEDate();"/>
+																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" disabled="%{(layerProposalNo!=null) || (#dislayer)?true:false}" onchange="functionEDate();"/>
 																	</div>
 																</s:else>
 															</div>
@@ -365,7 +371,7 @@ gap:20px;
 																<s:text name="label.uwYearFrom" /> &nbsp; <sup style="color: red;">  </sup>
 															</div>
 															<div class="tbox" id="yearId">
-																<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" id="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(contNo != "" && contNo != null)?true:false}' onblur="getRetention();"/>
+																<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" id="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(contNo != "" && contNo != null) || (#dislayer)?true:false}' onblur="getRetention();"/>
 															</div>
 														</div>
 														<div class="textfield">
@@ -429,7 +435,7 @@ gap:20px;
 																			<button type="button"  class="btn btn-sm btn-warning"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
 																		</td>
 																		<td align="center">
-																			<s:if test='0!=(#stat.count-1)'>
+																			<s:if test='(#list.PROPOSAL_NO!=#list.BASE_LAYER)'>
 																			<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
 																			</s:if>
 																		</td>
@@ -679,7 +685,7 @@ gap:20px;
 																				<s:text name="label.leadUnderWriter" />  &nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
-																					<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"   onchange="getUnderwriterShare(this.value);"/>
+																					<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"  /> <!-- onchange="getUnderwriterShare(this.value);" -->
 																			</div>
 																		</div>
 																		<s:if test='"RI02".equals(#session.SOURCE_CODE)'>

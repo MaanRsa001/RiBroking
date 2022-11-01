@@ -33,14 +33,15 @@
     </div>
      <div class="row" style="padding-top:15px">
              <div class="text-center">
+             		<button type="submit" class="btn btn-danger" onclick="cancelEmail();">Discard</button>
                     <button type="submit" class="btn btn-success" onclick="sendEmail();">Send</button>
-                    <button type="submit" class="btn btn-danger" onclick="cancelEmail();">Discard</button>
+                    
                </div>
        </div>
-       <s:hidden name="mailBody" id="mailBody"></s:hidden>
  <script>
       var editor =CKEDITOR.replace( 'editor' );
       CKEDITOR.config.height = '400px';
+      
     </script>
 </body>
 </html>

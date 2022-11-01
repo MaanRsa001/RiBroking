@@ -41,5 +41,13 @@ public void getMailTemplate(PlacementBean bean) {
 dao.getMailTemplate(bean);
 	
 }
+
+public void sendMail(PlacementBean bean) {
+	dao.sendMail( bean);
+}
+
+public List<Map<String, Object>> getExReinsurerInfo(PlacementBean bean) {
+	return dao.getExReinsurerInfo(bean);
+}
 	
 }

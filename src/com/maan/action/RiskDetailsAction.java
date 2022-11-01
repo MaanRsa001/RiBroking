@@ -240,7 +240,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				session.put("DepartmentId",bean.getDepartId());
 			}
 			bean.setRskCountCheck("Yes");
-			validatenext();
+			//validatenext();
+			validateoffer();
 			if (!hasActionErrors()) {
 				bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 				boolean  SaveFlag=false;
@@ -324,6 +325,83 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		return forward;
 	}
 
+	private void validateoffer() {
+		try {
+		
+			final Validation val = new Validation();
+			final String incDate = val.checkDate(bean.getIncepDate());
+			final String expdate = val.checkDate(bean.getExpDate());
+			
+			Map<String, Object> map = null;
+			List<Map<String, Object>> list = service.getValidation(bean);
+			if (list != null && list.size() > 0) {
+				map = (Map<String, Object>) list.get(0);
+			}
+			
+			if(StringUtils.isBlank(bean.getBouquetModeYN())) {
+				addActionError(getText("error.bouquetModeYn.required"));
+			}
+			if (StringUtils.isBlank(bean.getCedingCo())) {
+				addActionError(getText("error.cedingCo.required"));
+			}
+			if (val.isNull(bean.getIncepDate()).equalsIgnoreCase("")) {
+				addActionError(getText("error.incepDate.required"));
+			} else if (incDate.equalsIgnoreCase("INVALID")) {
+				addActionError(getText("error.incepDate.check"));
+			} else if (!"".equals(bean.getRenewal_contract_no())&& !"0".equals(bean.getRenewal_contract_no())&& map != null) {
+				if ("Invalid".equalsIgnoreCase(val.getDateValidate((String) map.get("EXPIRY_DATE"), bean.getIncepDate()))) {
+					addActionError(getText("errors.InceptionDate.invalid"));
+				}else {
+					bean.setRenewalFlag("NEWCONTNO");
+				}
+			}
+			if (val.isNull(bean.getExpDate()).equalsIgnoreCase("")) {
+				addActionError(getText("error.expDate.required"));
+			} else if (expdate.equalsIgnoreCase("INVALID")) {
+				addActionError(getText("errors.ExpiryDate.Error"));
+			}
+			if (!bean.getIncepDate().equalsIgnoreCase("")&& !bean.getExpDate().equalsIgnoreCase("")) {
+				if (Validation.ValidateTwo(bean.getIncepDate(),bean.getExpDate()).equalsIgnoreCase("Invalid")) {
+					addActionError(getText("error.expDate.check"));
+				}
+			}
+			if (val.isSelect(bean.getUwYear()).equalsIgnoreCase("")) {
+				addActionError(getText("error.uwYear.required"));
+			}
+			if(StringUtils.isBlank(bean.getUwYearTo())) {
+				addActionError(getText("error.uwYearto.required"));
+			}
+			if(StringUtils.isBlank(bean.getRiskdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getBrokerdetYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getCoverdetYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getPremiumdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getAcqdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getCommissiondetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getDepositdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			if(StringUtils.isBlank(bean.getLossdetailYN())) {
+				addActionError(getText("error.alldetails.required"));
+			}
+			
+			
+		} catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+
+		}
+	}
 	public String check() {
 		String Status="";
 		String forward="protreaty1";
@@ -1401,7 +1479,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 					else if(bean.getContractTypelist()==null){
 						bean.setContractTypelist(list);
 					}*/
-					 ViewFlag = service.viewRiskDetails(bean, bean.getProduct_id());
+					 ViewFlag = service.riskEditMode(bean, false);
+							 //service.viewRiskDetails(bean, bean.getProduct_id());
 
 					if (ViewFlag) {
 						forward="ProView";
@@ -4382,6 +4461,9 @@ public String EditSection(){
 	}
 	if("copy".equals(bean.getFlag())) {
 		bean.setSectionNo("");
+		bean.setTreatyName_type("");
+		bean.setDepartId("");
+		bean.setSubProfit_center("");
 	}
 	} catch (Exception e) {
 		logger.debug("Exception @ {" + e + "}");
