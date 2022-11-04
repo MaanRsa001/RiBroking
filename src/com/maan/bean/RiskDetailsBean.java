@@ -530,6 +530,7 @@ public class RiskDetailsBean  {
 	private String scalementhod;
 	private String portfolioType;
 	private String sectionMode;
+	private String reinsdelete;
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -2175,6 +2176,8 @@ public class RiskDetailsBean  {
 	private List<String> coverLimitOC;
 	private List<String> coverLimitOCRe;
 	private List<String> hcoverLimitOC;
+	private List<String> hcoverLimitOCRe;
+	
 	private List<String> deductableLimitOC;
 	private List<String> coverLimitAmount;
 	private List<String> coverLimitPercent;
@@ -5591,6 +5594,18 @@ public class RiskDetailsBean  {
 	}
 	public void setSectionMode(String sectionMode) {
 		this.sectionMode = sectionMode;
+	}
+	public List<String> getHcoverLimitOCRe() {
+		return hcoverLimitOCRe;
+	}
+	public void setHcoverLimitOCRe(List<String> hcoverLimitOCRe) {
+		this.hcoverLimitOCRe = hcoverLimitOCRe;
+	}
+	public String getReinsdelete() {
+		return reinsdelete;
+	}
+	public void setReinsdelete(String reinsdelete) {
+		this.reinsdelete = reinsdelete;
 	}
 	
 	

@@ -61,6 +61,9 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public List<Map<String,Object>>getNotPlacedProposalList(){
 		return dropDownController.getNotPlacedProposalList(bean);
 	}
+	public List<Map<String,Object>>getMailCCList(){
+		return dropDownController.getMailCCList(bean);
+	}
 	public String init() {
 		String forward="placement";
 		service.proposalInfo(bean);

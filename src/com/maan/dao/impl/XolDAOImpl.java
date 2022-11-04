@@ -3379,7 +3379,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setMonth(resMap.get("RSK_MONTH")==null?"":resMap.get("RSK_MONTH").toString());
 				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
 				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
-				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
+				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"N":resMap.get("Bouquet_Mode_YN").toString());
 				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
 				if(!"Layer".equalsIgnoreCase(beanObj.getProposalReference())){
@@ -3477,12 +3477,12 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setBaseLoginID(resMap.get("LOGIN_ID")==null?"":resMap.get("LOGIN_ID").toString());
 				beanObj.setPaymentPartner(resMap.get("PAYMENT_PARTNER")==null?"":resMap.get("PAYMENT_PARTNER").toString());
 				beanObj.setRateOnLine(resMap.get("RATE_ON_LINE")==null?"":resMap.get("RATE_ON_LINE").toString());
-				beanObj.setRiskdetailYN(resMap.get("RISK_DET_YN")==null?"":resMap.get("RISK_DET_YN").toString());
-				beanObj.setBrokerdetYN(resMap.get("BROKER_DET_YN")==null?"":resMap.get("BROKER_DET_YN").toString());
-				beanObj.setPremiumdetailYN(resMap.get("PREMIUM_DET_YN")==null?"":resMap.get("PREMIUM_DET_YN").toString());
-				beanObj.setInstallYN(resMap.get("INTALL_DET_YN")==null?"":resMap.get("INTALL_DET_YN").toString());
-				beanObj.setAcqdetailYN(resMap.get("ACQCOST_DET_YN")==null?"":resMap.get("ACQCOST_DET_YN").toString());
-				beanObj.setReinstdetailYN(resMap.get("REINST_DET_YN")==null?"":resMap.get("REINST_DET_YN").toString());
+				beanObj.setRiskdetailYN(resMap.get("RISK_DET_YN")==null?"N":resMap.get("RISK_DET_YN").toString());
+				beanObj.setBrokerdetYN(resMap.get("BROKER_DET_YN")==null?"N":resMap.get("BROKER_DET_YN").toString());
+				beanObj.setPremiumdetailYN(resMap.get("PREMIUM_DET_YN")==null?"N":resMap.get("PREMIUM_DET_YN").toString());
+				beanObj.setInstallYN(resMap.get("INTALL_DET_YN")==null?"N":resMap.get("INTALL_DET_YN").toString());
+				beanObj.setAcqdetailYN(resMap.get("ACQCOST_DET_YN")==null?"N":resMap.get("ACQCOST_DET_YN").toString());
+				beanObj.setReinstdetailYN(resMap.get("REINST_DET_YN")==null?"N":resMap.get("REINST_DET_YN").toString());
 				
 				
 				saveFlag = true;
@@ -3896,17 +3896,24 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					gnpi.add(insMap.get("RSK_GNPI_AS_OFF")==null?"0.00":DropDownControllor.formatter(insMap.get("RSK_GNPI_AS_OFF").toString()));
 					//ScoversubdeptList.add(new DropDownControllor().getSubProfitCentreDropDown(insMap.get("RSK_COVER_CLASS")==null?"":insMap.get("RSK_COVER_CLASS").toString(),beanObj.getBranchCode(),beanObj.getProduct_id()));
 					netMaxRetentPer.add(insMap.get("RSK_NET_MAX_RETENT_PERCENT")==null?"0.00":DropDownControllor.formatter(insMap.get("RSK_NET_MAX_RETENT_PERCENT").toString()));
+					
 				}
 				
 				
 				if(!beanObj.getBusinessType().equalsIgnoreCase("5") && !beanObj.getBusinessType().equalsIgnoreCase("Stop Loss")){
 					beanObj.setCoverdepartId(coverdepartId);
+					beanObj.setCoverdepartIdRe(coverdepartId);
 					//SbeanObj.setCoversubdepartId(coversubdepartId);
 					 if(StringUtils.isNotBlank(beanObj.getReinstatementOption()) && "U".equalsIgnoreCase(beanObj.getReinstatementOption())){
 						 beanObj.setHcoverLimitOC(coverLimitAmount);
+						 beanObj.setHcoverLimitOCRe(coverLimitAmount);
 					 }else{
 						 beanObj.setCoverLimitOC(coverLimitAmount);
+						 beanObj.setCoverLimitOCRe(coverLimitAmount);
+						 
 						 beanObj.setHcoverLimitOC(coverLimitAmount);
+						 beanObj.setHcoverLimitOCRe(coverLimitAmount);
+						 
 					 }
 					beanObj.setDeductableLimitOC(deductableLimitAmount);
 					beanObj.setEgnpiAsPerOff(egnpi);
@@ -3927,6 +3934,31 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					//SbeanObj.setCoversubDepartList(coversubdeptList);
 					
 					beanObj.setCount(Integer.toString(result.size()));
+				}
+				
+				if("copy".equals(beanObj.getFlag())) {
+					coverLimitAmount = new ArrayList<String>();
+					deductableLimitAmount = new ArrayList<String>();
+					String sql=getQuery("GET_MAX_LAYER_NO");
+					String proposalno=StringUtils.isBlank(beanObj.getBaseLayer())?beanObj.getProposal_no():beanObj.getBaseLayer();
+					String layermax=this.mytemplate.queryForObject(sql, new Object[] {proposalno},String.class);
+					if(Integer.parseInt(beanObj.getLayerNo())>=Integer.parseInt(layermax)) {
+						for(int j=0;j<result.size();j++) {
+							Map<String, Object> insMap = (Map<String, Object>)result.get(j);
+							coverLimitAmount.add("");
+							String coverAmount=insMap.get("RSK_COVER_LIMT")==null?"0.00":insMap.get("RSK_COVER_LIMT").toString();
+							String coverAmount1=insMap.get("RSK_DEDUCTABLE_LIMT")==null?"0.00":insMap.get("RSK_DEDUCTABLE_LIMT").toString();
+							String deducttotal=String.valueOf(Double.parseDouble(coverAmount1)+Double.parseDouble(coverAmount));
+							deductableLimitAmount.add(DropDownControllor.formatter(deducttotal));
+						}
+					}else {
+						for(int j=0;j<result.size();j++) {
+							coverLimitAmount.add("");
+							deductableLimitAmount.add("");
+						}
+					}
+					beanObj.setCoverLimitOC(coverLimitAmount);
+					beanObj.setDeductableLimitOC(deductableLimitAmount);
 				}
 				
 				beanObj.setCoverList(result);
@@ -3981,10 +4013,12 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	               bean.setReinstatementTypeId(type);
 	               bean.setReinstatementAmount(amount);
 	               bean.setReinstatementMinAmount(minamount);
-	               bean.setReinstatementMinTime(minTime);
-	               query =getQuery("REINSTATEMENT_MAIN_SELECT_B");
+	               bean.setReinstatementMinTime(minTime); 
+	               
+	              /* query =getQuery("REINSTATEMENT_MAIN_SELECT_B");
 	               list = this.mytemplate.queryForList(query,args);
 	               if(CollectionUtils.isEmpty(result)) {
+	            		args[0] = bean.getReferenceNo();
 						query =getQuery("REINSTATEMENT_MAIN_SELECT_B_REFERENCE");
 						result = this.mytemplate.queryForList(query,args);
 					}
@@ -4023,13 +4057,13 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	            		   else{
 	            			   bean.setCoverLimitOC(new ArrayList<String>());
 	            			   bean.setHcoverLimitOC(new ArrayList<String>());
-	            		   }*/
+	            		   }
 	            	   }
 	               }
 	              }else{
 	            	  bean.setBusinessType("1");
 	            	  getClassLimitDetails(bean);
-	              }
+	              }*/
 		}
 	
 		catch(Exception e){
@@ -4253,7 +4287,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			logger.info("Args=>"+StringUtils.join(args, ","));
 			this.mytemplate.update(query,args);
 			}
-			query =getQuery("INSERT_REINSTATEMENT_MAIN_B");
+			/*query =getQuery("INSERT_REINSTATEMENT_MAIN_B");
 			 Object args1[] = new Object[11];
 			for(int i=0;i<bean.getCoverdepartId().size();i++){
 				args1[0] = bean.getCoverdepartId().get(i);
@@ -4270,7 +4304,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				logger.info("Query=>"+query);
 				logger.info("Args=>"+StringUtils.join(args1));
 				this.mytemplate.update(query,args1);
-			}
+			}*/
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -4285,6 +4319,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				query1 =getQuery("REINSTATEMENT_MAIN_DELETE");
 				 arg = new Object[2];
 				 arg[0] = bean.getProposal_no();
+				 arg[1] = bean.getBranchCode();
+			}else if(StringUtils.isBlank(bean.getProposal_no())) {
+				query1 =getQuery("REINSTATEMENT_MAIN_DELETE_REF");
+				 arg = new Object[2];
+				 arg[0] = bean.getReferenceNo();
 				 arg[1] = bean.getBranchCode();
 			}
 			else{

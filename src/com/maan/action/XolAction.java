@@ -172,6 +172,8 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		bean.setBranchCode(branchCode);
 		bean.setShortname(service.getShortname(bean));
 		String forward = "xol1";
+		bean.setOrginalCurrency("1");
+		bean.setBroker("63");
 		bean.setMenuStatus("N");
 		if(StringUtils.isNotBlank(bean.getProposal_no())){
 		bean.setProposal_no("");
@@ -395,7 +397,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
 				addActionError(getText("error.layerNo.error"));
 			}
-			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
+			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("") && StringUtils.isBlank(bean.getProposal_no())) {
 				if (service.getLayerDuplicationCheck(bean)) {
 					logger.info("// PMD Changes");
 					addActionError(getText("error.layer.duplicate"));
@@ -580,7 +582,8 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					bean.setProduct_id(pid);
 					bean.setBranchCode(branchCode);
 					bean.setShortname(service.getShortname(bean));
-					final boolean ViewFlag = service.viewRiskDetails(bean, pid);
+					final boolean ViewFlag = service.riskEditMode(bean, false);
+							//service.viewRiskDetails(bean, pid);
 					//String country = dropDownController.getUnderwriterCountryName(bean,branchCode);
 					//bean.setLeader_Underwriter_country(country);
 					
@@ -618,9 +621,10 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 					}
 					bean.setRetroCessList(retroCessList1);
 				}
-				ShowDropDown("");
+				//ShowDropDown("");
 			}
 			bean.setDepartIdlist(dropDownController.getDepartmentDropDown(branchCode,pid,"Y","","","","",""));
+			ShowDropDown("");
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 		}
@@ -3695,7 +3699,7 @@ private void resetCoverLimit() {
 				else if(pid.equalsIgnoreCase("5")){
 					//value="<script type='text/javascript'>window.opener.retroxol2.anualAggregateLiability.value='"+bean.getAnualAggregateLiability()+"';window.close();</script>";
 				}
-				value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value="+bean.getReferenceNo()+"</script>";
+				value="<script type='text/javascript'>$('#companyModal1').modal('toggle');document.getElementById('referenceNo').value="+(StringUtils.isBlank(bean.getReferenceNo())?"0":bean.getReferenceNo())+"</script>";
 
 				byte[] byteArray = value.getBytes();
 				inputStream=new ByteArrayInputStream(byteArray);
@@ -3910,13 +3914,13 @@ private void resetCoverLimit() {
 		string.put("1","1");
 		list.add(string);
 		}
-		for(int i=0;i<bean.getCoverLimitOC().size();i++){
+		/*for(int i=0;i<bean.getCoverLimitOC().size();i++){
 			Map<String,Object> string = new HashMap<String,Object>();
 			string.put("1","1");
 			coverlist.add(string);
 			double val= Double.parseDouble(bean.getHcoverLimitOC().get(i).replaceAll(",", ""))*Double.parseDouble(bean.getTotalNoOfRows());
 			coverOC.add(DropDownControllor.formatter(Double.toString(val)));
-			}
+			}*/
 		
 		int j=1;
 		
@@ -3964,6 +3968,7 @@ private void resetCoverLimit() {
  		bean.setCoverLimitOC(coverOC);
  		bean.setCoverList(coverlist);
         bean.setTotalNoOfRows(String.valueOf(bean.getReInstatementDetailsList().size()));
+        bean.setReinsdelete("Yes");
 		return "popup";
 	}
 	private void validationReinstatementDetails() {
@@ -3996,7 +4001,7 @@ private void resetCoverLimit() {
 				if(StringUtils.isBlank(bean.getReinstatementOption())){
 					list1.add(getText("Scale.error.option.val"));					
 				}
-				for(int i=0;i<bean.getCoverLimitOCRe().size();i++){
+				/*for(int i=0;i<bean.getCoverLimitOCRe().size();i++){
 					if(StringUtils.isBlank(bean.getCoverLimitOCRe().get(i))){
 						list1.add(getText("error.coverList",new String[] { String.valueOf(i + 1) }));
 					}
@@ -4026,13 +4031,13 @@ private void resetCoverLimit() {
 				}
 				if(StringUtils.isBlank(bean.getAnualAggregateLiability()) || val!=Double.parseDouble(bean.getAnualAggregateLiability().replace(",", ""))){
 					list1.add(getText("error.annual.aggre.total"));
-				}
+				}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 			bean.setErrorList(list1);
 	}
-private void validateUploadDocument() {
+private void validateUploadDocument() { 
 
 	int emptyCount = 0;
 	String emptyRows = "";

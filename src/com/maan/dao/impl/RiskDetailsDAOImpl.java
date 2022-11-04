@@ -634,7 +634,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setExpDate(resMap.get("RSK_EXPIRY_DATE")==null?"":resMap.get("RSK_EXPIRY_DATE").toString());
 				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
 				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
-				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
+				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"N":resMap.get("Bouquet_Mode_YN").toString());
 				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setProposal_no(resMap.get("RSK_PROPOSAL_NUMBER")==null?"":resMap.get("RSK_PROPOSAL_NUMBER").toString());
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
@@ -725,15 +725,15 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			}else{
 				beanObj.setPrclFlag(false);
 			}
-			beanObj.setRiskdetailYN(resMap.get("RISK_DET_YN")==null?"":resMap.get("RISK_DET_YN").toString());
-			beanObj.setBrokerdetYN(resMap.get("BROKER_DET_YN")==null?"":resMap.get("BROKER_DET_YN").toString());
-			beanObj.setCoverdetYN(resMap.get("COVER_DET_YN")==null?"":resMap.get("COVER_DET_YN").toString());
-			beanObj.setPremiumdetailYN(resMap.get("PREMIUM_DET_YN")==null?"":resMap.get("PREMIUM_DET_YN").toString());
-			beanObj.setAcqdetailYN(resMap.get("ACQCOST_DET_YN")==null?"":resMap.get("ACQCOST_DET_YN").toString());
-			beanObj.setCommissiondetailYN(resMap.get("COMM_DET_YN")==null?"":resMap.get("COMM_DET_YN").toString());
-			beanObj.setDepositdetailYN(resMap.get("DEPOSIT_DET_YN")==null?"":resMap.get("DEPOSIT_DET_YN").toString());
-			beanObj.setLossdetailYN(resMap.get("LOSS_DET_YN")==null?"":resMap.get("LOSS_DET_YN").toString());
-			beanObj.setDocdetailYN(resMap.get("DOC_DET_YN")==null?"":resMap.get("DOC_DET_YN").toString());
+			beanObj.setRiskdetailYN(resMap.get("RISK_DET_YN")==null?"N":resMap.get("RISK_DET_YN").toString());
+			beanObj.setBrokerdetYN(resMap.get("BROKER_DET_YN")==null?"N":resMap.get("BROKER_DET_YN").toString());
+			beanObj.setCoverdetYN(resMap.get("COVER_DET_YN")==null?"N":resMap.get("COVER_DET_YN").toString());
+			beanObj.setPremiumdetailYN(resMap.get("PREMIUM_DET_YN")==null?"N":resMap.get("PREMIUM_DET_YN").toString());
+			beanObj.setAcqdetailYN(resMap.get("ACQCOST_DET_YN")==null?"N":resMap.get("ACQCOST_DET_YN").toString());
+			beanObj.setCommissiondetailYN(resMap.get("COMM_DET_YN")==null?"N":resMap.get("COMM_DET_YN").toString());
+			beanObj.setDepositdetailYN(resMap.get("DEPOSIT_DET_YN")==null?"N":resMap.get("DEPOSIT_DET_YN").toString());
+			beanObj.setLossdetailYN(resMap.get("LOSS_DET_YN")==null?"N":resMap.get("LOSS_DET_YN").toString());
+			beanObj.setDocdetailYN(resMap.get("DOC_DET_YN")==null?"N":resMap.get("DOC_DET_YN").toString());
 			beanObj.setPaymentPartner(resMap.get("PAYMENT_PARTNER")==null?"":resMap.get("PAYMENT_PARTNER").toString());
 			beanObj.setSectionNo(resMap.get("SECTION_NO")==null?"":resMap.get("SECTION_NO").toString());
 			beanObj.setQuotesharePercent(resMap.get("QUOTESHARE_PERCENT")==null?"":resMap.get("QUOTESHARE_PERCENT").toString());
@@ -5259,7 +5259,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 				beanObj.setExpDate(resMap.get("RSK_EXPIRY_DATE")==null?"":resMap.get("RSK_EXPIRY_DATE").toString());
 				beanObj.setUwYear(resMap.get("RSK_UWYEAR")==null?"":resMap.get("RSK_UWYEAR").toString());
 				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
-				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"":resMap.get("Bouquet_Mode_YN").toString());
+				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"N":resMap.get("Bouquet_Mode_YN").toString());
 				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
 				beanObj.setProposal_no(resMap.get("RSK_PROPOSAL_NUMBER")==null?"":resMap.get("RSK_PROPOSAL_NUMBER").toString());
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());

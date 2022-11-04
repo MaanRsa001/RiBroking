@@ -318,6 +318,9 @@ sup {
     font-size: smaller;
 }
 
-
+input[type="text"]:disabled {
+   background-color: #eee;
+  cursor: default;
+}
 
 

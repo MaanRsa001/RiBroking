@@ -183,7 +183,7 @@
 										<s:text name="label.provisionCom" />
 									</div>
 									<div class="tbox">
-										<s:textfield name="provisionCom" id="provisionCom" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+										<s:textfield name="provisionCom" id="provisionCom" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>
 									</div>
 								</div>
 								<div class="textfield">

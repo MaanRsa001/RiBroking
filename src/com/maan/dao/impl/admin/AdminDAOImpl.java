@@ -5325,6 +5325,17 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 		}
 		return list;
 	}
+	@Override
+	public int getLoginCount(AdminBean bean,String branchCode) {
+		Object[] obj=new Object[2];
+		String sql=getQuery("GET_LOGIN_COUNT");
+		obj[0]=bean.getLoginId();
+		obj[1]=branchCode;
+		LOGGER.info("SQL=>"+sql);
+		LOGGER.info("OBj=>"+StringUtils.join(obj,","));
+		int count=this.mytemplate.queryForInt(sql,obj);
+		return count;
+	}
 
 }
 

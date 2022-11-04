@@ -154,7 +154,7 @@
 										</td>
 										<td>
 										<s:textfield name="coverLimitOCRe[%{#stat.count-1}]" id="coverLimitOCRe[%{#stat.count-1}]"  cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple" disabled='true'/>
-										<s:hidden name="hcoverLimitOC[%{#stat.count-1}]" id="hcoverLimitOC[%{#stat.count-1}]" ></s:hidden>
+										<s:hidden name="hcoverLimitOCRe[%{#stat.count-1}]" id="hcoverLimitOCRe[%{#stat.count-1}]" ></s:hidden>
 										</td>
 										
 									</tr>
@@ -262,12 +262,13 @@
 				<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="ReinsRow('bonusTbl');" />
 			</div>
 		</div>
-		
+			<s:hidden name="annualTemp" id="annualTemp" value="%{anualAggregateLiability}"></s:hidden>
+			<s:hidden name="anualAggregateLiabilityTemp" id="anualAggregateLiabilityTemp" ></s:hidden>
    </div>
    </div>
    </div>
    </div>
-   <div class="panel panel-primary">
+   <%-- <div class="panel panel-primary">
 	<div class="panel-heading">
 		Section B – Annual Aggregate Liability
 	</div>
@@ -311,7 +312,7 @@
 				</div>
 			</div>
 		</div>
-		</div>
+		</div> --%>
 
 
    <div class="boxcontent" align="center">
@@ -334,7 +335,9 @@
 </div>	
 
 <script type="text/javascript">
-
+<s:if test='reinsdelete!=null && !"".equals(reinsdelete)'>	
+getAnnualAgg();
+</s:if>
 
 
 </script>

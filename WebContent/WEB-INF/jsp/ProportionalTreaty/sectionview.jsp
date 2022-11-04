@@ -58,8 +58,7 @@ gap:20px;
 	</style>
 	
 </head>
-	<body
-		onload="Commas(<s:property value="#session.mfrid" />),setCedRetType('<s:property value="cedRetenType" />')">
+	<body>
 		<s:set var="elayerInfo" value='%{sectionInfo}'/>
 		<div class="table0" style="width: 100%; margin: 0 auto;">
 			<div class="tablerow">
@@ -80,15 +79,22 @@ gap:20px;
 									
 									
 									
-									<div class="tablerow">
-										<s:hidden name="nr" value="0" />										
-										<div class="boxcontent">
+									<div class="boxcontent">
 											<div class="panel panel-primary subpannel">											
 												<div class="panel-heading">
 													<s:text name="label.sectiondetail" />
 												</div>
 												<div class="panel-body">
 														<div class="boxcontent">
+															<s:if test="#elayerInfo!=null && #elayerInfo.size()>0">
+															<div class="row">
+															<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+																<s:iterator value="#elayerInfo" var="list"  status="stat">
+																	<button type="button"  class="btn btn-sm btn-info"  onclick="funViewMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1">Section <s:property value="#list.SECTION_NO"/> </button>
+																</s:iterator>
+															</div>
+															</div>
+															</s:if>
 														<div class="textfield">
 															<div class="text">
 																<s:text name="label.sectionNo" />
@@ -121,10 +127,11 @@ gap:20px;
 																			<s:radio list="#{'Y':'Yes','N':'No' }" name="riskdetailYN" id="riskdetailYN" value="%{riskdetailYN==null?'N':riskdetailYN}" onchange="getRiskInfo(this.value)" disabled="true"></s:radio>													
 																		</div>
 																	</div>
+																	<s:if test='"Y".equals(riskdetailYN)'>
 																	<div class="boxcontent" id="riskid">
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.originalCurrency" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.originalCurrency" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:select list="orginalCurrencylist" listKey="CURRENCY_ID" listValue="CURRENCY_NAME" name="orginalCurrency" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetExchangeRate()" disabled="true" />
@@ -143,7 +150,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.treatyType" />&nbsp;<sup style="color: red;">#</sup>
+																				<s:text name="label.treatyType" />&nbsp;<sup style="color: red;"></sup>
 																			</div>
 																			<div class="tbox">
 																				<s:if test="RenewalMode != null">
@@ -164,10 +171,10 @@ gap:20px;
 																					<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" onchange="getAjax(this.value,'subclass')" />
 																				</s:if>
 																				<s:elseif test="(baseLayer!=null && baseLayer!='')">
-																					<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="getAjax(this.value,'subclass');" disabled="true"/>
+																					<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" onchange="getAjax(this.value,'subclass');" />
 																				</s:elseif>
 																				<s:else>
-																					<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getAjax(this.value,'subclass');" /><%-- disabled='%{(proposal_no!=null && proposal_no!="") ?true:false}' --%>
+																					<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" onchange="getAjax(this.value,'subclass');" /><%-- disabled='%{(proposal_no!=null && proposal_no!="") ?true:false}' --%>
 																				</s:else>
 																			</div>
 																		</div>
@@ -194,7 +201,16 @@ gap:20px;
 																				<s:text name="label.treatyLimitOC" />
 																			</div>
 																			<div class="tbox">
-																				<s:textfield name="limitOrigCur" id="limitOrigCur" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value)" onchange="CalculateTreatyQSPML()" maxlength="30" disabled="true" />
+																				<s:textfield name="limitOrigCur" id="limitOrigCur" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value)" onchange="calculateTreatySur()" maxlength="30" disabled="true" />
+																			</div>
+																		</div>
+																		<div class="textfield" id="treatyQSper"
+																			style="display: none">
+																			<div class="text">
+																				<s:text name="label.quotesharePercent" />
+																			</div>
+																			<div class="tbox">
+																				<s:textfield name="quotesharePercent" id="quotesharePercent" cssClass="inputBox" cssStyle="text-align: right;" maxlength="20" onkeyup="middleMinusRestrictionNeg(this);negative(this.id,this.value);checkDecimals(this);allowOneDot(this);hundredCheck(this.id,this.value)"  disabled="true"/>
 																			</div>
 																		</div>
 																		<div class="textfield" id="treatySurp1"
@@ -203,7 +219,7 @@ gap:20px;
 																				<s:text name="label.noofline" />
 																			</div>
 																			<div class="tbox">
-																				<s:textfield name="treatynoofLine" id="treatynoofLine" cssClass="inputBox" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);javascript:this.value=Comma(this.value)" maxlength="30" disabled="true" />
+																				<s:textfield name="treatynoofLine" id="treatynoofLine" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);javascript:this.value=Comma(this.value)"  onchange="calculateTreatySur()" maxlength="30" disabled="true" />
 																			</div>
 																		</div>
 																		<div class="textfield" id="treatySurp2"
@@ -215,39 +231,26 @@ gap:20px;
 																				<s:textfield name="treatyLimitsurplusOC" id="treatyLimitsurplusOC" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value)" onchange="CalculateTreatyQSPML()" maxlength="30" disabled="true" />
 																			</div>
 																		</div>
+																		<s:hidden  name="cedRetenType" ></s:hidden>
+																		<s:hidden  name="cedReten" id="cedReten" ></s:hidden>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.cedantsRetentionType" />
+																				<s:text name="label.cleancutrunoff" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
-																				<s:radio name="cedRetenType" list="#{'A':'Amount','P':'Percentage'}" onclick="setCedRetType(this.value)" disabled="true" />
-																			</div>
-																		</div>
-																		<div class="textfield">
-																			<div class="text">
-																				<s:text name="label.cedantsRetention" />
-																			</div>
-																			<div class="tbox">
-																				<s:textfield name="cedReten" id="cedReten" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value)" maxlength="30" disabled="true" />
-																			</div>
-																		</div>
-																		<div class="textfield">
-																			<div class="text">
-																				<s:text name="label.cleancutrunoff" /> &nbsp; <sup style="color: red;"> # </sup>
-																			</div>
-																			<div class="tbox">
-																				<s:select list="proposaltypelist" listKey="TYPE" listValue="DETAIL_NAME" name="proposalType" cssClass="inputBoxS" headerKey="0" headerValue="---Select---" onchange="getRateField(this.value)" />
+																				<s:select list="proposaltypelist" listKey="TYPE" listValue="DETAIL_NAME" name="proposalType" cssClass="inputBoxS" headerKey="0" headerValue="---Select---" onchange="getRateField(this.value)" disabled="true"/>
 																			</div>
 																		</div>
 																		<div class="textfield" id="ratId" style="display: none;">
 																			<div class="text">
-																				<s:text name="label.rate.year" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.rate.year" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
-																				<s:textfield name="runoffYear" id="runoffYear" cssClass="inputBox" cssStyle="text-align:right;" maxlength="26" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" />
+																				<s:textfield name="runoffYear" id="runoffYear" cssClass="inputBox" cssStyle="text-align:right;" maxlength="26" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" disabled="true"/>
 																			</div>
 																		</div>
 																	</div>
+																	</s:if>
 																</div>
 															</div>
 														</div>
@@ -266,20 +269,14 @@ gap:20px;
 																				<s:radio list="#{'Y':'Yes','N':'No' }" name="brokerdetYN" id="brokerdetYN" value="%{brokerdetYN==null?'N':brokerdetYN}" onchange="getBrokerInfo(this.value)" disabled="true"></s:radio>													
 																			</div>
 																		</div>
+																		<s:if test='"Y".equals(brokerdetYN)'>
 																		<div class="boxcontent" id="brokerid">
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.broker" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.broker" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
-																				<div class="input-group">
 																					<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="true" onchange="getPaypartner(this.value,'paypartid');"/>
-																					<span class="input-group-addon">
-																						<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
-																		 			     	<span class="glyphicon glyphicon-list"></span>
-																		 			    </button>
-												     								</span>
-																				</div>
 																			</div>
 																		</div>
 																		<div class="textfield">
@@ -292,16 +289,16 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.leadUnderWriter" />  &nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.leadUnderWriter" />  &nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
-																					<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"   onchange="getUnderwriterShare(this.value);" disabled="true"/>
+																					<s:select list="underwriterList" listKey="CUSTOMER_ID" cssClass="select1 inputBoxS"  listValue="NAME" name="leader_Underwriter" id="leader_Underwriter"   headerKey="" headerValue="---Select---"  disabled="true"/> <!-- onchange="getUnderwriterShare(this.value);" -->
 																			</div>
 																		</div>
 																		<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
 																		 <div class="textfield" >
 																			<div class="text">
-																				<s:text name="label.leadUnderwritterCountry" />  &nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.leadUnderwritterCountry" />  &nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox" id="country">
 																				
@@ -311,18 +308,19 @@ gap:20px;
 																		</s:if>
 																		<s:else>
 																		<div class="tbox" id="country">
-																			<s:hidden  name="leader_Underwriter_country" id="leader_Underwriter_country"/>
+																			<s:hidden  name="leader_Underwriter_country" id="leader_Underwriter_country" disabled="true"/>
 																		</div>	
 																		</s:else>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.leadUnderwritterShareP" />&nbsp; <sup style="color:red;">#</sup>
+																				<s:text name="label.leadUnderwritterShareP" />&nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="leader_Underwriter_share" id="leader_Underwriter_share" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="true"/>
 																			</div>
 																		</div>
 																		</div>
+																		</s:if>
 																	</div>
 																</div>
 															</div>
@@ -342,10 +340,11 @@ gap:20px;
 																				<s:radio list="#{'Y':'Yes','N':'No' }" name="coverdetYN" id="coverdetYN" value="%{coverdetYN==null?'N':coverdetYN}" onchange="getCoverInfo(this.value)" disabled="true"></s:radio>													
 																			</div>
 																		</div>
+																		<s:if test='"Y".equals(coverdetYN)'>
 																		<div class="boxcontent" id="coverid">
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.territoryScope" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.territoryScope" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="territoryscope" cssClass="inputBox" maxlength="500" disabled="true"/>
@@ -361,13 +360,14 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.pnocDays" /> &nbsp; <sup style="color: red;"> # </sup>
+																				<s:text name="label.pnocDays" /> &nbsp; <sup style="color: red;">  </sup>
 																			</div>
 																			<div class="tbox">
 																				<s:select list="PNOCDayslist" listValue="DETAIL_NAME" listKey="TYPE" name="pnoc" cssClass="select1 inputBoxS" headerKey="-1" headerValue="---Select---" disabled="true"/>
 																			</div>
 																		</div>
 																		</div>
+																		</s:if>
 																	</div>
 																</div>
 															</div>
@@ -387,34 +387,35 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="premiumdetailYN" id="premiumdetailYN" value="%{premiumdetailYN==null?'N':premiumdetailYN}" onchange="getPremiumInfo(this.value)" disabled="true"></s:radio>													
 																				</div>
 																			</div>
-																	<div class="boxcontent" id="premiumid">
+																			<s:if test='"Y".equals(premiumdetailYN)'>
+																			<div class="boxcontent" id="premiumid">
 																			<div class="textfield">
 																				<div class="text">
 																					<s:text name="label.ourAssessedEPIOC100" />
 																				</div>
 																				<div class="tbox">
-																					<s:textfield name="epi" id="epi" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);calculation('epi');" disabled="true"/>
+																					<s:textfield name="epi" id="epi" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);calculation('epi');calculateSurplus();" disabled="true"/>
 																				</div>
 																			</div>
-																			<div class="textfield">
+																			<div class="textfield" id="premiumQuoteid">
 																				<div class="text">
 																					<s:text name="label.premiumQuotaShare" />
 																				</div>
 																				<div class="tbox">
-																					<s:textfield cssClass="inputBox" name="premiumQuotaShare" id="premiumQuotaShare" cssStyle="text-align:right;"  onkeyup="allow2DigitDecValues(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30" disabled="true"/>
+																					<s:textfield cssClass="inputBox" name="premiumQuotaShare" id="premiumQuotaShare" cssStyle="text-align:right;"  onkeyup="allow2DigitDecValues(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);calculateSurplus();" maxlength="30" disabled="true"/>
 																				</div>
 																			</div>
-																			<div class="textfield">
+																			<div class="textfield" id="premiumSurplusid">
 																				<div class="text">
 																					<s:text name="label.premiumSurplus" />
 																				</div>
 																				<div class="tbox">
-																					<s:textfield cssClass="inputBox" name="premiumSurplus" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30" disabled="true" />
+																					<s:textfield cssClass="inputBox" name="premiumSurplus" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30"  readonly="true"/>
 																				</div>
 																			</div>
 																			<div class="textfield">
 																				<div class="text">
-																					<s:text name="label.accountingPeriod" /> &nbsp; <sup style="color: red;"> # </sup>
+																					<s:text name="label.accountingPeriod" /> &nbsp; <sup style="color: red;">  </sup>
 																				</div>
 																				<div class="tbox">
 																					<s:select list="AccontPeriodlist" listValue="DETAIL_NAME" listKey="TYPE" name="accountingPeriod" cssClass="select1 inputBoxS" headerKey="0" headerValue="---Select---" disabled="true" />
@@ -422,7 +423,15 @@ gap:20px;
 																			</div>
 																			<div class="textfield">
 																				<div class="text">
-																					<s:text name="label.statementDueDays" />&nbsp; <sup style="color: red;"> # </sup>
+																					<s:text name="label.accountingPeriodNotes" />&nbsp; <sup style="color: red;">  </sup>
+																				</div>
+																				<div class="tbox">
+																					<s:textfield name="accountingPeriodNotes" cssClass="inputBox"  maxlength="200"  disabled="true"/>
+																				</div>
+																			</div>
+																			<div class="textfield">
+																				<div class="text">
+																					<s:text name="label.statementDueDays" />&nbsp; <sup style="color: red;">  </sup>
 																				</div>
 																				<div class="tbox">
 																					<s:textfield name="receiptofStatements" cssClass="inputBox" cssStyle="text-align:right;" maxlength="3" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" disabled="true"/>
@@ -430,7 +439,15 @@ gap:20px;
 																			</div>
 																			<div class="textfield">
 																				<div class="text">
-																					<s:text name="label.paymentDueDays" />&nbsp; <sup style="color: red;"> # </sup>
+																					<s:text name="label.statementConfirm" />&nbsp; <sup style="color: red;">  </sup>
+																				</div>
+																				<div class="tbox">
+																					<s:textfield name="statementConfirm" cssClass="inputBox"  maxlength="200"  disabled="true"/>
+																				</div>
+																			</div>
+																			<div class="textfield">
+																				<div class="text">
+																					<s:text name="label.paymentDueDays" />&nbsp; <sup style="color: red;">  </sup>
 																				</div>
 																				<div class="tbox">
 																					<s:textfield name="receiptofPayment" cssClass="inputBox" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);" cssStyle="text-align:right;" maxlength="3" disabled="true"/>
@@ -438,8 +455,32 @@ gap:20px;
 					
 																			</div>
 																	</div>
+																	</s:if>
 																</div>
 															</div>	
+														<s:hidden name="spRetro" value="%{(spRetro==null || spRetro=='')?'Y':spRetro}"/>
+														<s:hidden name="no_Insurer" id="NoOFInsur"/>
+														<s:hidden name="accDate" id="accDate"/>
+														<s:hidden name="polBr" id="polBr"/>
+														<s:hidden name="profit_Center" id="profit_Center" value="D"/>
+														<s:hidden name="inwardType" id="inwardType"/>
+														<s:hidden name="underwriter" id="underwriter"/>
+														<s:hidden name="maxLimit_Product" id="maxLimit_Product"/>
+														<s:hidden name="locCreditAmt" id="locCreditAmt"/>
+														<s:hidden name="locCreditPrd" id="locCreditPrd"/>
+														<s:hidden name="LOCIssued" id="LOCIssued" value="%{(LOCIssued==null || LOCIssued=='')?'N':LOCIssued}"/>
+														<s:hidden name="locBankName" id="locBankName"/>
+														<s:hidden name="locBeneficerName" id="locBeneficerName"/>
+														<s:hidden name="perilCovered" id="perilCovered"/>
+														<s:hidden name="ourEstimate" id="ourEstimate"/>
+														<s:hidden name="proStatus" id="proStatus" value="A"/>
+														<s:hidden name="shareWritt" id="shareWritt"/>
+														<s:hidden name="sharSign" id="sharSign"/>
+														<s:hidden name="retentionYN" ></s:hidden>
+														<s:hidden name="epi_origCur" ></s:hidden>
+														<s:hidden name="limitPerVesselOC" ></s:hidden>
+														<s:hidden name="limitPerLocationOC" ></s:hidden>
+															
 														</div>
 														<div class="boxcontent">
 															<div class="panel panel-primary">											
@@ -456,16 +497,17 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="acqdetailYN" id="acqdetailYN" value="%{acqdetailYN==null?'N':acqdetailYN}" onchange="getAcqInfo(this.value);" disabled="true"></s:radio>													
 																				</div>
 																			</div>
+																			<s:if test='"Y".equals(acqdetailYN)'>
 																			<div class="boxcontent" id="aquid">
-																				<div class="textfield">
+																				<div class="textfield" id="commissionQSPid">
 																					<div class="text">
 																						<s:text name="label.commissionQSP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="commissionQ_S" id="commissionQ_S" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled="true" />													
+																						<s:textfield name="commissionQ_S" id="commissionQ_S" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled="true"/>													
 																					</div>
 																				</div>
-																				<div class="textfield">
+																				<div class="textfield" id="commissionSurpPid">
 																					<div class="text">
 																						<s:text name="label.commissionSurpP" />
 																					</div>
@@ -483,11 +525,11 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.brokerageP" />&nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.brokerageP" />&nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:if test="(broker.toString().trim()).equalsIgnoreCase('DIRECT')">
-																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" value="0" readonly="true" cssStyle="text-align:right;" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="14" />
+																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" value="0" readonly="true" cssStyle="text-align:right;" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="14" disabled="true"/>
 																						</s:if>
 																						<s:else>
 																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="14" disabled="true"/>
@@ -496,7 +538,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.taxP" />&nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.taxP" />&nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="tax" id="taxIDDD" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D".equals(profit_Center) ?0.00:tax}' onblur="CalculateValue()"  maxlength="8" disabled="true"/>
@@ -507,18 +549,20 @@ gap:20px;
 																						<s:text name="label.otherCostP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="othercost" id="CostOther" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled="true"/>
+																						<s:textfield name="othercost" id="CostOther" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8"  disabled="true"/>
 																					</div>
 																				</div>
-																				<div class="textfield">
+																				<s:hidden name="acquisition_Cost" id="acquisition_Cost"></s:hidden>
+																				<%-- <div class="textfield">
 																					<div class="text">
 																						<s:text name="label.acqCostAmount" />
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="acquisition_Cost" id="acquisition_Cost" cssClass="inputBox" cssStyle="text-align:right;" readonly="true" />
 																					</div>
-																				</div>
+																				</div> --%>
 																			</div>
+																			</s:if>
 																		</div>
 																	</div>
 																</div>
@@ -538,6 +582,7 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="commissiondetailYN" id="premiumdetailYN" value="%{commissiondetailYN==null?'N':commissiondetailYN}" onchange="getCommInfo(this.value)" disabled="true"></s:radio>													
 																				</div>
 																			</div>
+																			<s:if test='"Y".equals(commissiondetailYN)'>
 																			<div class="boxcontent" id="commid">
 																				<div class="textfield">
 																					<div class="text">
@@ -575,29 +620,22 @@ gap:20px;
 																					<div class="tbox">	
 																						<div class="reinsstyle">												
 																						<div><s:radio name="share_Profit_Commission" list="#{'1':'Yes','2':'No'}" value="share_Profit_Commission==null ||share_Profit_Commission==''?'2':share_Profit_Commission" onclick="ShareProfitCommission(this.value)" disabled="true"/></div>
-																						<div id="pc" style="display:none"><button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal2" >
+																						<%-- <div id="pc" style="display:none"><button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal2" >
 																					 			     <s:text name="label.enterDetails" />
 																					 		</button>
-																					 		</div>	
+																					 		</div>	 --%>
 																					 	</div>												
 																																			
 																					</div>
 																				</div>
 																			</div>
+																			</s:if>
 																		</div>
 																	</div>
 																</div>
 															</div>
-															<div id="companyModal2" class="modal fade" role="dialog">
-																  <div class="modal-dialog modal-lg">
-																    <!-- Modal content-->
-																    <div class="modal-content">
-																      <div class="modal-header">
-																        <button type="button" class="close" data-dismiss="modal">&times;</button>
-																      </div>
-																      <div class="modal-body" >
-																        <div class="container-fluid" id="companyAjaxId2">
-																        	<div class="boxcontent">
+															<s:if test='"q".equals(share_Profit_Commission)'>
+															<div class="boxcontent" id="pc">
 																			<div class="panel panel-primary">											
 																				<div class="panel-heading">
 																					<s:text name="Profit Commission"></s:text>
@@ -617,7 +655,7 @@ gap:20px;
 																								<s:text name="label.comtype" /> 
 																							</div>
 																							<div class="tbox">												
-																							<s:select  list="commissionTypeList"  name="commissionType" id="commissionType" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getCommissionField(this.value);getpopupenable()" disabled="true"/>
+																							<s:select  list="commissionTypeList"  name="commissionType" id="commissionType" cssClass="select1 inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getCommissionField(this.value);getpopupenable()"  disabled="true"/>
 																							</div>
 																						</div>
 																						<div class="textfield" id="supcom" style="display:none;">
@@ -629,10 +667,11 @@ gap:20px;
 																									<div  id="compoptype" style="display:none;">
 																										<s:if test='"Y"==profitCommissionEnable || "Y".equals(disableStatus1)'>
 																											&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-info btn-rounded btn-xs" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="baseLayer"/>')"><s:text name="label.viewDetails" /></a>
-																											<%-- <a href="#" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="baseLayer"/>')"><s:text name="label.enterDetails" /></a>--%><br/>	
 																										</s:if>
 																										<s:else>
-																											&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="layerProposalNo"/>')"><s:text name="label.enterDetails" /></a><br/>	
+																										<button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal1" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="layerProposalNo"/>')">
+																								 			     <s:text name="label.enterDetails" />
+																								 		</button>
 																										</s:else>
 																									</div>		
 																							</div>
@@ -652,7 +691,7 @@ gap:20px;
 																							</div>
 																							<div class="tbox">	
 																								<div class="reinsstyle">												
-																									<div><s:radio list="#{'Y':'Yes','N':'No'}" name="setup" id="setup" value="(setup==null || setup=='')?'Y':setup"   disabled="true"></s:radio></div>
+																									<div><s:radio list="#{'Y':'Yes','N':'No'}" name="setup" id="setup" value="(setup==null || setup=='')?'Y':setup"  disabled="true"></s:radio></div>
 																									<div id="ratioPopUp" style="display:none"><button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal1" onclick="getPopUpDetails('profitCommission','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="layerProposalNo"/>')">
 																								 			     <s:text name="label.enterDetails" />
 																								 		</button>
@@ -665,7 +704,7 @@ gap:20px;
 																								<s:text name="label.lossCarFordType" /> 
 																							</div>
 																							<div class="tbox">												
-																							<s:select  list="typeYearListVar"  name="lossCarried" id="lossCarried" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getLossYear(this.value)"  disabled="true"/><br/>
+																							<s:select  list="typeYearListVar"  name="lossCarried" id="lossCarried" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getLossYear(this.value)"  disabled="true"/><br/>
 																							</div>
 																						</div>
 																						<div class="textfield" >
@@ -683,7 +722,7 @@ gap:20px;
 																								<s:text name="label.profitCarFordType" /> 
 																							</div>
 																							<div class="tbox">												
-																							<s:select  list="typeYearListVar"  name="profitCarried" id="profitCarried" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getProfitYear(this.value)"  disabled="true"/><br/>
+																							<s:select  list="typeYearListVar"  name="profitCarried" id="profitCarried" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  onchange="getProfitYear(this.value)"  disabled="true"/><br/>
 																							</div>
 																						</div>
 																						<div class="textfield" >
@@ -696,7 +735,16 @@ gap:20px;
 																								</div>
 																							</div>
 																						</div>
+																						
 																						<div class="textfield">
+																							<div class="text">
+																								<s:text name="label.fpcType" />
+																							</div>
+																							<div class="tbox">
+																									<s:select  list="slidingScalePeriodList"  name="pcfpcType" id="pcfpcType" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="TYPE"  listValue="DETAIL_NAME"   onchange="getPcscalePeriod(this.value);" disabled="true"/>
+																							</div>
+																						</div>
+																						<div class="textfield" id="pcscfiid">
 																							<div class="text">
 																								<s:text name="label.firstprofitcom" />
 																							</div>
@@ -704,14 +752,32 @@ gap:20px;
 																									<s:textfield name="fistpc" id="fistpc"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" disabled="true"/><br/>
 																							</div>
 																						</div>	
-																						<div class="textfield" >
+																						<div class="textfield" id="pcperiodid" style="display:none">
+																							<div class="text">
+																								<s:text name="label.fpcfixedDate" />
+																							</div>
+																							<div class="tbox">
+																									<s:textfield name="pcfixedDate" id="periodDate"  cssClass="inputBox"  disabled="true"/>
+																							</div>
+																						</div>
+																						
+																						<div class="textfield" id="pcscseid">
 																							<div class="text">
 																								<s:text name="label.period" />
 																							</div>
 																							<div class="tbox">
-																									<s:select  list="profitCommissionListVar"  name="profitMont" id="profitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   disabled="true"/><br/>
+																									<s:select  list="profitCommissionListVar"  name="profitMont" id="profitMont" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   disabled="true"/><br/>
 																							</div>
 																						</div>	
+																						<div class="textfield" >
+																							<div class="text">
+																								<s:text name="label.subseqcal" />
+																							</div>
+																							<div class="tbox">
+																								<s:radio list="#{'Y':'Yes','N':'No'}" name="subSeqCalculation" value="subSeqCalculation==null || subSeqCalculation==''?'N':subSeqCalculation"   disabled="true" onchange="getSubseqCal(this.value)"></s:radio><br/>	
+																							</div>
+																						</div>
+																						<div id="subseqcalid">
 																						<div class="textfield" >
 																							<div class="text">
 																								<s:text name="label.subprofitcom" />
@@ -725,16 +791,9 @@ gap:20px;
 																								<s:text name="label.period" />
 																							</div>
 																							<div class="tbox">
-																									<s:select  list="profitCommissionListVar"  name="subProfitMonth" id="subProfitMonth" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  disabled="true" /><br/>
+																									<s:select  list="profitCommissionListVar"  name="subProfitMonth" id="subProfitMonth" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  disabled="true" /><br/>
 																							</div>
 																						</div>	
-																						<div class="textfield" >
-																							<div class="text">
-																								<s:text name="label.subseqcal" />
-																							</div>
-																							<div class="tbox">
-																								<s:radio list="#{'Y':'Yes','N':'No'}" name="subSeqCalculation" value="subSeqCalculation==null || subSeqCalculation==''?'N':subSeqCalculation"   disabled="true"></s:radio><br/>	
-																							</div>
 																						</div>	
 																						<div class="textfield" >
 																							<div class="text">
@@ -747,7 +806,7 @@ gap:20px;
 																								<s:text name="label.notes" />
 																							</div>
 																							<div class="tbox">
-																									<s:textarea rows="3" name="profitCommission" id="profitCommission" cssClass="inputBoxA" cssStyle="width: 90%;" disabled="true"/><br/>
+																									<s:textarea rows="2" name="profitCommission" id="profitCommission" cssClass="inputBoxA" cssStyle="width: 90%;" disabled="true"/><br/>
 																								<br/>
 																							</div>
 																						</div>
@@ -756,13 +815,20 @@ gap:20px;
 																													
 																							
 																					</div>
-																					<br class="clear"/>
-																							<div class="boxcontent" align="center">
-																									<input type="button" value="Submit" data-dismiss="modal" class="btn btn-sm btn-success" />
-																									<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-																							</div>	
+																					
 																				</div>
 																			</div>
+																		</s:if>
+															<div id="companyModal2" class="modal fade" role="dialog">
+																  <div class="modal-dialog modal-lg">
+																    <!-- Modal content-->
+																    <div class="modal-content">
+																      <div class="modal-header">
+																        <button type="button" class="close" data-dismiss="modal">&times;</button>
+																      </div>
+																      <div class="modal-body" >
+																        <div class="container-fluid" id="companyAjaxId2">
+																        	
 																        </div>
 																      </div>
 																    </div>
@@ -784,18 +850,24 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="depositdetailYN" id="depositdetailYN" value="%{depositdetailYN==null?'N':depositdetailYN}" onchange="getDepositInfo(this.value)" disabled="true"></s:radio>													
 																				</div>
 																			</div>
+																			<s:if test='"Y".equals(depositdetailYN)'>
 																			<div class="boxcontent" id="depositid">													
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.premiumReserveP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.premiumReserveP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="premium_Reserve" cssClass="inputBox" cssStyle="text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="true"/>
+																						<div class="input-group" style="display: flex;">
+																							<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="premiumResType" id="premiumResType" cssClass="inputBoxS" cssStyle="width:50%;" headerKey="" headerValue="---Select---" disabled="true"/>
+																							<%-- <span class="input-group-addon"> --%>
+																								<s:textfield name="premium_Reserve" id="premium_Reserve" cssClass="inputBox"   cssStyle="width:40%;text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="true"/>
+														     								<%-- </span> --%>
+																						</div>
 																					</div>
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.lossReserveP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.lossReserveP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="loss_reserve" cssClass="inputBox" cssStyle="text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="true"/>
@@ -803,7 +875,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.interestP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.interestP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="interest" id="interset" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="true"/>
@@ -811,7 +883,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.portfolioinoutLossP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.portfolioinoutLossP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="portfolio_inout_Loss" id="InoutLoss" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="true"/>
@@ -819,14 +891,21 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.portfolioinoutPremiumP" /> &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.portfolioinoutPremiumP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
+																					
 																					<div class="tbox">
-																						<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled="true"/>
+																						<div class="input-group" style="display: flex;">
+																						<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="portfolioType" id="portfolioType" cssClass="inputBoxS" cssStyle="width:50%;" headerKey="" headerValue="---Select---" disabled="true"/>
+																						<%-- <span class="input-group-addon"> --%>
+																							<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="width:40%;text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled="true"/>
+													     								<%-- </span> --%>
+																					</div>
 																					</div>
 																				</div>
 																				<br class="clear"/>
 																			</div>
+																			</s:if>
 																		</div>
 																	</div>
 																</div>
@@ -846,10 +925,11 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="lossdetailYN" id="lossdetailYN" value="%{lossdetailYN==null?'N':lossdetailYN}" onchange="getLossdetInfo(this.value)" disabled="true"></s:radio>													
 																				</div>
 																			</div>
+																			<s:if test='"Y".equals(lossdetailYN)'>
 																			<div class="boxcontent" id="lossid">													
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.lossAdvicePOC" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.lossAdvicePOC" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="loss_Advise" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" disabled="true"/>
@@ -857,7 +937,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.cashLossPOC" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.cashLossPOC" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="cash_Loss_Limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" disabled="true"/>
@@ -865,7 +945,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.eventLimit" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.eventLimit" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="event_limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" disabled="true"/>
@@ -873,7 +953,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.aggregateLimit" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.aggregateLimit" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="aggregate_Limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" disabled="true"/>
@@ -881,7 +961,7 @@ gap:20px;
 																				</div>
 																				<div class="textfield">
 																					<div class="text">
-																						<s:text name="label.OccurrentLimit" />  &nbsp; <sup style="color:red;">#</sup>
+																						<s:text name="label.OccurrentLimit" />  &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
 																						<s:textfield name="occurrent_Limit" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);javascript:this.value=Comma(this.value)" maxlength="30" disabled="true"/>
@@ -889,6 +969,7 @@ gap:20px;
 																				</div>
 																				<br class="clear"/>
 																			</div>
+																			</s:if>
 																		</div>
 																	</div>
 																</div>
@@ -912,14 +993,15 @@ gap:20px;
 																		<br class="clear"/>
 																	</div>
 																	<div class="boxcontent">
-																		<div id="remarkid">
-																			<table class="table table-bordered" width="100%" id="remark">
+																	<div id="remarkid">
+																	<table class="table table-bordered" width="100%" id="remark">
 																					<thead>
 																						<tr>
 																							<th width="2%" style="text-align: center; vertical-align: middle;"> <s:text name="Serial No" />  </th>
 																							<th width="10%" style="text-align: center; vertical-align: middle;"> <s:text name="label.description" />  </th>
 																							<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.Remark1" />  </th>
 																							<th width="15.8%" style="text-align: center; vertical-align: middle;"> <s:text name="label.Remark2" /> </th>
+																							<th width="4%" style="text-align: center; vertical-align: middle;"> <s:text name="Delete Row" /> </th>
 																						</tr>
 																					</thead>
 																					<tbody>
@@ -933,18 +1015,21 @@ gap:20px;
 																								
 																								</td>
 																								<td>
-																								<s:textarea name="remark1[%{#stat.count-1}]" id="remark1[%{#stat.count-1}]" cssClass="inputBox" cssStyle="width: 100%; resize: vertical; " disabled="true" />
+																								<s:textarea name="remark1[%{#stat.count-1}]" id="remark1[%{#stat.count-1}]" cssClass="inputBox" cssStyle="width: 100%; resize: vertical; "  disabled="true"/>
 																								</td>
 																								<td>
-																								<s:textarea name="remark2[%{#stat.count-1}]" id="remark2[%{#stat.count-1}]" cssClass="inputBox" cssStyle="width: 100%; resize: vertical; " disabled="true" />
+																								<s:textarea name="remark2[%{#stat.count-1}]" id="remark2[%{#stat.count-1}]" cssClass="inputBox" cssStyle="width: 100%; resize: vertical; " disabled="true"/>
 																								</td>
-																								
+																								<td align="center">
+																								<s:if test='0!=(#stat.count-1)'>
+																								<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="deleteRemark('<s:property value="%{#stat.count-1}"/>')" disabled="true"/>
+																								</s:if>
+																								</td>
 																								<s:hidden name="remarkCount" id="remarkCount" ></s:hidden>
 																							</tr>
 																							</s:iterator>
 																						</tbody>
 																						</table>
-																						
 																					</div>
 																				</div>
 																		</div>
@@ -953,7 +1038,6 @@ gap:20px;
 													</div>
 												</div>
 											</div>
-										</div>
 							</div>
 							<div id="companyModal" class="modal fade" role="dialog">
 								  <div class="modal-dialog modal-lg">
@@ -983,15 +1067,17 @@ gap:20px;
 							    </div>
 							  </div>
 						</div>	
+						<s:if test='"".equals(dropDown) || dropDown==null'>		
 						<div class="tablerow">							
 							<div class="boxcontent" align="center">
 								<input type="button"  value="Cancel"  class="btn btn-sm btn-danger"  onClick="window.close();" />							
 							</div>
 						</div>
+						</s:if>
 								</div>
 								<s:hidden name="layerMode" id="layerMode"/>
 								<s:hidden name="proposalNo1" id="proposalNo1"/>
-								<s:hidden name="flag" id="flag" />
+					
 								<s:hidden name="menuId" id="menuId" />
 								<s:hidden name="CustomerId" value="cedingCo" />
 								<s:hidden name="layerProposalNo" />
@@ -1011,9 +1097,7 @@ gap:20px;
 								<s:hidden name="commissionQ_SAmt" />
 								<s:hidden name="commission_surpAmt" />
 								<s:hidden name="endorsmentno" />
-								<s:hidden name="proposalNo" id="proposalNo"
-									value="%{proposal_no}" />
-								<s:hidden name="mode" />
+								
 								<s:hidden name="countryExcludedList" id="countryExcludedList" />
 								<s:hidden name="countryIncludedList" id="countryIncludedList" />
 								<s:hidden name="renewalProposalNo" id="renewalProposalNo" />

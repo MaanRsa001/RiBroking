@@ -515,7 +515,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			String subject = bean.getMailSubject();
 			String toAddress = bean.getMailTo();
 			String ccAddress = bean.getMailCC();
-			
+			String mailBody= bean.getMailBody()+"<br/>"+bean.getMailRemarks();
+			bean.setMailBody(mailBody);
 			if(toAddress!=null && !"".equals(toAddress)){
 				String[] toAddresses = (toAddress.indexOf(",")!=-1)?toAddress.split(","):new String[]{toAddress};
 				String[] ccAddresses = new String[0];
@@ -599,7 +600,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					obj[7]=map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString();
 					obj[8]=bean.getReinsurerId();
 					obj[9]=bean.getBrokerId();
-					obj[10]="65".equals(bean.getBrokerId())?bean.getReinsurerId():bean.getBrokerId();
+					obj[10]="63".equals(bean.getBrokerId())?bean.getReinsurerId():bean.getBrokerId();
 					obj[11]=bean.getMailType();
 					obj[12]=bean.getMailTo();
 					obj[13]=bean.getMailCC();

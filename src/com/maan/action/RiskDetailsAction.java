@@ -170,6 +170,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			bean.setAmendId("0");
 			bean.setBranchCode(branchCode);
 			bean.setShortname(service.getShortname(bean));
+			bean.setOrginalCurrency("1");
+			bean.setBroker("63");
 			if(StringUtils.isNotBlank(bean.getProposal_no())){
 			bean.setProposal_no("");
 			}
@@ -837,7 +839,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				}
 			}
 			}
-			if("3".equalsIgnoreCase(bean.getTreatyType()) ||"2".equalsIgnoreCase(bean.getTreatyType()) ){
+			if("3".equalsIgnoreCase(bean.getTreatyType()) ){
 
 			if (StringUtils.isBlank(bean.getPremiumSurplus())) {
 				addActionError(getText("Errors.PremiumSurplus.reqired"));
@@ -1837,7 +1839,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 						}
 					}
 				}
-				if("3".equalsIgnoreCase(bean.getTreatyType()) ||"2".equalsIgnoreCase(bean.getTreatyType()) ){
+				if("3".equalsIgnoreCase(bean.getTreatyType()) ){
 					if (StringUtils.isBlank(bean.getPremiumSurplus())) {
 						addActionError(getText("Errors.PremiumSurplus.reqired"));
 					} else {
@@ -4464,6 +4466,7 @@ public String EditSection(){
 		bean.setTreatyName_type("");
 		bean.setDepartId("");
 		bean.setSubProfit_center("");
+		//bean.setProposal_no("");
 	}
 	} catch (Exception e) {
 		logger.debug("Exception @ {" + e + "}");

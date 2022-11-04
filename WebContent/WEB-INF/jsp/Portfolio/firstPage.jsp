@@ -186,6 +186,9 @@
 										      <span class="heading"><b><s:text name="heading.renewalPendingList"/></b></span>
 										      
 										  </s:elseif>
+										  <span class="pullRight"> <input type="button"
+															value="New Offer" class="btn btn-sm btn-success"
+															onclick="AddNewOffer();" /> </span>
 										</s:if>
 								</div>
 							</div>
@@ -346,6 +349,7 @@
 					<s:hidden name="contractno1" id="contractno1"/>
 					<s:hidden name="lay1" id="lay1"/>
 					<s:hidden name="multiuserError" id="multiuserError"/>
+					<s:hidden name="pro" id="pro" value="%{#session.mfrid}" />
 </div>
 </div>
 </div>
@@ -575,5 +579,25 @@ function funReinsurerMode(proposalno,mfrid,flag,amendId)
   
    
 }
+function AddNewOffer() {
+	var pro = document.getElementById("pro").value;
+		if(pro==1)
+        {
+        document.FirstPageForm.action="${pageContext.request.contextPath}/InitMethodFacultative.action";
+        }
+        if(pro==2)
+        {
+        document.FirstPageForm.action="${pageContext.request.contextPath}/InitRiskDetails.action";
+        }
+        if(pro==3 || pro==5)
+        {
+        document.FirstPageForm.action="${pageContext.request.contextPath}/InitXol.action";
+        }
+        if(pro==4)
+        {
+        document.FirstPageForm.action="${pageContext.request.contextPath}/InitRetro.action";
+        }
+		document.FirstPageForm.submit();
+	}
    </script>
 </html>

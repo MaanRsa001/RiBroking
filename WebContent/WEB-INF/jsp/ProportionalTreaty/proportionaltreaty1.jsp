@@ -180,13 +180,14 @@ gap:20px;
 																	<thead>
 																	<tr>
 																		<th width="4%"> <s:text name="label.sno" /> </th>
-																		<th width="15%"><s:text name="label.businessType" /></th>
+																		<th width="10%"><s:text name="label.businessType" /></th>
 																		<th width="10%"><s:text name="label.baseproposal" /></th>
 																		<th width="10%"><s:text name="label.proposalNo" /></th>
 																		<th width="10%"><s:text name="label.sectionNoLayer" /></th>
 																		<th width="15%"><s:text name="label.departmentClass" /></th>
-																		<th width="15%"><s:text name="label.treatyType" /></th>
-																		<th width="15%"><s:text name="label.treatyNameType" /></th>
+																		<th width="15%"><s:text name="label.subClass" /></th>
+																		<th width="10%"><s:text name="label.treatyType" /></th>
+																		<th width="10%"><s:text name="label.sectreatyNameType" /></th>
 																		<th width="10%"><s:text name="label.newRenew" /></th>
 																		<%-- <th width="10%"><s:text name="label.existingshare" /></th> --%>
 																	</tr>
@@ -216,6 +217,9 @@ gap:20px;
 																		</td>
 																		<td>
 																			<s:property value="#list.TMAS_DEPARTMENT_NAME"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.SUB_CLASS"/>
 																		</td>
 																		<td>
 																			<s:property value="#list.TREATY_TYPE"/>
@@ -289,7 +293,7 @@ gap:20px;
 																<s:text name="label.proposalNo" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="proposal_no" id="proposal_no" cssClass="inputBox" disabled="true" />
+																<s:textfield name="proposal_no" id="proposal_no" cssClass="inputBox" disabled="true" value="%{'copy'.equals(flag)?'':proposal_no}" />
 															</div>
 														</div>											
 														<div class="textfield">
@@ -329,7 +333,7 @@ gap:20px;
 													 			    </span>
 																</s:if>
 																<s:else>
-																	<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();"/>
+																	<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();"/>
 																	<span class="input-group-addon">
 																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
 													 			     	<span class="glyphicon glyphicon-list"></span>
@@ -345,7 +349,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<div class="">
-																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer)?true:false}' />
+																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"   onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer)?true:false}' />
 																</div>
 															</div>
 														</div>
@@ -354,16 +358,9 @@ gap:20px;
 																<s:text name="label.expiryDate" /> &nbsp; <sup style="color: red;">  </sup>
 															</div>
 															<div class="tbox">
-																<s:if test="layerProposalNo == null || layerProposalNo == ''">
 																	<div class="">
 																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" disabled="%{(layerProposalNo!=null) || (#dislayer)?true:false}" onchange="functionEDate();"/>
 																	</div>
-																</s:if>
-																<s:else>
-																	<div class="">
-																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" disabled="%{(layerProposalNo!=null) || (#dislayer)?true:false}" onchange="functionEDate();"/>
-																	</div>
-																</s:else>
 															</div>
 														</div>
 														<div class="textfield">
@@ -404,7 +401,7 @@ gap:20px;
 																		<th width="10%"><s:text name="label.sectionNo" /></th>
 																		<th width="15%"><s:text name="label.departmentClass" /></th>
 																		<th width="15%"><s:text name="label.treatyType" /></th>
-																		<th width="15%"><s:text name="label.treatyNameType" /></th>
+																		<th width="15%"><s:text name="label.sectreatyNameType" /></th>
 																		<th width="10%"><s:text name="label.edit" /></th>
 																		<th width="10%"><s:text name="label.seccopy" /></th>
 																		<th width="10%" > <s:text name="Delete" /> </th>
@@ -514,7 +511,7 @@ gap:20px;
 																		</div>
 																		<div class="textfield">
 																			<div class="text">
-																				<s:text name="label.treatyNameType" />
+																				<s:text name="label.sectreatyNameType" />
 																			</div>
 																			<div class="tbox">
 																				<s:textfield name="treatyName_type" cssClass="inputBox" maxlength="500" />
@@ -783,7 +780,7 @@ gap:20px;
 																					<s:text name="label.ourAssessedEPIOC100" />
 																				</div>
 																				<div class="tbox">
-																					<s:textfield name="epi" id="epi" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);calculation('epi');calculateSurplus();"/>
+																					<s:textfield name="epi" id="epi" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value);negative(this.id,this.value);calculation('epi');calculateSurplus();SlidingScaleEnable();"/>
 																				</div>
 																			</div>
 																			<div class="textfield" id="premiumQuoteid">
@@ -891,7 +888,7 @@ gap:20px;
 																						<s:text name="label.commissionQSP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="commissionQ_S" id="commissionQ_S" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}' />													
+																						<s:textfield name="commissionQ_S" id="commissionQ_S" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue();SlidingScaleEnable();" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}' />													
 																					</div>
 																				</div>
 																				<div class="textfield" id="commissionSurpPid">
@@ -899,7 +896,7 @@ gap:20px;
 																						<s:text name="label.commissionSurpP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="commission_surp" id="commission_surp" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>													
+																						<s:textfield name="commission_surp" id="commission_surp" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue();SlidingScaleEnable();" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>													
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -975,7 +972,7 @@ gap:20px;
 																					</div>
 																					<div class="tbox">	
 																						<div class="reinsstyle">
-																							<div><s:radio name="slideScaleCommission" list="#{'Y':'Yes','N':'No'}"  value="slideScaleCommission==null || slideScaleCommission==''?'N':slideScaleCommission" onclick="getSlideInfo(this.value)" disabled='%{"Y".equals(disableStatus1)?true:false}'/></div>
+																							<div><s:radio name="slideScaleCommission" id="slideScaleCommission" list="#{'Y':'Yes','N':'No'}"  value="slideScaleCommission==null || slideScaleCommission==''?'N':slideScaleCommission" onclick="getSlideInfo(this.value)" disabled='%{"Y".equals(disableStatus1)?true:false}'/></div>
 																							<div id="ssc" style="display:none"><button type="button" name="companyBtn" id="companyBtn" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#companyModal1" onclick="getPopUpDetails('scale','<s:property value="contNo"/>','<s:property value="amendId"/>','<s:property value="proposal_no"/>','<s:property value="flag"/>','<s:property value="layerProposalNo"/>')">
 																					 			     <s:text name="label.enterDetails" />
 																					 		</button>
@@ -1521,7 +1518,7 @@ gap:20px;
 							<div class="tablerow">
 										<div class="boxcontent" align="center">
 											<s:if test='amend_Id_Mode ==null ||"".equals(amend_Id_Mode) '>
-												<s:if test='proposal_no == null ||"".equals(proposal_no) '>
+												<s:if test='(proposal_no == null ||"".equals(proposal_no)) '>
 													<s:if
 														test='layerProposalNo == null ||"".equals(layerProposalNo) '>
 														<s:if test='"renewal".equals(flagTest)'>
@@ -1774,6 +1771,7 @@ function funsubmit(){
 
 
 function FunctionEdit(){
+	document.getElementById("proposal_no").value=document.proportional.proposalNo.value;
 	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.proportional.action="${pageContext.request.contextPath}/EditModeRiskDetails?multiuserMode=edit";
@@ -1911,7 +1909,7 @@ function calculateSurplus(){
 	epi=epi.replace(new RegExp(',', 'g'),'');
 	var quotashare=document.proportional.premiumQuotaShare.value;
 	quotashare=quotashare.replace(new RegExp(',', 'g'),'');
-	if(quotashare>epi){
+	if(parseFloat(quotashare)>parseFloat(epi)){
 		alert("Value should not exceed EPI 100% OC");
 		document.proportional.premiumQuotaShare.value='';
 		return false;
@@ -1972,8 +1970,7 @@ if(val=="1"){
 		document.getElementById('premiumSurplusid').style.display="none";
 		document.getElementById('commissionQSPid').style.display="inline";
 		document.getElementById('commissionSurpPid').style.display="none";
-		
-		
+		document.getElementById('slideScaleCommissionY').disabled=false;
 	}
 else if(val=="2"){
 		document.getElementById('treatyQS1').style.display="inline";
@@ -1993,6 +1990,7 @@ else if(val=="2"){
 		document.getElementById('premiumSurplusid').style.display="none";
 		document.getElementById('commissionQSPid').style.display="none";
 		document.getElementById('commissionSurpPid').style.display="inline";
+		document.getElementById('slideScaleCommissionY').disabled=false;
 	}
 	else if(val=="3"){
 		document.getElementById('treatyQS1').style.display="inline";
@@ -2012,6 +2010,7 @@ else if(val=="2"){
 		document.getElementById('premiumSurplusid').style.display="inline";
 		document.getElementById('commissionQSPid').style.display="inline";
 		document.getElementById('commissionSurpPid').style.display="inline";
+		document.getElementById('slideScaleCommissionY').disabled=true;
 	}
 	else if(val=="4" || val=="5" ){
 		document.getElementById('treatyQS1').style.display="none";
@@ -2026,7 +2025,11 @@ else if(val=="2"){
 		document.getElementById('premiumSurplusid').style.display="none";
 		document.getElementById('commissionQSPid').style.display="inline";
 		document.getElementById('commissionSurpPid').style.display="none";
+		document.getElementById('slideScaleCommissionY').disabled=false;
 	}
+$("#slideScaleCommissionN").prop("checked", true);
+getSlideInfo('N');
+SlidingScaleEnable();
 }
 function GetExchangeRate() {
 		var incDate=document.forms['proportional'].incepDate.value;
@@ -2876,6 +2879,10 @@ function getPopUpDetails(pageFor,contractNo,endorsmentno,proposalNo,flag,renewal
 	 if(renewalProposalNo!=null && renewalProposalNo!=''){
 		 proposalNo=renewalProposalNo;
 	 }
+	 var premiumQS = document.proportional.commissionQ_S.value;
+		if(premiumQS ==  null || premiumQS ==""){
+		premiumQS =  document.proportional.commission_surp.value;
+		}
 	 if("scale"==pageFor){
 	  document.getElementById("slidePopUp").value = "Y";
 	 }else if("lossparticipates"==pageFor){
@@ -2885,7 +2892,7 @@ function getPopUpDetails(pageFor,contractNo,endorsmentno,proposalNo,flag,renewal
 	 }
 	 $.ajax({
 	        type: "POST",
-	        url: "${pageContext.request.contextPath}/viewScaleCommissionPopUpRiskDetails.action?pageFor="+pageFor+"&proposal_no="+proposalNo+"&amendId="+endorsmentno+"&contractNo="+contractNo+"&flag="+flag+"&layerProposalNo="+renewalProposalNo+"&commissionType="+type+"&treatyType="+treatyType+"&referenceNo="+referenceNo,
+	        url: "${pageContext.request.contextPath}/viewScaleCommissionPopUpRiskDetails.action?pageFor="+pageFor+"&proposal_no="+proposalNo+"&amendId="+endorsmentno+"&contractNo="+contractNo+"&flag="+flag+"&layerProposalNo="+renewalProposalNo+"&commissionType="+type+"&treatyType="+treatyType+"&referenceNo="+referenceNo+"&provisionCom="+premiumQS,
 	        //data:'src_type_id='+val,
 	        success: function(data){
 	            $('#companyAjaxId1').html(data);
@@ -3386,6 +3393,29 @@ function commissioninsRow(tableID)
 			cell5.appendChild(element5);
 			 document.getElementById("loopcount").value =parseInt(rowCount);
 			// }
+}
+function SlidingScaleEnable(){
+	var treatyType = document.proportional.treatyType.value;
+	//alert(treatyType);
+	if(treatyType=='3'){
+	var premiumQS = document.proportional.commissionQ_S.value;
+	if(premiumQS ==  null || premiumQS ==""){
+	premiumQS =  0;
+	}
+	var premiumSurplus = document.proportional.commission_surp.value;
+	if(premiumSurplus ==  null || premiumSurplus ==""){
+	premiumSurplus =  0;
+	}
+	if(premiumQS==premiumSurplus){
+		document.getElementById('slideScaleCommissionY').disabled=false;
+	}else{
+		document.getElementById('slideScaleCommissionY').disabled=true;
+	}
+	}else{
+		$("#slideScaleCommissionN").prop("checked", true);
+		getSlideInfo('N');
+	}
+	
 }
 </script>
 	</body>

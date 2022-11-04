@@ -553,6 +553,11 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 		if(bean.getUseroperation().equalsIgnoreCase("new")){
 			if(StringUtils.isBlank(bean.getLoginId())){
 				addActionError(getText("error.userLoginId.required"));
+			}else {
+				int count=service.getLoginCount(bean,branchCode);
+				if(count>0) {
+					addActionError(getText("error.userLoginId.invalid"));
+				}
 			}
 		}
 

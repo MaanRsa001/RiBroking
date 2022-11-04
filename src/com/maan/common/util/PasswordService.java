@@ -7,8 +7,9 @@ package com.maan.common.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
 import org.slf4j.Logger;
-import sun.misc.BASE64Encoder;
 
 public final class PasswordService {
 
@@ -33,7 +34,7 @@ public final class PasswordService {
         }
 
         byte raw[] = md.digest(); //step 4
-        String hash = (new BASE64Encoder()).encode(raw); //step 5
+        final String hash = new String(Base64.getEncoder().encode(raw));
         return hash; //step 6
     }
 

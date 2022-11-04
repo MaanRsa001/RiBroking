@@ -245,6 +245,9 @@
 															</s:if>
 														<%-- </s:if> --%>
 													</s:if>
+													<s:else>
+													<s:hidden name="placementMode" id="placementMode"></s:hidden>
+													</s:else>
 														<div class="boxcontent" style="width:75%" align="center">
 														<div id="reinsurerid" >
 															<table width="100%" class="table table-bordered" id="reinsTbl">
@@ -353,7 +356,7 @@
 															</tbody>
 														</table>
 														</div>
-														<s:hidden name="placementMode"></s:hidden>											
+														<s:hidden name="placementMode" id="placementMode"></s:hidden>											
 													</div> 
 													</s:if>
 												
@@ -394,7 +397,7 @@
 										</div>
 									</div>
 									</div>
-									<s:hidden name="placementMode"></s:hidden>
+									<s:hidden name="placementMode" id="placementMode"></s:hidden>
 									</s:elseif>
 									</div>
 									<br class="clear"/>									
@@ -429,6 +432,7 @@
 						<s:hidden name="brokerId" id="brokerId"></s:hidden>
 						<s:hidden name="bouquetModeYN" id="bouquetModeYN"></s:hidden>
 						<s:hidden name="bouquetNo" id="bouquetNo"></s:hidden>
+						<s:hidden name="prePerilVal" id="prePerilVal"></s:hidden>
 						
 					</div>	
 					<div id="premiumSubmit">
@@ -561,7 +565,9 @@ function FnCancel(){
 	document.placement.submit();
 }
 function FnNext(){
-	document.placement.placementMode.disabled=false;
+	$('input:radio[name=placementMode]').attr('disabled',false);
+	//document.getElementById('placementModeS').disabled=false;
+	//document.getElementById('placementModeC').disabled=false;
 	document.placement.action='${pageContext.request.contextPath}/savePlacingPlacement.action'
 	document.placement.submit();
 }
@@ -592,6 +598,45 @@ function getPlacement(){
 	document.placement.action='${pageContext.request.contextPath}/initPlacement.action';
 	document.placement.submit();
 }
+$(document).ready(function() {     
+    $('#mailTo').multiselect({ 
+      	includeSelectAllOption: false,
+        enableFiltering:true,
+        numberDisplayed: 0,
+        enableCaseInsensitiveFiltering: true,
+        onChange: function(element, checked) {
+          var val = $('#mailTo').val();
+          var val1 =document.getElementById("prePerilVal").value;
+          if(val1!= null && val1=='ALL' && val !=null && val[1]!=undefined ){
+          $("#mailTo").multiselect('clearSelection');
+          val = removeElementsWithValue(val, 'ALL');
+          $("#mailTo").val(val);
+           $("#mailTo").multiselect("refresh");
+           document.getElementById("prePerilVal").value = '';
+          }
+          else if (val !=null && val[0]=='ALL' ) {
+          	$("#mailTo").multiselect('clearSelection');
+          	$("#mailTo").val('ALL');
+          	 $("#mailTo").multiselect("refresh");
+          	 document.getElementById("prePerilVal").value = 'ALL';
+          }
+          else if(val== null || val[0]==''){
+          $("#mailTo").multiselect('clearSelection');
+          $("#mailTo").multiselect("refresh");
+          document.getElementById("prePerilVal").value = '';
+          }
+      	}                     
+    }); 
+    
+     <s:if test='mailTo!=null && !"".equals(mailTo)'>	
+ 		var uwgrade='<s:property value="mailTo"/>';
+		 var data=uwgrade.replace(/ /g,'');	
+	   	 var dataArray=data.split(",");   	 
+	   	$("#mailTo").val(dataArray);
+		 $("#mailTo").multiselect("refresh");
+	</s:if>    
+           
+});
 </script>	
 	
 </body>

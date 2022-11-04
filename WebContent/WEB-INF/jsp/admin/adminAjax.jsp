@@ -368,10 +368,10 @@
 				<s:textfield name="deductableLimitOC[%{#stat.count-1}]" id="deductableLimitOC[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); allow2DigitDecValues(this);middleMinusRestrictionNeg(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple"/>
 				</td>
 				<td>
-					<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30"  theme="simple"/>
+					<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal();" maxlength="30"  theme="simple"/>
 				</td>
 				<td>
-				<s:textfield name="netMaxRetentPer[%{#stat.count-1}]" id="netMaxRetentPer%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30" theme="simple" />
+				<s:textfield name="netMaxRetentPer[%{#stat.count-1}]" id="netMaxRetentPer%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30" theme="simple" />
 				</td>
 				<td align="center">
 				<s:if test='0!=(#stat.count-1)'>

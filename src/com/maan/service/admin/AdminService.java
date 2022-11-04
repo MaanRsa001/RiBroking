@@ -1606,6 +1606,9 @@ public class AdminService {
 	public List<Map<String, Object>> getAttachUnderWriterList(String branchCode) {
 		return dao.getAttachUnderWriterList(branchCode);
 	}
+	public int getLoginCount(AdminBean bean, String branchCode) {
+		return dao.getLoginCount( bean,branchCode);
+	}
 }
 	
 	

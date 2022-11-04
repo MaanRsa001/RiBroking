@@ -56,7 +56,7 @@ gap:20px;
 	</style>
 	
 </head>
-<body onload="setCedRetType('<s:property value="cedRetenType" />')">
+<body>
 <s:set var="elayerInfo" value='%{layerInfo}'/>
 <div class="table0" style="width: 100%; margin: 0 auto;">
 	<div class="tablerow">
@@ -107,6 +107,7 @@ gap:20px;
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="riskdetailYN" id="riskdetailYN" value="%{riskdetailYN==null?'N':riskdetailYN}" onchange="getRiskInfo(this.value)" disabled="true"></s:radio>													
 															</div>
 														</div>
+														<s:if test='"Y".equals(riskdetailYN)'>
 														<div class="boxcontent" id="riskid">
 														<div class="textfield">
 															<div class="text">
@@ -141,6 +142,36 @@ gap:20px;
 																<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled="true" />
 															</s:else>
 															</div>
+															</div>
+														</div>
+														<div class="textfield">
+															<div class="text">
+																<s:text name="label.departmentClass" />
+															</div>
+															<div class="tbox">
+																<s:if test="RenewalMode != null ">
+																	<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
+																</s:if>
+																<s:else>
+																	<s:if test="'Layer'.equals(proposalReference)">
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="true"/>
+																	</s:if>
+																	<s:else>
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" /><!-- getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass') -->
+																	</s:else>
+																</s:else>
+															</div>
+														</div>
+														<div class="textfield">
+															<div class="text">
+																<s:text name="label.subClass" />
+															</div>
+															<div class="tbox"  id="subclass">
+																<s:select list="subProfitList" listKey="TMAS_SPFC_ID" listValue="TMAS_SPFC_NAME" multiple="true" name="subProfit_center" id="subProfit_center"  cssClass="inputBoxS"  headerKey="ALL" headerValue="ALL" disabled="true"/>
+																
+																<s:hidden name="profit_Center" id="profit_Center" value="D"/>
+																<%--<s:select list="subProfitList" listKey="TMAS_SPFC_ID" listValue="TMAS_SPFC_NAME" name="subProfit_center" id="subProfit_center" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{contNo != null && contNo != ""?true:RenewalMode!=null?false:"Y".equals(disableStatus)?true:false}'/>
+																 <s:hidden name="subProfit_center" id="subProfit_center" value="D"/>--%>											
 															</div>
 														</div>
 														<div class="textfield">
@@ -278,6 +309,7 @@ gap:20px;
 															</div>
 														</div>
 														</div>
+														</s:if>
 													</div>
 												</div>
 											</div>
@@ -297,20 +329,15 @@ gap:20px;
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="brokerdetYN" id="brokerdetYN" value="%{brokerdetYN==null?'N':brokerdetYN}" onchange="getBrokerInfo(this.value)" disabled="true"></s:radio>													
 															</div>
 														</div>
+														<s:if test='"Y".equals(brokerdetYN)'>
 														<div class="boxcontent" id="brokerid">														
 														<div class="textfield">
 															<div class="text">
 																<s:text name="label.broker" />
 															</div>
 															<div class="tbox">
-																<div class="input-group">
 																	<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true"  />
-																	<span class="input-group-addon">
-																		<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
-														 			     	<span class="glyphicon glyphicon-list"></span>
-														 			    </button>
-								     								</span>
-																</div>
+																	
 															</div>
 														</div>
 														<div class="textfield">
@@ -354,6 +381,7 @@ gap:20px;
 														</div>
 														<br class="clear"></br>
 													</div>
+													</s:if>
 												</div>
 											</div>
 										</div>	
@@ -373,6 +401,7 @@ gap:20px;
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="premiumdetailYN" id="premiumdetailYN" value="%{premiumdetailYN==null?'N':premiumdetailYN}" onchange="getPremiumInfo(this.value)" disabled="true"></s:radio>													
 															</div>
 														</div>
+														<s:if test='"Y".equals(premiumdetailYN)'>
 													<div class="boxcontent" id="premiumid">
 														<div class="textfield">
 															<div class="text">
@@ -466,6 +495,7 @@ gap:20px;
 															</div>
 														</div>
 													</div>
+													</s:if>
 												</div>
 											</div>
 										</div>
@@ -485,6 +515,7 @@ gap:20px;
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="installYN" id="installYN" value="%{installYN==null?'N':installYN}" onchange="getInstallInfo(this.value)" disabled="true"></s:radio>													
 															</div>
 														</div>
+														<s:if test='"Y".equals(installYN)'>
 														<div class="boxcontent" id="insid">
 														<table width="100%" class="table table-bordered" id="installid">
 															<thead>
@@ -517,6 +548,7 @@ gap:20px;
 														</table>											
 														
 													</div> 
+													</s:if>
 													</div>
 												</div>
 											</div>
@@ -536,6 +568,7 @@ gap:20px;
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="acqdetailYN" id="acqdetailYN" value="%{acqdetailYN==null?'N':acqdetailYN}" onchange="getAcqInfo(this.value);" disabled="true"></s:radio>													
 															</div>
 														</div>
+														<s:if test='"Y".equals(acqdetailYN)'>
 														<div class="boxcontent" id="aquid">
 														<div class="textfield">
 															<div class="text">
@@ -602,6 +635,7 @@ gap:20px;
 														<s:hidden name="share_Profit_Commission" value="0" />
 														<br class="clear"></br>
 														</div>
+														</s:if>
 													</div>
 												</div>
 											</div>
@@ -621,6 +655,7 @@ gap:20px;
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="reinstdetailYN" id="reinstdetailYN" value="%{reinstdetailYN==null?'N':reinstdetailYN}" onchange="getReinsInfo(this.value);" disabled="true"></s:radio>													
 															</div>
 														</div>
+														<s:if test='"Y".equals(reinstdetailYN)'>
 														<div class="boxcontent" id="reinsid">
 														<div class="textfield">
 															<div class="text">
@@ -662,6 +697,7 @@ gap:20px;
 														</div>
 														<br class="clear"></br>
 														</div>
+														</s:if>
 													</div>
 												</div>
 											</div>
@@ -797,17 +833,18 @@ gap:20px;
 						      </div>
 						    </div>
 						  </div>
-						</div>					
+						</div>
+						<s:if test='"".equals(dropDown) || dropDown==null'>					
 						<div class="tablerow">							
 							<div class="boxcontent" align="center">
 								<input type="button"  value="Cancel"  class="btn btn-sm btn-danger"  onClick="window.close();" />							
 							</div>
 						</div>
+						</s:if>
 																			
 					</div>
 					<s:hidden name="proposalNo1" id="proposalNo1"/>
 					<s:hidden name="manufactureID" id="manufactureID"/>
-					<s:hidden name="flag" id="flag"/>
 					<s:hidden name="menuId" id="menuId"/>
 					<s:hidden name="branchCode" />
 					<s:hidden name="xlPremium" value="0" />			
@@ -827,8 +864,7 @@ gap:20px;
 					--><s:hidden name="edit" />
 					<s:hidden name="cedType" id="cedType" />
 					<s:hidden name="endorsmentno"/>
-					<s:hidden name="proposalNo" id="proposalNo" value="%{proposal_no}"/>
-					<s:hidden name="mode" id="mode"/>
+				
 					<s:hidden name="limitOrigCur"/>
 					<s:hidden name="deduc_hunPercent"/>
 					<s:hidden name="layerMode" id="layerMode"/>
@@ -856,7 +892,15 @@ gap:20px;
 </div>
 <script type="text/javascript">
 
-$('.select1').select2({ });
+getRiskInfo('<s:property value="riskdetailYN"/>');
+function getRiskInfo(val){
+	if(val=="Y"){
+    	document.getElementById('riskid').style.display = 'block';
+   	} 
+   	else{
+   	 	document.getElementById('riskid').style.display = 'none';
+   	}
+}
 
 var mtbChildWin = new Array();
 var mtbWinCound = 0;
@@ -2541,15 +2585,7 @@ mode='view';
 var URL ="${pageContext.request.contextPath}/viewPopUpXol.action?pageFor="+pageFor+"&proposal_no="+proposalNo+"&amendId="+endorsmentno+"&contractNo="+contractNo+"&flag="+flag+"&layerProposalNo="+renewalProposalNo+"&anualAggregateLiabilityTemp="+anualAggregateLiability+"&layerNo="+layerNo+'&mode='+mode;
 postRequest(URL, 'companyAjaxId1');	
 	}
-getRiskInfo('<s:property value="riskdetailYN"/>');
-function getRiskInfo(val){
-	if(val=="Y"){
-    	document.getElementById('riskid').style.display = 'block';
-   	} 
-   	else{
-   	 	document.getElementById('riskid').style.display = 'none';
-   	}
-}
+
 getBrokerInfo('<s:property value="brokerdetYN"/>');
 function getBrokerInfo(val){
 	if(val=="Y"){

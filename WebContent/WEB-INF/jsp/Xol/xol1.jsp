@@ -174,12 +174,13 @@ gap:20px;
 															<thead>
 															<tr>
 																<th width="4%"> <s:text name="label.sno" /> </th>
-																<th width="15%"><s:text name="label.businessType" /></th>
+																<th width="10%"><s:text name="label.businessType" /></th>
 																<th width="10%"><s:text name="label.baseproposal" /></th>
 																<th width="10%"><s:text name="label.proposalNo" /></th>
 																<th width="10%"><s:text name="label.sectionNoLayer" /></th>
 																<th width="15%"><s:text name="label.departmentClass" /></th>
-																<th width="15%"><s:text name="label.treatyType" /></th>
+																<th width="15%"><s:text name="label.subClass" /></th>
+																<th width="10%"><s:text name="label.treatyType" /></th>
 																<th width="15%"><s:text name="label.treatyNameType" /></th>
 																<th width="10%"><s:text name="label.newRenew" /></th>
 																<%-- <th width="10%"><s:text name="label.existingshare" /></th> --%>
@@ -210,6 +211,9 @@ gap:20px;
 																</td>
 																<td>
 																	<s:property value="#list.TMAS_DEPARTMENT_NAME"/>
+																</td>
+																<td>
+																	<s:property value="#list.SUB_CLASS"/>
 																</td>
 																<td>
 																	<s:property value="#list.TREATY_TYPE"/>
@@ -248,7 +252,7 @@ gap:20px;
 													<s:text name="label.proposalNo" />
 												</div>
 												<div class="tbox">
-													<s:textfield name="proposal_no" id="proposal_no" cssClass="inputBox" disabled="true" />
+													<s:textfield name="proposal_no" id="proposal_no" cssClass="inputBox" disabled="true" value="%{'copy'.equals(flag)?'':proposal_no}"/>
 												</div>
 											</div>											
 											<div class="textfield">
@@ -624,17 +628,17 @@ gap:20px;
 																				</s:if>
 																				</td>
 																				 --%><td>
-																				<s:textfield name="coverLimitOC[%{#stat.count-1}]" id="coverLimitOC[%{#stat.count-1}]"  cssClass = "inputBox"  cssStyle="text-align:right;"  onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);"  maxlength="30"  disabled='%{"Y".equals(disableStatus1)?true:false}'  />
+																				<s:textfield name="coverLimitOC[%{#stat.count-1}]" id="coverLimitOC[%{#stat.count-1}]"  cssClass = "inputBox"  cssStyle="text-align:right;"  onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getAnnualAggNo();"  maxlength="30"  disabled='%{"Y".equals(disableStatus1)?true:false}'  />
 																				
 																				</td>
 																				<td>
 																				<s:textfield name="deductableLimitOC[%{#stat.count-1}]" id="deductableLimitOC[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 																				</td>
 																				<td>
-																				<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30"  />
+																				<s:textfield name="egnpiAsPerOff[%{#stat.count-1}]" id="egnpiAsPerOff%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal();" maxlength="30"  />
 																				</td>
 																				<td>
-																				<s:textfield name="netMaxRetentPer[%{#stat.count-1}]" id="netMaxRetentPer%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal()" maxlength="30"  />
+																				<s:textfield name="netMaxRetentPer[%{#stat.count-1}]" id="netMaxRetentPer%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30"  />
 																				</td>
 																				<td align="center">
 																				<s:if test='0!=(#stat.count-1)'>
@@ -1235,7 +1239,7 @@ gap:20px;
 							<div class="boxcontent" align="center">
 								<s:hidden name="amend_Id_Mode"/>
 								<s:if test='amend_Id_Mode == null ||"".equals(amend_Id_Mode)  '>
-									<s:if test='proposal_no == null ||"".equals(proposal_no) '>
+									<s:if test='proposal_no == null ||"".equals(proposal_no)'>
 										<s:if test='layerProposalNo == null ||"".equals(layerProposalNo) '>
 											<s:if test='"renewal".equals(flagTest)'>
 												<input type="button"  value="Back"  class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
@@ -1592,6 +1596,7 @@ function FunctionEdit()
 {	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.getElementById("multiuserMode").value='edit';
+	document.getElementById("proposal_no").value=document.xol1.proposalNo.value;
 	document.xol1.action="${pageContext.request.contextPath}/EditModeXol.action";
 	document.xol1.submit();
 }
@@ -2234,7 +2239,7 @@ var table = document.getElementById(tableID);
       		element2.id = "coverLimitOC["+(rowCount-1)+"]";
       		element2.value=document.getElementById("coverLimitOC["+(rowCount-2)+"]").value;
 			element2.className = "inputBox";
-			element2.setAttribute("onkeyup", "Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value)");
+			element2.setAttribute("onkeyup", "Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getAnnualAggNo();");
 			element2.setAttribute("maxlength",'30');
 			element2.setAttribute("style", "text-align:right;");
 			//element2.setAttribute("disabled",'{"Y".equals(disableStatus1)?true:false}');
@@ -2261,7 +2266,7 @@ var table = document.getElementById(tableID);
       		element4.id = "egnpiAsPerOff"+(rowCount-1);
 			element4.value=document.getElementById("egnpiAsPerOff"+(parseFloat(rowCount)-2)).value;
 			element4.className = "inputBox";
-			element4.setAttribute("onkeyup", "Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);");
+			element4.setAttribute("onkeyup", "Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);getEgnpiCal();");
 			element4.setAttribute("maxlength",'30'); 
 			element4.setAttribute("style", "text-align:right;");
 			cell5.appendChild(element4); 
@@ -2272,9 +2277,9 @@ var table = document.getElementById(tableID);
 			//cell6.style.display ='none';
 			var element5 = document.createElement("input");
 			element5.type = "text";
-			element5.name = "gnpiAsPO["+(rowCount-1)+"]";
-      		element5.id = "gnpiAsPO"+(rowCount-1);
-			//element5.value=document.getElementById("gnpiAsPO"+(parseFloat(rowCount)-2)).value;
+			element5.name = "netMaxRetentPer["+(rowCount-1)+"]";
+      		element5.id = "netMaxRetentPer"+(rowCount-1);
+			element5.value=document.getElementById("netMaxRetentPer"+(parseFloat(rowCount)-2)).value;
 			element5.setAttribute("disabled",true);
 			element5.className = "inputBox";
 			element5.setAttribute("onkeyup", "Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);");
@@ -2299,7 +2304,8 @@ var table = document.getElementById(tableID);
 			// document.getElementById("loopcount").value =parseInt(val)+1;
 			// }
 			 document.getElementById("loopcount").value =parseInt(rowCount);			 
-			// getEgnpiCal();
+			 getEgnpiCal();
+			 getAnnualAggNo();
 			 getAjaxCoverClass();
 			 
 }
@@ -2648,7 +2654,7 @@ function getEgnpiCal(){
     }
         sum = parseFloat(sum) + parseFloat(val);
     }
-    document.getElementById("egnpiOffer").value =  Comma(parseFloat(sum).toFixed(2));
+    document.getElementById("subPremium").value =  Comma(parseFloat(sum).toFixed(2));
 			
 }
 
@@ -3111,7 +3117,7 @@ function getAcqInfo(val){
    	 	document.getElementById('aquid').style.display = 'none';
    	}
 }
-getReinsInfo('<s:property value="acqdetailYN"/>');
+getReinsInfo('<s:property value="reinstdetailYN"/>');
 function getReinsInfo(val){
 	if(val=="Y"){
     	document.getElementById('reinsid').style.display = 'block';
@@ -3194,6 +3200,7 @@ function removeRowReins(val){
 	else{
 		var status=confirm("Do you want to delete specified row");
 		if(status){
+			
 			postFormRequest("${pageContext.request.contextPath}/removeRowXol.action?mode=delete&deleteId="+val, "companyAjaxId1", "xol1");
 			}
 		}
@@ -3317,6 +3324,24 @@ function removeRowReins(val){
 			getAnnualAgg();	
 				
 	}
+	function getAnnualAggNo(){
+		var noofrows =0;
+		noofrows = parseInt(noofrows)+1;
+		var total=0;
+				<s:iterator value="CoverList"  var="list" status="stat">
+				 var i = <s:property value="%{#stat.count-1}"/>;
+				 var val= document.getElementById("coverLimitOC["+(i)+"]").value;
+				 if(val==''){
+				 val ="0";
+				 }else{
+				 val=val.replace(new RegExp(',', 'g'),'');
+				 }
+				// document.getElementById("coverLimitOC["+(i)+"]").value=Comma(((parseInt(val))*(parseInt(noofrows))).toFixed(2));
+				  total=parseInt(total)+parseInt(val);
+				 </s:iterator>
+				 document.getElementById("anualAggregateLiability").value=Comma(((parseInt(total))*(parseInt(noofrows))).toFixed(2));
+
+		}
 	function getAnnualAgg(){
 	var val =document.getElementById("reinstatementOption").value;
 	var noofrows = document.getElementById("totalNoOfRows").value;
@@ -3325,26 +3350,26 @@ function removeRowReins(val){
 		if(val=="S"){
 			<s:iterator value="CoverList"  var="list" status="stat">
 			 var i = <s:property value="%{#stat.count-1}"/>;
-			 var val= document.getElementById("hcoverLimitOC["+(i)+"]").value;
+			 var val= document.getElementById("coverLimitOC["+(i)+"]").value;
 			 if(val==''){
 			 val ="0";
 			 }else{
 			 val=val.replace(new RegExp(',', 'g'),'');
 			 }
-			 document.getElementById("coverLimitOCRe["+(i)+"]").value=Comma(((parseInt(val))*(parseInt(noofrows))).toFixed(2));
+			// document.getElementById("coverLimitOC["+(i)+"]").value=Comma(((parseInt(val))*(parseInt(noofrows))).toFixed(2));
 			  total=parseInt(total)+parseInt(val);
 			 </s:iterator>
 			 document.getElementById("anualAggregateLiabilityTemp").value=Comma(((parseInt(total))*(parseInt(noofrows))).toFixed(2));
 		}else{
 			<s:iterator value="CoverList"  var="list" status="stat">
 			 var i = <s:property value="%{#stat.count-1}"/>;
-			 var val= document.getElementById("hcoverLimitOC["+(i)+"]").value;
+			 var val= document.getElementById("coverLimitOC["+(i)+"]").value;
 			 if(val==''){
 			 val ="0";
 			 }else{
 			 val=val.replace(new RegExp(',', 'g'),'');
 			 }
-			 document.getElementById("coverLimitOC["+(i)+"]").value=Comma(((parseInt(val))).toFixed(2));
+			// document.getElementById("coverLimitOC["+(i)+"]").value=Comma(((parseInt(val))).toFixed(2));
 			 total=parseInt(total)+parseInt(val);
 			 </s:iterator>
 		document.getElementById("anualAggregateLiabilityTemp").value=Comma(total.toFixed(2));
@@ -3851,6 +3876,7 @@ function getRateOnline(val1){
 	 document.getElementById("rateOnLine").value=Comma(finalvalue.toFixed(2));	 
 	
 }
+
 
 </script>		
 </body>

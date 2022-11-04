@@ -359,4 +359,6 @@ public interface AdminDAO {
 	boolean removeSubMenuAllocationForUser(AdminBean bean);
 
 	List<Map<String, Object>> getAttachUnderWriterList(String branchCode);
+
+	int getLoginCount(AdminBean bean, String branchCode);
 }

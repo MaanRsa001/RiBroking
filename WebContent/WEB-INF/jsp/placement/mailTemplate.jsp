@@ -18,7 +18,8 @@
             <div class="row">
                 <label for="to" class="col-2 col-sm-1 col-form-label">To:</label>
                 <div class="col-10 col-sm-10 mb-2" style="padding-bottom: 10px;">
-                 <s:textfield name="mailTo" id="mailTo" cssClass="inputBox"/>
+                <s:select list="mailCCList" listKey="CODE" listValue="CODEDESC" name="mailTo" id="mailTo"  multiple="true" cssClass="inputBoxS" headerKey="ALL" headerValue="ALL"  />
+                 <%-- <s:textfield name="mailTo" id="mailTo" cssClass="inputBox"/> --%>
                 </div>
             </div>
             
@@ -31,6 +32,12 @@
     <div id="editor" >
         <s:text name="mailBody" />
     </div>
+    <div class="row">
+    	 <label for="cc" class="col-2 col-sm-1 col-form-label">Remarks:</label>
+          <div class="col-10 col-sm-10 mb-2" style="padding-bottom: 10px;">
+          	<s:textarea name="mailRemarks" id="mailRemarks" rows="3" cssClass="inputBoxA" cssStyle="width: 100%;"/>
+          </div>
+      </div>
      <div class="row" style="padding-top:15px">
              <div class="text-center">
              		<button type="submit" class="btn btn-danger" onclick="cancelEmail();">Discard</button>
@@ -41,6 +48,7 @@
  <script>
       var editor =CKEDITOR.replace( 'editor' );
       CKEDITOR.config.height = '400px';
+      CKEDITOR.config.readOnly = true;
       
     </script>
 </body>

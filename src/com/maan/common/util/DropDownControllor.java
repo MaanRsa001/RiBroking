@@ -3412,4 +3412,18 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		}
 		return statusList;
 	}
+
+	public List<Map<String, Object>> getMailCCList(PlacementBean bean) {
+		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
+		String query="";
+		try{
+			query=getQuery("GET_MAIL_CC_LIST");
+			logger.info("Select Query==> " + query);
+			
+			statusList=this.mytemplate.queryForList(query,new Object[]{"63".equals(bean.getBrokerId())?bean.getReinsurerId():bean.getBrokerId()});
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");	
+		}
+		return statusList;
+	}
 }

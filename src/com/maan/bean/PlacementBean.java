@@ -69,6 +69,7 @@ public class PlacementBean {
 	private String eproposalNo;
 	private String placementMode;
 	private String placementDisabled;
+	private String mailRemarks;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -447,6 +448,12 @@ public class PlacementBean {
 	}
 	public void setPlacementDisabled(String placementDisabled) {
 		this.placementDisabled = placementDisabled;
+	}
+	public String getMailRemarks() {
+		return mailRemarks;
+	}
+	public void setMailRemarks(String mailRemarks) {
+		this.mailRemarks = mailRemarks;
 	}
 	
 	
