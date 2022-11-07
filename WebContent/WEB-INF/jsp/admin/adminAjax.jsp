@@ -2874,7 +2874,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 			</s:else>
 			<s:if test='"A".equals(newStatus)'>
 			<td>
-				<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
+				<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox writtenvaliditydate" theme="simple"/>
 			</td>
 			<td>
 				<s:textfield name="writtenvalidityRemarks[%{#stat.count-1}]" id="writtenvalidityRemarks[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
@@ -2902,7 +2902,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 			</s:else>
 			<s:if test='"SL".equals(newStatus)'>
 			<td>
-				<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+				<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox signedLineValidity" cssStyle="text-align: right;" theme="simple"/>
 			</td>
 			<td>
 				<s:textfield name="signedLineRemarks[%{#stat.count-1}]" id="signedLineRemarks[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
@@ -2957,4 +2957,32 @@ alert("This action is not allowed because a previous transaction is pending for 
 	</tbody>
 </table>
 </div>
+<script type="text/javascript">
+	 $(function() {
+		$( "#updateDate" ).datepicker({
+			changeMonth : true,
+			changeYear : true,
+			dateFormat : "dd/mm/yy"
+			//yearRange: "-100:+0"
+		});
+		$( ".signedLineValidity" ).datepicker({
+			changeMonth : true,
+			changeYear : true,
+			dateFormat : "dd/mm/yy"
+			//yearRange: "-100:+0"
+		});
+		$( ".writtenvaliditydate" ).datepicker({
+			changeMonth : true,
+			changeYear : true,
+			dateFormat : "dd/mm/yy"
+			//yearRange: "-100:+0"
+		});
+		$( "#statementDate" ).datepicker({
+			changeMonth : true,
+			changeYear : true,
+			dateFormat : "dd/mm/yy"
+			//yearRange: "-100:+0"
+		});
+	  });	
+	  </script>	
 </s:elseif>							

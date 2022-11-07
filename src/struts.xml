@@ -502,6 +502,16 @@
 				<result name="placementStatus" type="tiles">placementStatus</result>
 				<result name="dropdownajax" >/WEB-INF/jsp/admin/adminAjax.jsp</result>
 				<result name="mailtemplate" >/WEB-INF/jsp/placement/mailTemplate.jsp</result>
+				<result name="pendingList" type="redirectAction">
+					<param name="actionName">commonListPortfolio</param>
+					<param name="manufactureID">${productId}</param>
+				</result>
+				<result name="stream" type="stream">
+					<param name="contentDisposition">attachment;filename=${fileName}</param>
+					<param name="contentType">application/octet-stream</param>
+					<param name="inputName">inputStream</param>
+				</result>
+				
 			</action>
 		
 		</package>

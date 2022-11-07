@@ -3,10 +3,27 @@ package com.maan.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
-import org.springframework.dao.DataAccessException;
 import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.PlacementBean;
@@ -20,14 +37,16 @@ public class PlacementDAO extends MyJdbcTemplate{
 	
 private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
-
+	String SMTP_AUTH_USER; 
+	String SMTP_AUTH_PWD;
 	public List<Map<String,Object>> proposalInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		try {
+			String proposal=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
 			String query=getQuery("GET_EXISTING_PROPOSAL");
 			Object[] obj=new Object[2];
 			obj[0]=bean.getBranchCode();
-			obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+			obj[1]=proposal;
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -47,6 +66,11 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setSectionNo(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString());
 				if(StringUtils.isBlank(bean.getEproposalNo()))
 				bean.setEproposalNo(bean.getProposalNo());
+				/*String sql=getQuery("GET_BASE_LAYER_COUNT");
+				int count=this.mytemplate.queryForInt(sql,new Object[] {proposal});
+				if(count>0) {
+					bean.setBaseProposalNo(proposal);
+				}*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,7 +83,11 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<Map<String,Object>>list=null;
 		try {
 			if("C".equalsIgnoreCase(bean.getPlacementMode())) {
-				list=new DropDownControllor().getBouquetExistingList(bean.getBranchCode(),bean.getBouquetNo(),bean.getBouquetModeYN());
+				if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+					list=new DropDownControllor().getBouquetExistingList(bean.getBranchCode(),bean.getBouquetNo(),bean.getBouquetModeYN());
+				}else {
+					list=new DropDownControllor().getBaseLayerExistingList(bean.getBranchCode(),bean.getBaseProposalNo());
+				}
 				for(int i=0;i<list.size();i++) {
 					bean.setEproposalNo(list.get(i).get("PROPOSAL_NO")==null?"":list.get(i).get("PROPOSAL_NO").toString());
 					insertPlacing(bean);
@@ -128,20 +156,22 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		}
 	}
 
-
 	public List<Map<String, Object>> getPlacingInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		String query="";
 		try {
 			Object[] obj=new Object[2];
 			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
-				query=getQuery("GET_PLACEMENT_BOUQUET_LIST");
+				query=getQuery("GET_PLACING_BOUQUET_LIST");
 				obj[0]=bean.getBranchCode();
 				obj[1]=bean.getBouquetNo();
 			}else {
-				query=getQuery("GET_PLACEMENT_LIST");
+				query=getQuery("GET_PLACING_LIST");
 				obj[0]=bean.getBranchCode();
 				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+			}
+			if(StringUtils.isNotBlank(bean.getSearchType())) {
+				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
 			}
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
@@ -151,7 +181,35 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		}
 		return list;
 	}
-
+	public List<Map<String, Object>> getPlacementInfoList(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[2];
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_PLACEMENT_BOUQUET_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBouquetNo();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_PLACEMENT_BASE_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
+			}else {
+				query=getQuery("GET_PLACEMENT_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+			}
+			if(StringUtils.isNotBlank(bean.getSearchType())) {
+				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
+			}
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 	public List<Map<String, Object>> getReinsurerInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
@@ -228,7 +286,12 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		try {
 			String query="";
 			Object[]obj=null;
-			result=GetPlacementEdit(bean);
+			if(StringUtils.isBlank(bean.getSearchType())) {
+				result=GetPlacementEdit(bean);
+			}else {
+				result=GetPlacementSearchEdit(bean);
+			}
+			
 			if(!CollectionUtils.isEmpty(result)) {
 				for(int i=0;i<result.size();i++) {
 					Map<String,Object>map=result.get(i);
@@ -303,8 +366,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setUpdateDate(map.get("UPDATE_DATE")==null?"":map.get("UPDATE_DATE").toString());
 				
 			}else {
-				bean.setCurrentStatus("O");
-				bean.setNewStatus("O");
+				bean.setCurrentStatus(StringUtils.isBlank(bean.getSearchStatus())?"O":bean.getSearchStatus());
+				bean.setNewStatus(bean.getCurrentStatus());
 			}
 			
 		}catch (Exception e) {
@@ -390,6 +453,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			bean.setMailBody(map.get("MAIL_BODY")==null?"":map.get("MAIL_BODY").toString());
 			bean.setMailTo(map.get("EMAIL_TO")==null?"":map.get("EMAIL_TO").toString());
 			bean.setMailCC(map.get("EMAIL_CC")==null?"":map.get("EMAIL_CC").toString());
+			bean.setMailRegards(map.get("MAIL_REGARDS")==null?"":map.get("MAIL_REGARDS").toString());
 			
 	}
 		GetMailBodyFrame(bean);
@@ -403,8 +467,11 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			Map<String,Object>map=list.get(0);
 			String bouquetNo=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
 			String proposalNo=map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString();
+			String baseproposalNo=map.get("BASE_LAYER")==null?"":map.get("BASE_LAYER").toString();
 			if(StringUtils.isNotBlank(bouquetNo)) {
 				mailsub=mailsub+" "+bouquetNo+" / ";
+			}if(StringUtils.isNotBlank(baseproposalNo)) {
+				mailsub=mailsub+" "+baseproposalNo+" / ";
 			}if(StringUtils.isNotBlank(proposalNo)) {
 				mailsub=mailsub+" "+proposalNo;
 			}
@@ -435,10 +502,16 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		String query="";
 		try {
 			Object[] obj=new Object[2];
-			if(StringUtils.isNotBlank(bean.getBouquetNo()) && "C".equals(bean.getPlacementMode())) {
-				query=getQuery("GET_MAILTEPLATE_BOUQUET");
-				obj[0]=bean.getBranchCode();
-				obj[1]=bean.getBouquetNo();
+			if("C".equals(bean.getPlacementMode())) {
+				if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+					query=getQuery("GET_MAILTEPLATE_BOUQUET");
+					obj[0]=bean.getBranchCode();
+					obj[1]=bean.getBouquetNo();
+				}else {
+					query=getQuery("GET_MAILTEPLATE_BASELAYER");
+					obj[0]=bean.getBranchCode();
+					obj[1]=bean.getBaseProposalNo();
+				}
 			}else {
 				query=getQuery("GET_MAILTEPLATE_PROPOSAL");
 				obj[0]=bean.getBranchCode();
@@ -515,7 +588,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			String subject = bean.getMailSubject();
 			String toAddress = bean.getMailTo();
 			String ccAddress = bean.getMailCC();
-			String mailBody= bean.getMailBody()+"<br/>"+bean.getMailRemarks();
+			String mailBody= bean.getMailBody()+"<br/>"+bean.getMailRemarks()+""+bean.getMailRegards();
 			bean.setMailBody(mailBody);
 			if(toAddress!=null && !"".equals(toAddress)){
 				String[] toAddresses = (toAddress.indexOf(",")!=-1)?toAddress.split(","):new String[]{toAddress};
@@ -524,7 +597,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					ccAddresses = (ccAddress.indexOf(",")!=-1)?ccAddress.split(","):new String[]{ccAddress};
 				}
 			insertMailDetails(bean);
-			String status=service.sendResponseMail(hostName, user, pwd, mailform, subject, bean.getMailBody(), toAddresses, ccAddresses, shortAddress,port);
+			Multipart multipart=GetMailAttachment(bean);
+			String status=sendResponseMail(hostName, user, pwd, mailform, subject, multipart, toAddresses, ccAddresses, shortAddress,port);
 			if("Success".equals(status)) {
 				updateStatus(bean,"P");
 			}
@@ -534,6 +608,35 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			e.printStackTrace();
 		}
 
+	}
+
+
+	private Multipart GetMailAttachment(PlacementBean bean) {
+		Multipart multipart = new MimeMultipart();
+		try {
+			BodyPart messageBodyPart1 = new MimeBodyPart();
+			messageBodyPart1.setContent(bean.getMailBody(),"text/html;charset=UTF-8");
+			multipart.addBodyPart(messageBodyPart1);
+			List<Map<String,Object>>list=getExistingAttachList(bean);
+			if(!CollectionUtils.isEmpty(list)) {
+				for(int i=0;i<list.size();i++) {
+					Map<String,Object>map=list.get(i);
+					BodyPart messageBodyPart = new MimeBodyPart();
+					String filePath=ServletActionContext.getServletContext().getRealPath("/")+"documents/";
+					String fileName=map.get("ORG_FILE_NAME")==null?"":map.get("ORG_FILE_NAME").toString();
+					String orgfileName=map.get("OUR_FILE_NAME")==null?"":map.get("OUR_FILE_NAME").toString();
+					if(fileName!=null ){
+						DataSource source = new FileDataSource(filePath+orgfileName);
+						messageBodyPart.setDataHandler(new DataHandler(source));
+						messageBodyPart.setFileName(fileName);
+						multipart.addBodyPart(messageBodyPart);
+					 }
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return multipart;
 	}
 
 
@@ -552,11 +655,24 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		logger.info("Query=>"+query);
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
+		
 		obj[0]=bean.getMailType();
 		query=getQuery("UPDATE_PLACEMENT_STATUS");
 		logger.info("Query=>"+query);
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
+		
+		obj=new Object[4];
+		obj[0]=bean.getProposalNos().get(i);;
+		obj[1]=bean.getReinsurerIds().get(i);
+		obj[2]=bean.getBrokerIds().get(i);
+		obj[3]=bean.getBranchCode();
+		query=getQuery("UPDATE_ATTACHMENT_MAIL");
+		logger.info("Query=>"+query);
+		logger.info("Args=>"+StringUtils.join(obj, ","));	
+		this.mytemplate.update(query,obj);
+		
+		
 		}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -573,9 +689,10 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<Map<String,Object>>list=null;
 		try {
 			query=getQuery("INSERT_MAIL_NOTIFICATION");
-			if(StringUtils.isNotBlank(bean.getBouquetNo()) || "C".equals(bean.getPlacementMode())) {
+			if("C".equals(bean.getPlacementMode())) {
 				list=GetPlacementBouquet(bean);
-			}else {
+			}
+			else {
 				list=GetPlacementEdit(bean);
 			}
 			
@@ -628,13 +745,20 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
 	private List<Map<String, Object>> GetPlacementBouquet(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
+		String query="";
 		try {
-			String query=getQuery("GET_PLACEMENT_BOUQUET");
 			Object[] obj=new Object[4];
 			obj[0]=bean.getBranchCode();
 			obj[1]=bean.getBouquetNo();
 			obj[2]=bean.getReinsurerId();
 			obj[3]=bean.getBrokerId();
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_PLACEMENT_BOUQUET");
+			}else {
+				query=getQuery("GET_PLACEMENT_BASELAYER");
+				obj[1]=bean.getBaseProposalNo();
+			}
+			
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -662,7 +786,30 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		}
 		return list;
 	}
-
+	private List<Map<String, Object>> GetPlacementSearchEdit(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[4];
+			obj[0]=bean.getBranchCode();
+			obj[2]=bean.getSearchReinsurerId();
+			obj[3]=bean.getSearchStatus();
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_PLACEMENT_SEARCHBQ_EDIT");
+				obj[1]=bean.getBouquetNo();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_PLACEMENT_SEARCHBP_EDIT");
+				obj[1]=bean.getBaseProposalNo();
+			}
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 
 	public List<Map<String, Object>> getExReinsurerInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
@@ -685,6 +832,224 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+
+	public List<Map<String, Object>> getExistingReinsurerList(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[2];
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_EX_REINSURER_BOUQUET_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBouquetNo();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_EX_REINSURER_BASE_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
+			}else {
+				query=getQuery("GET_EX_REINSURER_PRO_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+			}
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	public String attachFile(PlacementBean bean) {
+		String query="",result="";
+		List<Map<String,Object>>list=null;
+		try {
+			
+			if("C".equals(bean.getPlacementMode())) {
+				list=GetPlacementBouquet(bean);
+			}
+			else {
+				list=GetPlacementEdit(bean);
+			}
+			
+			if(!CollectionUtils.isEmpty(list)) {
+				String sql=getQuery("GET_DOC_SEQUENCE");
+				String docId=this.mytemplate.queryForObject(sql, String.class);
+				bean.setDocId(StringUtils.isBlank(docId)?"0":docId);
+				query=getQuery("INSET_NOTIFY_ATTACHEMENT");
+				for(int  i=0;i<list.size();i++) {
+					Map<String,Object>map=list.get(i);
+					
+					bean.setBrokerId(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
+					bean.setReinsurerId(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
+					bean.setEproposalNo(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
+					Object[] obj = new Object[17];
+					obj[0]=bean.getDocId();
+					obj[1]=bean.getDocType();
+					obj[2]=map.get("SNO")==null?"":map.get("SNO").toString();
+					obj[3]=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
+					obj[4]=map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString();
+					obj[5]=bean.getEproposalNo();
+					obj[6]=map.get("CONTRACT_NO")==null?"":map.get("CONTRACT_NO").toString();
+					obj[7]=map.get("LAYER_NO")==null?"":map.get("LAYER_NO").toString();
+					obj[8]=map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString();
+					obj[9]=map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString();
+					obj[10]=bean.getReinsurerId();
+					obj[11]=bean.getBrokerId();
+					obj[12]=bean.getUploadFileName();
+					obj[13]=bean.getFileName();
+					obj[14]=bean.getFilePath();
+					obj[15]=bean.getBranchCode();
+					obj[16]=bean.getUserId();
+					logger.info("Query=>"+query);
+					logger.info("Args=>"+StringUtils.join(obj, ","));	
+					this.mytemplate.update(query,obj);
+				}
+				
+			}
+			
+					
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+
+	public List<Map<String, Object>> getExistingAttachList(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[4];
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_EX_DOC_BOUQUET_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBouquetNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_EX_DOC_BASE_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+			}else {
+				query=getQuery("GET_EX_DOC_PRO_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+			}
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	public String deleteFile(PlacementBean bean) {
+		String query="";
+		try {
+		
+		query=getQuery("DELETE_ATTACHED_FILE");
+		Object[] obj=new Object[2];
+		obj[0]=bean.getDocId();
+		obj[1]=bean.getFileName();;
+		logger.info("Query=>"+query);
+		logger.info("Args=>"+StringUtils.join(obj, ","));	
+		this.mytemplate.update(query,obj);
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+
+	public String downloadFile(PlacementBean bean) {
+		String query="";
+		String result="";
+		try {
+		
+		query=getQuery("DOWNLOAD_ATTACHED_FILE");
+		Object[] obj=new Object[2];
+		obj[0]=bean.getDocId();
+		obj[1]=bean.getFileName();
+		logger.info("Query=>"+query);
+		logger.info("Args=>"+StringUtils.join(obj, ","));	
+		result=this.mytemplate.queryForObject(query, obj,String.class);
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public String sendResponseMail(final String SMTP_HOST_NAME, final String user,  final String pwd, final String SMTP_MAIL_FROM, final String subject,
+    		final Multipart message, final String[] toAddress, final String[] ccAddress, final String SMTP_SHORT_ADDRESS,final String SMTP_PORT){
+    	 logger.info("Enter sendResponseMail");
+    	 String status="";
+    	SMTP_AUTH_USER = user;
+    	SMTP_AUTH_PWD = pwd;
+    	try{
+	    	Properties props = new Properties();
+	    	props.setProperty("mail.transport.protocol", "smtp");
+			props.put("mail.smtp.host", SMTP_HOST_NAME);
+			props.put("mail.smtp.port", SMTP_PORT);
+			props.put("mail.smtp.starttls.enable", "true");
+			 props.put("mail.debug", "true");
+			Session session = null; 
+			if(SMTP_AUTH_PWD != null && !"".equals(SMTP_AUTH_PWD.trim())){
+				props.put("mail.smtp.auth", "true");
+				Authenticator auth = new SMTPAuthenticator();
+				session = Session.getInstance(props, auth);
+			}else{
+				props.put("mail.smtp.auth", "false");
+				session = Session.getInstance(props);
+			}
+			session.setDebug(false);
+			Message msg1 = new MimeMessage(session);
+			InternetAddress addressFrom = new InternetAddress(SMTP_MAIL_FROM, SMTP_SHORT_ADDRESS);
+			msg1.setFrom(addressFrom);
+			if(toAddress != null && toAddress.length>0){
+				InternetAddress[] addressTo = new InternetAddress[toAddress.length];			
+				for (int i = 0; i < toAddress.length; i++){
+					addressTo[i] = new InternetAddress(toAddress[i]);
+					msg1.addRecipient(Message.RecipientType.TO, addressTo[i]);
+				}
+			}
+			if(ccAddress != null && ccAddress.length>0){
+				InternetAddress[] addressToCC = new InternetAddress[ccAddress.length];			
+				for(int i=0;i<ccAddress.length;i++){
+					addressToCC[i] = new InternetAddress(ccAddress[i]);
+					msg1.addRecipient(Message.RecipientType.CC, addressToCC[i]);
+				}
+			}
+			msg1.setSubject(subject);
+				
+			msg1.setContent(message);
+			
+			System.out.println(msg1);
+			logger.info("Mail msg"+msg1);
+			Transport.send(msg1);
+			status="Success";
+		}catch(Exception e){
+			System.out.println(e);
+			status="Failed";
+		}
+    	logger.info("Exit sendResponseMail");
+    	return status;
+    }
+	 private class SMTPAuthenticator extends javax.mail.Authenticator{
+			public PasswordAuthentication getPasswordAuthentication(){
+				String username = SMTP_AUTH_USER;
+				String password = SMTP_AUTH_PWD;
+				return new PasswordAuthentication(username, password);
+			}
 	}
 }
 	

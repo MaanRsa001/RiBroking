@@ -3380,15 +3380,34 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
 		String query="";
 		try{
-			if("C".equalsIgnoreCase(bean.getPlacementMode())) {
-				query=getQuery("GET_PLACED_PROPOSAL_BOUQUET");
-				
+			Object[] obj=null;
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+					query=getQuery("GET_PLACED_PROPOSAL_BOUQUET");
+					
+				}else {
+					query=getQuery("GET_PLACED_PROPOSAL_BOUQUET_SINGLE");
+				}
+				obj=new Object[2];
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBouquetNo();
+			
 			}else {
-				query=getQuery("GET_PLACED_PROPOSAL_BOUQUET_SINGLE");
+				if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+					query=getQuery("GET_PLACED_PROPOSAL_BASELAYER");
+					
+				}else {
+					query=getQuery("GET_PLACED_PROPOSAL_BASELAYER_SINGLE");
+				}
+				obj=new Object[3];
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
+				obj[2]=bean.getBaseProposalNo();
 			}
+			
 			logger.info("Select Query==> " + query);
 			
-			statusList=this.mytemplate.queryForList(query,new Object[]{bean.getBranchCode(),bean.getBouquetNo()});
+			statusList=this.mytemplate.queryForList(query,obj);
 		}catch(Exception e){
 			logger.debug("Exception @ {" + e + "}");	
 		}
@@ -3398,15 +3417,37 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
 		String query="";
 		try{
-			if("C".equalsIgnoreCase(bean.getPlacementMode())) {
-				query=getQuery("GET_NOTPLACED_PROPOSAL_BOUQUET");
-				
-			}else {
-				query=getQuery("GET_NOTPLACED_PROPOSAL_BOUQUET_SINGLE");
-			}
-			logger.info("Select Query==> " + query);
 			
-			statusList=this.mytemplate.queryForList(query,new Object[]{bean.getBranchCode(),bean.getBouquetNo()});
+				Object[] obj=null;
+				if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+					if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+						query=getQuery("GET_NOTPLACED_PROPOSAL_BOUQUET");
+						
+					}else {
+						query=getQuery("GET_NOTPLACED_PROPOSAL_BOUQUET_SINGLE");
+					}
+					obj=new Object[2];
+					obj[0]=bean.getBranchCode();
+					obj[1]=bean.getBouquetNo();
+				
+				}else {
+					if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+						query=getQuery("GET_NOTPLACED_PROPOSAL_BASELAYER");
+						
+					}else {
+						query=getQuery("GET_NOTPLACED_PROPOSAL_BASELAYER_SINGLE");
+					}
+					obj=new Object[3];
+					obj[0]=bean.getBranchCode();
+					obj[1]=bean.getBaseProposalNo();
+					obj[2]=bean.getBaseProposalNo();
+				}
+				
+				logger.info("Select Query==> " + query);
+				
+				statusList=this.mytemplate.queryForList(query,obj);
+			
+			
 		}catch(Exception e){
 			logger.debug("Exception @ {" + e + "}");	
 		}
@@ -3425,5 +3466,21 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 			logger.debug("Exception @ {" + e + "}");	
 		}
 		return statusList;
+	}
+
+	public List<Map<String, Object>> getBaseLayerExistingList(String branchCode, String baseProposalNo) {
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		try{
+			String query="";
+			query=getQuery("GET_EXISTING_BASELAYER");
+			logger.info("Select Query==> " + query);
+			logger.info("Arg[0]==> " + branchCode);
+			list=this.mytemplate.queryForList(query, new Object[]{branchCode,baseProposalNo});
+			
+		}
+		catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+		}
+		return list;
 	}
 }

@@ -1,11 +1,17 @@
 package com.maan.action;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.springframework.util.CollectionUtils;
 
@@ -21,6 +27,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	/**
 	 * 
 	 */
+	Logger logger = LogUtil.getLogger(this.getClass());
 	private static final long serialVersionUID = 1L;
 	Map<String,Object> session = ActionContext.getContext().getSession();
 	private String branchCode=session.get("BRANCH_CODE")==null?"":session.get("BRANCH_CODE").toString();
@@ -34,7 +41,17 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public PlacementBean getModel() {
 		bean.setBranchCode(branchCode);
 		bean.setUserId(userId);
+		bean.setProductId(pid);
 		return bean;
+	}
+	 private InputStream inputStream;
+	 
+	 
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 	DropDownControllor dropDownController=new DropDownControllor();
 	public List<Map<String,Object>>getReinsurerList(){
@@ -45,6 +62,9 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	}
 	public List<Map<String,Object>> getBouquetExistingList(){
 		return dropDownController.getBouquetExistingList(branchCode,bean.getBouquetNo(),bean.getBouquetModeYN());
+	}
+	public List<Map<String,Object>> getBaseLayerExistingList(){
+		return dropDownController.getBaseLayerExistingList(branchCode,bean.getBaseProposalNo());
 	}
 	public List<Map<String,Object>>getEmailByList(){
 		return dropDownController.getConstantDropDown("55");
@@ -63,6 +83,12 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	}
 	public List<Map<String,Object>>getMailCCList(){
 		return dropDownController.getMailCCList(bean);
+	}
+	public List<Map<String,Object>>getExistingReinsurerList(){
+		return service.getExistingReinsurerList(bean);
+	}
+	public List<Map<String,Object>>getExistingAttachList(){
+		return service.getExistingAttachList(bean);
 	}
 	public String init() {
 		String forward="placement";
@@ -89,7 +115,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public String summary() {
 		String forward="placementList";
 		service.proposalInfo(bean);
-		bean.setPlacementInfoList(service.getPlacingInfo(bean));
+		bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 		return forward;
 	}
 	
@@ -135,19 +161,37 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		return forward;
 	}
 	public String savePlacing() {
+		String forward="placement";
 		validatePlacing();
 		if(!hasActionErrors()) {
 			service.savePlacing(bean);
 			//bean.setExreinsurerInfoList(service.getPlacingInfo(bean));
 			bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+			if("S".equals(bean.getMode())) {
+				forward="pendingList";
+			}
 			bean.setMode("mail");
 		}else {
-			bean.setMode("placing");
+			init();
 		}
-		return "placement";
+		return forward;
 	}
 	private void validatePlacing() {
-		// TODO Auto-generated method stub
+		if(StringUtils.isNotBlank(bean.getBouquetNo()) || StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+			if(StringUtils.isBlank(bean.getPlacementMode())) {
+				addActionError(getText("error.placementmode.required"));
+			}if(StringUtils.isBlank(bean.getNotplacedProposal()) && StringUtils.isBlank(bean.getPlacedProposal())) {
+				addActionError(getText("error.placednotpalced.required"));
+			}
+		}
+		if(!CollectionUtils.isEmpty(bean.getReinsSNo()))
+		for(int i=0;i<bean.getReinsSNo().size();i++) {
+			if(StringUtils.isBlank(bean.getReinsureName().get(i))) {
+				addActionError(getText("error.reinsuere.required")+" "+(i+1));
+			}if(StringUtils.isBlank(bean.getPlacingBroker().get(i))) {
+				addActionError(getText("error.placingbroker.required")+" "+(i+1));
+			}
+		}
 		
 	}
 	public String updateInfo() {
@@ -162,7 +206,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		validationStatus();
 		if(!hasActionErrors()) {
 			service.updatePlacement(bean);
-			bean.setPlacementInfoList(service.getPlacingInfo(bean));
+			bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 			forward= "placementList";
 		}else {
 			service.proposalInfo(bean);	
@@ -172,6 +216,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	}
 	private void validationStatus() {
 		// TODO Auto-generated method stub
+		
 		
 	}
 	public String getStatusChange() {
@@ -193,6 +238,11 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		
 		return "placement";
 	}
+	public String mailInfo() {
+		bean.setMode("mail");
+		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+		return "placement";
+	}
 	public String getreinsurerInfo() { 
 		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
 		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
@@ -209,7 +259,33 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			bean.setMailStatus(new ArrayList<String>());
 			bean.setProposalNos(new ArrayList<String>());
 			bean.setReinsurerInfoList(list);
-		}
+		} 
 		return "dropdownajax";
+	}
+	public String attachFile() {
+		bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
+		String result=service.attachFile(bean);
+		bean.setMode("template");
+		service.getMailTemplate(bean);
+		return "placement";
+	}
+	public String deleteFile() {
+		String result=service.deleteFile(bean);
+		bean.setMode("template");
+		service.getMailTemplate(bean);
+		return "placement";
+	}
+	public String downloadFile() {
+		try {
+			String filePath=ServletActionContext.getServletContext().getRealPath("/")+"documents/";
+			String orginalFile=service.downloadFile(bean);
+			inputStream = new FileInputStream(filePath+orginalFile);
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			logger.debug("Exception @ { " + e + " } ");
+		}
+		return "stream";
 	}
 }

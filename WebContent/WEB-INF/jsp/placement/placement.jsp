@@ -49,12 +49,13 @@
 		<div class="table1" style="width: 100%; margin: 0 auto; background-color: #E5E5E5; ">
 			<div class="tablerow">
 			<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
+			<s:set var="ebaseLayerExistingList" value='%{baseLayerExistingList}'/>
 			<s:set var="ereinsurerList" value='%{reinsurerList}'/>
 			<s:set var="ebrokerList" value='%{brokerList}'/>
 			<s:set var="ereinsurerInfoList" value='%{reinsurerInfoList}'/>
 			
 				<div style="padding:10px; background:#F8F8F8">
-				<s:form id="placement" name="placement" theme="simple" action=""	method="post" autocomplete="off">					
+				<s:form id="placement" name="placement" theme="simple" action=""	method="post" autocomplete="off" >					
 					<div class="table2">
 						<div class="tablerow">
 							<span style="color:red;"><s:actionerror/></span>
@@ -72,9 +73,10 @@
 										<s:if test='"Y".equals(bouquetModeYN)'>
 										<div class="boxcontent" >
 											<div class="panel panel-primary">											
-												<div class="panel-heading">
-													<s:text name="label.bouquetinfo" />
-												</div>
+													<div class="panel-heading" style="display: flex;justify-content: space-between;">
+														<div><s:text name="label.bouquetinfo" /></div>
+														<div><s:text name="label.bouquetNo" />:<s:property value="bouquetNo"/></div>
+													</div>
 												<div class="panel-body">
 													<div class="boxcontent">
 															<div>
@@ -142,10 +144,85 @@
 											</div>
 										</div>
 									</s:if>
+									<s:elseif test='(baseProposalNo!=null && baseProposalNo!="")'>
+										<div class="boxcontent" >
+											<div class="panel panel-primary">											
+												<div class="panel-heading" style="display: flex;justify-content: space-between;">
+													<div><s:text name="label.baseinfo" /></div>
+													<div><s:text name="label.baseproposal" />:<s:property value="baseProposalNo"/></div>
+												</div>
+												<div class="panel-body">
+													<div class="boxcontent">
+															<div>
+																<table width="100%" class="table table-bordered" >
+																	<thead>
+																	<tr>
+																		<th width="7%"> <s:text name="label.sno" /> </th>
+																		<th width="20%"><s:text name="label.businessType" /></th>
+																		<th width="10%"><s:text name="label.proposalNo" /></th>
+																		<th width="10%"><s:text name="label.inceptionDate" /></th>
+																		<th width="10%"><s:text name="label.expiryDate" /></th>
+																		<th width="5%"><s:text name="label.underwritingYear" /></th>
+																		<th width="5%"><s:text name="label.uwYearto" /></th>
+																		<th width="10%"><s:text name="label.treatyType" /></th>
+																		<th width="20%"><s:text name="label.treatyNameType" /></th>
+																		<th width="10%"><s:text name="label.newRenew" /></th>
+																		<th width="5%"><s:text name="label.existingshare" /></th>
+																	</tr>
+																	</thead>
+																	<tbody>	
+																	<s:iterator value="#ebaseLayerExistingList" var="list"  status="stat">									
+																	<tr>
+																		<td>
+																			<s:property value="%{#stat.count}"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.BUSINESS_TYPE"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.PROPOSAL_NO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.INS_DATE"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.EXP_DATE"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.UW_YEAR"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.UW_YEAR_TO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.TREATY_TYPE"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.RSK_TREATYID"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.POLICY_STATUS"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.EXISTING_SHARE"/>
+																		</td>
+																	</tr>												
+																	</s:iterator>
+																	</tbody>
+																</table>											
+															</div> 
+														
+														
+													</div>
+												</div>
+											</div>
+										</div>
+									</s:elseif>
 									<s:else>
 										<div class="panel panel-primary">											
-												<div class="panel-heading">
-													<s:text name="label.offerinfo" />
+												<div class="panel-heading" style="display: flex;justify-content: space-between;">
+													<div><s:text name="label.offerinfo" /></div>
+													<div><s:text name="label.proposalNo" />:<s:property value="proposalNo"/></div>
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent">
@@ -212,7 +289,7 @@
 										</div>
 										<div class="panel-body">
 											<div class="boxcontent">
-													<s:if test='"Y".equals(bouquetModeYN)'>
+													<s:if test='"Y".equals(bouquetModeYN) || (baseProposalNo!=null && baseProposalNo!="")'>
 														<%-- <s:if test='#eexreinsurerInfoList.size()==0'> --%>
 															<div class="textfield">
 																<div class="text txtB">
@@ -412,12 +489,10 @@
 						</div>						
 						<div class="tablerow">							
 							<div class="boxcontent" align="center">
-							
-							
-								<input type="button"  value="Cancel"  class="btn btn-sm btn-danger"  onclick="FnCancel()" />
+								<button type="submit" class="btn btn-sm btn-danger" onclick="FnCancel();">Cancel</button>
 								<s:if test='"placing".equals(mode)'>
-								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="FnNext()" />	
-								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnSumbit()" />
+								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="FnNext('')" />	
+								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnNext('S')" />
 								</s:if>											
 							</div>
 						</div>	
@@ -433,7 +508,11 @@
 						<s:hidden name="bouquetModeYN" id="bouquetModeYN"></s:hidden>
 						<s:hidden name="bouquetNo" id="bouquetNo"></s:hidden>
 						<s:hidden name="prePerilVal" id="prePerilVal"></s:hidden>
-						
+						<s:hidden name="baseProposalNo" id="baseProposalNo"></s:hidden>
+						<s:hidden name="mailRegards" id="mailRegards"></s:hidden>
+						<s:hidden name="docType" id="docType" value="mailattach"></s:hidden>
+						<s:hidden name="docId" id="docId"></s:hidden>
+						<s:hidden name="fileName" id="fileName"></s:hidden>
 					</div>	
 					<div id="premiumSubmit">
 					</div>									
@@ -564,11 +643,11 @@ function FnCancel(){
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.placement.submit();
 }
-function FnNext(){
+function FnNext(val){
 	$('input:radio[name=placementMode]').attr('disabled',false);
 	//document.getElementById('placementModeS').disabled=false;
 	//document.getElementById('placementModeC').disabled=false;
-	document.placement.action='${pageContext.request.contextPath}/savePlacingPlacement.action'
+	document.placement.action='${pageContext.request.contextPath}/savePlacingPlacement.action?mode='+val
 	document.placement.submit();
 }
 function FnSumbit(){
@@ -576,6 +655,7 @@ function FnSumbit(){
 	document.placement.submit();
 }
 function sendEmail(){
+	alert();
 	//var test=document.getElementById("editor").innerHTML;
 	document.getElementById('mailBody').value=CKEDITOR.instances.editor.getData();
 	document.placement.action='${pageContext.request.contextPath}/sendMailPlacement.action';
@@ -591,7 +671,7 @@ function getMailTemplate(mailType,share,reinsurerId,brokerId,proposalNos){
 	document.placement.submit();
 }
 function cancelEmail(){
-	document.placement.action='${pageContext.request.contextPath}/initPlacement.action';
+	document.placement.action='${pageContext.request.contextPath}/mailInfoPlacement.action';
 	document.placement.submit();
 }
 function getPlacement(){
@@ -637,6 +717,25 @@ $(document).ready(function() {
 	</s:if>    
            
 });
+function uploadFile(){
+	document.placement.enctype="multipart/form-data";
+	document.placement.action='${pageContext.request.contextPath}/attachFilePlacement.action';
+	document.placement.submit();
+	// postFormRequest("${pageContext.request.contextPath}/attachFilePlacement.action?dropDown=attachment", "attachment", "placement");
+}
+function DeleteFile(id,name){
+	document.getElementById('docId').value=id
+	document.getElementById('fileName').value=name;
+	document.placement.action='${pageContext.request.contextPath}/deleteFilePlacement.action';
+	document.placement.submit();
+}
+function DownloadFile(id,name){
+	document.getElementById('docId').value=id
+	document.getElementById('fileName').value=name;
+	document.placement.action='${pageContext.request.contextPath}/downloadFilePlacement.action';
+	document.placement.submit();
+}
+
 </script>	
 	
 </body>

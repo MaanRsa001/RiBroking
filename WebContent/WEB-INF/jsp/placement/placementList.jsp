@@ -65,6 +65,37 @@
 										<div class="boxcontent" >
 											<div class="panel panel-primary">											
 												<div class="panel-heading">
+													<s:text name="label.searchinfo" />
+												</div>
+												<div class="panel-body">
+													<div class="boxcontent">
+														<div class="textfield">
+															<div class="text txtB">
+																<s:text name="label.reinsureName" />
+															</div> 
+															<div class="tbox">
+																<s:select list="existingReinsurerList" listKey="REINSURER_ID" listValue="REINSURER_NAME" name="searchReinsurerId" id="searchReinsurerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" />
+															</div>
+														</div>
+														<div class="textfield">
+															<div class="text txtB">
+																<s:text name="label.currentStatus" />
+															</div> 
+															<div class="tbox">
+																<s:select list="statusList" listKey="STATUS_CODE" listValue="STATUS_NAME" name="searchStatus" id="searchStatus" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"/>
+															</div>
+														</div>
+														<div  align="center">
+																<input type="button" class="btn btn-sm btn-info" value="Search" style="cursor: pointer;" onclick="funSearchMode('S')" />
+																<input type="button" class="btn btn-sm btn-success" value="Clear Search" style="cursor: pointer;"	onclick="funSearchMode('')" />	 					
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="boxcontent" >
+											<div class="panel panel-primary">											
+												<div class="panel-heading">
 													<s:text name="label.bouquetinfo" />
 												</div>
 												<div class="panel-body">
@@ -86,7 +117,9 @@
 																		<th width="10%"><s:text name="label.signedLine" /></th>
 																		<th width="5%"><s:text name="label.brokerage" /></th>
 																		<th width="5%"><s:text name="label.status" /></th>
+																		<s:if test='!"S".equals(searchType)'>
 																		<th width="5%"><s:text name="label.action" /></th>
+																		</s:if>
 																	</tr>
 																	</thead>
 																	<tbody>	
@@ -132,9 +165,11 @@
 																		<td>
 																			<s:property value="#list.STATUS"/>
 																		</td>
+																		<s:if test='!"S".equals(searchType)'>
 																		<td>
 																			<input type="button" value="Update" class="btn btn-sm btn-warning"   onclick="FnUpdate('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
 																		</td>
+																		</s:if>
 																	</tr>												
 																	</s:iterator>
 																	</tbody>
@@ -165,6 +200,10 @@
 							
 							
 								<input type="button"  value="Cancel"  class="btn btn-sm btn-danger"  onclick="FnCancel()" />
+								<s:if test='"S".equals(searchType)'>
+								<input type="button"  value="Update"  class="btn btn-sm btn-success"  onclick="FnNext()" />
+								</s:if>
+								
 								<!-- <input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="FnNext()" />	
 								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnSumbit()" /> -->											
 							</div>
@@ -175,6 +214,9 @@
 						<s:hidden name="eproposalNo" id="eproposalNo"></s:hidden>
 						<s:hidden name="reinsurerId" id="reinsurerId"></s:hidden>
 						<s:hidden name="brokerId" id="brokerId"></s:hidden>
+						<s:hidden name="searchType" id="searchType"></s:hidden>
+						<s:hidden name="bouquetNo" id="bouquetNo"></s:hidden>
+						<s:hidden name="baseProposalNo" id="baseProposalNo"></s:hidden>
 					</div>	
 					<div id="premiumSubmit">
 					</div>									
@@ -185,7 +227,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-
+$('.select1').select2({ });
 function FnCancel(){
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.placement.submit();
@@ -197,7 +239,15 @@ function FnUpdate(val,val1,val2){
 	document.placement.action='${pageContext.request.contextPath}/updateInfoPlacement.action'
 	document.placement.submit();
 }
-
+function funSearchMode(mode){
+	document.getElementById("searchType").value=mode;
+	document.placement.action="${pageContext.request.contextPath}/summaryPlacement.action";
+	document.placement.submit();
+}
+function FnNext(){
+	document.placement.action='${pageContext.request.contextPath}/updateInfoPlacement.action'
+	document.placement.submit();
+}
 </script>		
 </body>
 </html>

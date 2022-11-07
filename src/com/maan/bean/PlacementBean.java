@@ -1,5 +1,6 @@
 package com.maan.bean;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,12 +65,28 @@ public class PlacementBean {
 	private String mailBody;
 	private String mailTo;
 	private String mailCC;
+	private String mailRegards;
 	private String maxSharePercent;
 	private String userId;
 	private String eproposalNo;
 	private String placementMode;
 	private String placementDisabled;
 	private String mailRemarks;
+	private String searchType;
+	private String searchReinsurerId;
+	private String searchStatus;
+	private String notplacedProposal;
+	private String placedProposal;
+	private String productId;
+	
+	
+	private File upload;
+	private String uploadFileName;
+	private String uploadContentType;
+	private String filePath;
+	private String fileName;
+	private String docType;
+	private String docId;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -407,6 +424,13 @@ public class PlacementBean {
 	public void setMailCC(String mailCC) {
 		this.mailCC = mailCC;
 	}
+	
+	public String getMailRegards() {
+		return mailRegards;
+	}
+	public void setMailRegards(String mailRegards) {
+		this.mailRegards = mailRegards;
+	}
 	public String getMaxSharePercent() {
 		return maxSharePercent;
 	}
@@ -454,6 +478,85 @@ public class PlacementBean {
 	}
 	public void setMailRemarks(String mailRemarks) {
 		this.mailRemarks = mailRemarks;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	public String getSearchReinsurerId() {
+		return searchReinsurerId;
+	}
+	public void setSearchReinsurerId(String searchReinsurerId) {
+		this.searchReinsurerId = searchReinsurerId;
+	}
+	public String getSearchStatus() {
+		return searchStatus;
+	}
+	public void setSearchStatus(String searchStatus) {
+		this.searchStatus = searchStatus;
+	}
+	public String getNotplacedProposal() {
+		return notplacedProposal;
+	}
+	public void setNotplacedProposal(String notplacedProposal) {
+		this.notplacedProposal = notplacedProposal;
+	}
+	public String getPlacedProposal() {
+		return placedProposal;
+	}
+	public void setPlacedProposal(String placedProposal) {
+		this.placedProposal = placedProposal;
+	}
+	public String getProductId() {
+		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+	
+	public File getUpload() {
+		return upload;
+	}
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+	public String getUploadContentType() {
+		return uploadContentType;
+	}
+	public void setUploadContentType(String uploadContentType) {
+		this.uploadContentType = uploadContentType;
+	}
+	public String getFilePath() {
+		return filePath;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getDocType() {
+		return docType;
+	}
+	public void setDocType(String docType) {
+		this.docType = docType;
+	}
+	public String getDocId() {
+		return docId;
+	}
+	public void setDocId(String docId) {
+		this.docId = docId;
 	}
 	
 	

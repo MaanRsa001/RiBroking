@@ -21,13 +21,13 @@
 			dateFormat : "dd/mm/yy"
 			//yearRange: "-100:+0"
 		});
-		$( "#signedLineValidity" ).datepicker({
+		$( ".signedLineValidity" ).datepicker({
 			changeMonth : true,
 			changeYear : true,
 			dateFormat : "dd/mm/yy"
 			//yearRange: "-100:+0"
 		});
-		$( "#writtenvaliditydate" ).datepicker({
+		$( ".writtenvaliditydate" ).datepicker({
 			changeMonth : true,
 			changeYear : true,
 			dateFormat : "dd/mm/yy"
@@ -228,7 +228,7 @@
 																		</s:else>
 																		<s:if test='"A".equals(newStatus)'>
 																		<td>
-																			<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox" />
+																			<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox writtenvaliditydate" />
 																		</td>
 																		<td>
 																			<s:textfield name="writtenvalidityRemarks[%{#stat.count-1}]" id="writtenvalidityRemarks[%{#stat.count-1}]" cssClass="inputBox" />
@@ -256,7 +256,7 @@
 																		</s:else>
 																		<s:if test='"SL".equals(newStatus)'>
 																		<td>
-																			<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"/>
+																			<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox signedLineValidity" cssStyle="text-align: right;"/>
 																		</td>
 																		<td>
 																			<s:textfield name="signedLineRemarks[%{#stat.count-1}]" id="signedLineRemarks[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"/>
@@ -491,7 +491,11 @@
 						<s:hidden name="eproposalNo" id="eproposalNo"></s:hidden>
 						<s:hidden name="reinsurerId" id="reinsurerId"></s:hidden>
 						<s:hidden name="brokerId" id="brokerId"></s:hidden>
-						
+						<s:hidden name="searchType" id="searchType"></s:hidden>
+						<s:hidden name="bouquetNo" id="bouquetNo"></s:hidden>
+						<s:hidden name="baseProposalNo" id="baseProposalNo"></s:hidden>
+						<s:hidden name="searchReinsurerId" id="searchReinsurerId"></s:hidden>
+						<s:hidden name="searchStatus" id="searchStatus"></s:hidden>
 					</div>	
 					<div id="premiumSubmit">
 					</div>									
