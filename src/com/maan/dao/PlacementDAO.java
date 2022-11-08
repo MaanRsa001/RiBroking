@@ -165,6 +165,10 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				query=getQuery("GET_PLACING_BOUQUET_LIST");
 				obj[0]=bean.getBranchCode();
 				obj[1]=bean.getBouquetNo();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_PLACING_BASELAYER_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
 			}else {
 				query=getQuery("GET_PLACING_LIST");
 				obj[0]=bean.getBranchCode();
@@ -172,7 +176,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 			if(StringUtils.isNotBlank(bean.getSearchType())) {
 				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
-			}
+			} 
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -557,7 +561,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("CLASS")==null?"":map.get("CLASS").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SUB_CLASS")==null?"":map.get("SUB_CLASS").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("TREATY_TYPE")==null?"":map.get("TREATY_TYPE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("TREATYTYPE")==null?"":map.get("TREATYTYPE").toString())+"</td>" + 
+			"<td style=\"border: 1px solid #000000;\">"+(map.get("RSK_TREATYID")==null?"":map.get("RSK_TREATYID").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SAHRE_MAX")==null?DropDownControllor.formatterpercentage(bean.getMaxSharePercent()):map.get("SAHRE_MAX").toString())+"</td>" + 

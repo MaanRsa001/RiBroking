@@ -104,17 +104,17 @@
 																<table width="100%" class="table table-bordered" >
 																	<thead>
 																	<tr>
-																		<th width="7%"> <s:text name="label.sno" /> </th>
-																		<th width="10%"><s:text name="label.bouquetNo" /></th>
-																		<th width="10%"><s:text name="label.baseproposal" /></th>
-																		<th width="10%"><s:text name="label.proposalNo" /></th>
-																		<th width="10%"><s:text name="label.cedingCompany" /></th>
-																		<th width="10%"><s:text name="label.reinsureName" /></th>
-																		<th width="10%"><s:text name="label.placingBroker" /></th>
-																		<th width="10%"><s:text name="label.shareOffer" /></th>
-																		<th width="10%"><s:text name="label.written" /></th>
-																		<th width="10%"><s:text name="label.proposedWL" /></th>
-																		<th width="10%"><s:text name="label.signedLine" /></th>
+																		<th width="5%"> <s:text name="label.sno" /> </th>
+																		<th width="8%"><s:text name="label.bouquetNo" /></th>
+																		<th width="8%"><s:text name="label.baseproposal" /></th>
+																		<th width="8%"><s:text name="label.proposalNo" /></th>
+																		<th width="8%"><s:text name="label.cedingCompany" /></th>
+																		<th width="8%"><s:text name="label.reinsureName" /></th>
+																		<th width="8%"><s:text name="label.placingBroker" /></th>
+																		<th width="6%"><s:text name="label.shareOffer" /></th>
+																		<th width="6%"><s:text name="label.written" /></th>
+																		<th width="6%"><s:text name="label.proposedWL" /></th>
+																		<th width="6%"><s:text name="label.signedLine" /></th>
 																		<th width="5%"><s:text name="label.brokerage" /></th>
 																		<th width="5%"><s:text name="label.status" /></th>
 																		<s:if test='!"S".equals(searchType)'>
@@ -146,20 +146,19 @@
 																		<td>
 																			<s:property value="#list.BROKER_NAME"/>
 																		</td>
-																		<td>
+																		<td align="right">
 																			<s:property value="#list.SHARE_OFFERED"/>
 																		</td>
-																		<td>
+																		<td align="right">
 																			<s:property value="#list.SHARE_WRITTEN"/>
 																		</td>
-																		
-																		<td>
+																		<td align="right">
 																			<s:property value="#list.SHARE_PROPOSAL_WRITTEN"/>
 																		</td>
-																		<td>
+																		<td align="right">
 																			<s:property value="#list.SHARE_SIGNED"/>
 																		</td>
-																		<td>
+																		<td align="right">
 																			<s:property value="#list.BROKERAGE"/>
 																		</td>
 																		<td>

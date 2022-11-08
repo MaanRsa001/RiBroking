@@ -55,7 +55,7 @@
 			<s:set var="ereinsurerInfoList" value='%{reinsurerInfoList}'/>
 			
 				<div style="padding:10px; background:#F8F8F8">
-				<s:form id="placement" name="placement" theme="simple" action=""	method="post" autocomplete="off" >					
+				<s:form id="placement" name="placement" theme="simple" action=""	method="post" autocomplete="off" enctype="multipart/form-data" >					
 					<div class="table2">
 						<div class="tablerow">
 							<span style="color:red;"><s:actionerror/></span>
@@ -327,7 +327,7 @@
 													</s:else>
 														<div class="boxcontent" style="width:75%" align="center">
 														<div id="reinsurerid" >
-															<table width="100%" class="table table-bordered" id="reinsTbl">
+															<%-- <table width="100%" class="table table-bordered" id="reinsTbl">
 																<thead>
 																<tr>
 																	<th width="10%"> <s:text name="label.sno" /> </th>
@@ -335,7 +335,7 @@
 																	<th width="20%"><s:text name="label.placingBroker" /></th>
 																	<th width="20%"><s:text name="label.shareOffer" /></th>
 																	<th width="20%" > <s:text name="Mail Status" /> </th>
-																	<%-- <th width="15%" > <s:text name="Action" /> </th> --%>
+																	<th width="15%" > <s:text name="Action" /> </th>
 																	<th width="10%" > <s:text name="Delete Row" /> </th>
 																</tr>
 																</thead>
@@ -343,7 +343,7 @@
 																<s:iterator value="#ereinsurerInfoList" var="list"  status="stat">									
 																<tr>
 																	<td align="center">
-																		<s:textfield name="reinsSNo[%{#stat.count-1}]" id="reinsSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple" style="align:middle"/>
+																		<s:textfield name="reinsSNo[%{#stat.count-1}]" id="reinsSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple" cssStyle="text-align: center;"/>
 																		<s:hidden name="proposalNos[%{#stat.count-1}]" id="proposalNos[%{#stat.count-1}]"></s:hidden>
 																	</td>
 																	<td>
@@ -353,16 +353,16 @@
 																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  />
 																	</td>
 																	<td>
-																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" />
+																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);"/>
 																	</td>
 																	<td>
 																	<s:property value="#list.MAIL_STATUS"/>
 																	</td>
-																	<%-- <td align="center">
+																	<td align="center">
 																		<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
 																			<input type="button" value="Send Mail" class="btn btn-sm btn-primary"    onclick="getMailTemplate('P','<s:property value="#list.SHARE_OFFERED"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>','<s:property value="#list.PROPOSAL_NO"/>');"/>
 																		</s:if>
-																	</td> --%>
+																	</td>
 																	<td align="center">
 																		<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
 																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count-1}"/>')" />
@@ -371,11 +371,9 @@
 																</tr>												
 																</s:iterator>
 																</tbody>
-															</table>
+															</table> --%>
 															</div>
-															<div class="boxcontent" align="center">
-																<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="reinsureRow('reinsTbl');" />
-															</div>	
+															
 														</div>
 												</div> 
 											</div>
@@ -469,6 +467,39 @@
 										</div>
 										<div class="panel-body">
 											<div class="boxcontent">
+												<div class="textfield">
+													<div class="text">
+														<s:text name="label.reinsureName" />
+													</div>
+													<div class="tbox">
+														<div class="input-group"> 
+															<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName" id="reinsureName" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" value="%{reinsurerId}" disabled="true"/>
+															<span class="input-group-addon">
+															<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+											 			     	<span class="glyphicon glyphicon-list"></span>
+											 			    </button>
+											 			   </span>												
+														</div>
+													</div>
+												</div>
+												<div class="textfield">
+													<div class="text">
+														<s:text name="label.placingBroker" />
+													</div>
+													<div class="tbox">
+														<div class="input-group"> 
+															<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker" id="placingBroker" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" value="%{brokerId}" disabled="true"/>
+															<span class="input-group-addon">
+															<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
+											 			     	<span class="glyphicon glyphicon-list"></span>
+											 			    </button>
+											 			   </span>												
+														</div>												
+													</div>
+												</div>
+												<br/><br/><br/>
+											</div>
+											<div class="boxcontent">
 											<s:include value="mailTemplate.jsp"></s:include>
 											</div>
 										</div>
@@ -486,13 +517,28 @@
 								</div>
 							
 													
-						</div>						
+						</div>		
+						<div id="companyModal" class="modal fade" role="dialog">
+								  <div class="modal-dialog modal-lg">
+								    <!-- Modal content-->
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+								      <div class="modal-body" >
+								        <div class="container-fluid" id="companyAjaxId">
+								        </div>
+								      </div>
+								    </div>
+								  </div>
+								</div>					
 						<div class="tablerow">							
 							<div class="boxcontent" align="center">
 								<button type="submit" class="btn btn-sm btn-danger" onclick="FnCancel();">Cancel</button>
 								<s:if test='"placing".equals(mode)'>
+								<input type="button"  value="Save"  class="btn btn-sm btn-primary"  onclick="FnSave('Save')" />	
 								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="FnNext('')" />	
-								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnNext('S')" />
+								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnNext('Submit')" />
 								</s:if>											
 							</div>
 						</div>	
@@ -538,6 +584,7 @@ var table = document.getElementById(tableID);
        		element1.id = "reinsSNo["+(rowCount-1)+"]";
  			element1.value = rowCount;
  			element1.className = "inputBox";
+ 			element1.setAttribute("style", "text-align:center;");
 			element1.setAttribute("readonly",true);
        		cell1.appendChild(element1);
        		
@@ -553,6 +600,9 @@ var table = document.getElementById(tableID);
 			element2.name = "shareOffer["+(rowCount-1)+"]";
       		element2.id = "shareOffer["+(rowCount-1)+"]";
 			element2.className = "inputBox";
+			element2.setAttribute("onkeyup", "checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);");
+			element2.setAttribute("onchange", "decimal(this.id,this.value);");
+			element2.setAttribute("style", "text-align:right;");
 			cell4.appendChild(element2);
 			
 			var cell5 = row.insertCell(4);
@@ -650,12 +700,19 @@ function FnNext(val){
 	document.placement.action='${pageContext.request.contextPath}/savePlacingPlacement.action?mode='+val
 	document.placement.submit();
 }
+function FnSave(val){
+	$('input:radio[name=placementMode]').attr('disabled',false);
+	//document.getElementById('placementModeS').disabled=false;
+	//document.getElementById('placementModeC').disabled=false;
+	document.placement.action='${pageContext.request.contextPath}/savePlacingPlacement.action?mode='+val
+	document.placement.submit();
+}
+
 function FnSumbit(){
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.placement.submit();
 }
 function sendEmail(){
-	alert();
 	//var test=document.getElementById("editor").innerHTML;
 	document.getElementById('mailBody').value=CKEDITOR.instances.editor.getData();
 	document.placement.action='${pageContext.request.contextPath}/sendMailPlacement.action';
@@ -680,32 +737,10 @@ function getPlacement(){
 }
 $(document).ready(function() {     
     $('#mailTo').multiselect({ 
-      	includeSelectAllOption: false,
+      	includeSelectAllOption: true,
         enableFiltering:true,
         numberDisplayed: 0,
-        enableCaseInsensitiveFiltering: true,
-        onChange: function(element, checked) {
-          var val = $('#mailTo').val();
-          var val1 =document.getElementById("prePerilVal").value;
-          if(val1!= null && val1=='ALL' && val !=null && val[1]!=undefined ){
-          $("#mailTo").multiselect('clearSelection');
-          val = removeElementsWithValue(val, 'ALL');
-          $("#mailTo").val(val);
-           $("#mailTo").multiselect("refresh");
-           document.getElementById("prePerilVal").value = '';
-          }
-          else if (val !=null && val[0]=='ALL' ) {
-          	$("#mailTo").multiselect('clearSelection');
-          	$("#mailTo").val('ALL');
-          	 $("#mailTo").multiselect("refresh");
-          	 document.getElementById("prePerilVal").value = 'ALL';
-          }
-          else if(val== null || val[0]==''){
-          $("#mailTo").multiselect('clearSelection');
-          $("#mailTo").multiselect("refresh");
-          document.getElementById("prePerilVal").value = '';
-          }
-      	}                     
+        enableCaseInsensitiveFiltering: true                   
     }); 
     
      <s:if test='mailTo!=null && !"".equals(mailTo)'>	
@@ -718,7 +753,6 @@ $(document).ready(function() {
            
 });
 function uploadFile(){
-	document.placement.enctype="multipart/form-data";
 	document.placement.action='${pageContext.request.contextPath}/attachFilePlacement.action';
 	document.placement.submit();
 	// postFormRequest("${pageContext.request.contextPath}/attachFilePlacement.action?dropDown=attachment", "attachment", "placement");
@@ -735,7 +769,20 @@ function DownloadFile(id,name){
 	document.placement.action='${pageContext.request.contextPath}/downloadFilePlacement.action';
 	document.placement.submit();
 }
-
+function decimal(id,val){
+	document.getElementById(id).value=parseFloat(val).toFixed(4);
+}
+function functionview(id){
+	var cedding="";
+	if(id==1) {
+		cedding=document.getElementById("reinsureName").value;
+	}
+	else {
+		cedding=document.getElementById("placingBroker").value;
+	}
+	var URL ='<%=request.getContextPath()%>/ViewModeCeding?Mode=PopUp&ceddingcompany='+cedding;
+	postRequest(URL, 'companyAjaxId');	 
+}
 </script>	
 	
 </body>

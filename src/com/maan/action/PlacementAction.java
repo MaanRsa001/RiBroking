@@ -164,13 +164,17 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		String forward="placement";
 		validatePlacing();
 		if(!hasActionErrors()) {
-			service.savePlacing(bean);
-			//bean.setExreinsurerInfoList(service.getPlacingInfo(bean));
-			bean.setReinsurerInfoList(service.getPlacingInfo(bean));
-			if("S".equals(bean.getMode())) {
+			service.savePlacing(bean);			
+			if("Submit".equals(bean.getMode())) {
 				forward="pendingList";
+			}else if("Save".equals(bean.getMode())) {
+				bean.setMode("placing");
+				init();
+			}else {
+				bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+				bean.setMode("mail");
 			}
-			bean.setMode("mail");
+			
 		}else {
 			init();
 		}
@@ -240,6 +244,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	}
 	public String mailInfo() {
 		bean.setMode("mail");
+		service.proposalInfo(bean);
 		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
 		return "placement";
 	}

@@ -35,7 +35,8 @@
 			//yearRange: "-100:+0"
 		});
 	  });
-</SCRIPT>	
+	 $('.select1').select2({ });
+</SCRIPT>
 </s:if>	
 <s:if test='"currencyRate".equalsIgnoreCase(dropDown)'>
   <s:textfield name="usCurrencyRate" cssStyle="text-align:right;" readonly="true" cssClass="inputBox" />
@@ -2754,7 +2755,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 			<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  theme="simple"/>
 		</td>
 		<td>
-			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" theme="simple"/>
+			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" theme="simple"/>
 		</td>
 		<td>
 			<s:property value="#list.MAIL_STATUS"/>
@@ -2768,6 +2769,9 @@ alert("This action is not allowed because a previous transaction is pending for 
 	</s:iterator>
 	</tbody>
 </table>
+<div class="boxcontent" align="center">
+	<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="reinsureRow('reinsTbl');" />
+</div>	
 </s:elseif>	
 <s:elseif test='"statusChange".equalsIgnoreCase(dropDown)'>
 <style type="text/css">
