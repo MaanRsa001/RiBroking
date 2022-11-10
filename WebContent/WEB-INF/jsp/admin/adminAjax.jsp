@@ -2569,6 +2569,21 @@ alert("This action is not allowed because a previous transaction is pending for 
 			</s:iterator>
 			</tbody>
 		</table>
+		<div class="boxcontent" align="center">
+			<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="installRow('installid');" />
+	</div>
+	 <script type="text/javascript">
+	 var rowCount = '<s:property value="instalList.size()"/>';
+		document.xol1.m_d_InstalmentNumber.value=(rowCount);
+		 $(function() {
+			$( ".instalmentDate" ).datepicker({
+				changeMonth : true,
+				changeYear : true,
+				dateFormat : "dd/mm/yy"
+				//yearRange: "-100:+0"
+			});
+		 });
+	 </script>
 </s:elseif>
 <s:elseif test='"scale".equalsIgnoreCase(dropDown)'>
 	<table class="table table-bordered" id="bonusTbl" width="100%" >										

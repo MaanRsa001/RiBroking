@@ -171,6 +171,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			bean.setBranchCode(branchCode);
 			bean.setShortname(service.getShortname(bean));
 			bean.setOrginalCurrency("1");
+			bean.setSectionNo("1");
 			bean.setBroker("63");
 			if(StringUtils.isNotBlank(bean.getProposal_no())){
 			bean.setProposal_no("");
@@ -198,7 +199,9 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			 bean.setPaymentPartnerlist(dropDownController.getPaymentPartnerlist(branchCode,bean.getCedingCo(),bean.getBroker()));
 			// bean.setNo_Insurer("1");
 			//bean.setMaxLimit_Product(dropDownController.getUWLimmit((String)session.get("UserId"),(String)session.get("processId"),pid, "0"));
-			
+			if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
+				dropDownController.getBouquetCedentBrokerInfo(bean);
+			}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 		}
@@ -300,8 +303,11 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				}
 			} else {
 				if(StringUtils.isNotBlank(bean.getProposal_no())) {
-				bean.setFlag("layer");
-				bean.setLayerMode("layer");
+					bean.setFlag("layer");
+					bean.setLayerMode("layer");
+				}else if(StringUtils.isNotBlank(bean.getProposalNo())) {
+					bean.setFlag("copy");
+					bean.setLayerMode("layer");
 				}
 				logger.info("##########Validation Message Start###########");
 				Iterator<String> error = getActionErrors().iterator();
@@ -372,6 +378,20 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			}
 			if(StringUtils.isBlank(bean.getUwYearTo())) {
 				addActionError(getText("error.uwYearto.required"));
+			}
+			if(StringUtils.isBlank(bean.getSectionNo())) {
+				addActionError(getText("error.section.required"));
+			}
+			if (!val.isNull(bean.getSectionNo()).equalsIgnoreCase("") && StringUtils.isBlank(bean.getProposal_no())) {
+				if (service.getSectionDuplicationCheck(bean)) {
+					logger.info("// PMD Changes");
+					addActionError(getText("error.section.duplicate"));
+				}
+			}
+			if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
+				if (dropDownController.getBouquetCedentBrokercheck(bean)) {
+					addActionError(getText("error.brokercedent.duplicate"));
+				}
 			}
 			if(StringUtils.isBlank(bean.getRiskdetailYN())) {
 				addActionError(getText("error.alldetails.required"));
@@ -4462,7 +4482,7 @@ public String EditSection(){
 		bean.setProposal_no(bean.getProposalNo());
 	}
 	if("copy".equals(bean.getFlag())) {
-		bean.setSectionNo("");
+		//bean.setSectionNo("");
 		bean.setTreatyName_type("");
 		bean.setDepartId("");
 		bean.setSubProfit_center("");

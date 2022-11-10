@@ -57,6 +57,7 @@ public class CedingMasterAction extends ActionSupport implements ModelDriven<Ced
 	 		bean.setBankCurrencyList(new DropDownControllor().getbankCurrencyList(bean));
 			bean.setBrokercountryList(new DropDownControllor().getCountryDropDown(branchCode));
 			bean.setBroGroupList(new DropDownControllor().getbroGroupList(bean));
+			bean.setDepartList(service.gettdsTypeList(bean,"50"));
 		if(StringUtils.isEmpty(bean.getMode())){
 		List<Map<String,Object>> tempList=service.GetListCedingMaster(bean);
 		bean.setViewList(tempList);

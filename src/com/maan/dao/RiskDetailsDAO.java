@@ -47,4 +47,5 @@ public interface RiskDetailsDAO {
 		void getRetentionDetails(RiskDetailsBean bean);
 		void getcalculateSC(RiskDetailsBean bean);
 		void getSectionEditMode(RiskDetailsBean bean);
+		boolean getSectionDuplicationCheck(RiskDetailsBean bean);
 }

@@ -217,6 +217,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			 bean.setBaseLayer("");
 			 //bean.setNo_Insurer("1");
 			 bean.setNoRetroCess("1");
+			 if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
+					dropDownController.getBouquetCedentBrokerInfo(bean);
+				}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 			e.printStackTrace();
@@ -401,6 +404,11 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				if (service.getLayerDuplicationCheck(bean)) {
 					logger.info("// PMD Changes");
 					addActionError(getText("error.layer.duplicate"));
+				}
+			}
+			if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
+				if (dropDownController.getBouquetCedentBrokercheck(bean)) {
+					addActionError(getText("error.brokercedent.duplicate"));
 				}
 			}
 			if(StringUtils.isBlank(bean.getRiskdetailYN())) {
@@ -4298,6 +4306,35 @@ public String  removeRowInst() {
 		}
 		}
 		j++;
+	}
+	bean.setInstalmentDateList(instalmentDate);
+	bean.setInstallmentPremium(installmentPremium);
+	bean.setPaymentDueDays(paymentDueDays);
+	bean.setInstalList(instalList);
+	return "dropdownajax";
+}
+public String insInstall() {
+	List<String> instalmentDate = new ArrayList<String>();
+	List<String> installmentPremium = new ArrayList<String>();
+	List<String> paymentDueDays = new ArrayList<String>();
+	List<String> instalList = new ArrayList<String>();
+	int count=bean.getInstallsno().size();
+	if(StringUtils.isNotBlank(bean.getM_d_InstalmentNumber()) && Integer.parseInt(bean.getM_d_InstalmentNumber())>0){
+	for(int j=0;j<Integer.parseInt(bean.getM_d_InstalmentNumber());j++){
+		
+		if(count>j) {
+		if(StringUtils.isNotBlank(bean.getInstalmentDateList().get(j))){
+			instalmentDate.add(bean.getInstalmentDateList().get(j));
+		}
+		if(StringUtils.isNotBlank(bean.getInstallmentPremium().get(j))){
+			installmentPremium.add(bean.getInstallmentPremium().get(j));	
+					}
+		if(StringUtils.isNotBlank(bean.getPaymentDueDays().get(j))){
+			paymentDueDays.add(bean.getPaymentDueDays().get(j));
+		}
+		}
+		instalList.add("0"); 
+	} 
 	}
 	bean.setInstalmentDateList(instalmentDate);
 	bean.setInstallmentPremium(installmentPremium);

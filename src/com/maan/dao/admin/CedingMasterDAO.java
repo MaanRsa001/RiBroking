@@ -12,6 +12,7 @@ public interface CedingMasterDAO {
 	List<Map<String, Object>> getproposalList(CedingMasterBean bean);
 	boolean getUserDetails(CedingMasterBean bean);
 	void CancelProposal(CedingMasterBean bean, String proposalNo);
+	List<Map<String, Object>> gettdsTypeList(CedingMasterBean bean, String string);
 	
 
 }

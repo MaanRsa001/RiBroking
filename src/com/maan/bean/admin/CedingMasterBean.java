@@ -85,8 +85,11 @@ public class CedingMasterBean {
 	private String loginIdList;
 	private String editMode;
 	private String bouquetNo;
-	
-	
+	private List<String> corespondentbank;
+	private List<List<Map<String, Object>>> currencyList;
+	private List<List<Map<String, Object>>> contactList;
+	private List<Map<String, Object>> departList;
+	private List<String> subdepartmentCD;
 	public String getEditMode() {
 		return editMode;
 	}
@@ -677,6 +680,46 @@ public class CedingMasterBean {
 
 	public void setBouquetNo(String bouquetNo) {
 		this.bouquetNo = bouquetNo;
+	}
+
+	public List<String> getCorespondentbank() {
+		return corespondentbank;
+	}
+
+	public void setCorespondentbank(List<String> corespondentbank) {
+		this.corespondentbank = corespondentbank;
+	}
+
+	public List<List<Map<String, Object>>> getCurrencyList() {
+		return currencyList;
+	}
+
+	public void setCurrencyList(List<List<Map<String, Object>>> currencyList) {
+		this.currencyList = currencyList;
+	}
+
+	public List<List<Map<String, Object>>> getContactList() {
+		return contactList;
+	}
+
+	public void setContactList(List<List<Map<String, Object>>> contactList) {
+		this.contactList = contactList;
+	}
+
+	public List<String> getSubdepartmentCD() {
+		return subdepartmentCD;
+	}
+
+	public void setSubdepartmentCD(List<String> subdepartmentCD) {
+		this.subdepartmentCD = subdepartmentCD;
+	}
+
+	public List<Map<String, Object>> getDepartList() {
+		return departList;
+	}
+
+	public void setDepartList(List<Map<String, Object>> departList) {
+		this.departList = departList;
 	}
 	
 }

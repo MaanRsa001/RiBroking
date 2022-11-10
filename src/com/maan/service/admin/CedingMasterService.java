@@ -32,4 +32,8 @@ public class CedingMasterService {
 		
 	}
 
+	public List<Map<String, Object>> gettdsTypeList(CedingMasterBean bean, String string) {
+		return dao.gettdsTypeList( bean,  string);
+	}
+
 }

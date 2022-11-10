@@ -30,28 +30,30 @@
 		<title><tiles:insertAttribute name="title" ignore="true" /></title>
 	</head>
 	<body>
-		<s:form name="cusPopup" id="cusPopup" action="" method="post" theme="simple">
+<s:form name="cusPopup" id="cusPopup" action="" method="post" theme="simple">
 <div class="table0" style="width: 100%; margin: 0 auto;">
-<div class="tablerow">
-<div class="table1" style="width: 100%; margin: 0 auto; background-color: #E5E5E5; ">
-<div class="tablerow">
-<div style="padding:10px; background:#F8F8F8">
-<div class="boxcontent">
-							<div class="panel panel-primary">	
-							 <div class="panel-heading">
+	<div class="tablerow">
+		<div class="table1" style="width: 100%; margin: 0 auto; background-color: #E5E5E5; ">
+			<div class="tablerow">
+				<div style="padding:10px; background:#F8F8F8">
+					<div class="boxcontent">
+							<div class="tablerow">							
+							<div class="boxcontent">
+								<div class="panel panel-primary">											
+									<div class="panel-heading">
 											<s:text name="label.nameaddressdetails" />
 									</div>
 									<div class="panel-body">
-										
+										<div class="boxcontent">
 											<div class="textfield" >
 												<div class="text" id="cc" >
-													<s:text name="cedingcompany.firstName" />
+													<s:text name="cedingcompany.firstName" />&nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="text" id="BN" style="display:none">
-													<s:text name="broker.firstname" />
+													<s:text name="broker.firstname" />&nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="text" id="LN" style="display:none">
-													<s:text name="leader.firstname" />
+													<s:text name="leader.firstname" />&nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">													
 													<s:textfield name="firstName" cssClass="inputBox" maxlength="200" readonly="true"/>													
@@ -59,7 +61,7 @@
 											</div>
 											<div class="textfield"  id="BG" style="display: none">
 												<div class="text" >
-													<input type="checkbox" name="brokerGroup" id="brokerGroup" onchange="checkboxChange()" disabled="true"/>
+													<input type="checkbox" name="brokerGroup" id="brokerGroup" onchange="checkboxChange()" />
 													<s:text name="Broker_Group" />
 												</div>
 												<div class="tbox" id="broGroup" style="display: none">
@@ -68,7 +70,7 @@
 											</div>
 											<div class="textfield">
 												<div class="text">
-													<s:text name="ceding.address1" /> 
+													<s:text name="ceding.address1" /> &nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">
 													<s:textfield name="address1" cssClass="inputBox" maxlength="500" readonly="true"/>
@@ -84,24 +86,23 @@
 											</div>
 											<div class="textfield">
 												<div class="text">
-													<s:text name="ceding.city" />
+													<s:text name="ceding.city" /> &nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">
-													<s:textfield name="city" cssClass="inputBox" readonly="true"/>
+													<s:textfield name="city" cssClass="inputBox" maxlength="200" readonly="true"/>
 												</div>
 											</div>
 											<div class="textfield">
 												<div class="text">
-													<s:text name="ceding.country" /> 
+													<s:text name="ceding.country" /> &nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">
-													<s:select list="brokercountryList" name="country" id="country" listKey="COUNTRY_ID" listValue="COUNTRY_NAME" cssClass="inputBoxS" headerKey=""  headerValue="---Select---" disabled="true"/>
-												
+												<s:select list="brokercountryList" name="country" id="country" listKey="COUNTRY_ID" listValue="COUNTRY_NAME" cssClass="inputBoxS" headerKey=""  headerValue="---Select---" disabled="true" />
 												</div>
 											</div>
 											<div class="textfield">
 												<div class="text">
-													<s:text name="ceding.zipcode" /> 
+													<s:text name="ceding.zipcode" /> &nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">
 													<s:textfield name="zipcode" cssClass="inputBox" maxlength="25" readonly="true"/>
@@ -143,123 +144,132 @@
 											
 											<div class="textfield">
 												<div class="text">
-													<s:text name="ceding.active" /> 
+													<s:text name="ceding.active" /> &nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">
-													<s:radio list="#{'Y':'Yes','N':'No'}" name="active" value="active==null?'N':active" disabled="true"/>
+													<s:radio list="#{'Y':'Yes','N':'No'}" name="active" value="active==null?'Y':active" disabled="true"/>
 												</div>
 											</div>
 										</div>
+										</div>
+										
+						              
+										
 								</div>
 							</div>
-						</div>
-						</div>
-		            <div class="tablerow">
-		              <div style="padding:10px; background:#F8F8F8">
-						<div class="boxcontent">
-							<div class="panel panel-primary">											
-								<div class="panel-heading">
-										<s:text name="label.bankdetails" />
-								</div>
-								<div class="panel-body">
-									<div class="boxcontent">
-			     					 <div class="panel-body">
-										<table class="table table-bordered" width="100%" id="newgen">
-											<thead>
-												<tr>
-													<th width="15.8%"> <s:text name="label.bankcurrency" /></th>
-													<th width="15.8%"> <s:text name="label.bankaccountnumber" /></th>
-													<th width="15.8%"> <s:text name="label.bankname" /></th>
-													<th width="15.8%"> <s:text name="label.accountname" /></th>
-													<th width="15.8%"> <s:text name="label.swiftcode" /> </th>
-													<th width="15.8%"> <s:text name="label.ifsccode" /> </th>
-													<th width="15.8%"> <s:text name="label.remarks" /> </th>
-												</tr>
-											</thead>
-											<tbody>
-												<s:iterator value="bankaccountnumber" var="list" status="stat">
-													<tr><td>
-															<s:select  list="bankCurrencyList"  name="bankCurrency[%{#stat.count-1}]" id="bankCurrency%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CURRENCY_ID"  listValue="CURRENCY_NAME" disabled="true"/>
-														</td>
-														<td>
-															<s:textfield name="bankaccountnumber[%{#stat.count-1}]" id="bankaccountnumber[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
-														</td>
-														<td>
-															<s:textfield name="bankname[%{#stat.count-1}]" id="bankname[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
-														</td>
-														<td>
-															<s:textfield name="accountname[%{#stat.count-1}]" id="accountname[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
-														</td>
-														<td>
-															<s:textfield name="swiftcode[%{#stat.count-1}]" id="swiftcode[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
-														</td>
-														<td>
-															<s:textfield name="ifsccode[%{#stat.count-1}]" id="ifsccode[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
-														</td>
-														<td>
-															<s:textfield name="bankRemarks[%{#stat.count-1}]" id="remarks[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
-														</td>
-														</tr>
-													</s:iterator>
-											</tbody>
-										</table>
-									  </div>
-								    </div>
-								</div>
-			                  </div>
-			               </div>
-			               </div>
-		              </div>
-		            <div class="tablerow">	
-		            <div style="padding:10px; background:#F8F8F8">						
-						<div class="boxcontent">
-							<div class="panel panel-primary">											
-								<div class="panel-heading">
-									<s:text name="label.contractdetails" />
-								</div>
-								<div class="panel-body">
-									<div class="boxcontent">
-										<div class="panel-body">
-											<table class="table table-bordered" width="100%" id="newgen">
-												<thead>
-													<tr>
-													<th width="2.8%"> <s:text name="label.serialnumber" /></th>
-													<th width="15.8%"> <s:text name="label.departmentName" /></th>
-													<th width="15.8%"> <s:text name="label.emailaddress" /></th>
-													<th width="15.8%"> <s:text name="label.telephonenumber" /></th>
-													<th width="15.8%"> <s:text name="label.faxnumber" /> </th>
-													</tr>
-												</thead>
-												<tbody>
-													<s:iterator value="departmentCD" var="list" status="stat">
-														<tr>
-															<td><s:property value="#stat.count"/></td>
-															<td>
-															<s:textfield name="departmentCD[%{#stat.count-1}]" id="departmentCD[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
-															</td>
-															<td>
-															<s:textfield name="emailaddress[%{#stat.count-1}]" id="emailaddress[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
-															</td>
-															<td>
-															<s:textfield name="telephonenumber[%{#stat.count-1}]" id="telephonenumber[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
-															</td>
-															<td>
-															<s:textfield name="faxnumber[%{#stat.count-1}]" id="faxnumber[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
-															</td>
-															</tr>
-														</s:iterator>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							 </div>
-						</div>
-					</div>
-					</div>
-					<div class="tablerow">	
-					<div style="padding:10px; background:#F8F8F8">						
 							<div class="boxcontent">
+											<div class="panel panel-primary">											
+												<div class="panel-heading">
+														<s:text name="label.bankdetails" />
+												</div>
+												<div class="panel-body">
+													<div class="boxcontent">
+							     					 <div class="panel-body">
+							     					 <div id="bankid">
+														<table class="table table-bordered" width="100%" id="newgen1">
+															<thead>
+																<tr>
+																	<th width="2.8%"> <s:text name="label.serialnumber" /></th>
+																	<th width="15.8%"> <s:text name="label.bankcurrency" /></th>
+																	<th width="15.8%"> <s:text name="label.bankaccountnumber" /></th>
+																	<th width="15.8%"> <s:text name="label.bankname" /></th>
+																	<th width="15.8%"> <s:text name="label.accountname" /></th>
+																	<th width="15.8%"> <s:text name="label.swiftcode" /> </th>
+																	<th width="15.8%"> <s:text name="label.coresondentbank" /> </th>
+																	<th width="15.8%"> <s:text name="label.remarks" /> </th>
+																</tr>
+															</thead>
+															<tbody>
+																<s:iterator value="currencyList" var="list" status="stat">
+																	<tr>
+																		<td><s:textfield name="bankSNo[%{#stat.count-1}]" id="bankSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/></td>
+																	
+																		<td>
+																			<s:select  list="bankCurrencyList"  name="bankCurrency[%{#stat.count-1}]" id="bankCurrency%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CURRENCY_ID"  listValue="CURRENCY_NAME" disabled="true"/>
+																		</td>
+																		<td>
+																			<s:textfield name="bankaccountnumber[%{#stat.count-1}]" id="bankaccountnumber[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
+																		</td>
+																		<td>
+																			<s:textfield name="bankname[%{#stat.count-1}]" id="bankname[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
+																		</td>
+																		<td>
+																			<s:textfield name="accountname[%{#stat.count-1}]" id="accountname[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
+																		</td>
+																		<td>
+																			<s:textfield name="swiftcode[%{#stat.count-1}]" id="swiftcode[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
+																		</td>
+																		<td>
+																			<s:textarea name="corespondentbank[%{#stat.count-1}]" id="corespondentbank[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
+																		</td>
+																		<td>
+																			<s:textarea name="bankRemarks[%{#stat.count-1}]" id="remarks[%{#stat.count-1}]" cssClass="inputBox" onchange="checkCurrency(this.id,%{#stat.count-1})" readonly="true"/>
+																		</td>
+																		
+																		</tr>
+																	</s:iterator>
+															</tbody>
+														</table>
+														</div>
+													  </div>
+													 
+												</div>
+							                  </div>
+							               </div>
+						              </div>
+						              <div class="boxcontent">
+										<div class="panel panel-primary">											
+											<div class="panel-heading">
+												<s:text name="label.contractdetails" />
+											</div>
+											<div class="panel-body">
+												<div class="boxcontent">
+													<div class="panel-body">
+														<div id="contact">
+														<table class="table table-bordered" width="100%" id="newgen">
+															<thead>
+																<tr>
+																<th width="2.8%"> <s:text name="label.serialnumber" /></th>
+																<th width="15.8%"> <s:text name="label.departmentName" /></th>
+																<th width="15.8%"> <s:text name="label.subdepartmentName" /></th>
+																<th width="15.8%"> <s:text name="label.emailaddress" /></th>
+																<th width="15.8%"> <s:text name="label.telephonenumber" /></th>
+																<th width="15.8%"> <s:text name="label.faxnumber" /> </th>
+																</tr>
+															</thead>
+															<tbody>
+																<s:iterator value="contactList" var="list" status="stat">
+																	<tr>
+																		<td><s:textfield name="contactSNo[%{#stat.count-1}]" id="contactSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/></td>
+																		<td>
+																		<s:select  list="departList"  name="departmentCD[%{#stat.count-1}]" id="departmentCD%{#stat.count-1}" cssClass="inputBox"  headerKey="" headerValue="---Select---" listKey="CATEGORY_DETAIL_ID" listValue="DETAIL_NAME" disabled="true"/>
+																		</td>
+																		<td>
+																		<s:textfield name="subdepartmentCD[%{#stat.count-1}]" id="subdepartmentCD[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
+																		</td>
+																		<td>
+																		<s:textfield name="emailaddress[%{#stat.count-1}]" id="emailaddress[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
+																		</td>
+																		<td>
+																		<s:textfield name="telephonenumber[%{#stat.count-1}]" id="telephonenumber[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
+																		</td>
+																		<td>
+																		<s:textfield name="faxnumber[%{#stat.count-1}]" id="faxnumber[%{#stat.count-1}]" cssClass="inputBox" readonly="true"/>
+																		</td>
+																		
+																		</tr>
+																	</s:iterator>
+															</tbody>
+														</table>
+														</div>
+													</div>
+													
+												</div>
+											</div>
+										 </div>
+									</div>
+								<s:if test='"RI02".equals(#session.SOURCE_CODE)'>	
+									<div class="boxcontent">
 								<div class="panel panel-primary">											
 									<div class="panel-heading">
 											<s:text name="label.tdsdetails" />
@@ -295,7 +305,7 @@
 														<s:text name="ceding.specialRate" />
 													</div>
 													<div class="tbox">
-														<s:textfield name="specialRate" cssClass="inputBox" maxlength="2" onkeyup="checkNumbers(this);middleMinusRestriction(this);" readonly="true"/>
+														<s:textfield name="specialRate" cssClass="inputBox" maxlength="2" onkeyup="checkNumbers(this);"  readonly="true"/>
 													</div>
 												</div>
 
@@ -303,11 +313,8 @@
 										</div>					
 						        </div>
 						    </div>
-						</div>
-						</div>
-						<div class="tablerow">
-						<div style="padding:10px; background:#F8F8F8">							
-							<div class="boxcontent">
+						    </s:if>
+						    <div class="boxcontent">
 								<div class="panel panel-primary">											
 									<div class="panel-heading">
 											<s:text name="label.otherdetails" />
@@ -316,15 +323,20 @@
 										<div class="boxcontent">
 											<div class="textfield">
 													<div class="text">
-														<s:text name="label.estabilishment.year" />
+														<s:text name="label.estabilishment.year" />&nbsp;
 													</div>
 													<div class="tbox">
-														<s:textfield  name="establishmentYear" id="establishmentYear" cssClass="inputBox" onkeyup="checkNumbers(this);middleMinusRestriction(this);" readonly="true"/>
+														<s:textfield  name="establishmentYear" id="establishmentYear" cssClass="inputBox" onkeyup="checkNumbers(this);" maxlength="4" readonly="true"/>
 													</div>
 											</div>
 											<div class="textfield">
 													<div class="text">
-														<s:text name="label.regNo" />
+													<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
+														<s:text name="label.regNo" />&nbsp;
+														</s:if>
+														<s:else>
+														<s:text name="label.regNoira" />&nbsp;
+														</s:else>
 													</div>
 													<div class="tbox">
 														<s:textfield name="regNo" id="regNo" cssClass="inputBox"  readonly="true"/>
@@ -332,7 +344,7 @@
 											</div>
 											<div class="textfield">
 													<div class="text">
-														<s:text name="label.cinNo" />
+														<s:text name="label.cinNo" />&nbsp;
 													</div>
 													<div class="tbox">
 														<s:textfield name="cinNo" id="cinNo" cssClass="inputBox"  readonly="true"/>
@@ -340,7 +352,7 @@
 											</div>
 											<div class="textfield">
 													<div class="text">
-														<s:text name="label.rate" />
+														<s:text name="label.rate" />&nbsp;
 													</div>
 													<div class="tbox">
 														<s:textfield  name="rating" id="rating" cssClass="inputBox"  readonly="true"/>
@@ -348,7 +360,7 @@
 											</div>
 											<div class="textfield">
 													<div class="text">
-														<s:text name="label.rateagency" />
+														<s:text name="label.rateagency" />&nbsp;
 													</div>
 													<div class="tbox">
 														<s:textfield  name="ratingAgency" id="ratingAgency" cssClass="inputBox"  readonly="true"/>
@@ -357,20 +369,18 @@
 											
 											<div class="textfield">
 													<div class="text">
-														<s:text name="label.lastrate" />
+														<s:text name="label.lastrate" />&nbsp;
 													</div>
 													<div class="tbox">
-														<s:textfield name="lastRating" id="lastRating" cssClass="inputBox" readonly="true"/>
+													<div class="inputAppend">
+													<s:textfield name="lastRating" id="lastRating"  cssStyle="width: 100%; border:transparent;" onkeyup="validateSpecialChars(this)"  readonly="true"/>
+													</div>
 													</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								</div>
 							</div>
-						</div>
-						<div class="tablerow">	
-						<div style="padding:10px; background:#F8F8F8">						
 							<div class="boxcontent">
 								<div class="panel panel-primary">											
 									<div class="panel-heading">
@@ -391,265 +401,14 @@
 									</div>
 						</div>
 						</div>
-						</div>
-						</div>
-						</div>
-					<%--<s:if test='"C".equals(customerType)'>
-						<div class="panel panel-primary">
-						<div class="tablerow">							
-							<div class="boxcontent">
-								<div class="panel panel-primary">											
-									
-							<div class="panel-heading">
-								<s:text name="Heding.CedingCompany" />
-							</div>
-							<div class="panel-body">
-								<table width="75%" style="margin: 0 auto;" class="table table-bordered">
-									<tr>
-										<td width="50%">
-											<s:text name="Ceding.CompanyName" />
-										</td>
-										<td width="50%" class="txtB">
-											<s:property value="companyName" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.ContactPersonName" />
-										</td>
-										<td class="txtB">
-											<s:property value="firstName" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Designation" />
-										</td>
-										<td class="txtB">
-											<s:property value="designation" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Address1" />
-										</td>
-										<td class="txtB">
-											<s:property value="address1" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Address2" />
-										</td>
-										<td class="txtB">
-											<s:property value="address2" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.City" />
-										</td>
-										<td class="txtB">
-											<s:property value="city" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.ZipCode" />
-										</td>
-										<td class="txtB">
-											<s:property value="zipcode" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Country" />
-										</td>
-										<td class="txtB">
-											<s:property value="country" />
-										</td>
-									</tr>
-									
-									<tr>
-										<td>
-											<s:text name="Ceding.EmailAddress" />
-										</td>
-										<td class="txtB">
-											<s:property value="email" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.PhoneNo" />
-										</td>
-										<td class="txtB">
-											<s:property value="telephone" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.MobileNumber" />
-										</td>
-										<td class="txtB">
-											<s:property value="mobile" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.FaxNo" />
-										</td>
-										<td class="txtB">
-											<s:property value="faxNo" />
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-						</div>
-						</div>
-						</div>
-						</s:if>
-						<s:else>
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<s:text name="broker.name" />
-							</div>
-							<div class="panel-body">
-								<table width="75%" style="margin: 0 auto;" class="table table-bordered">
-									<tr>
-										<td width="50%">
-											<s:text name="Ceding.Title" />
-										</td>
-										<td width="50%" class="txtB">
-											<s:property value="title" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.ContactPersonName" />
-										</td>
-										<td class="txtB">
-											<s:property value="firstName" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Designation" />
-										</td>
-										<td class="txtB">
-											<s:property value="designation" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Address1" />
-										</td>
-										<td class="txtB">
-											<s:property value="address1" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Address2" />
-										</td>
-										<td class="txtB">
-											<s:property value="address2" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.City" />
-										</td>
-										<td class="txtB">
-											<s:property value="city" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.ZipCode" />
-										</td>
-										<td class="txtB">
-											<s:property value="zipcode" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.Country" />
-										</td>
-										<td class="txtB">
-											<s:property value="country" />
-										</td>
-									</tr>
-									
-									<tr>
-										<td>
-											<s:text name="Ceding.EmailAddress" />
-										</td>
-										<td class="txtB">
-											<s:property value="email" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.PhoneNo" />
-										</td>
-										<td class="txtB">
-											<s:property value="telephone" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.MobileNumber" />
-										</td>
-										<td class="txtB">
-											<s:property value="mobile" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="Ceding.FaxNo" />
-										</td>
-										<td class="txtB">
-											<s:property value="faxNo" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="ceding.panNo" />
-										</td>
-										<td class="txtB">
-											<s:property value="panNo" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="ceding.isIndividual" />
-										</td>
-										<td class="txtB">
-											<s:property value="isIndividual" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="ceding.isNonResident" />
-										</td>
-										<td class="txtB">
-											<s:property value="isNonResident" />
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<s:text name="ceding.specialRate" />
-										</td>
-										<td class="txtB">
-											<s:property value="specialRate" />
-										</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-						</s:else>--%>
 					</div>
+							</div>
+						</div>
+						</div>
+					
+						</div>
+						</div>
+					
 					<div class="boxcontent" align="center">
 					<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
 					</div>

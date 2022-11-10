@@ -333,7 +333,12 @@ gap:20px;
 													 			    </span>
 																</s:if>
 																<s:else>
-																	<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();"/>
+																	<s:if test='bouquetNo!=null && !"".equals(bouquetNo)'>
+																		<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='true' onchange="getRetention();getPaypartner('paypartid');"/>
+																	</s:if>
+																	<s:else>
+																		<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();getPaypartner('paypartid');"/>
+																	</s:else>
 																	<span class="input-group-addon">
 																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
 													 			     	<span class="glyphicon glyphicon-list"></span>
@@ -359,7 +364,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																	<div class="">
-																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)" disabled="%{(layerProposalNo!=null) || (#dislayer)?true:false}" onchange="functionEDate();"/>
+																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"  onchange="functionEDate();"/>
 																	</div>
 															</div>
 														</div>
@@ -386,7 +391,7 @@ gap:20px;
 										<div class="boxcontent" id="laydet">
 											<div class="panel panel-primary">											
 												<div class="panel-heading" style="display: flex;justify-content: space-between;">
-													<div><s:text name="label.sectioninfo" /></div><div><button type="button"  class="btn btn-sm btn-success"  onclick="funNewMode('<s:property value='proposal_no'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','new');" tabindex="1"> New </button></div>
+													<div><s:text name="label.sectioninfo" /></div><div><button type="button"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');funNewMode('<s:property value='proposal_no'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','new');" tabindex="1"> New </button></div>
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent" style="width:75%">
@@ -472,10 +477,10 @@ gap:20px;
 															<div class="tbox">
 															<s:if test='"Renewal".equals(proposalReference) || "Layer".equals(proposalReference)'>
 															<%--<s:textfield name="layerNo" cssClass="inputBox" cssStyle="text-align: right;" readonly="%{(proposal_no!='' && proposal_no!=null)?true:false}" disabled='%{("Y".equals(disableStatus1))?true:false}' onkeyup="checkNumbers(this);"/>--%>
-																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" readonly="true"/>
+																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);"  readonly="true"/>
 															</s:if>
 															<s:else>
-																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" readonly="true"/>
+																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);" />
 															</s:else>
 															
 															</div>
@@ -523,7 +528,7 @@ gap:20px;
 																			</div>
 																			<div class="tbox">
 																				<s:if test="RenewalMode != null">
-																					<s:select list="treatyTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="treatyType" cssClass="select1 inputBoxS" headerKey="0" headerValue="---Select---" onchange="getTreatyType(this.value);" disabled='%{baseLayer!=null  && !"".equalsIgnoreCase(baseLayer)?true:false}' />
+																					<s:select list="treatyTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="treatyType" cssClass="select1 inputBoxS" headerKey="0" headerValue="---Select---" onchange="getTreatyType(this.value);"  /> <!-- disabled='%{baseLayer!=null  && !"".equalsIgnoreCase(baseLayer)?true:false}' -->
 																				</s:if>
 																				<s:else>
 																					<s:select list="treatyTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="treatyType" cssClass="select1 inputBoxS" headerKey="0" headerValue="---Select---" onchange="getTreatyType(this.value);"  /> <%-- disabled='%{ (proposal_no != "" && proposal_no != null)?true:false}' --%>
@@ -660,7 +665,12 @@ gap:20px;
 																			</div>
 																			<div class="tbox">
 																				<div class="input-group">
-																					<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"Y".equals(disableStatus1)?true:false}' onchange="getPaypartner(this.value,'paypartid');"/>
+																					<s:if test='bouquetNo!=null && !"".equals(bouquetNo)'>
+																						<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='true' onchange="getPaypartner('paypartid');"/>
+																					</s:if>
+																					<s:else>
+																						<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"Y".equals(disableStatus1)?true:false}' onchange="getPaypartner('paypartid');"/>
+																					</s:else>
 																					<span class="input-group-addon">
 																						<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
 																		 			     	<span class="glyphicon glyphicon-list"></span>
@@ -1028,7 +1038,7 @@ gap:20px;
 																								<s:text name="label.manexp" />
 																							</div>
 																							<div class="tbox">												
-																							<s:textfield name="managementExpenses" id="managementExpenses"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestriction(this);" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>	<br/>											
+																							<s:textfield name="managementExpenses" id="managementExpenses"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>	<br/>											
 																							</div>
 																						</div>
 																						<div class="textfield">
@@ -1063,7 +1073,7 @@ gap:20px;
 																								<s:text name="label.procomper" /> 
 																							</div>
 																							<div class="tbox">												
-																								<s:textfield name="profitCommissionPer" id="profitCommissionPer"  cssClass="inputBox" onkeyup="checkDecimals(this);" cssStyle="text-align: right;" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>		<br/>										
+																								<s:textfield name="profitCommissionPer" id="profitCommissionPer"  cssClass="inputBox" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" cssStyle="text-align: right;" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>		<br/>										
 																						</div>
 																						</div>
 																						<div class="textfield" id="setup" style="display:none;">
@@ -1130,7 +1140,10 @@ gap:20px;
 																								<s:text name="label.firstprofitcom" />
 																							</div>
 																							<div class="tbox">
-																									<s:textfield name="fistpc" id="fistpc"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																								<div class="input-group" style="display: flex;">
+																									<s:textfield name="fistpc" id="fistpc"  cssClass="inputBox" cssStyle="width:50%;text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'  /><br/>
+																									<s:select  list="profitCommissionListVar"  name="profitMont" id="profitMont" cssClass="select1 inputBoxS"  cssStyle="width:40%;"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																								</div>
 																							</div>
 																						</div>	
 																						<div class="textfield" id="pcperiodid" style="display:none">
@@ -1142,14 +1155,14 @@ gap:20px;
 																							</div>
 																						</div>
 																						
-																						<div class="textfield" id="pcscseid">
+																						<%-- <div class="textfield" id="pcscseid">
 																							<div class="text">
 																								<s:text name="label.period" />
 																							</div>
 																							<div class="tbox">
 																									<s:select  list="profitCommissionListVar"  name="profitMont" id="profitMont" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
 																							</div>
-																						</div>	
+																						</div> --%>	
 																						<div class="textfield" >
 																							<div class="text">
 																								<s:text name="label.subseqcal" />
@@ -1164,17 +1177,20 @@ gap:20px;
 																								<s:text name="label.subprofitcom" />
 																							</div>
 																							<div class="tbox">
-																									<s:textfield name="subpc" id="subpc"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" maxlength="10" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																								<div class="input-group" style="display: flex;">
+																									<s:textfield name="subpc" id="subpc"  cssClass="inputBox" cssStyle="width:50%;text-align: right;" onkeyup="checkNumbers(this);middleMinusRestrictionNeg(this);" maxlength="10" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/><br/>
+																									<s:select  list="profitCommissionListVar"  name="subProfitMonth" id="subProfitMonth" cssClass="select1 inputBoxS"   cssStyle="width:40%;"  headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false' /><br/>
+																								</div>
 																							</div>
 																						</div>
-																						<div class="textfield" >
+																						<%-- <div class="textfield" >
 																							<div class="text">
 																								<s:text name="label.period" />
 																							</div>
 																							<div class="tbox">
 																									<s:select  list="profitCommissionListVar"  name="subProfitMonth" id="subProfitMonth" cssClass="select1 inputBoxS"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"  disabled='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false' /><br/>
 																							</div>
-																						</div>	
+																						</div>	 --%>
 																						</div>	
 																						<div class="textfield" >
 																							<div class="text">
@@ -1517,7 +1533,7 @@ gap:20px;
 							</div>		
 							<div class="tablerow">
 										<div class="boxcontent" align="center">
-											<s:if test='amend_Id_Mode ==null ||"".equals(amend_Id_Mode) '>
+											<%-- <s:if test='amend_Id_Mode ==null ||"".equals(amend_Id_Mode) '> --%>
 												<s:if test='(proposal_no == null ||"".equals(proposal_no)) '>
 													<s:if
 														test='layerProposalNo == null ||"".equals(layerProposalNo) '>
@@ -1563,12 +1579,12 @@ gap:20px;
 														  <input type="button"  value="Submit"   class="btn btn-sm btn-warning"   id="mybutton1" onclick="disableForm(this.form,false,'');funEditSubmit()" />
 														</s:if> --%>
 												</s:else>
-											</s:if>
-											<s:else>
+											<%-- </s:if> --%>
+											<%-- <s:else>
 												<input type="button" value="Cancel" class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
 									
 												<input type="button" value="Next" class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');destroyPopUps();funAmendsubmit()" />
-											</s:else>
+											</s:else> --%>
 										</div>
 									</div>
 									
@@ -1799,7 +1815,7 @@ function FunctionAddLayer()
 	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value="";
-	document.getElementById("sectionNo").value="";
+	//document.getElementById("sectionNo").value="";
 	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 	document.proportional.action="FirstPageSaveMethodRiskDetails.action";
 	document.proportional.submit();
@@ -2012,7 +2028,7 @@ else if(val=="2"){
 		document.getElementById('commissionSurpPid').style.display="inline";
 		document.getElementById('slideScaleCommissionY').disabled=true;
 	}
-	else if(val=="4" || val=="5" ){
+	else if(val=="4" || val=="5" || val=="6"  ){
 		document.getElementById('treatyQS1').style.display="none";
 		document.getElementById('treatySurp1').style.display="none";
 		document.getElementById('treatySurp2').style.display="none";
@@ -2297,7 +2313,7 @@ function toggleXLCostOC(retroType){
 }
 
 <s:if test='baseLayer!=null  && !"".equalsIgnoreCase(baseLayer)'>
-	enableForm1(document.proportional,true,'<s:property value="%{fields}"/>');
+	//enableForm1(document.proportional,true,'<s:property value="%{fields}"/>');
 	//document.getElementById("retDelete").disabled = true;
 	//document.getElementById("retAdd").disabled = true;	
 </s:if>
@@ -2851,10 +2867,15 @@ function DocScript(id){
         }
     }
 }
-function getPaypartner(val,id){
+
+getPaypartner('paypartid');
+function getPaypartner(id){
 	var cedingid=document.getElementById("CeddingId").value;
-	var URL='${pageContext.request.contextPath}/paymentPartnerAjaxXol.action?dropDown='+id+'&cedingId='+cedingid+'&brokerId='+val;
- 		postRequest(URL,id);
+	var val=document.getElementById("BrokerId").value;
+	if(cedingid!=null && cedingid!='' && val!=null && val!=''){
+		var URL='${pageContext.request.contextPath}/paymentPartnerAjaxXol.action?dropDown='+id+'&cedingId='+cedingid+'&brokerId='+val;
+	 	postRequest(URL,id);
+	}
 }
 function getUnderwriterShare(val){
 	var proStatus = document.getElementById("proStatus").value
@@ -3296,12 +3317,12 @@ function getPcscalePeriod(val){
 	if (val=='P') {
          document.getElementById('pcscfiid').style.display = 'block';
          document.getElementById('pcperiodid').style.display = 'none';
-         document.getElementById('pcscseid').style.display = 'block';
+       //  document.getElementById('pcscseid').style.display = 'block';
      }
      else {
          document.getElementById('pcperiodid').style.display = 'block';
          document.getElementById('pcscfiid').style.display = 'none';
-         document.getElementById('pcscseid').style.display = 'none';
+        // document.getElementById('pcscseid').style.display = 'none';
      }
     
 }

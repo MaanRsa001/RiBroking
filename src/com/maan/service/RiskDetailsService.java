@@ -212,6 +212,10 @@ public class RiskDetailsService {
 		dao.getSectionEditMode(bean);
 		
 	}
+	public boolean getSectionDuplicationCheck(RiskDetailsBean bean) {
+		return dao.getSectionDuplicationCheck(bean);
+	}
+	
 	
 
 	

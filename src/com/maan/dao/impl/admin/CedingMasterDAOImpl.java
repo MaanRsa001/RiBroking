@@ -1,8 +1,10 @@
 package com.maan.dao.impl.admin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.maan.bean.admin.AdminBean;
 import com.maan.bean.admin.CedingMasterBean;
 import com.maan.common.db.DBConstants;
 import com.maan.common.db.MyJdbcTemplate;
@@ -54,7 +56,7 @@ public class CedingMasterDAOImpl extends MyJdbcTemplate implements CedingMasterD
 		});*/
 		return list;
 	}
-	public boolean searchmethod(final CedingMasterBean bean,final String productId,final boolean viewFlag){
+	public boolean searchmethod1(final CedingMasterBean bean,final String productId,final boolean viewFlag){
 		boolean flag=false;
 		try{     
 			String sql=getQuery(DBConstants.CEDDINGCOMPANYDAO_SELECT_GETSEARCHQUERYTRUE);
@@ -229,6 +231,142 @@ public class CedingMasterDAOImpl extends MyJdbcTemplate implements CedingMasterD
 		}
 	 return flag;
 	}
+	public boolean searchmethod(final CedingMasterBean bean,final String productId,final boolean viewFlag){
+	//public void getEditClientMaster(AdminBean bean,String branchCode) {
+		boolean flag=false;
+		String query="";
+		try{
+			Object obj[] = new Object[2];
+			obj[0]=bean.getCustomerId();
+			obj[1]=bean.getBranchCode();
+
+			query=getQuery("EDIT_CLIENT_DETAILS");
+			List list=this.mytemplate.queryForList(query,obj);
+			if(list!=null && list.size()>0)
+			{
+				Map map=(Map)list.get(0);
+				bean.setClientType(map.get("CUSTOMER_TYPE")==null?"":map.get("CUSTOMER_TYPE").toString());
+				bean.setFirstName(map.get("FIRST_NAME")==null?"":map.get("FIRST_NAME").toString());
+				bean.setBroGroup(map.get("BROKER_GROUP")==null?"":map.get("BROKER_GROUP").toString());
+				bean.setDesignation(map.get("OCCUPATION")==null?"":map.get("OCCUPATION").toString());
+				bean.setInceptionDate(map.get("EFFECTIVE_DATE")==null?"":map.get("EFFECTIVE_DATE").toString());
+				bean.setAddress1(map.get("ADDRESS1")==null?"":map.get("ADDRESS1").toString());
+				bean.setAddress2(map.get("ADDRESS2")==null?"":map.get("ADDRESS2").toString());
+				bean.setCity(map.get("CITY")==null?"":map.get("CITY").toString());
+				bean.setCountry(map.get("COUNTRY")==null?"":map.get("COUNTRY").toString());
+				bean.setZipcode(map.get("POBOX")==null?"":map.get("POBOX").toString());
+				bean.setTelephone(map.get("TELEPHONE")==null?"":map.get("TELEPHONE").toString());
+				bean.setMobile(map.get("MOBILE")==null?"":map.get("MOBILE").toString());
+				bean.setFaxNo(map.get("FAX")==null?"":map.get("FAX").toString());
+				bean.setPanNo(map.get("PAN_NUMBER")==null?"":map.get("PAN_NUMBER").toString());
+				bean.setIsIndividual(map.get("INDIVIDUALYN")==null?"":map.get("INDIVIDUALYN").toString());
+				bean.setIsNonResident(map.get("NON_RESIDENTYN")==null?"":map.get("NON_RESIDENTYN").toString());
+				bean.setSpecialRate(map.get("SPECIAL_RATE")==null?"":map.get("SPECIAL_RATE").toString());
+				bean.setActive(map.get("STATUS")==null?"":map.get("STATUS").toString());
+				bean.setClientRemarks(map.get("REMARKS")==null?"":map.get("REMARKS").toString());
+				bean.setSnumber(map.get("CON_SERIAL_NO")==null?"":map.get("CON_SERIAL_NO").toString());
+				bean.setBroGroup(map.get("BROKER_GROUP")==null?"":map.get("BROKER_GROUP").toString());
+				bean.setEstablishmentYear(map.get("ESTB_YEAR")==null?"":map.get("ESTB_YEAR").toString());
+				bean.setRegNo(map.get("REG_NO")==null?"":map.get("REG_NO").toString());
+				bean.setCinNo(map.get("CIN_NO")==null?"":map.get("CIN_NO").toString());
+				bean.setRating(map.get("RATING")==null?"":map.get("RATING").toString());
+				bean.setRatingAgency(map.get("RATING_AGENCY")==null?"":map.get("RATING_AGENCY").toString());
+				bean.setLastRating(map.get("LAST_RATING")==null?"":map.get("LAST_RATING").toString());
+				
+			}
+			GetContactInfo(bean,bean.getBranchCode());
+			GetBankInfo(bean,bean.getBranchCode());
+			flag=true; 
+		}catch(Exception exception){
+			exception.printStackTrace();
+		}
+		return flag;
+
+	}
+	private void GetBankInfo(CedingMasterBean bean, String branchCode) {
+		try {
+			String query=getQuery("GET_PERSONAL_BANK_INFO");
+			Object obj[] = new Object[2];
+			obj[0]=bean.getCustomerId();
+			obj[1]=branchCode;
+			List list=this.mytemplate.queryForList(query,obj);
+			if(list!=null && list.size()>0) {
+				List<String> bankCurrency=new ArrayList<String>();
+				List<String> bankaccountnumber=new ArrayList<String>();
+				List<String> bankname=new ArrayList<String>();
+				List<String> accountname=new ArrayList<String>();
+				List<String> swiftcode=new ArrayList<String>();
+				List<String> corespondentbank=new ArrayList<String>();
+				List<String> bankRemarks=new ArrayList<String>();
+				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>();
+				for(int i=0;i<list.size();i++) {
+					Map<String,Object>map=(Map<String, Object>) list.get(i);
+					bankCurrency.add(map.get("BANK_CURRENCY")==null?"":map.get("BANK_CURRENCY").toString());
+					bankaccountnumber.add(map.get("BANK_ACC_NO")==null?"":map.get("BANK_ACC_NO").toString());
+					bankname.add(map.get("BANK_NAME")==null?"":map.get("BANK_NAME").toString());
+					accountname.add(map.get("BANK_ACC_NAME")==null?"":map.get("BANK_ACC_NAME").toString());
+					swiftcode.add(map.get("SWIFT_CODE")==null?"":map.get("SWIFT_CODE").toString());
+					corespondentbank.add(map.get("CORESPONDENT_BANK")==null?"":map.get("CORESPONDENT_BANK").toString());
+					bankRemarks.add(map.get("BANK_REMARKS")==null?"":map.get("BANK_REMARKS").toString());
+					Map<String,Object> doubleMap = new HashMap<String,Object>();
+					List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
+					doubleMap.put("one",new Double(1.0));
+					creList.add(doubleMap);
+					currencyList1.add(creList);
+				}
+				bean.setBankCurrency(bankCurrency);
+				bean.setBankaccountnumber(bankaccountnumber);
+				bean.setBankname(bankname);
+				bean.setAccountname(accountname);
+				bean.setSwiftcode(swiftcode);
+				bean.setCorespondentbank(corespondentbank);
+				bean.setBankRemarks(bankRemarks);
+				bean.setCurrencyList(currencyList1);
+				bean.setContactList(currencyList1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void GetContactInfo(CedingMasterBean bean,String branchCode) {
+		try {
+			String query=getQuery("GET_PERSONAL_CONTACT_INFO");
+			Object obj[] = new Object[2];
+			obj[0]=bean.getCustomerId();
+			obj[1]=branchCode;
+			List list=this.mytemplate.queryForList(query,obj);
+			if(list!=null && list.size()>0) {
+				List<String> departmentCD=new ArrayList<String>();
+				List<String> subdepartmentCD=new ArrayList<String>();
+				List<String> emailaddress=new ArrayList<String>();
+				List<String> telephonenumber=new ArrayList<String>();
+				List<String> faxnumber=new ArrayList<String>();
+				List<List<Map<String,Object>>> currencyList1=new ArrayList<List<Map<String,Object>>>();
+				for(int i=0;i<list.size();i++) {
+					Map<String,Object>map=(Map<String, Object>) list.get(i);
+					departmentCD.add(map.get("DEPARTMENT")==null?"":map.get("DEPARTMENT").toString());
+					subdepartmentCD.add(map.get("SUB_DEPARTMENT")==null?"":map.get("SUB_DEPARTMENT").toString());
+					emailaddress.add(map.get("EMAIL")==null?"":map.get("EMAIL").toString());
+					telephonenumber.add(map.get("TELEPHONE")==null?"":map.get("TELEPHONE").toString());
+					faxnumber.add(map.get("FAX_NUMBER")==null?"":map.get("FAX_NUMBER").toString());
+					Map<String,Object> doubleMap = new HashMap<String,Object>();
+					List<Map<String,Object>> creList=new ArrayList<Map<String,Object>>();
+					doubleMap.put("one",new Double(1.0));
+					creList.add(doubleMap);
+					currencyList1.add(creList);
+				}
+				bean.setDepartmentCD(departmentCD);
+				bean.setSubdepartmentCD(subdepartmentCD);
+				bean.setEmailaddress(emailaddress);
+				bean.setTelephonenumber(telephonenumber);
+				bean.setFaxnumber(faxnumber);
+				bean.setContactList(currencyList1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	public List<Map<String, Object>> getproposalList(CedingMasterBean bean) {
 		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
 		try{
@@ -277,4 +415,19 @@ public class CedingMasterDAOImpl extends MyJdbcTemplate implements CedingMasterD
 		e.printStackTrace();
 	}
 }
+	@Override
+	public List<Map<String, Object>> gettdsTypeList(CedingMasterBean bean, String string) {
+		List<Map<String, Object>> result=new ArrayList<Map<String,Object>>();
+		try{
+			String query=getQuery("GET_CLIENT_TYPE_LIST");
+			Object args[]=new Object[2];
+			args[0]=string;
+			args[1]="Y";
+			result=this.mytemplate.queryForList(query,args);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

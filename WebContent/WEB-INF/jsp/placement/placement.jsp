@@ -302,7 +302,7 @@
 															<div class="textfield">
 															
 															</div>
-															<s:if test='placementMode!=null && !"".equals(placementMode)'>
+															<s:if test='"S".equals(placementMode)'>
 																<div class="textfield">
 																	<div class="text txtB">
 																		<s:text name="label.notplacedProposal" />
@@ -327,7 +327,8 @@
 													</s:else>
 														<div class="boxcontent" style="width:75%" align="center">
 														<div id="reinsurerid" >
-															<%-- <table width="100%" class="table table-bordered" id="reinsTbl">
+														<s:if test='!"S".equals(placementMode)'>
+															 <table width="100%" class="table table-bordered" id="reinsTbl">
 																<thead>
 																<tr>
 																	<th width="10%"> <s:text name="label.sno" /> </th>
@@ -335,7 +336,6 @@
 																	<th width="20%"><s:text name="label.placingBroker" /></th>
 																	<th width="20%"><s:text name="label.shareOffer" /></th>
 																	<th width="20%" > <s:text name="Mail Status" /> </th>
-																	<th width="15%" > <s:text name="Action" /> </th>
 																	<th width="10%" > <s:text name="Delete Row" /> </th>
 																</tr>
 																</thead>
@@ -358,11 +358,7 @@
 																	<td>
 																	<s:property value="#list.MAIL_STATUS"/>
 																	</td>
-																	<td align="center">
-																		<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
-																			<input type="button" value="Send Mail" class="btn btn-sm btn-primary"    onclick="getMailTemplate('P','<s:property value="#list.SHARE_OFFERED"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>','<s:property value="#list.PROPOSAL_NO"/>');"/>
-																		</s:if>
-																	</td>
+																	
 																	<td align="center">
 																		<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
 																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count-1}"/>')" />
@@ -371,7 +367,11 @@
 																</tr>												
 																</s:iterator>
 																</tbody>
-															</table> --%>
+															</table> 
+															<div class="boxcontent" align="center">
+																<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="reinsureRow('reinsTbl');" />
+															</div>
+															</s:if>
 															</div>
 															
 														</div>

@@ -176,7 +176,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			}
 			
 		}else {
-			init();
+			service.proposalInfo(bean);
+			bean.setMode("placing");
 		}
 		return forward;
 	}
@@ -184,18 +185,46 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		if(StringUtils.isNotBlank(bean.getBouquetNo()) || StringUtils.isNotBlank(bean.getBaseProposalNo())) {
 			if(StringUtils.isBlank(bean.getPlacementMode())) {
 				addActionError(getText("error.placementmode.required"));
-			}if(StringUtils.isBlank(bean.getNotplacedProposal()) && StringUtils.isBlank(bean.getPlacedProposal())) {
-				addActionError(getText("error.placednotpalced.required"));
+			}
+			else if("S".equals(bean.getPlacementMode())) {
+				if(StringUtils.isBlank(bean.getNotplacedProposal()) && StringUtils.isBlank(bean.getPlacedProposal())) {
+					addActionError(getText("error.placednotpalced.required"));
+				}
 			}
 		}
-		if(!CollectionUtils.isEmpty(bean.getReinsSNo()))
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		if(!CollectionUtils.isEmpty(bean.getReinsSNo())) {
+			List<String>rebrlist=new ArrayList<String>();
 		for(int i=0;i<bean.getReinsSNo().size();i++) {
 			if(StringUtils.isBlank(bean.getReinsureName().get(i))) {
 				addActionError(getText("error.reinsuere.required")+" "+(i+1));
-			}if(StringUtils.isBlank(bean.getPlacingBroker().get(i))) {
+			}
+			if(StringUtils.isBlank(bean.getPlacingBroker().get(i))) {
 				addActionError(getText("error.placingbroker.required")+" "+(i+1));
 			}
+			
+			if(StringUtils.isNotBlank(bean.getReinsureName().get(i)) && StringUtils.isNotBlank(bean.getPlacingBroker().get(i))) {
+				rebrlist.add(bean.getReinsureName().get(i)+"~"+bean.getPlacingBroker().get(i));
+			}
+			Map<String,Object> string = new HashMap<String,Object>();
+			string.put("1","1");
+			list.add(string);
+			
 		}
+		bean.setReinsurerInfoList(list);
+		int count=0;
+		for(int i=0;i<bean.getReinsSNo().size();i++) {
+			String rebr=bean.getReinsureName().get(i)+"~"+bean.getPlacingBroker().get(i);
+			if (StringUtils.isNotEmpty(rebr)) {
+				if (java.util.Collections.frequency(rebrlist, rebr) > 1) {
+					if(count==0) {
+					addActionError(getText("error.placingbroker.duplicate"));
+					count=1;
+					}
+				}
+			}
+		} 
+	}
 		
 	}
 	public String updateInfo() {

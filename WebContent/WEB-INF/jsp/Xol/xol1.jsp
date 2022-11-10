@@ -294,7 +294,7 @@ gap:20px;
 					     								</span>
 													</s:if>
 													<s:else>
-														<s:if test="'Layer'.equals(proposalReference)">
+														<%-- <s:if test="'Layer'.equals(proposalReference)">
 															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
 															 <span class="input-group-addon">
                             									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
@@ -310,15 +310,21 @@ gap:20px;
 												 			    </button>
 					     									 </span>
 														</s:elseif>
+														<s:else> --%>
+														<s:if test='bouquetNo!=null && !"".equals(bouquetNo)'>
+															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='true' onchange="getPaypartner('paypartid');"/>
+														</s:if>
 														<s:else>
-														<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
+															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getPaypartner('paypartid');"/>
+														</s:else>
+														<%-- <s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" /> --%>
 															 <span class="input-group-addon">
                             									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
 												 			     	<span class="glyphicon glyphicon-list"></span>
 												 			    </button>
 					     									 </span>
 														</s:else>
-													</s:else>
+													<%-- </s:else> --%>
 													 </div>
 												</div>
 											</div>
@@ -367,12 +373,12 @@ gap:20px;
 												<div class="tbox">
 													<s:if test="layerProposalNo == null || layerProposalNo == ''">
 														<div class="">
-														<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"  disabled='%{"Layer".equals(proposalReference)|| "Y".equals(disableStatus) || (#dislayer) ?true:false}' onchange="functionEDate();"/>
+														<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();"/>
 														</div>														
 													</s:if>
 													<s:else>
 													<div class="">
-													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"  disabled='%{"Layer".equals(proposalReference)|| "Y".equals(disableStatus) || (#dislayer) ?true:false}' onchange="functionEDate();"/>
+													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();"/>
 													 </div>
 													</s:else>
 												</div>
@@ -776,7 +782,12 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<div class="input-group">
-																	<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{baseLayer==null  && "".equalsIgnoreCase(baseLayer) || "Y".equals(disableStatus1)?true:false}'  onchange="getPaypartner(this.value,'paypartid');"/>
+																<s:if test='bouquetNo!=null && !"".equals(bouquetNo)'>
+																	<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='true' onchange="getPaypartner('paypartid');"/>
+																</s:if>
+																<s:else>
+																	<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{baseLayer==null  && "".equalsIgnoreCase(baseLayer) || "Y".equals(disableStatus1)?true:false}'  onchange="getPaypartner('paypartid');"/>
+																</s:else>
 																	<span class="input-group-addon">
 																		<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
 														 			     	<span class="glyphicon glyphicon-list"></span>
@@ -934,7 +945,7 @@ gap:20px;
 																<s:text name="label.MandDInstallments" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="m_d_InstalmentNumber" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" maxlength="3"/>
+																<s:textfield name="m_d_InstalmentNumber" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);" onchange="insinall();"  maxlength="3"/>
 															</div>
 														</div>
 												</div>
@@ -2986,10 +2997,14 @@ else{
 			var URL='${pageContext.request.contextPath}/getTypeOfBusinessXol.action?dropDown='+id+'&departId='+val;
   	 		postRequest(URL,id);
 	}
-	function getPaypartner(val,id){
+	getPaypartner('paypartid');
+	function getPaypartner(id){
 		var cedingid=document.getElementById("CeddingId").value;
-		var URL='${pageContext.request.contextPath}/paymentPartnerAjaxXol.action?dropDown='+id+'&cedingId='+cedingid+'&brokerId='+val;
-	 		postRequest(URL,id);
+		var val=document.getElementById("BrokerId").value;
+		if(cedingid!=null && cedingid!='' && val!=null && val!=''){
+			var URL='${pageContext.request.contextPath}/paymentPartnerAjaxXol.action?dropDown='+id+'&cedingId='+cedingid+'&brokerId='+val;
+		 	postRequest(URL,id);
+		}
 }
 function middleMinusRestriction(txt) {
 	var prevValue='';
@@ -3675,7 +3690,7 @@ document.getElementById("quotaShare").display='inline';
 }
 
 }
-function installRow(tableID){
+function installRow(tableID,val){
 	var table = document.getElementById(tableID);
 	var rowCount = table.rows.length;	
 	//alert(rowCount);
@@ -3736,16 +3751,19 @@ function installRow(tableID){
 	cell4.appendChild(element4);
 	
 	var cell6 = row.insertCell(4);
-	//cell9.setAttribute("align","center");
+	//cell9.setAttribute("align","center");xol
 	var element9 = document.createElement("input");
 	element9.type = "button";
 	element9.value="Delete";
 	element9.setAttribute("onclick", "removeInst('"+(rowCount-1)+"')");
-	element9.className="btn btn-sm btn-info"
+	element9.className="btn btn-sm btn-danger"
 	cell6.appendChild(element9);
+	document.xol1.m_d_InstalmentNumber.value=(rowCount);
 	
 }
-
+function insinall(){
+	postFormRequest("${pageContext.request.contextPath}/insInstallXol.action?dropDown=deleteInst", "insid", "xol1");
+}
 function removeInst(val){
 	if(val==0){
 		alert("First row can't be deleted");

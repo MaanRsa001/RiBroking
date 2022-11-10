@@ -215,9 +215,9 @@ public class PortfolioAction extends ActionSupport implements
 			}
 			if (StringUtils.isBlank(bean.getFlag())
 					|| "N".equalsIgnoreCase(bean.getFlag())
-					|| "RP".equalsIgnoreCase(bean.getFlag())) {
+					|| "RP".equalsIgnoreCase(bean.getFlag()) || "P".equalsIgnoreCase(bean.getFlag())) {
 				String Mode = "";
-				if (StringUtils.isBlank(bean.getFlag()))
+				if (StringUtils.isBlank(bean.getFlag()) || "P".equalsIgnoreCase(bean.getFlag()))
 					Mode = "QUO";// Pending
 				else if ("N".equals(bean.getFlag()))
 					Mode = "NTU";// Not Taken Up

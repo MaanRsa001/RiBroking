@@ -4752,7 +4752,7 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			String query=getQuery("GET_BANK_CURRENCY_LIST");
 			Object args[]= new Object[2];
 			args[0]="Y";
-			args[1]="06";
+			args[1]=bean.getBranchCode();
 			result=this.mytemplate.queryForList(query,args);
 		}catch(Exception e)
 		{
@@ -4824,6 +4824,7 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 		try{
 			String qry ="select max(customer_id)+1 from personal_info";
 			String maxId = this.mytemplate.queryForObject(qry,String.class);
+			bean.setCustomerId(maxId);
 			query =getQuery("INSERT_CLIENT_DETAILS");
 			args= new Object[38];
 			args[0]=bean.getClientType();

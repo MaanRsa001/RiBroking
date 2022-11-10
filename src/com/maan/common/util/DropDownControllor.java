@@ -27,6 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
+import org.springframework.dao.DataAccessException;
 
 import com.maan.bean.ClaimBean;
 import com.maan.bean.FaculPremiumBean;
@@ -329,6 +330,7 @@ public class DropDownControllor extends MyJdbcTemplate {
 			 query=getQuery(DBConstants.COMMON_SELECT_GETCONSTDET);
 			 
 			}
+			query=query+" order by TYPE";
 			logger.info("Select Query==> " + query);
 			logger.info("Args[0]==> " + categoryId);
 			logger.info("Args[1]==> " + "Y");
@@ -3483,4 +3485,53 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		}
 		return list;
 	}
+
+	public void getBouquetCedentBrokerInfo(RiskDetailsBean bean) {
+		List<Map<String, Object>> list=null;
+		String query="";
+		try {
+			query= getQuery("GET_BOUQUET_CEDENT_BROKER");
+			logger.info("Select Query=>"+query);
+			logger.info("Args[0]=>"+bean.getBouquetNo());
+			list=this.mytemplate.queryForList(query,new Object[]{bean.getBouquetNo()});
+			logger.info("Result=>"+list.size());
+			if(list!=null && list.size()>0){
+				bean.setCedingCo(list.get(0).get("CEDING_COMPANY_ID")==null?"":list.get(0).get("CEDING_COMPANY_ID").toString());
+				bean.setBroker(list.get(0).get("BROKER_ID")==null?"":list.get(0).get("BROKER_ID").toString());
+			}
+		} catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+			e.printStackTrace();
+		}
+	}
+
+	public boolean getBouquetCedentBrokercheck(RiskDetailsBean bean) {
+		boolean result=false;
+		List<Map<String, Object>> list=null;
+		String query="";
+		try{
+				query= getQuery("GET_BOUQUET_CEDENT_BROKER");
+				logger.info("Select Query=>"+query);
+				logger.info("Args[0]=>"+bean.getBouquetNo());
+				list=this.mytemplate.queryForList(query,new Object[]{bean.getBouquetNo()});
+				logger.info("Result=>"+list.size());
+				if(list!=null && list.size()>0){
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map=(Map<String, Object>)list.get(i);
+						String res=map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString();
+						String res1=map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString();
+						if(!res.equalsIgnoreCase(bean.getCedingCo())){
+							result=true;
+						}else if(!res1.equalsIgnoreCase(bean.getBroker())){
+							result=true;
+						}
+					}
+				}
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");
+
+		}
+		return result;
+	}
+	
 }

@@ -843,6 +843,16 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				proposalno = beanObj.getProposal_no();
 			}
 			this.showSecondpageEditItems(beanObj, beanObj.getProduct_id(), proposalno);
+			if("copy".equals(beanObj.getFlag())) {
+				String sectionNo="";
+				if("2".equals(beanObj.getProduct_id())) {
+					//if(StringUtils.isBlank(beanObj.getSectionNo())) {
+						String query=getQuery("GET_MAX_SECTION_NO_DET");
+						sectionNo=this.mytemplate.queryForObject(query, String.class, new Object[] {beanObj.getProposalNo()});
+						beanObj.setSectionNo(sectionNo);
+					//}
+				}
+			}
 			 
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
@@ -3773,14 +3783,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 
 	public Object[] insertHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid,	final Object args2, final boolean amendId,String renewalStatus) {
-		String sectionNo="",bouquetno="";
-		if("2".equals(beanObj.getProduct_id())) {
-			//if(StringUtils.isBlank(beanObj.getSectionNo())) {
-				String query=getQuery("GET_MAX_SECTION_NO_DET");
-				sectionNo=this.mytemplate.queryForObject(query, String.class, new Object[] {beanObj.getProposalNo()});
-				beanObj.setSectionNo(sectionNo);
-			//}
-		}
+		String bouquetno="";
+		
 		if(StringUtils.isBlank(beanObj.getBouquetNo()) && "Y".equals(beanObj.getBouquetModeYN())) {
 			String query=getQuery("GET_BOUQUET_NO_SEQ");
 			bouquetno=this.mytemplate.queryForObject(query, String.class);
@@ -5274,5 +5278,49 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean getSectionDuplicationCheck(RiskDetailsBean formObj) {
+		boolean result=false;
+		try{
+			if(StringUtils.isNotBlank(formObj.getLayerProposalNo())&&StringUtils.isNotBlank(formObj.getSectionNo())){
+				String query= getQuery("risk.select.getSectionDupcheckByBaseLayer");
+				logger.info("Select Query=>"+query);
+				logger.info("Args[0]=>"+formObj.getSectionNo());
+				logger.info("Args[1]=>"+formObj.getLayerProposalNo());
+				List<Map<String, Object>> list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getLayerProposalNo()});
+				logger.info("Result=>"+list.size());
+				if(list!=null && list.size()>0)	{
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map=(Map<String, Object>)list.get(i);
+						String res=map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString();
+						if(res.equalsIgnoreCase(formObj.getSectionNo())){
+							result=true;
+						}
+					}
+				}
+				query= getQuery("risk.select.getSectionDupcheckByProNo");
+				logger.info("Select Query=>"+query);
+				logger.info("Args[0]=>"+formObj.getSectionNo());
+				logger.info("Args[1]=>"+formObj.getLayerProposalNo());
+				list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getLayerProposalNo()});
+				logger.info("Result=>"+list.size());
+				if(list!=null && list.size()>0){
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map=(Map<String, Object>)list.get(i);
+						String res=map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString();
+						if(res.equalsIgnoreCase(formObj.getSectionNo())){
+							result=true;
+						}
+					}
+				}
+			}
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");
+
+		}
+		return result;
+	}
+
 	
 }

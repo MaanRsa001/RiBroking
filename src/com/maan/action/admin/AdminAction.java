@@ -2961,6 +2961,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 		return submenuinfo;
 	}
 	public String clientMaster1(){
+		bean.setBranchCode(branchCode);
 		bean.setPath("InsertClientMaster");
 		bean.setBankCurrencyList(service.getbankCurrencyList(bean));
 		bean.setTdsTypeList(service.gettdsTypeList(bean,"36"));
@@ -3005,6 +3006,7 @@ public class AdminAction extends ActionSupport implements ModelDriven<AdminBean>
 
 	public String insertClientMaster(){
 		bean.setLoginId(userId);
+		bean.setBranchCode(branchCode);
 		if("Edit".equals(bean.getMode())){
 			bean.setPath("InsertClientMaster");
 			bean.setBankCurrencyList(service.getbankCurrencyList(bean));
