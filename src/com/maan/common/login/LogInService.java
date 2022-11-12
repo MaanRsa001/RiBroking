@@ -200,6 +200,7 @@ public class LogInService {
 			props.put("mail.smtp.port", SMTP_PORT);
 			props.put("mail.smtp.starttls.enable", "true");
 			 props.put("mail.debug", "true");
+			 props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 			Session session = null; 
 			if(SMTP_AUTH_PWD != null && !"".equals(SMTP_AUTH_PWD.trim())){
 				props.put("mail.smtp.auth", "true");

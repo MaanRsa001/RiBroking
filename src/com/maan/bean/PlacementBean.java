@@ -80,13 +80,20 @@ public class PlacementBean {
 	private String productId;
 	
 	
-	private File upload;
-	private String uploadFileName;
-	private String uploadContentType;
+	private List<File> upload;
+	private List<String> uploadFileName;
+	private List<String> uploadContentType;
 	private String filePath;
 	private String fileName;
-	private String docType;
-	private String docId;
+	//private String docType;
+	//private String docId;
+	private List<Integer> docuList=new ArrayList<Integer>();
+	private List<String>docId;
+	private List<String>docTypeId;
+	private List<String>docDesc;
+	private String corresId;
+	private String sno;
+	private List<String> deleteStatus;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -516,23 +523,41 @@ public class PlacementBean {
 		this.productId = productId;
 	}
 	
-	public File getUpload() {
+	public List<File> getUpload() {
 		return upload;
 	}
-	public void setUpload(File upload) {
+	public void setUpload(List<File> upload) {
 		this.upload = upload;
 	}
-	public String getUploadFileName() {
+	public List<String> getUploadFileName() {
 		return uploadFileName;
 	}
-	public void setUploadFileName(String uploadFileName) {
+	public void setUploadFileName(List<String> uploadFileName) {
 		this.uploadFileName = uploadFileName;
 	}
-	public String getUploadContentType() {
+	public List<String> getUploadContentType() {
 		return uploadContentType;
 	}
-	public void setUploadContentType(String uploadContentType) {
+	public void setUploadContentType(List<String> uploadContentType) {
 		this.uploadContentType = uploadContentType;
+	}
+	public List<String> getDocId() {
+		return docId;
+	}
+	public void setDocId(List<String> docId) {
+		this.docId = docId;
+	}
+	public List<String> getDocTypeId() {
+		return docTypeId;
+	}
+	public void setDocTypeId(List<String> docTypeId) {
+		this.docTypeId = docTypeId;
+	}
+	public List<String> getDocDesc() {
+		return docDesc;
+	}
+	public void setDocDesc(List<String> docDesc) {
+		this.docDesc = docDesc;
 	}
 	public String getFilePath() {
 		return filePath;
@@ -546,18 +571,32 @@ public class PlacementBean {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	public String getDocType() {
-		return docType;
+	
+	public List<Integer> getDocuList() {
+		return docuList;
 	}
-	public void setDocType(String docType) {
-		this.docType = docType;
+	public void setDocuList(List<Integer> docuList) {
+		this.docuList = docuList;
 	}
-	public String getDocId() {
-		return docId;
+	public String getCorresId() {
+		return corresId;
 	}
-	public void setDocId(String docId) {
-		this.docId = docId;
+	public void setCorresId(String corresId) {
+		this.corresId = corresId;
 	}
+	public String getSno() {
+		return sno;
+	}
+	public void setSno(String sno) {
+		this.sno = sno;
+	}
+	public List<String> getDeleteStatus() {
+		return deleteStatus;
+	}
+	public void setDeleteStatus(List<String> deleteStatus) {
+		this.deleteStatus = deleteStatus;
+	}
+	
 	
 	
 	

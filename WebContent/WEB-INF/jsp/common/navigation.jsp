@@ -15,7 +15,7 @@
 					<td width="100%" align="left">
 						<table width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>					
-								<td align="left" valign="middle" style="background-color: #004499;">						
+								<td align="left" valign="middle" style="background-color: #167ab3;">						
 									<ul class="dropdown" style="font-family;Arial;font-size:12px;margin: 0 auto;">
 										<s:iterator value="%{#session.ProductList}" var="productList" status="stat">
 											<li>

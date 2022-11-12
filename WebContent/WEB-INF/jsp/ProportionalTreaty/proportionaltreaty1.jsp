@@ -70,6 +70,8 @@ gap:20px;
 		onload="Commas(<s:property value="#session.mfrid" />),setCedRetType('<s:property value="cedRetenType" />')">
 		<s:set var="elayerInfo" value='%{sectionInfo}'/>
 		<s:set var="dislayer" value="%{'layer'.equals(layerMode)}"/>
+		<s:set var="baselayer" value='%{!(("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no)))}'/>
+		
 		<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 		<div class="table0" style="width: 100%; margin: 0 auto;">
 			<div class="tablerow">
@@ -337,7 +339,7 @@ gap:20px;
 																		<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='true' onchange="getRetention();getPaypartner('paypartid');"/>
 																	</s:if>
 																	<s:else>
-																		<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();getPaypartner('paypartid');"/>
+																		<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || (#baselayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();getPaypartner('paypartid');"/>
 																	</s:else>
 																	<span class="input-group-addon">
 																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
@@ -354,7 +356,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<div class="">
-																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"   onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer)?true:false}' />
+																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"   onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}' />
 																</div>
 															</div>
 														</div>
@@ -364,7 +366,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																	<div class="">
-																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"  onchange="functionEDate();"/>
+																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"  onchange="functionEDate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}'/>
 																	</div>
 															</div>
 														</div>
@@ -373,7 +375,7 @@ gap:20px;
 																<s:text name="label.uwYearFrom" /> &nbsp; <sup style="color: red;">  </sup>
 															</div>
 															<div class="tbox" id="yearId">
-																<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" id="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(contNo != "" && contNo != null) || (#dislayer)?true:false}' onblur="getRetention();"/>
+																<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" id="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}' onblur="getRetention();"/>
 															</div>
 														</div>
 														<div class="textfield">
@@ -381,7 +383,7 @@ gap:20px;
 																<s:text name="label.uwYearto" /> &nbsp; <sup style="color:red;"></sup>
 															</div>
 															<div class="tbox" id="yearIdto">
-																<s:select  list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) ||(contNo != "" && contNo != null)?true:false}' />
+																<s:select  list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer) ||(contNo != "" && contNo != null)?true:false}' />
 															</div>
 														</div>
 												</div>
@@ -477,7 +479,7 @@ gap:20px;
 															<div class="tbox">
 															<s:if test='"Renewal".equals(proposalReference) || "Layer".equals(proposalReference)'>
 															<%--<s:textfield name="layerNo" cssClass="inputBox" cssStyle="text-align: right;" readonly="%{(proposal_no!='' && proposal_no!=null)?true:false}" disabled='%{("Y".equals(disableStatus1))?true:false}' onkeyup="checkNumbers(this);"/>--%>
-																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);"  readonly="true"/>
+																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);"  />
 															</s:if>
 															<s:else>
 																<s:textfield name="sectionNo" id="sectionNo" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkNumbers(this); middleMinusRestrictionNeg(this);hundredCheck(this.id,this.value);" />

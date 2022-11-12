@@ -49,7 +49,7 @@
 			<div class="tablerow">
 			<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 				<div style="padding:10px; background:#F8F8F8">
-				<s:form id="placement" name="placement" theme="simple" action=""	method="post" autocomplete="off">					
+				<s:form id="placement" name="placement" theme="simple" action=""	method="post" autocomplete="off" enctype="multipart/form-data">					
 					<div class="table2">
 						<div class="tablerow">
 							<span style="color:red;"><s:actionerror/></span>
@@ -136,9 +136,67 @@
 														</div>
 														<br class="clear"/>
 													</div>
-												</div>
+												
+												<div class="boxcontent">
+											<table class="table table-bordered" id="lcDoctable">
+												<thead>
+												<tr>
+													<th width="5%">
+														<s:text name="upload.docId" />
+													</th>
+													<th width="20%">
+														<s:text name="upload.docType" />
+													</th>
+													<th width="45%">
+														<s:text name="upload.docDesc" />
+													</th>
+													<th width="30%">
+														<s:text name="upload.selectdoc" />
+													</th>
+													<th width="30%">
+														<s:text name="Delete" />
+													</th>
+												</tr>
+												</thead>
+												<tbody>
+												<s:iterator value="docuList" id="index" status="stat">
+												<tr>
+													<td class="formCon" style="text-align: center;">${index+1}
+												 		<s:hidden name="docId[%{index}]" id="vdocId" value="%{#index+1}"/>
+												 	</td>
+												 	<s:if test='!"null".equals(docTypeList)'>
+													<td class="formCon"  valign="top">
+														<s:select name="docTypeId[%{index}]" list="docTypeList" listKey="DOC_TYPE" listValue="DOC_NAME" cssClass="inputBoxS" headerKey="" headerValue="---Select---" />
+													</td>
+													</s:if>
+													<s:else>
+													<td class="formCon"  valign="top">
+														<s:select name="docTypeId[%{index}]" list="#{}"  cssClass="inputBoxS" headerKey="" headerValue="---Select---" />
+													</td>
+													</s:else>
+													<td >
+														<s:textarea name="docDesc[%{index}]"  rows="2" cols="70" />												 
+													</td>													
+													<td class="formCon">
+														<s:file name="upload"  cssClass="inputBox" id="upload"/>
+													</td>
+													<td class="formCon">
+														<s:if test='0!=(#stat.count-1)'>
+																<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteUpload('<s:property value="%{#stat.count-1}"/>')" />
+														</s:if>
+														
+													</td>
+												</tr>
+												</s:iterator>
+												</tbody>
+											</table>											
 										</div>
-									
+										<div class="boxcontent" align="center">
+											<input type="button"  value="Add More" class="btn btn-sm btn-info" onClick="addMorelc();" />
+										</div>
+										</div>
+										
+									</div>
 									
 									
 									</div>
@@ -312,155 +370,7 @@
 																</table>											
 															</div> 
 													</div>
-													<%-- <div class="boxcontent">
-														<div class="textfield" style="display:table;">
-															<div class="text txtB">
-																<s:text name="label.proposalNo" />
-															</div>
-															<div class="tbox">
-																<s:property value="proposalNo"/>
-															</div>
-														</div>
-														<div class="textfield" style="display:table;">
-																<div class="text txtB">
-																	<s:text name="label.cedingCompany" />
-																</div>
-																<div class="tbox">
-																	<s:property value="cedingCompany"/>
-																</div>
-															</div>
-														<div class="textfield" style="display:table;">
-																<div class="text txtB">
-																	<s:text name="label.reinsureName" />
-																</div>
-																<div class="tbox">
-																	<s:property value="cedingCompany"/>
-																</div>
-															</div>
-														<div class="textfield" style="display:table;">
-																<div class="text txtB">
-																	<s:text name="label.treatyNameType" />
-																</div>
-																<div class="tbox">
-																	<s:property value="treatyName"/>
-																</div>
-															</div>
-														<div class="textfield" id="shareOfferid">
-															<div class="text txtB">
-																<s:text name="label.shareOffer" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="shareOffered" id="shareOffered" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="writtenLineid">
-															<div class="text txtB">
-																<s:text name="label.written" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="writtenLine" id="writtenLine" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="brokerageid">
-															<div class="text txtB">
-																<s:text name="label.brokerage" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="brokerage" id="brokerage" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield"  id="writtendateid">
-															<div class="text txtB">
-																<s:text name="label.writtenvaliditydate" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="writtenvaliditydate" id="writtenvaliditydate" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield"  id="writtenremid">
-															<div class="text txtB">
-																<s:text name="label.writtenvalidityRemarks" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="writtenvalidityRemarks" id="writtenvalidityRemarks" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield"  id="proposedWLid">
-															<div class="text txtB">
-																<s:text name="label.proposedWL" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="proposedWL" id="proposedWL" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="signedLineid">
-															<div class="text txtB">
-																<s:text name="label.signedLine" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="signedLine" id="signedLine" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="proposedSLid">
-															<div class="text txtB">
-																<s:text name="label.proposedSL" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="proposedSL" id="proposedSL" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="reofferid">
-															<div class="text txtB">
-																<s:text name="label.reoffer" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="reoffer" id="reoffer" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="tqrBrokerageAmtid">
-															<div class="text txtB">
-																<s:text name="label.tqrBrokerageAmt" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="tqrBrokerageAmt" id="tqrBrokerageAmt" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														<div class="textfield" id="signedLineValidityid">
-															<div class="text txtB">
-																<s:text name="label.signedLineValidity" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="signedLineValidity" id="signedLineValidity" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														
-														<div class="textfield" id="signedLineRemarksid">
-															<div class="text txtB">
-																<s:text name="label.signedLineRemarks" />
-															</div> 
-															<div class="tbox">
-																<s:textfield name="signedLineRemarks" id="signedLineRemarks" cssClass="inputBox" cssStyle="text-align: right;"/>
-															</div>
-														</div>
-														
-														<div class="textfield" id="emailStatusid">
-															<div class="text txtB">
-																<s:text name="label.emailStatus" />
-															</div> 
-															<div class="tbox">
-																<s:property value="emailStatus"/>
-															</div>
-														</div>
-														<div class="textfield" id="previewsendmailid">
-															<div class="text txtB">
-																<s:text name="label.previewsendmail" />
-															</div> 
-															<div class="tbox">
-																<input type="button" value="Update" class="btn btn-sm btn-info"   onclick="FnUpdate('<s:property value="%{#stat.count-1}"/>')" />
-															</div>
-														</div>
-															<br class="clear"/>
-													</div> --%>
+													
 												</div>
 										</div>
 									
@@ -524,6 +434,85 @@ getStatuschange('<s:property value="newStatus"/>')
 function getStatuschange(val){
 	postFormRequest("${pageContext.request.contextPath}/getStatusChangePlacement.action?dropDown=statusChange", "statusChange", "placement");
 	
+}
+function addMorelc(){
+		var table = document.getElementById('lcDoctable');
+		var rowCount = table.rows.length;
+		var row = table.insertRow(rowCount);
+
+		var cell1 = row.insertCell(0)
+		var element1 = document.createElement("p");
+		element1.innerHTML = rowCount;
+   		cell1.appendChild(element1);
+   		cell1.setAttribute("align","center");
+		
+		cell = row.insertCell(1);
+		element = document.createElement("select");
+		element.name = "docTypeId["+(rowCount-1)+"]";
+		element.id = "docTypeId["+(rowCount-1)+"]";
+ 	element.className = "form-control inputBoxS";
+ 	
+		var objOption = document.createElement("option");
+    objOption.text = '---Select---';
+    objOption.value = '';
+    if(document.all && !window.opera){
+    	element.add(objOption);
+    }else{
+    	element.add(objOption, null);
+    }
+   	<s:iterator value='docTypeList'>
+			var objOption = document.createElement("option");
+			objOption.text = "<s:property value='DOC_TYPE' />".replace("&amp;", "&");
+			objOption.value = "<s:property value='DOC_NAME' />";
+			if(document.all && !window.opera){
+				element.add(objOption);
+				
+				
+			}else{
+				element.add(objOption, null);
+			}
+	</s:iterator>
+		cell.appendChild(element);
+		
+		cell = row.insertCell(2);
+		var element = document.createElement("textarea");
+		element.name = "docDesc["+(rowCount-1)+"]";
+		element.id = "docDesc["+(rowCount-1)+"]";
+		element.row="2";
+		element.cols="70";
+		cell.appendChild(element);
+		
+		cell = row.insertCell(3);
+		var element = document.createElement("input");
+		element.className = "inputBox";
+		element.name = "upload";
+		element.id = "upload";
+		element.type = "file";
+		cell.appendChild(element);
+		
+		
+		
+		cell = row.insertCell(4);
+		var element = document.createElement("input");
+		element.type = "checkbox";
+		element.id = "chk"+rowCount;
+		element.align = "right";
+		element.onclick = function () {deleteRow(this.id,this)};	
+	    cell.appendChild(element);
+}
+function deleteRow(id, el) {
+var decision = confirm("Row will be deleted. Do You Want to continue? ","");{
+if (decision==true){
+	while (el.parentNode && el.tagName.toLowerCase() != 'tr') {
+		el = el.parentNode;
+	}
+	if (el.parentNode && el.parentNode.rows.length > 1) {
+		el.parentNode.removeChild(el);
+	}
+} else {
+	document.getElementById(id).checked=false;
+}	   
+}
 }
 </script>		
 </body>

@@ -4488,6 +4488,9 @@ public String EditSection(){
 		bean.setSubProfit_center("");
 		//bean.setProposal_no("");
 	}
+	if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
+		dropDownController.getBouquetCedentBrokerInfo(bean);
+	}
 	} catch (Exception e) {
 		logger.debug("Exception @ {" + e + "}");
 

@@ -64,27 +64,6 @@ public List<Map<String, Object>> getPlacementInfoList(PlacementBean bean) {
 }
 
 public String attachFile(PlacementBean bean) {
-	try {
-		String filePath=bean.getFilePath();
-		
-		File tmpFile = new File(filePath);
-		if(!tmpFile.exists()){
-			tmpFile.mkdir();
-		}
-		final String orgFileName=bean.getUploadFileName();
-		Calendar cal = Calendar.getInstance();
-		String time = cal.get(Calendar.DATE)+"-"+(cal.get(Calendar.MONTH)+1)+"-"
-		+cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.HOUR)+cal.get(Calendar.MINUTE)+cal.get(Calendar.SECOND);
-		String ext = orgFileName.substring(orgFileName.lastIndexOf("."));
-		String fileName = orgFileName.substring(0, orgFileName.lastIndexOf("."))+"_"+time;
-		fileName = fileName + ext;
-		final File copyFile = new File(filePath+fileName);
-		
-		FileUtils.copyFile(bean.getUpload(), copyFile);
-		bean.setFileName(fileName);
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
 	return dao.attachFile(bean);
 }
 
@@ -98,6 +77,10 @@ public String deleteFile(PlacementBean bean) {
 
 public String downloadFile(PlacementBean bean) {
 	return dao.downloadFile(bean);
+}
+
+public void uploadDocument(PlacementBean bean) {
+	 dao.uploadDocument(bean) ; 
 }
 	
 }

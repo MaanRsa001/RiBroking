@@ -1,6 +1,9 @@
 package com.maan.dao;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -21,6 +24,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
@@ -108,12 +112,12 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			String query=getQuery("GET_PLACEMENT_NO_SEQ");
 			placementNo=this.mytemplate.queryForObject(query, String.class);
 			bean.setPlacementNo(placementNo);
-			
+			DeletePlacement(bean);
 			query=getQuery("INSERT_PLACEMENT_INFO");
 			for(int i=0;i<bean.getReinsSNo().size();i++) {
 				bean.setReinsurerId(bean.getReinsureName().get(i));
 				bean.setBrokerId(bean.getPlacingBroker().get(i));;
-				DeletePlacement(bean);
+				if(!"N".equals(bean.getDeleteStatus().get(i))) {
 					Object[] obj = new Object[15];
 					obj[0]=bean.getPlacementNo();
 					obj[1]=bean.getReinsSNo().get(i);
@@ -133,6 +137,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					logger.info("Query=>"+query);
 					logger.info("Args=>"+StringUtils.join(obj, ","));	
 					this.mytemplate.update(query,obj);
+				}
 					
 			}
 		} catch (Exception e) {
@@ -141,16 +146,23 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	}
 
 	private void DeletePlacement(PlacementBean bean) {
+		String query="";
+		int mailcount=0;
 		try {
-			String query=getQuery("DELETE_PLACEMENT_INFO");
-			Object[] obj=new Object[4];
+			Object[] obj=new Object[2];
 			obj[0]=bean.getBranchCode();
 			obj[1]=bean.getEproposalNo();
-			obj[2]=bean.getReinsurerId();
-			obj[3]=bean.getBrokerId();
+			query=getQuery("GET_PROPOSAL_MAIL_COUNT");
+			mailcount=this.mytemplate.queryForInt(query,obj);
+			if(mailcount==0) {
+			query=getQuery("DELETE_PLACEMENT_INFO");
+			
+			//obj[2]=bean.getReinsurerId();
+			//obj[3]=bean.getBrokerId();
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			this.mytemplate.update(query,obj);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -218,12 +230,14 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	public List<Map<String, Object>> getReinsurerInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		String query="";
+		int mailcount=0;
 		List<String> reinsSNo=new ArrayList<String>();
 		List<String> reinsureName=new ArrayList<String>();
 		List<String> placingBroker=new ArrayList<String>();
 		List<String> shareOffer=new ArrayList<String>();
 		List<String> mailStatus=new ArrayList<String>();
 		List<String> proposalNos=new ArrayList<String>();
+		List<String> deleteStatus=new ArrayList<String>();
 		try {
 			Object[] obj=new Object[2];
 			query=getQuery("GET_REINSURER_INFO_NOTIN");
@@ -236,6 +250,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			bean.setPlacementMode(list.get(0).get("PLACEMENT_MODE")==null?"":list.get(0).get("PLACEMENT_MODE").toString());
 			bean.setPlacementDisabled("Y");
 			}
+			query=getQuery("GET_PROPOSAL_MAIL_COUNT");
+			mailcount=this.mytemplate.queryForInt(query,obj);
 			if(StringUtils.isNotBlank(bean.getBouquetNo()) && "C".equals(bean.getPlacementMode())) {
 				query=getQuery("GET_REINSURER_INFO_BOUQUET_NOTIN");
 				obj[0]=bean.getBranchCode();
@@ -243,16 +259,24 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				logger.info("Query=>"+query);
 				logger.info("Args=>"+StringUtils.join(obj, ","));
 				list=this.mytemplate.queryForList(query, obj);
+				query=getQuery("GET_BOUQUET_MAIL_COUNT");
+				mailcount=this.mytemplate.queryForInt(query,obj);
 			}
 			if(!CollectionUtils.isEmpty(list)) {
 				for(int i=0;i<list.size();i++) {
 					Map<String,Object>map=list.get(i);
+					String mailstatus=map.get("MAIL_STATUS")==null?"":map.get("MAIL_STATUS").toString();
 					reinsSNo.add(map.get("SNO")==null?"":map.get("SNO").toString());
 					reinsureName.add(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					placingBroker.add(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
 					shareOffer.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
-					mailStatus.add(map.get("MAIL_STATUS")==null?"":map.get("MAIL_STATUS").toString());
+					mailStatus.add(mailstatus);
 					proposalNos.add(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
+					if(mailcount>0) {
+						deleteStatus.add("N");
+					}else {
+						deleteStatus.add("Y");
+					}
 				}
 				bean.setReinsSNo(reinsSNo);
 				bean.setReinsureName(reinsureName);
@@ -260,6 +284,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setShareOffer(shareOffer);
 				bean.setMailStatus(mailStatus);
 				bean.setProposalNos(proposalNos);
+				bean.setDeleteStatus(deleteStatus);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -351,7 +376,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 			query=getQuery("GET_PLACEMENT_STATUS_EDIT");
 			obj=new Object[4];
-			obj[0]=bean.getProposalNo();
+			obj[0]=bean.getEproposalNo();
 			obj[1]=bean.getBranchCode();
 			obj[2]=bean.getReinsurerId();
 			obj[3]=bean.getBrokerId(); 
@@ -412,9 +437,13 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		
 	}
 	public void updateStatus(PlacementBean bean,String status) {
+		String corresId="";
 		try {
-			String query=getQuery("INSERT_PLACEMENT_STATUS");
-			Object obj[]=new Object[15];
+			String query=getQuery("GET_PLACEMENT_NO_SEQ");
+			corresId=this.mytemplate.queryForObject(query, String.class);
+			bean.setCorresId(corresId);
+			 query=getQuery("INSERT_PLACEMENT_STATUS");
+			Object obj[]=new Object[16];
 			for(int i=0;i<bean.getProposalNos().size();i++) {
 			obj[0]=bean.getProposalNos().get(i);
 			obj[1]=bean.getProposalNos().get(i);;
@@ -431,6 +460,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			obj[12]=bean.getUpdateDate();
 			obj[13]="Y";
 			obj[14]=bean.getBranchCode();
+			obj[15]=bean.getCorresId();
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			this.mytemplate.update(query,obj);
@@ -878,39 +908,13 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 			
 			if(!CollectionUtils.isEmpty(list)) {
-				String sql=getQuery("GET_DOC_SEQUENCE");
-				String docId=this.mytemplate.queryForObject(sql, String.class);
-				bean.setDocId(StringUtils.isBlank(docId)?"0":docId);
-				query=getQuery("INSET_NOTIFY_ATTACHEMENT");
 				for(int  i=0;i<list.size();i++) {
 					Map<String,Object>map=list.get(i);
-					
 					bean.setBrokerId(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
 					bean.setReinsurerId(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					bean.setEproposalNo(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
-					Object[] obj = new Object[17];
-					obj[0]=bean.getDocId();
-					obj[1]=bean.getDocType();
-					obj[2]=map.get("SNO")==null?"":map.get("SNO").toString();
-					obj[3]=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
-					obj[4]=map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString();
-					obj[5]=bean.getEproposalNo();
-					obj[6]=map.get("CONTRACT_NO")==null?"":map.get("CONTRACT_NO").toString();
-					obj[7]=map.get("LAYER_NO")==null?"":map.get("LAYER_NO").toString();
-					obj[8]=map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString();
-					obj[9]=map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString();
-					obj[10]=bean.getReinsurerId();
-					obj[11]=bean.getBrokerId();
-					obj[12]=bean.getUploadFileName();
-					obj[13]=bean.getFileName();
-					obj[14]=bean.getFilePath();
-					obj[15]=bean.getBranchCode();
-					obj[16]=bean.getUserId();
-					logger.info("Query=>"+query);
-					logger.info("Args=>"+StringUtils.join(obj, ","));	
-					this.mytemplate.update(query,obj);
-				}
-				
+					insertDocdetails(bean);
+					}
 			}
 			
 					
@@ -1005,7 +1009,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			props.put("mail.smtp.host", SMTP_HOST_NAME);
 			props.put("mail.smtp.port", SMTP_PORT);
 			props.put("mail.smtp.starttls.enable", "true");
-			 props.put("mail.debug", "true");
+			props.put("mail.debug", "true");
+			props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 			Session session = null; 
 			if(SMTP_AUTH_PWD != null && !"".equals(SMTP_AUTH_PWD.trim())){
 				props.put("mail.smtp.auth", "true");
@@ -1054,6 +1059,69 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				String password = SMTP_AUTH_PWD;
 				return new PasswordAuthentication(username, password);
 			}
+	}
+	 public void insertDocdetails(PlacementBean bean) {
+		 
+		 try {
+			String filePath=bean.getFilePath();
+				
+				File tmpFile = new File(filePath);
+				if(!tmpFile.exists()){
+					tmpFile.mkdir();
+				}
+				String sql=getQuery("GET_DOC_SEQUENCE");
+				String docId=this.mytemplate.queryForObject(sql, String.class);
+				for(int i=0;i<bean.getDocTypeId().size();i++) {
+				final String orgFileName=bean.getUploadFileName().get(i);
+				Calendar cal = Calendar.getInstance();
+				String time = cal.get(Calendar.DATE)+"-"+(cal.get(Calendar.MONTH)+1)+"-"
+				+cal.get(Calendar.YEAR)+"_"+cal.get(Calendar.HOUR)+cal.get(Calendar.MINUTE)+cal.get(Calendar.SECOND);
+				String ext = orgFileName.substring(orgFileName.lastIndexOf("."));
+				String fileName = orgFileName.substring(0, orgFileName.lastIndexOf("."))+"_"+time;
+				fileName = fileName + ext;
+				final File copyFile = new File(filePath+fileName);
+				
+				FileUtils.copyFile(bean.getUpload().get(i), copyFile);
+				bean.setFileName(fileName);
+				
+				
+				//bean.setDocId(StringUtils.isBlank(docId)?"1":docId);
+				String query=getQuery("INSET_NOTIFY_ATTACHEMENT");
+					
+					
+					Object[] obj = new Object[12];
+					obj[0]=StringUtils.isBlank(docId)?"1":docId;
+					obj[1]=bean.getDocTypeId().get(i);
+					obj[2]=bean.getEproposalNo();
+					obj[3]=bean.getReinsurerId();
+					obj[4]=bean.getBrokerId();
+					obj[5]=bean.getUploadFileName().get(i);
+					obj[6]=bean.getFileName();
+					obj[7]=bean.getFilePath();
+					obj[8]=bean.getBranchCode();
+					obj[9]=bean.getUserId();
+					obj[10]=StringUtils.isBlank(bean.getCorresId())?"":bean.getCorresId();
+					obj[11]=bean.getDocDesc().get(i);
+					logger.info("Query=>"+query);
+					logger.info("Args=>"+StringUtils.join(obj, ","));	
+					this.mytemplate.update(query,obj);
+				}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+	 }
+
+
+	public void uploadDocument(PlacementBean bean) {
+		for(int i=0;i<bean.getProposalNos().size();i++) {
+			bean.setBrokerId(bean.getBrokerIds().get(i));
+			bean.setReinsurerId(bean.getReinsurerIds().get(i));
+			bean.setEproposalNo(bean.getProposalNos().get(i));
+			insertDocdetails(bean);
+		}
+		
 	}
 }
 	

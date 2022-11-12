@@ -19,6 +19,7 @@ import com.maan.bean.PlacementBean;
 import com.maan.common.util.DropDownControllor;
 import com.maan.common.util.LogUtil;
 import com.maan.service.PlacementService;
+import com.maan.service.UploadService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -89,6 +90,10 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	}
 	public List<Map<String,Object>>getExistingAttachList(){
 		return service.getExistingAttachList(bean);
+	}
+	
+	public List<Map<String,Object>>getDocTypeList(){
+		return new UploadService().getDocType(branchCode,"12","PL");
 	}
 	public String init() {
 		String forward="placement";
@@ -230,6 +235,10 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public String updateInfo() {
 		//bean.setCurrentStatus("O");
 		//service.proposalInfo(bean);
+		List<Integer> docList=new ArrayList<Integer>();
+		for(int i=0;i<1;i++)
+			docList.add(i);
+		bean.setDocuList(docList);
 		bean.setPlacementeditInfo(service.editPlacingDetails(bean));
 		return "placementStatus";
 		 
@@ -239,6 +248,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		validationStatus();
 		if(!hasActionErrors()) {
 			service.updatePlacement(bean);
+			bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
+			service.uploadDocument(bean);
 			bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 			forward= "placementList";
 		}else {
@@ -321,5 +332,11 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			logger.debug("Exception @ { " + e + " } ");
 		}
 		return "stream";
+	}
+	private String uploadDoc() {
+		bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
+		String result=service.attachFile(bean);
+		updateInfo();
+		return "placementStatus";
 	}
 }

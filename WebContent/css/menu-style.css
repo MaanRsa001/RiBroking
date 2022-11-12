@@ -2,7 +2,7 @@
 	LEVEL ONE
 */
 ul.dropdown                         { position: relative; z-index: 1; display: block; font-size: 12px;}
-ul.dropdown li                      { font-weight: bold; float: left; zoom: 1; background: #004499; border-left: 1px solid #ffffff; width: 180px;display: block; transition: background-color 0.5s ease;}
+ul.dropdown li                      { font-weight: bold; float: left; zoom: 1; background: #167ab3; border-left: 1px solid #ffffff; width: 180px;display: block; transition: background-color 0.5s ease;}
 ul.dropdown a:hover		            { color: #ffffff; }
 ul.dropdown a:active                { color: #ffa500; }
 ul.dropdown li a                    { display: block; padding: 10px; color: #ffffff;}
@@ -16,7 +16,7 @@ ul.dropdown li.hover a              { color: #ffffff;}
 	LEVEL TWO
 */
 ul.dropdown ul 						{ width: 220px; visibility: hidden; position: absolute; top: 100%; left: 0; }
-ul.dropdown ul li 					{ font-weight: normal; background: #004499; color: #ffffff;
+ul.dropdown ul li 					{ font-weight: normal; background: #167ab3; color: #ffffff;
 									  border-bottom: 1px solid #000000; float: none; border-left: 1px solid #ffffff; }
 									  
                                     /* IE 6 & 7 Needs Inline Block */

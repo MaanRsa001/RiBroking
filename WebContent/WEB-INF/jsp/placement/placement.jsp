@@ -356,12 +356,14 @@
 																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);"/>
 																	</td>
 																	<td>
-																	<s:property value="#list.MAIL_STATUS"/>
+																	<s:property value="mailStatus[#stat.count-1]"/>
+																	<s:hidden name="mailStatus[%{#stat.count-1}]"/>
 																	</td>
 																	
 																	<td align="center">
-																		<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
-																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count-1}"/>')" />
+																		<s:hidden name="deleteStatus[%{#stat.count-1}]"/>
+																		<s:if test='!"N".equals(deleteStatus[#stat.count-1])'>
+																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count}"/>')" />
 																		</s:if>
 																	</td>
 																</tr>												
@@ -606,16 +608,26 @@ var table = document.getElementById(tableID);
 			cell4.appendChild(element2);
 			
 			var cell5 = row.insertCell(4);
-			
-			
+			var element7 = document.createElement("input");
+			element7.type = "hidden";
+			element7.name = "deleteStatus["+(rowCount-1)+"]";
+      		element7.id = "deleteStatus"+(rowCount-1);
+      		element7.value='';
+      		cell5.appendChild(element7);
 			var cell6 = row.insertCell(5);
 			cell6.setAttribute("align","center");
 			var element6 = document.createElement("input");
 			element6.type = "button";
 			element6.value="Delete";
-			element6.setAttribute("onclick", "disableForm(this.form,false,'');deleteRow('"+(rowCount-1)+"')");
+			element6.setAttribute("onclick", "disableForm(this.form,false,'');deleteRow('"+(rowCount)+"')");
 			element6.className="btn btn-sm btn-danger"
+			var element7 = document.createElement("input");
+			element7.type = "hidden";
+			element7.name = "deleteStatus["+(rowCount-1)+"]";
+      		element7.id = "deleteStatus"+(rowCount-1);
+      		element7.value='';
 			cell6.appendChild(element6);
+			cell6.appendChild(element7);
 			$('.select1').select2({ });	 
 }
 function createreinsurerCell(cell, rowCount){
@@ -679,15 +691,12 @@ function populateBroker(objSelect){
 	 postFormRequest("${pageContext.request.contextPath}/getreinsurerInfoPlacement.action?mode=delete&deleteId="+val+"&dropDown=reinsurerid", "reinsurerid", "placement");
  }
 function deleteRow(val){
-	if(val==0){
-		alert("First row can't be deleted");
-	}
-	else{
+	
 		var status=confirm("Do you want to delete specified row");
 		if(status){
 			postFormRequest("${pageContext.request.contextPath}/removeRowPlacement.action?mode=delete&deleteId="+val+"&dropDown=reinsurerid", "reinsurerid", "placement");
-			}
 		}
+		
 }
 function FnCancel(){
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';

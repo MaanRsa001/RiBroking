@@ -174,10 +174,7 @@ function worker() {
     			<tiles:insertAttribute name="menu" />
     		</div>
     		<div class="tablerow contents" style="margin-top: 2px;">
-    			<div class="boxcontent" style="overflow: auto; position: relative; height: 68vh; padding: 5px; top: 0; bottom: 25px;">
     			<tiles:insertAttribute name="body"  />
-    			<br class="clear"/>
-    			</div>
     		</div>
     		<div class="tablerow" style="margin-top: 2px;" id="footer">    			
     			<tiles:insertAttribute name="footer" />    			

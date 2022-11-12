@@ -67,6 +67,7 @@ gap:20px;
 <s:set var="elayerInfo" value='%{layerInfo}'/>
 <s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 <s:set var="dislayer" value="%{baseLayer!=null && !''.equals(baseLayer)}"/>
+<s:set var="baselayer" value='%{!(("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no)))}'/>
 <div class="table0" style="width: 100%; margin: 0 auto;">
 	<div class="tablerow">
 		<div class="table1" style="width: 100%; margin: 0 auto; background-color: #E5E5E5; ">
@@ -315,7 +316,7 @@ gap:20px;
 															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='true' onchange="getPaypartner('paypartid');"/>
 														</s:if>
 														<s:else>
-															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getPaypartner('paypartid');"/>
+															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer)  || (#baselayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getPaypartner('paypartid');"/>
 														</s:else>
 														<%-- <s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" /> --%>
 															 <span class="input-group-addon">
@@ -336,12 +337,12 @@ gap:20px;
 													<s:if test="RenewalMode != null">
 														<s:if test="layerProposalNo == null || layerProposalNo == ''">
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:if>
 														<s:else>
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate" cssClass="inputBox"  onkeyup="validateSpecialChars(this)" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate" cssClass="inputBox"  onkeyup="validateSpecialChars(this)" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:else>
 													</s:if>
@@ -354,13 +355,13 @@ gap:20px;
 															</s:if>
 															<s:else>
 																<div class="">
-																<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) ?true:false}' />
+																<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 																</div>																
 															</s:else>
 														</s:if>
 														<s:else>
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:else>
 													</s:else>													
@@ -373,12 +374,12 @@ gap:20px;
 												<div class="tbox">
 													<s:if test="layerProposalNo == null || layerProposalNo == ''">
 														<div class="">
-														<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();"/>
+														<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
 														</div>														
 													</s:if>
 													<s:else>
 													<div class="">
-													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();"/>
+													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
 													 </div>
 													</s:else>
 												</div>
@@ -388,7 +389,7 @@ gap:20px;
 													<s:text name="label.uwYearFrom" /> &nbsp; <sup style="color:red;">#</sup>
 												</div>
 												<div class="tbox" id="yearId">
-													<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) ||(contNo != "" && contNo != null)?true:false}' />
+													<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer) ||(contNo != "" && contNo != null)?true:false}' />
 												</div>
 											</div>
 											<div class="textfield">
@@ -396,7 +397,7 @@ gap:20px;
 													<s:text name="label.uwYearto" /> &nbsp; <sup style="color:red;">#</sup>
 												</div>
 												<div class="tbox" id="yearIdto">
-													<s:select list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) ||(contNo != "" && contNo != null)?true:false}' />
+													<s:select list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer) ||(contNo != "" && contNo != null)?true:false}' />
 												</div>
 											</div>
 											

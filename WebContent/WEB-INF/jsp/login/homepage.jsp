@@ -70,7 +70,7 @@
                             </tr>
                             <tr>
                                 <td align="left">
-                                <img src="${pageContext.request.contextPath}/images/Grips Logo 5a.png" border="0" width="230" height="71">
+                                <img src="${pageContext.request.contextPath}/images/TQR_Logo.png" border="0" width="230" height="71">
                                 </td>
                                 <td class="textbold" colspan="2" align="center">
                                     <h2><font color = "#004094" style="font-family: Arial; margin: 0px; font-weight:bold; font-size: 50px;"><s:text name="application.name" /></font></h2>
