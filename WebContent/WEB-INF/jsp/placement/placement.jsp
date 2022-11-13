@@ -347,13 +347,13 @@
 																		<s:hidden name="proposalNos[%{#stat.count-1}]" id="proposalNos[%{#stat.count-1}]"></s:hidden>
 																	</td>
 																	<td>
-																		<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  />
+																		<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
-																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  />
+																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
-																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);"/>
+																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
 																	<s:property value="mailStatus[#stat.count-1]"/>
@@ -538,9 +538,9 @@
 							<div class="boxcontent" align="center">
 								<button type="submit" class="btn btn-sm btn-danger" onclick="FnCancel();">Cancel</button>
 								<s:if test='"placing".equals(mode)'>
-								<input type="button"  value="Save"  class="btn btn-sm btn-primary"  onclick="FnSave('Save')" />	
-								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="FnNext('')" />	
-								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="FnNext('Submit')" />
+								<input type="button"  value="Save"  class="btn btn-sm btn-primary"  onclick="disableForm(this.form,false,'');FnSave('Save')" />	
+								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FnNext('')" />	
+								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="disableForm(this.form,false,'');FnNext('Submit')" />
 								</s:if>											
 							</div>
 						</div>	
@@ -558,7 +558,7 @@
 						<s:hidden name="prePerilVal" id="prePerilVal"></s:hidden>
 						<s:hidden name="baseProposalNo" id="baseProposalNo"></s:hidden>
 						<s:hidden name="mailRegards" id="mailRegards"></s:hidden>
-						<s:hidden name="docType" id="docType" value="mailattach"></s:hidden>
+						
 						<s:hidden name="docId" id="docId"></s:hidden>
 						<s:hidden name="fileName" id="fileName"></s:hidden>
 					</div>	
@@ -791,6 +791,58 @@ function functionview(id){
 	}
 	var URL ='<%=request.getContextPath()%>/ViewModeCeding?Mode=PopUp&ceddingcompany='+cedding;
 	postRequest(URL, 'companyAjaxId');	 
+}
+function addMorelc(){
+	var table = document.getElementById('lcDoctable');
+	var rowCount = table.rows.length;
+	var row = table.insertRow(rowCount);
+
+	
+	
+	cell = row.insertCell(0);
+	var element = document.createElement("input");
+	element.className = "inputBox";
+	element.name = "upload";
+	element.id = "upload";
+	element.type = "file";
+	var element1 = document.createElement("input");
+	element1.type = "hidden";
+	element1.name = "docDesc["+(rowCount-1)+"]";
+	element1.id = "docDesc"+(rowCount-1);
+	element1.value = "Mail Template";
+	
+	var element2 = document.createElement("input");
+	element2.type = "hidden";
+	element2.name = "docTypeId["+(rowCount-1)+"]";
+	element2.id = "docTypeId"+(rowCount-1);
+	element1.value = "MA";
+	cell.appendChild(element);
+	cell.appendChild(element1);
+	cell.appendChild(element2);
+	
+	
+	
+	cell = row.insertCell(1);
+	var element = document.createElement("input");
+	element.type = "checkbox";
+	element.id = "chk"+rowCount;
+	element.align = "right";
+	element.onclick = function () {deleteRow1(this.id,this)};	
+    cell.appendChild(element);
+}
+function deleteRow1(id, el) {
+var decision = confirm("Row will be deleted. Do You Want to continue? ","");{
+if (decision==true){
+while (el.parentNode && el.tagName.toLowerCase() != 'tr') {
+	el = el.parentNode;
+}
+if (el.parentNode && el.parentNode.rows.length > 1) {
+	el.parentNode.removeChild(el);
+}
+} else {
+document.getElementById(id).checked=false;
+}	   
+}
 }
 </script>	
 	

@@ -296,9 +296,15 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	public List<Map<String, Object>> editPlacingDetails(PlacementBean bean) {
 		List<Map<String,Object>>result=null;
 		List<Map<String,Object>>list=null;
+		List<String> snos=new ArrayList<String>();
+		List<String> bouquetNos=new ArrayList<String>();
+		List<String>baseproposalNos=new ArrayList<String>();
 		List<String> reinsurerIds=new ArrayList<String>();
 		List<String> brokerIds=new ArrayList<String>();
 		List<String>proposalNos=new ArrayList<String>();
+		List<String> reinsurerNames=new ArrayList<String>();
+		List<String> brokerNames=new ArrayList<String>();
+		List<String>cedingCompanys=new ArrayList<String>();
 		List<String>shareOffered=new ArrayList<String>();
 		List<String>writtenLine=new ArrayList<String>();
 		List<String>brokerage=new ArrayList<String>();
@@ -312,6 +318,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<String>signedLineValidity=new ArrayList<String>();
 		List<String>signedLineRemarks=new ArrayList<String>();
 		List<String>emailStatus=new ArrayList<String>();
+		List<String>psignedLine=new ArrayList<String>();
+		
 		try {
 			String query="";
 			Object[]obj=null;
@@ -324,9 +332,15 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			if(!CollectionUtils.isEmpty(result)) {
 				for(int i=0;i<result.size();i++) {
 					Map<String,Object>map=result.get(i);
+					snos.add(map.get("SNO")==null?"":map.get("SNO").toString());
+					bouquetNos.add(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString());
+					baseproposalNos.add(map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString());
 					reinsurerIds.add(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					brokerIds.add(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
 					proposalNos.add(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
+					reinsurerNames.add(map.get("REINSURER_NAME")==null?"":map.get("REINSURER_NAME").toString());
+					brokerNames.add(map.get("BROKER_NAME")==null?"":map.get("BROKER_NAME").toString());
+					cedingCompanys.add(map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString());
 					shareOffered.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
 					writtenLine.add(map.get("SHARE_WRITTEN")==null?"":map.get("SHARE_WRITTEN").toString());
 					brokerage.add(map.get("BROKERAGE_PER")==null?"":map.get("BROKERAGE_PER").toString());
@@ -334,6 +348,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					writtenvalidityRemarks.add(map.get("WRITTEN_LINE_REMARKS")==null?"":map.get("WRITTEN_LINE_REMARKS").toString());
 					proposedWL.add(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":map.get("SHARE_PROPOSAL_WRITTEN").toString());
 					signedLine.add(map.get("SHARE_SIGNED")==null?"":map.get("SHARE_SIGNED").toString());
+					psignedLine.add(map.get("SHARE_SIGNED")==null?"":map.get("SHARE_SIGNED").toString());
 					proposedSL.add(map.get("SHARE_PROPOSED_SIGNED")==null?"":map.get("SHARE_PROPOSED_SIGNED").toString());
 					reoffer.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
 					tqrBrokerageAmt.add(map.get("TQR_BROKERAGE_AMT")==null?"":map.get("TQR_BROKERAGE_AMT").toString());
@@ -341,7 +356,13 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					signedLineRemarks.add(map.get("SHARE_LINE_REMARKS")==null?"":map.get("SHARE_LINE_REMARKS").toString());
 					emailStatus.add(map.get("MAIL_STATUS")==null?"":map.get("MAIL_STATUS").toString());
 				}
+				bean.setSnos(snos);
+				bean.setBaseproposalNos(baseproposalNos);
+				bean.setBouquetNos(bouquetNos);
 				bean.setReinsurerIds(reinsurerIds);
+				bean.setReinsurerNames(reinsurerNames);
+				bean.setBrokerNames(brokerNames);
+				bean.setCedingCompanys(cedingCompanys);
 				bean.setBrokerIds(brokerIds);
 				bean.setProposalNos(proposalNos);
 				bean.setShareOffered(shareOffered);
@@ -357,22 +378,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setSignedLineValidity(signedLineValidity);
 				bean.setSignedLineRemarks(signedLineRemarks);
 				bean.setEmailStatus(emailStatus);
-				/*bean.setReinsurerId(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
-				bean.setBrokerId(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
-				bean.setShareOffered(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
-				bean.setWrittenLine(map.get("SHARE_WRITTEN")==null?"":map.get("SHARE_WRITTEN").toString());
-				bean.setBrokerage(map.get("BROKERAGE")==null?"":map.get("BROKERAGE").toString());
-				bean.setWrittenvaliditydate(map.get("WRITTEN_LINE_VALIDITY")==null?"":map.get("WRITTEN_LINE_VALIDITY").toString());
-				bean.setWrittenvalidityRemarks(map.get("WRITTEN_LINE_REMARKS")==null?"":map.get("WRITTEN_LINE_REMARKS").toString());
-				bean.setProposedWL(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":map.get("SHARE_PROPOSAL_WRITTEN").toString());
-				bean.setSignedLine(map.get("SHARE_SIGNED")==null?"":map.get("SHARE_SIGNED").toString());
-				bean.setProposedSL(map.get("SHARE_PROPOSED_SIGNED")==null?"":map.get("SHARE_PROPOSED_SIGNED").toString());
-				bean.setReoffer(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
-				bean.setTqrBrokerageAmt(map.get("TQR_BROKERAGE_AMT")==null?"":map.get("TQR_BROKERAGE_AMT").toString());
-				bean.setSignedLineValidity(map.get("SHARE_LINE_VALIDITY")==null?"":map.get("SHARE_LINE_VALIDITY").toString());
-				bean.setSignedLineRemarks(map.get("SHARE_LINE_REMARKS")==null?"":map.get("SHARE_LINE_REMARKS").toString());
-				bean.setEmailStatus(map.get("EMAIL_STATUS")==null?"":map.get("EMAIL_STATUS").toString());
-			}*/
+				bean.setPsignedLine(psignedLine);
 			}
 			query=getQuery("GET_PLACEMENT_STATUS_EDIT");
 			obj=new Object[4];
@@ -385,18 +391,18 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 			if(!CollectionUtils.isEmpty(list)) {
 				Map<String,Object>map=list.get(0);
-				bean.setEmailBy(map.get("EMAIL_BY")==null?"":map.get("EMAIL_BY").toString());
+				//bean.setEmailBy(map.get("EMAIL_BY")==null?"":map.get("EMAIL_BY").toString());
 				bean.setCurrentStatus(map.get("NEW_STATUS")==null?"":map.get("NEW_STATUS").toString());
-				if(StringUtils.isBlank(bean.getNewStatus()))
-				bean.setNewStatus(map.get("NEW_STATUS")==null?"":map.get("NEW_STATUS").toString());
-				bean.setCedentCorrespondent(map.get("CEDENT_CORRESPONDENCE")==null?"":map.get("CEDENT_CORRESPONDENCE").toString());
-				bean.setReinsurerCorrespondent(map.get("REINSURER_CORRESPONDENCE")==null?"":map.get("REINSURER_CORRESPONDENCE").toString());
-				bean.setTqrCorrespondent(map.get("TQR_CORRESPONDENCE")==null?"":map.get("TQR_CORRESPONDENCE").toString());
-				bean.setUpdateDate(map.get("UPDATE_DATE")==null?"":map.get("UPDATE_DATE").toString());
+				//bean.setCedentCorrespondent(map.get("CEDENT_CORRESPONDENCE")==null?"":map.get("CEDENT_CORRESPONDENCE").toString());
+				//bean.setReinsurerCorrespondent(map.get("REINSURER_CORRESPONDENCE")==null?"":map.get("REINSURER_CORRESPONDENCE").toString());
+				//bean.setTqrCorrespondent(map.get("TQR_CORRESPONDENCE")==null?"":map.get("TQR_CORRESPONDENCE").toString());
+				//bean.setUpdateDate(map.get("UPDATE_DATE")==null?"":map.get("UPDATE_DATE").toString());
 				
 			}else {
+				if(StringUtils.isBlank(bean.getNewStatus())) {
 				bean.setCurrentStatus(StringUtils.isBlank(bean.getSearchStatus())?"O":bean.getSearchStatus());
-				bean.setNewStatus(bean.getCurrentStatus());
+				//bean.setNewStatus(bean.getCurrentStatus());
+				}
 			}
 			
 		}catch (Exception e) {
@@ -422,7 +428,11 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			obj[7]=bean.getSignedLineRemarks().get(i);
 			obj[8]=bean.getProposedSL().get(i);
 			obj[9]=bean.getBrokerage().get(i);
-			obj[10]=StringUtils.isBlank(bean.getReoffer().get(i))?bean.getShareOffered().get(i):bean.getReoffer().get(i);
+			if("RO".equalsIgnoreCase(bean.getNewStatus())) {
+				obj[10]=bean.getReoffer().get(i);
+			}else {
+				obj[10]=bean.getShareOffered().get(i);
+			}
 			obj[11]=bean.getProposalNos().get(i);
 			obj[12]=bean.getReinsurerIds().get(i);
 			obj[13]=bean.getBrokerIds().get(i);
@@ -443,27 +453,31 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			corresId=this.mytemplate.queryForObject(query, String.class);
 			bean.setCorresId(corresId);
 			 query=getQuery("INSERT_PLACEMENT_STATUS");
-			Object obj[]=new Object[16];
+			Object obj[]=new Object[19];
 			for(int i=0;i<bean.getProposalNos().size();i++) {
-			obj[0]=bean.getProposalNos().get(i);
-			obj[1]=bean.getProposalNos().get(i);;
-			obj[2]=bean.getReinsurerIds().get(i);
-			obj[3]=bean.getBrokerIds().get(i);
-			obj[4]=bean.getReinsurerIds().get(i);
-			obj[5]=bean.getBrokerIds().get(i);
-			obj[6]=bean.getEmailBy();
-			obj[7]=bean.getCurrentStatus();
-			obj[8]=StringUtils.isBlank(bean.getNewStatus())?status:bean.getNewStatus();
-			obj[9]=bean.getCedentCorrespondent();
-			obj[10]=bean.getReinsurerCorrespondent();
-			obj[11]=bean.getTqrCorrespondent();
-			obj[12]=bean.getUpdateDate();
-			obj[13]="Y";
-			obj[14]=bean.getBranchCode();
-			obj[15]=bean.getCorresId();
-			logger.info("Query=>"+query);
-			logger.info("Args=>"+StringUtils.join(obj, ","));
-			this.mytemplate.update(query,obj);
+				obj[0]=bean.getSnos().get(i);
+				obj[1]=bean.getBouquetNos().get(i);
+				obj[2]=bean.getBaseproposalNos().get(i);
+				obj[3]=bean.getProposalNos().get(i);
+				obj[4]=bean.getProposalNos().get(i);
+				obj[5]=bean.getReinsurerIds().get(i);
+				obj[6]=bean.getBrokerIds().get(i);
+				obj[7]=bean.getReinsurerIds().get(i);
+				obj[8]=bean.getBrokerIds().get(i);
+				obj[9]=bean.getEmailBy();
+				obj[10]=bean.getCurrentStatus();
+				obj[11]=StringUtils.isBlank(bean.getNewStatus())?status:bean.getNewStatus();
+				obj[12]=bean.getCedentCorrespondent();
+				obj[13]=bean.getReinsurerCorrespondent();
+				obj[14]=bean.getTqrCorrespondent();
+				obj[15]=bean.getUpdateDate();
+				obj[16]="Y";
+				obj[17]=bean.getBranchCode();
+				obj[18]=bean.getCorresId();
+				
+				logger.info("Query=>"+query);
+				logger.info("Args=>"+StringUtils.join(obj, ","));
+				this.mytemplate.update(query,obj);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -485,7 +499,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			Map<String,Object>map=result.get(0);
 			bean.setMailSubject(map.get("MAIL_SUBJECT")==null?"":map.get("MAIL_SUBJECT").toString());
 			bean.setMailBody(map.get("MAIL_BODY")==null?"":map.get("MAIL_BODY").toString());
+			if(StringUtils.isBlank(bean.getMailTo()))
 			bean.setMailTo(map.get("EMAIL_TO")==null?"":map.get("EMAIL_TO").toString());
+			if(StringUtils.isBlank(bean.getMailCC()))
 			bean.setMailCC(map.get("EMAIL_CC")==null?"":map.get("EMAIL_CC").toString());
 			bean.setMailRegards(map.get("MAIL_REGARDS")==null?"":map.get("MAIL_REGARDS").toString());
 			
@@ -637,7 +653,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				updateStatus(bean,"P");
 			}
 			updateMailDetails(bean,status);
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -717,6 +733,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
 	private void insertMailDetails(PlacementBean bean) {
 		String query="";
+		List<String> snos=new ArrayList<String>();
+		List<String> bouquetNos=new ArrayList<String>();
+		List<String>baseproposalNos=new ArrayList<String>();
 		List<String> reinsurerIds=new ArrayList<String>();
 		List<String> brokerIds=new ArrayList<String>();
 		List<String>proposalNos=new ArrayList<String>();
@@ -733,17 +752,22 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			if(!CollectionUtils.isEmpty(list)) {
 				for(int  i=0;i<list.size();i++) {
 					Map<String,Object>map=list.get(i);
-					
+					bean.setSno(map.get("SNO")==null?"":map.get("SNO").toString());
+					bean.setBouquetNo(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString());
+					bean.setBaseProposalNo(map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString());
 					bean.setBrokerId(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
 					bean.setReinsurerId(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					bean.setEproposalNo(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
+					snos.add(bean.getSno());
+					bouquetNos.add(bean.getBouquetNo());
+					baseproposalNos.add(bean.getBaseProposalNo());
 					reinsurerIds.add(bean.getReinsurerId());
 					brokerIds.add(bean.getBrokerId());
 					proposalNos.add(bean.getEproposalNo());
 					Object[] obj = new Object[19];
-					obj[0]=map.get("SNO")==null?"":map.get("SNO").toString();
-					obj[1]=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
-					obj[2]=map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString();
+					obj[0]=bean.getSno();
+					obj[1]=bean.getBouquetNo();
+					obj[2]=bean.getBaseProposalNo();
 					obj[3]=bean.getEproposalNo();
 					obj[4]=map.get("CONTRACT_NO")==null?"":map.get("CONTRACT_NO").toString();
 					obj[5]=map.get("LAYER_NO")==null?"":map.get("LAYER_NO").toString();
@@ -764,6 +788,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					logger.info("Args=>"+StringUtils.join(obj, ","));	
 					this.mytemplate.update(query,obj);
 				}
+				bean.setSnos(snos);
+				bean.setBouquetNos(bouquetNos);
+				bean.setBaseproposalNos(baseproposalNos);
 				bean.setReinsurerIds(reinsurerIds);
 				bean.setBrokerIds(brokerIds);
 				bean.setProposalNos(proposalNos);
@@ -910,6 +937,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			if(!CollectionUtils.isEmpty(list)) {
 				for(int  i=0;i<list.size();i++) {
 					Map<String,Object>map=list.get(i);
+					bean.setSno(map.get("SNO")==null?"":map.get("SNO").toString());
+					bean.setBouquetNo(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString());
+					bean.setBaseProposalNo(map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString());
 					bean.setBrokerId(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
 					bean.setReinsurerId(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					bean.setEproposalNo(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
@@ -1004,13 +1034,15 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
     	SMTP_AUTH_USER = user;
     	SMTP_AUTH_PWD = pwd;
     	try{
-	    	Properties props = new Properties();
-	    	props.setProperty("mail.transport.protocol", "smtp");
-			props.put("mail.smtp.host", SMTP_HOST_NAME);
-			props.put("mail.smtp.port", SMTP_PORT);
-			props.put("mail.smtp.starttls.enable", "true");
-			props.put("mail.debug", "true");
-			props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+    		
+    		
+    		 Properties props = System.getProperties();
+    		 props.setProperty("mail.smtp.host", SMTP_HOST_NAME);
+    		 props.put("mail.smtp.port", SMTP_PORT);
+    		 props.put("mail.smtp.starttls.enable", "true");
+    		 props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+    		 props.put("mail.debug", "true");
+	    	
 			Session session = null; 
 			if(SMTP_AUTH_PWD != null && !"".equals(SMTP_AUTH_PWD.trim())){
 				props.put("mail.smtp.auth", "true");
@@ -1021,7 +1053,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				session = Session.getInstance(props);
 			}
 			session.setDebug(false);
+			
 			Message msg1 = new MimeMessage(session);
+			
 			InternetAddress addressFrom = new InternetAddress(SMTP_MAIL_FROM, SMTP_SHORT_ADDRESS);
 			msg1.setFrom(addressFrom);
 			if(toAddress != null && toAddress.length>0){
@@ -1044,10 +1078,15 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			
 			System.out.println(msg1);
 			logger.info("Mail msg"+msg1);
-			Transport.send(msg1);
+			Transport transport = session.getTransport("smtp");
+            transport.connect(SMTP_HOST_NAME, Integer.parseInt(SMTP_PORT),SMTP_AUTH_USER, SMTP_AUTH_PWD);
+            transport.sendMessage(msg1, msg1.getAllRecipients());
 			status="Success";
+			System.out.println("Mail successfully sent");
 		}catch(Exception e){
-			System.out.println(e);
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			System.out.println("Mail successfully Not Senrsent");
 			status="Failed";
 		}
     	logger.info("Exit sendResponseMail");
@@ -1063,7 +1102,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	 public void insertDocdetails(PlacementBean bean) {
 		 
 		 try {
-			String filePath=bean.getFilePath();
+			 if(bean.getUpload()!=null) {
+				 String filePath=bean.getFilePath();
 				
 				File tmpFile = new File(filePath);
 				if(!tmpFile.exists()){
@@ -1089,23 +1129,27 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				String query=getQuery("INSET_NOTIFY_ATTACHEMENT");
 					
 					
-					Object[] obj = new Object[12];
+					Object[] obj = new Object[15];
 					obj[0]=StringUtils.isBlank(docId)?"1":docId;
 					obj[1]=bean.getDocTypeId().get(i);
-					obj[2]=bean.getEproposalNo();
-					obj[3]=bean.getReinsurerId();
-					obj[4]=bean.getBrokerId();
-					obj[5]=bean.getUploadFileName().get(i);
-					obj[6]=bean.getFileName();
-					obj[7]=bean.getFilePath();
-					obj[8]=bean.getBranchCode();
-					obj[9]=bean.getUserId();
-					obj[10]=StringUtils.isBlank(bean.getCorresId())?"":bean.getCorresId();
-					obj[11]=bean.getDocDesc().get(i);
+					obj[2]=bean.getSno();
+					obj[3]=bean.getBouquetNo();
+					obj[4]=bean.getBaseProposalNo();
+					obj[5]=bean.getEproposalNo();
+					obj[6]=bean.getReinsurerId();
+					obj[7]=bean.getBrokerId();
+					obj[8]=bean.getUploadFileName().get(i);
+					obj[9]=bean.getFileName();
+					obj[10]=bean.getFilePath();
+					obj[11]=bean.getBranchCode();
+					obj[12]=bean.getUserId();
+					obj[13]=StringUtils.isBlank(bean.getCorresId())?"":bean.getCorresId();
+					obj[14]=bean.getDocDesc().get(i);
 					logger.info("Query=>"+query);
 					logger.info("Args=>"+StringUtils.join(obj, ","));	
 					this.mytemplate.update(query,obj);
 				}
+			 }
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1116,6 +1160,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
 	public void uploadDocument(PlacementBean bean) {
 		for(int i=0;i<bean.getProposalNos().size();i++) {
+			bean.setSno(bean.getSnos().get(i));
+			bean.setBouquetNo(bean.getBouquetNos().get(i));
+			bean.setBaseProposalNo(bean.getBaseproposalNos().get(i));
 			bean.setBrokerId(bean.getBrokerIds().get(i));
 			bean.setReinsurerId(bean.getReinsurerIds().get(i));
 			bean.setEproposalNo(bean.getProposalNos().get(i));
@@ -1123,6 +1170,33 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		}
 		
 	}
+	
+	 public static void main(String[] args) throws Exception {
+
+	        Properties properties = System.getProperties();
+	        properties.setProperty("mail.smtp.host", "smtp.zeptomail.com");
+	        properties.put("mail.smtp.port", "587");
+	        properties.put("mail.smtp.auth", "true");
+	        properties.put("mail.smtp.starttls.enable", "true");
+	        properties.put("mail.smtp.from", "fromaddress");
+	        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+	        Session session = Session.getDefaultInstance(properties);
+
+	        try {
+	            MimeMessage message = new MimeMessage(session);
+	            message.setFrom(new InternetAddress("noreply@nsuretqr.com"));
+	                message.addRecipient(Message.RecipientType.TO, new InternetAddress("3s@aromgrips.com"));
+	            message.setSubject("Test Email");
+	                message.setText("Test email sent successfully.");
+	            Transport transport = session.getTransport("smtp");
+	            transport.connect("smtp.zeptomail.com", 587, "emailapikey", "wSsVR60j+hSmBvt6nDOtdb08m1ldUVKjRk5+2FSj6CevGfyW9sdqkBefDVX0FfROEmI6QTdAorgpkU9SgzJdj4gly1hRDiiF9mqRe1U4J3x17qnvhDzPVm1clBGJLIsJxQtpmWVoF8gk+g==");
+	            transport.sendMessage(message, message.getAllRecipients());
+	            transport.close();
+	            System.out.println("Mail successfully sent");
+	        } catch (Exception ex) {
+	            System.out.print(ex.getMessage());
+	        }
+	    }
 }
 	
 

@@ -382,7 +382,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			if(StringUtils.isBlank(bean.getSectionNo())) {
 				addActionError(getText("error.section.required"));
 			}
-			if (!val.isNull(bean.getSectionNo()).equalsIgnoreCase("") && StringUtils.isBlank(bean.getProposal_no())) {
+			if (!val.isNull(bean.getSectionNo()).equalsIgnoreCase("") ) {
 				if (service.getSectionDuplicationCheck(bean)) {
 					logger.info("// PMD Changes");
 					addActionError(getText("error.section.duplicate"));

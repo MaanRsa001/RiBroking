@@ -159,6 +159,11 @@ gap:20px;
 								</div>
 							</div>
 						</div>
+						<div class="tablerow" id="bouquetpds1">
+							<div class="boxcontent" align="center">
+								<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
+							</div>
+						</div>
 						<div id="bouquestid" style="display:none">
 							<s:if test='"Y".equals(bouquetModeYN)'>
 								<div class="boxcontent" >
@@ -551,10 +556,10 @@ gap:20px;
 															<div class="tbox" >
 															<div id="typeBus">
 															<s:if test="RenewalMode != null">	
-																<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();"  disabled='%{(baseLayer==null  || "".equalsIgnoreCase(baseLayer))?true:false}' />
+																<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable(); getDepatmentCover();"  disabled='%{(baseLayer==null  || "".equalsIgnoreCase(baseLayer))?true:false}' />
 															</s:if>
 															<s:else>
-																<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable();getAjaxCoverClass();" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																<s:select list="businessTypelist" listKey="TYPE" listValue="DETAIL_NAME" name="businessType" id="businessType" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="GetStopLossType(this.value);getPremiumBasis();getUmbrellaVal();getFieldDisable(); getDepatmentCover();" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 															</s:else>
 															</div>
 															</div>
@@ -569,10 +574,10 @@ gap:20px;
 																</s:if>
 																<s:else>
 																	<s:if test="'Layer'.equals(proposalReference)">
-																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange="getAjaxCoverClass();getAjax(this.value,'subclass');"/>
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  onchange=" getDepatmentCover();getAjax(this.value,'subclass');"/>
 																	</s:if>
 																	<s:else>
-																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange="getAjaxCoverClass();getAjax(this.value,'subclass');" /><!-- getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass') -->
+																		<s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="departId" id="departId"  cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" onchange=" getDepatmentCover();getAjax(this.value,'subclass');" /><!-- getTypeOfBusiness(this.value,'typeBus');getBasis(this.value,'rdsBasis');getAjaxCoverClass();getAjax(this.value,'subclass') -->
 																	</s:else>
 																</s:else>
 															</div>
@@ -622,7 +627,7 @@ gap:20px;
 															 					<s:textfield name="coverSNo[%{#stat.count-1}]" id="coverSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true"/> 
 															 					</td>
 																				<td >
-																				<s:select list="coverDepartmentList" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="coverdepartId[%{#stat.count-1}]" id="coverdepartId[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  /><%--disabled="0==(#stat.count-1)?true:false" --%>
+																				<s:select list="coverDepartmentList" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="coverdepartId[%{#stat.count-1}]" id="coverdepartId[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="0==(#stat.count-1)?true:false"/><%-- --%>
 																				<%-- <s:select list="departIdlist" listValue="TMAS_DEPARTMENT_NAME" listKey="TMAS_DEPARTMENT_ID" name="coverdepartId[%{#stat.count-1}]" id="coverdepartId[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="0==(#stat.count-1)?true:false" onchange="getAjaxCover(this.value,'coverdepartid%{#stat.count-1}',%{#stat.count-1})"/>--%>
 																				<s:if test='0==(#stat.count-1)'>
 																				
@@ -1380,8 +1385,8 @@ for (mtbWinCound = 0; mtbWinCound < mtbChildWin.length; mtbWinCound++) {
 
 function getDepatmentCover()
 {
+	
   	var val1 =document.getElementById("departId").value;
-  	
   	if(val1=="17" || val1=="18" || val1=="19" ){
   	document.getElementById("coverdepartId[0]").disabled=false;
   	document.getElementById("coverdepartIdS[0]").disabled=false;
@@ -1503,7 +1508,7 @@ document.getElementById("mode").value = "class";
         success: function(data){
         //getEgnpiCal();
         //CalculateEGNPI();
-        getDepatmentCover('our');
+        getDepatmentCover();
         if(proposal_no!=''){
       //  document.getElementById('departId').disabled = true;
         }
@@ -2292,7 +2297,7 @@ var table = document.getElementById(tableID);
 			element5.name = "netMaxRetentPer["+(rowCount-1)+"]";
       		element5.id = "netMaxRetentPer"+(rowCount-1);
 			element5.value=document.getElementById("netMaxRetentPer"+(parseFloat(rowCount)-2)).value;
-			element5.setAttribute("disabled",true);
+			//element5.setAttribute("disabled",true);
 			element5.className = "inputBox";
 			element5.setAttribute("onkeyup", "Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);");
 			element5.setAttribute("maxlength",'30'); 
@@ -2318,7 +2323,7 @@ var table = document.getElementById(tableID);
 			 document.getElementById("loopcount").value =parseInt(rowCount);			 
 			 getEgnpiCal();
 			 getAnnualAggNo();
-			 getAjaxCoverClass();
+			 //getAjaxCoverClass();
 			 
 }
 function insRow1(tableID)
@@ -2440,7 +2445,7 @@ var table = document.getElementById(tableID);
 			// }
 			 document.getElementById("count").value =parseInt(rowCount-1);
 			 //getEgnpiCalSlide();
-			 getAjaxCoverClass();
+			// getAjaxCoverClass();
 }
 function createcoverdeptCell(cell, rowCount){
 	element = document.createElement("select");
@@ -3873,6 +3878,7 @@ document.getElementById('bouquetModeYNY').disabled=true;
 document.getElementById('bouquetModeYNN').disabled=true;
 
 document.getElementById('bouquetpds').style.display = 'none';
+document.getElementById('bouquetpds1').style.display = 'none';
 if ($("#bouquetModeYNY").prop("checked")) {
 	document.getElementById('bouquetNo').disabled=true;
 }

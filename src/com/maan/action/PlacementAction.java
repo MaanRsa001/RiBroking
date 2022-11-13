@@ -102,7 +102,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		//bean.setExreinsurerInfoList(service.getExReinsurerInfo(bean));
 		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-			for(int i=0;i<2;i++){
+			for(int i=0;i<1;i++){
 			Map<String,Object> string = new HashMap<String,Object>();
 			string.put("1","1");
 			list.add(string);
@@ -253,14 +253,99 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 			forward= "placementList";
 		}else {
-			service.proposalInfo(bean);	
+			service.proposalInfo(bean);
+			List<Integer> docList=new ArrayList<Integer>();
+			for(int i=0;i<1;i++)
+				docList.add(i);
+			bean.setDocuList(docList);
+			restPlacement();
 		}
 		return forward;
 		
 	}
+	private void restPlacement() {
+		if(!CollectionUtils.isEmpty(bean.getProposalNos())){
+			List<Map<String,Object>>result=new ArrayList<Map<String,Object>>();	
+			for(int i=0;i<bean.getProposalNos().size();i++){
+				
+				Map<String,Object> doubleMap = new HashMap<String,Object>();
+				 doubleMap.put("one",new Double(1.0));
+				 result.add(doubleMap);
+			}
+			
+			bean.setPlacementeditInfo(result);
+		}
+	}
 	private void validationStatus() {
-		// TODO Auto-generated method stub
-		
+		if(StringUtils.isBlank(bean.getEmailBy())) {
+			addActionError(getText("error.emailBy.required"));
+		}if(StringUtils.isBlank(bean.getUpdateDate())) {
+			addActionError(getText("error.updatedate.required"));
+		}if(StringUtils.isBlank(bean.getNewStatus())) {
+			addActionError(getText("error.newstatus.required"));
+		}else {
+			if(!CollectionUtils.isEmpty(bean.getProposalNos())) {
+				for(int i=0;i<bean.getProposalNos().size();i++) {
+					if("P".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getShareOffered().get(i))) {
+							addActionError(getText("error.shareoffer.required")+" "+(i+1));
+						}
+					}else if("A".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getWrittenLine().get(i))) {
+							addActionError(getText("error.writtenLine.required")+" "+(i+1));
+						}if(StringUtils.isBlank(bean.getWrittenvaliditydate().get(i))) {
+							addActionError(getText("error.writtenvaliditydate.required")+" "+(i+1));
+						}if(StringUtils.isBlank(bean.getWrittenvalidityRemarks().get(i))) {
+							addActionError(getText("error.writtenvalidityRemarks.required")+" "+(i+1));
+						}if(StringUtils.isBlank(bean.getBrokerage().get(i))) {
+							addActionError(getText("error.brokeragep.required")+" "+(i+1));
+						}
+					}else if("RO".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getReoffer().get(i))) {
+							addActionError(getText("error.reoffer.required")+" "+(i+1));
+						}
+					}else if("PWL".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getProposedWL().get(i))) {
+							addActionError(getText("error.proposedWL.required")+" "+(i+1));
+						}else {
+							if(StringUtils.isNotBlank(bean.getWrittenLine().get(i))) {
+								if(Double.parseDouble(bean.getProposedWL().get(i))>Double.parseDouble(bean.getWrittenLine().get(i))) {
+									addActionError(getText("error.proposedWL.valid")+" "+(i+1));	
+								}
+							}
+						}
+					}else if("SL".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getSignedLine().get(i))) {
+							addActionError(getText("error.signedLine.required")+" "+(i+1));
+						}else {
+							if(StringUtils.isNotBlank(bean.getWrittenLine().get(i))) {
+								if(Double.parseDouble(bean.getSignedLine().get(i))>Double.parseDouble(bean.getWrittenLine().get(i))) {
+									addActionError(getText("error.signedLine.valid")+" "+(i+1));	
+								}
+							}
+						}if(StringUtils.isBlank(bean.getSignedLineValidity().get(i))) {
+							addActionError(getText("error.signedLineValidity.required")+" "+(i+1));
+						}if(StringUtils.isBlank(bean.getSignedLineRemarks().get(i))) {
+							addActionError(getText("error.signedLineRemarks.required")+" "+(i+1));
+						}
+					}else if("PSL".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getProposedSL().get(i))) {
+							addActionError(getText("error.proposedSL.required")+" "+(i+1));
+						}
+					}else if("CSL".equals(bean.getNewStatus())) {
+						if(StringUtils.isBlank(bean.getSignedLine().get(i))) {
+							addActionError(getText("error.signedLine.required")+" "+(i+1));
+						}if(StringUtils.isNotBlank(bean.getPsignedLine().get(i))) {
+							if(Double.parseDouble(bean.getSignedLine().get(i))>Double.parseDouble(bean.getPsignedLine().get(i))) {
+								addActionError(getText("error.psignedLine.valid")+" "+(i+1));	
+							}
+						}
+						
+					}
+				
+			}
+		}
+		}
 		
 	}
 	public String getStatusChange() {
@@ -270,17 +355,34 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public String getMailTemplate() {
 		bean.setMode("template");
 		service.getMailTemplate(bean);
+		List<Integer> docList=new ArrayList<Integer>();
+		for(int i=0;i<1;i++)
+			docList.add(i);
+		bean.setDocuList(docList);
 		//bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
 		return "placement";
 	}
 	public String sendMail() {
+		validateMail();
+		if(!hasActionErrors()) {
 		bean.setMode("mail");
 		service.proposalInfo(bean);
+		bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
+		String result=service.attachFile(bean);
 		service.sendMail(bean);
 		//bean.setExreinsurerInfoList(service.getPlacingInfo(bean));
 		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+		}else {
+			getMailTemplate();
+		}
 		
 		return "placement";
+	}
+	private void validateMail() {
+		if(StringUtils.isBlank(bean.getMailTo())) {
+			addActionError(getText("error.mailto.required"));
+		}
+		
 	}
 	public String mailInfo() {
 		bean.setMode("mail");
@@ -292,7 +394,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
 		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-			for(int i=0;i<2;i++){
+			for(int i=0;i<1;i++){
 			Map<String,Object> string = new HashMap<String,Object>();
 			string.put("1","1");
 			list.add(string);

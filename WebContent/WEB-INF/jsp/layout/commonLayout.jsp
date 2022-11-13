@@ -175,6 +175,7 @@ function worker() {
     		</div>
     		<div class="tablerow contents" style="margin-top: 2px;">
     			<tiles:insertAttribute name="body"  />
+    			<br class="clear"/>
     		</div>
     		<div class="tablerow" style="margin-top: 2px;" id="footer">    			
     			<tiles:insertAttribute name="footer" />    			

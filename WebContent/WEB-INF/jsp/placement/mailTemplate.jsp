@@ -39,6 +39,44 @@
           </div>
       </div>
       <div class="row">
+      <div class="boxcontent col-md-4 col-lg-4 col-xl-4" style="width:40%"  align="left">
+      	<div class="boxcontent">
+			<table class="table table-bordered" id="lcDoctable">
+				<thead>
+				<tr>
+					<th width="30%">
+						<s:text name="upload.selectdoc" />
+					</th>
+					<th width="30%">
+						<s:text name="Delete" />
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<s:iterator value="docuList" id="index" status="stat">
+				<tr>
+					<td class="formCon">
+						<s:hidden name="docTypeId[%{index}]" value="MA"></s:hidden>
+						<s:hidden name="docDesc[%{index}]" value="Mail Attachement"></s:hidden>
+						<s:file name="upload"  cssClass="inputBox" id="upload"/>
+					</td>
+					<td class="formCon">
+						<s:if test='0!=(#stat.count-1)'>
+								<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteUpload('<s:property value="%{#stat.count-1}"/>')" />
+						</s:if>
+						
+					</td>
+				</tr>
+				</s:iterator>
+				</tbody>
+			</table>											
+		</div>
+		<div class="boxcontent" align="center">
+			<input type="button"  value="Add More" class="btn btn-sm btn-info" onClick="addMorelc();" />
+		</div>
+	</div>
+	</div>
+      <%-- <div class="row">
     	 <label for="cc" class="col-2 col-sm-1 col-form-label">Attachment:</label>
           <div class="col-5 col-sm-5 mb-2" >
           <s:file name="upload"  cssClass="inputBox" id="upload"/>
@@ -72,7 +110,7 @@
 				</s:iterator>
 			</ul>
      </div>
-      </div>
+      </div> --%>
      <div class="row" style="padding-top:15px">
              <div class="text-center">
              		<button type="submit" class="btn btn-sm btn-danger" onclick="cancelEmail();">Discard</button>

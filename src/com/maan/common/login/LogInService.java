@@ -129,7 +129,7 @@ public class LogInService {
 	    		String port=details.get("SMTP_PORT");
 	    		String SMTP_MAIL_FROM = details.get("MAIL_FROM");
 	    		String SMTP_SHORT_ADDRESS = details.get("SMTP_SHORT_ADDRESS");
-	    		String subject = "GRIPS - Re Insurance -Password Reset";
+	    		String subject = "RI-Broking Password Reset";
 	    		String toAddress = details.get("MAIL_TO");
 	    		String ccAddress = details.get("MAIL_CC");
 	    		String imagePath = details.get("LOGO_PATH");
@@ -177,7 +177,7 @@ public class LogInService {
     public String getMailSignature(String imagePath){
     	StringBuffer msg = new StringBuffer();
     	msg.append("<br /><table width='100%'><tr><td><span style='font-size: 14px;'>");
-    	msg.append("Best Regards,<br /><br />GRIPS Team");
+    	msg.append("Best Regards,<br /><br />TQR Insurance");
     	msg.append("</td></tr><tr><td>");
     	//msg.append("<img src=\"C:\\Documents and Settings\\Administrator\\Desktop\\HEAD1.GIF\" />");
     	//msg.append("<img src=\"C:\\Documents and Settings\\Administrator\\Desktop\\HEAD2.GIF\" />");

@@ -2597,7 +2597,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 
 	public Object[] updateHomePostion(final RiskDetailsBean beanObj,final String pid, final boolean bool) {
 
-		Object[] obj = new Object[22];
+		Object[] obj = new Object[23];
 		obj[0] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();
 		obj[1] = "";
 		obj[2] = pid;
@@ -2639,8 +2639,9 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[17] = beanObj.getBouquetModeYN();
 		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
-		obj[20] = beanObj.getProposal_no();
-		obj[21] = beanObj.getAmendId();
+		obj[20] = beanObj.getSectionNo();
+		obj[21] = beanObj.getProposal_no();
+		obj[22] = beanObj.getAmendId();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -3005,7 +3006,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		return obj;
 	}
 	public Object[] updateHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid, final String maxAmdId) {
-		Object[] obj = new Object[22];
+		Object[] obj = new Object[23];
 		obj[0] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();
 		obj[1] = "";
 		obj[2] = pid;
@@ -3036,7 +3037,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[17] = beanObj.getBouquetModeYN();
 		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
-		obj[20] = beanObj.getProposal_no();
+		obj[20] = beanObj.getSectionNo();
+		obj[22] = beanObj.getProposal_no();
 		obj[21] = maxAmdId;
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
@@ -5279,18 +5281,21 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		}
 	}
 
-	@Override
-	public boolean getSectionDuplicationCheck(RiskDetailsBean formObj) {
+	
+
+	public boolean getSectionDuplicationCheck(RiskDetailsBean  formObj) {
 		boolean result=false;
+		String query="";
+		List<Map<String, Object>> list=null;
 		try{
-			if(StringUtils.isNotBlank(formObj.getLayerProposalNo())&&StringUtils.isNotBlank(formObj.getSectionNo())){
-				String query= getQuery("risk.select.getSectionDupcheckByBaseLayer");
+			if (StringUtils.isNotBlank(formObj.getProposal_no()) && StringUtils.isNotBlank(formObj.getSectionNo()) /* && "Yes".equalsIgnoreCase(formObj.getLayerMode()) */){
+				query= getQuery("risk.select.getSectionDupcheckByProNo");
 				logger.info("Select Query=>"+query);
 				logger.info("Args[0]=>"+formObj.getSectionNo());
-				logger.info("Args[1]=>"+formObj.getLayerProposalNo());
-				List<Map<String, Object>> list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getLayerProposalNo()});
+				logger.info("Args[1]=>"+formObj.getProposal_no());
+				list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getProposal_no(),StringUtils.isBlank(formObj.getBaseLayer())?formObj.getProposalNo():formObj.getBaseLayer()});
 				logger.info("Result=>"+list.size());
-				if(list!=null && list.size()>0)	{
+				if(list!=null && list.size()>0){
 					for(int i=0;i<list.size();i++){
 						Map<String, Object> map=(Map<String, Object>)list.get(i);
 						String res=map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString();
@@ -5299,11 +5304,28 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 						}
 					}
 				}
-				query= getQuery("risk.select.getSectionDupcheckByProNo");
+			}else if (StringUtils.isNotBlank(formObj.getBaseLayer()) && StringUtils.isNotBlank(formObj.getSectionNo()) /* && "Yes".equalsIgnoreCase(formObj.getLayerMode()) */){
+				query= getQuery("risk.select.getSectionDupcheckByBaseLayer");
 				logger.info("Select Query=>"+query);
 				logger.info("Args[0]=>"+formObj.getSectionNo());
-				logger.info("Args[1]=>"+formObj.getLayerProposalNo());
-				list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getLayerProposalNo()});
+				logger.info("Args[1]=>"+formObj.getBaseLayer());
+				list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getBaseLayer()});
+				logger.info("Result=>"+list.size());
+				if(list!=null && list.size()>0){
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map=(Map<String, Object>)list.get(i);
+						String res=map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString();
+						if(res.equalsIgnoreCase(formObj.getSectionNo())){
+							result=true;
+						}
+					}
+				}
+			}else if (StringUtils.isNotBlank(formObj.getProposalNo()) && StringUtils.isNotBlank(formObj.getSectionNo())){
+				query= getQuery("risk.select.getSectionDupcheckByBaseLayer");
+				logger.info("Select Query=>"+query);
+				logger.info("Args[0]=>"+formObj.getSectionNo());
+				logger.info("Args[1]=>"+formObj.getProposalNo());
+				list=this.mytemplate.queryForList(query,new Object[]{formObj.getSectionNo(),formObj.getProposalNo()});
 				logger.info("Result=>"+list.size());
 				if(list!=null && list.size()>0){
 					for(int i=0;i<list.size();i++){
@@ -5317,10 +5339,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 		}catch(Exception e){
 			logger.debug("Exception @ {" + e + "}");
-
+			e.printStackTrace();
 		}
 		return result;
 	}
-
-	
 }

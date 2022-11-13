@@ -1127,6 +1127,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					beanObj.setContractGendration("Your Proposal is saved in Pending Stage with Proposal No : "	+ beanObj.getProposal_no() + " and Layer No : " + beanObj.getLayerNo());
 				}
 			}
+			instalMentPremium(beanObj);
 			//}
 			/*instalMentPremium(beanObj);
 			if("3".equalsIgnoreCase(productId)){
@@ -1571,13 +1572,15 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 
 	public boolean getLayerDuplicationCheck(RiskDetailsBean  formObj) {
 		boolean result=false;
+		String query="";
+		List<Map<String, Object>> list=null;
 		try{
-			if (StringUtils.isNotBlank(formObj.getBaseLayer()) && StringUtils.isNotBlank(formObj.getLayerNo()) /* && "Yes".equalsIgnoreCase(formObj.getLayerMode()) */){
-				String query= getQuery(DBConstants.RISK_SELECT_LAYERDUPCHECKBYBASELAYER);
+			if (StringUtils.isNotBlank(formObj.getProposal_no()) && StringUtils.isNotBlank(formObj.getLayerNo()) /* && "Yes".equalsIgnoreCase(formObj.getLayerMode()) */){
+				query= getQuery(DBConstants.RISK_SELECT_LAYERDUPCHECKBYPRONO);
 				logger.info("Select Query=>"+query);
-				logger.info("Args[0]=>"+formObj.getLayerNo());
-				logger.info("Args[1]=>"+formObj.getBaseLayer());
-				List<Map<String, Object>> list=this.mytemplate.queryForList(query,new Object[]{formObj.getLayerNo(),formObj.getBaseLayer()});
+				logger.info("Args[0]=>"+formObj.getSectionNo());
+				logger.info("Args[1]=>"+formObj.getProposal_no());
+				list=this.mytemplate.queryForList(query,new Object[]{formObj.getLayerNo(),formObj.getProposal_no(),StringUtils.isBlank(formObj.getBaseLayer())?formObj.getProposalNo():formObj.getBaseLayer()});
 				logger.info("Result=>"+list.size());
 				if(list!=null && list.size()>0){
 					for(int i=0;i<list.size();i++){
@@ -1588,11 +1591,28 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 						}
 					}
 				}
-				query= getQuery(DBConstants.RISK_SELECT_LAYERDUPCHECKBYPRONO);
+			}else if (StringUtils.isNotBlank(formObj.getBaseLayer()) && StringUtils.isNotBlank(formObj.getLayerNo()) /* && "Yes".equalsIgnoreCase(formObj.getLayerMode()) */){
+				query= getQuery(DBConstants.RISK_SELECT_LAYERDUPCHECKBYBASELAYER);
 				logger.info("Select Query=>"+query);
 				logger.info("Args[0]=>"+formObj.getLayerNo());
 				logger.info("Args[1]=>"+formObj.getBaseLayer());
 				list=this.mytemplate.queryForList(query,new Object[]{formObj.getLayerNo(),formObj.getBaseLayer()});
+				logger.info("Result=>"+list.size());
+				if(list!=null && list.size()>0){
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map=(Map<String, Object>)list.get(i);
+						String res=map.get("LAYER_NO")==null?"":map.get("LAYER_NO").toString();
+						if(res.equalsIgnoreCase(formObj.getLayerNo())){
+							result=true;
+						}
+					}
+				}
+			}else if (StringUtils.isNotBlank(formObj.getProposalNo()) && StringUtils.isNotBlank(formObj.getLayerNo())){
+				query= getQuery(DBConstants.RISK_SELECT_LAYERDUPCHECKBYBASELAYER);
+				logger.info("Select Query=>"+query);
+				logger.info("Args[0]=>"+formObj.getLayerNo());
+				logger.info("Args[1]=>"+formObj.getProposalNo());
+				list=this.mytemplate.queryForList(query,new Object[]{formObj.getLayerNo(),formObj.getProposalNo()});
 				logger.info("Result=>"+list.size());
 				if(list!=null && list.size()>0){
 					for(int i=0;i<list.size();i++){
@@ -2051,7 +2071,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			args[1] = endtNo;
 			this.mytemplate.update(query,args);
 			
-			final String InstallmentPeriod = beanObj.getM_d_InstalmentNumber();
+			final String InstallmentPeriod = (StringUtils.isBlank(beanObj.getM_d_InstalmentNumber())||"0".equals(beanObj.getM_d_InstalmentNumber()))?"1":beanObj.getM_d_InstalmentNumber();
 			int number=Integer.parseInt(InstallmentPeriod);
 			String insertQry = getQuery(DBConstants.RISK_INSERT_INSTALPREM);
 			
@@ -2274,7 +2294,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				saveFlag = true;
 			}
 			updateFirstPageFields(beanObj, getMaxAmednIdPro(beanObj.getProposal_no()));
-			if(StringUtils.isBlank(beanObj.getBaseLayer())) {
+			//if(StringUtils.isBlank(beanObj.getBaseLayer())) {
 			obj = updateHomePostion(beanObj, pid,true);
 			updateQry = getQuery(DBConstants.RISK_UPDATE_POSITIONMASTER);
 			logger.info("updateQry " + updateQry);
@@ -2283,7 +2303,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			if (res > 0) {
 				saveFlag = true;
 			}
-			}
+			//}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 		}
@@ -2291,7 +2311,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	}
 	public Object[] updateHomePostion(final RiskDetailsBean beanObj,final String pid, final boolean bool) {
 
-		Object[] obj = new Object[22];
+		Object[] obj = new Object[23];
 		obj[0] = StringUtils.isEmpty(beanObj.getLayerNo()) ? "0" : beanObj.getLayerNo();
 		obj[1] = "";
 		obj[2] = pid;
@@ -2337,8 +2357,9 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[17] = beanObj.getBouquetModeYN();
 		obj[18] = beanObj.getBouquetNo();
 		obj[19] = beanObj.getUwYearTo();
-		obj[20] = beanObj.getProposal_no();
-		obj[21] = beanObj.getAmendId();
+		obj[20] = "";
+		obj[21] = beanObj.getProposal_no();
+		obj[22] = beanObj.getAmendId();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -4523,10 +4544,11 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
          Object args[]=null;
          int count =0;
 		try{
-				args = new Object[3];
+				args = new Object[4];
 				args[0] = proposalNo;
 				args[1] = bean.getBranchCode();
 				args[2] = bean.getAcqBonus();
+				args[3] = "LR";
 					query =getQuery("BONUS_MAIN_SELECT");
 					result = this.mytemplate.queryForList(query,args);
 					if(CollectionUtils.isEmpty(result)) {

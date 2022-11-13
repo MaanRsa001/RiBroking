@@ -166,6 +166,11 @@ gap:20px;
 											</div>
 										</div>
 									</div>
+									<div class="tablerow" id="bouquetpds1">
+										<div class="boxcontent" align="center">
+											<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
+										</div>
+									</div>
 									<div id="bouquestid" style="display:none">
 									<s:if test='"Y".equals(bouquetModeYN)'>
 										<div class="boxcontent" >
@@ -3257,6 +3262,7 @@ document.getElementById('bouquetModeYNY').disabled=true;
 document.getElementById('bouquetModeYNN').disabled=true;
 
 document.getElementById('bouquetpds').style.display = 'none';
+document.getElementById('bouquetpds1').style.display = 'none';
 if ($("#bouquetModeYNY").prop("checked")) {
 	document.getElementById('bouquetNo').disabled=true;
 }

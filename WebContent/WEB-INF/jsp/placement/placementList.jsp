@@ -132,7 +132,13 @@
 																			<s:property value="#list.BOUQUET_NO"/>
 																		</td>
 																		<td>
+																		<s:if test="#list.BASE_PROPOSAL_NO==null">
+																			<s:property value="#list.PROPOSAL_NO"/>
+																		</s:if>
+																		<s:else>
 																			<s:property value="#list.BASE_PROPOSAL_NO"/>
+																		</s:else>
+																			
 																		</td>
 																		<td>
 																			<s:property value="#list.PROPOSAL_NO"/>

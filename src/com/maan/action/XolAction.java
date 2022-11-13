@@ -194,6 +194,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 		 List<String> inslist=new ArrayList<String>();
 		 inslist.add("");
 		 bean.setInstalList(inslist);
+		 bean.setM_d_InstalmentNumber("1");
 		 bean.setOurAssessment("100");
 		try {
 			bean.setSubProfitList(new ArrayList<Map<String,Object>>());
@@ -400,7 +401,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			} else if (val.isValidNo(bean.getLayerNo()).equalsIgnoreCase("INVALID")) {
 				addActionError(getText("error.layerNo.error"));
 			}
-			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("") && StringUtils.isBlank(bean.getProposal_no())) {
+			if (!val.isNull(bean.getLayerNo()).equalsIgnoreCase("")) {
 				if (service.getLayerDuplicationCheck(bean)) {
 					logger.info("// PMD Changes");
 					addActionError(getText("error.layer.duplicate"));
@@ -3780,7 +3781,7 @@ private void resetCoverLimit() {
 			bean.setProduct_id(pid);
 			bean.setDepartmentId((String) session.get("DepartmentId"));
 			String result = service.LowClaimBonusInser(bean);
-			String value="<script type='text/javascript'>$('#companyModal2').modal('toggle');</script>";
+			String value="<script type='text/javascript'>$('#companyModal2').modal('toggle');document.getElementById('referenceNo').value="+(StringUtils.isBlank(bean.getReferenceNo())?"0":bean.getReferenceNo())+"</script>";
 			byte[] byteArray = value.getBytes();
 			inputStream=new ByteArrayInputStream(byteArray);
 		}

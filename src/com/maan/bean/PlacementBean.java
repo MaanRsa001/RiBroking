@@ -49,6 +49,7 @@ public class PlacementBean {
 	private List<String>writtenvalidityRemarks=new ArrayList<String>();
 	private List<String>proposedWL=new ArrayList<String>();
 	private List<String>signedLine=new ArrayList<String>();
+	private List<String>psignedLine=new ArrayList<String>();
 	private List<String>proposedSL=new ArrayList<String>();
 	private List<String>reoffer=new ArrayList<String>();
 	private List<String>tqrBrokerageAmt=new ArrayList<String>();
@@ -57,9 +58,15 @@ public class PlacementBean {
 	private List<String>emailStatus=new ArrayList<String>();
 	private String reinsurerId;
 	private String brokerId;
+	private List<String> snos;
+	private List<String> bouquetNos;
+	private List<String> baseproposalNos;
 	private List<String> proposalNos;
 	private List<String> reinsurerIds;
 	private List<String> brokerIds;
+	private List<String> reinsurerNames;
+	private List<String> brokerNames;
+	private List<String> cedingCompanys;
 	private String mailType;
 	private String mailSubject;
 	private String mailBody;
@@ -596,6 +603,49 @@ public class PlacementBean {
 	public void setDeleteStatus(List<String> deleteStatus) {
 		this.deleteStatus = deleteStatus;
 	}
+	public List<String> getSnos() {
+		return snos;
+	}
+	public void setSnos(List<String> snos) {
+		this.snos = snos;
+	}
+	public List<String> getBouquetNos() {
+		return bouquetNos;
+	}
+	public void setBouquetNos(List<String> bouquetNos) {
+		this.bouquetNos = bouquetNos;
+	}
+	public List<String> getBaseproposalNos() {
+		return baseproposalNos;
+	}
+	public void setBaseproposalNos(List<String> baseproposalNos) {
+		this.baseproposalNos = baseproposalNos;
+	}
+	public List<String> getReinsurerNames() {
+		return reinsurerNames;
+	}
+	public void setReinsurerNames(List<String> reinsurerNames) {
+		this.reinsurerNames = reinsurerNames;
+	}
+	public List<String> getBrokerNames() {
+		return brokerNames;
+	}
+	public void setBrokerNames(List<String> brokerNames) {
+		this.brokerNames = brokerNames;
+	}
+	public List<String> getCedingCompanys() {
+		return cedingCompanys;
+	}
+	public void setCedingCompanys(List<String> cedingCompanys) {
+		this.cedingCompanys = cedingCompanys;
+	}
+	public List<String> getPsignedLine() {
+		return psignedLine;
+	}
+	public void setPsignedLine(List<String> psignedLine) {
+		this.psignedLine = psignedLine;
+	}
+	
 	
 	
 	
