@@ -3092,13 +3092,16 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		return obj;
 	}
 	public Object[] insertHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid, final Object args2, final boolean amendId,String renewalStatus) {
-		String sectionNo="",bouquetno="";
+		String offerNo="",bouquetno="";
 		if(StringUtils.isBlank(beanObj.getBouquetNo()) && "Y".equals(beanObj.getBouquetModeYN())) {
-			String query=getQuery("GET_BOUQUET_NO_SEQ");
-			bouquetno=this.mytemplate.queryForObject(query, String.class);
+			bouquetno=new DropDownControllor().getSequence("Bouquet","9","0", beanObj.getBranchCode(),"","");
 			beanObj.setBouquetNo(bouquetno);
 		}
-		Object[] obj = new Object[30];
+		if(StringUtils.isBlank(beanObj.getOfferNo())) {
+			offerNo=new DropDownControllor().getSequence("Offer",pid,"0", beanObj.getBranchCode(),"","");
+			beanObj.setOfferNo(offerNo);
+		}
+		Object[] obj = new Object[31];
 		if (amendId) {
 			obj[1] = beanObj.getContNo();
 			obj[2] = args2;
@@ -3140,6 +3143,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 		obj[27] = beanObj.getBouquetNo();
 		obj[28] = beanObj.getUwYearTo();
 		obj[29] = beanObj.getSectionNo();
+		obj[30] = beanObj.getOfferNo();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}
@@ -3402,6 +3406,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setUwYearTo(resMap.get("UW_YEAR_TO")==null?"":resMap.get("UW_YEAR_TO").toString());
 				beanObj.setBouquetModeYN(resMap.get("Bouquet_Mode_YN")==null?"N":resMap.get("Bouquet_Mode_YN").toString());
 				beanObj.setBouquetNo(resMap.get("Bouquet_No")==null?"":resMap.get("Bouquet_No").toString());
+				beanObj.setOfferNo(resMap.get("OFFER_NO")==null?"":resMap.get("OFFER_NO").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
 				if(!"Layer".equalsIgnoreCase(beanObj.getProposalReference())){
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());

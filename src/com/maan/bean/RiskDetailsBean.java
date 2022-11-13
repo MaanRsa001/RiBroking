@@ -531,6 +531,9 @@ public class RiskDetailsBean  {
 	private String portfolioType;
 	private String sectionMode;
 	private String reinsdelete;
+	private String offerNo;
+	
+	
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -5606,6 +5609,12 @@ public class RiskDetailsBean  {
 	}
 	public void setReinsdelete(String reinsdelete) {
 		this.reinsdelete = reinsdelete;
+	}
+	public String getOfferNo() {
+		return offerNo;
+	}
+	public void setOfferNo(String offerNo) {
+		this.offerNo = offerNo;
 	}
 	
 	

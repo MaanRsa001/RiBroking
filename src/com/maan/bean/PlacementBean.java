@@ -101,6 +101,7 @@ public class PlacementBean {
 	private String corresId;
 	private String sno;
 	private List<String> deleteStatus;
+	private String offerNo;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -644,6 +645,12 @@ public class PlacementBean {
 	}
 	public void setPsignedLine(List<String> psignedLine) {
 		this.psignedLine = psignedLine;
+	}
+	public String getOfferNo() {
+		return offerNo;
+	}
+	public void setOfferNo(String offerNo) {
+		this.offerNo = offerNo;
 	}
 	
 	

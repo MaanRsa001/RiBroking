@@ -815,7 +815,7 @@ function addMorelc(){
 	element2.type = "hidden";
 	element2.name = "docTypeId["+(rowCount-1)+"]";
 	element2.id = "docTypeId"+(rowCount-1);
-	element1.value = "MA";
+	element2.value = "MA"+(rowCount);
 	cell.appendChild(element);
 	cell.appendChild(element1);
 	cell.appendChild(element2);

@@ -642,7 +642,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				beanObj.setContNo(resMap.get("RSK_CONTRACT_NO")==null?"":resMap.get("RSK_CONTRACT_NO").toString());
 				beanObj.setLayerNo(resMap.get("RSK_LAYER_NO")==null?"":resMap.get("RSK_LAYER_NO").toString());
 				beanObj.setProduct_id(resMap.get("RSK_PRODUCTID")==null?"":resMap.get("RSK_PRODUCTID").toString());
-				
+				beanObj.setOfferNo(resMap.get("OFFER_NO")==null?"":resMap.get("OFFER_NO").toString());
 				
 				if(StringUtils.isBlank(beanObj.getSectionMode())) {
 				beanObj.setDepartId(resMap.get("RSK_DEPTID")==null?"":resMap.get("RSK_DEPTID").toString());	
@@ -736,6 +736,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			beanObj.setDocdetailYN(resMap.get("DOC_DET_YN")==null?"N":resMap.get("DOC_DET_YN").toString());
 			beanObj.setPaymentPartner(resMap.get("PAYMENT_PARTNER")==null?"":resMap.get("PAYMENT_PARTNER").toString());
 			beanObj.setSectionNo(resMap.get("SECTION_NO")==null?"":resMap.get("SECTION_NO").toString());
+			
 			beanObj.setQuotesharePercent(resMap.get("QUOTESHARE_PERCENT")==null?"":resMap.get("QUOTESHARE_PERCENT").toString());
 			beanObj.setAccountingPeriodNotes(resMap.get("RSK_ACCOUNT_PERIOD_NOTICE")==null?"":resMap.get("RSK_ACCOUNT_PERIOD_NOTICE").toString());
 			beanObj.setStatementConfirm(resMap.get("RSK_STATEMENT_CONFIRM")==null?"":resMap.get("RSK_STATEMENT_CONFIRM").toString());
@@ -3785,14 +3786,19 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	}
 
 	public Object[] insertHomePositionMasterAruguments(final RiskDetailsBean beanObj, final String pid,	final Object args2, final boolean amendId,String renewalStatus) {
-		String bouquetno="";
+		String bouquetno="",offerNo="";
 		
 		if(StringUtils.isBlank(beanObj.getBouquetNo()) && "Y".equals(beanObj.getBouquetModeYN())) {
-			String query=getQuery("GET_BOUQUET_NO_SEQ");
-			bouquetno=this.mytemplate.queryForObject(query, String.class);
+			bouquetno=new DropDownControllor().getSequence("Bouquet","9","0", beanObj.getBranchCode(),"","");
+			//String query=getQuery("GET_BOUQUET_NO_SEQ");
+			//bouquetno=this.mytemplate.queryForObject(query, String.class);
 			beanObj.setBouquetNo(bouquetno);
 		}
-		Object[] obj = new Object[30];
+		if(StringUtils.isBlank(beanObj.getOfferNo())) {
+			offerNo=new DropDownControllor().getSequence("Offer",pid,"0", beanObj.getBranchCode(),"","");
+			beanObj.setOfferNo(offerNo);
+		}
+		Object[] obj = new Object[31];
 		if (amendId) {
 			obj[1] = beanObj.getContNo();
 			obj[2] = args2;
@@ -3836,6 +3842,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		obj[27] = beanObj.getBouquetNo();
 		obj[28] = beanObj.getUwYearTo();
 		obj[29] = beanObj.getSectionNo();
+		obj[30] = beanObj.getOfferNo();
 		logger.info("Args[]=>" + StringUtils.join(obj,","));
 		return obj;
 	}

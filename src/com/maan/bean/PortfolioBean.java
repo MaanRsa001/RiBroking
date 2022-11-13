@@ -78,6 +78,7 @@ public class PortfolioBean
     private String autoopenDate;
     private String endtMode;
     private String proposal_no;
+    private String offerNo;
     private String proposalNo1;
     private String pageNumber;
     private String ceaseStatus;
@@ -113,7 +114,7 @@ public class PortfolioBean
 	private List<List<Map<String,Object>>> buttonList;
 	private List<Map<String,Object>> buttonSelectionList;
 	
-	
+	private String offerNoSearch;
 	private String proposalNoSearch;
 	private String companyNameSearch;
 	private String brokerNameSearch;
@@ -962,6 +963,18 @@ public void setEndorsmentTypeName(String endorsmentTypeName) {
 	}
 	public void setBouquetNo(String bouquetNo) {
 		this.bouquetNo = bouquetNo;
+	}
+	public String getOfferNo() {
+		return offerNo;
+	}
+	public void setOfferNo(String offerNo) {
+		this.offerNo = offerNo;
+	}
+	public String getOfferNoSearch() {
+		return offerNoSearch;
+	}
+	public void setOfferNoSearch(String offerNoSearch) {
+		this.offerNoSearch = offerNoSearch;
 	}
     
 }

@@ -70,13 +70,12 @@
 				      
 				      <div id="detailsData" style="display: none;" class = "panel-collapse collapse in">
 				         <div class = "panel-body">
-				           <div class="textfield">
+				         		<div class="textfield">
 									<div class="text">
-									<s:text name="Proposal No" />
-										
+									<s:text name="Offer No" />
 									</div>
 									<div class="tbox txtB">
-									 <s:textfield name="proposalNoSearch" id="proposalNoSearch" cssClass="inputBox" />
+									 <s:textfield name="offerNoSearch" id="offerNoSearch" cssClass="inputBox" />
 									</div>
 								</div>
 								<div class="textfield">
@@ -86,6 +85,14 @@
 									</div>
 									<div class="tbox txtB">
 									 <s:textfield name="bouquetNoSearch" id="bouquetNoSearch" cssClass="inputBox" />
+									</div>
+								</div>
+								<div class="textfield">
+									<div class="text">
+									<s:text name="Proposal No" />
+									</div>
+									<div class="tbox txtB">
+									 <s:textfield name="proposalNoSearch" id="proposalNoSearch" cssClass="inputBox" />
 									</div>
 								</div>
 								<div class="textfield">
@@ -200,6 +207,7 @@
 												<thead>
 												<tr>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
+													<th style="text-align: center; vertical-align: middle;"><s:text name="Offer No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
 													<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
@@ -224,6 +232,7 @@
 													<s:iterator value="portfolioList" var="list" status="stat">
 													<tr>
 													<td><s:property value="#stat.count"/></td>
+													<td><s:property value="offerNo"/></td>
 													<td><s:property value="bouquetNo"/></td>
 													<s:if test='!"5".equals(#session.mfrid) '>
 													<s:if test='#session.MenuRights.indexOf("EN")!=-1'>
@@ -268,6 +277,7 @@
 											<thead>
 											<tr>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="S.No" /></th>
+												<th style="text-align: center; vertical-align: middle;"><s:text name="Offer No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
 												<th style="text-align: center; vertical-align: middle;"><s:text name="Proposal No" /></th>
@@ -296,6 +306,7 @@
 												<s:iterator value="portfolioList" var="list" status="stat">
 												<tr>
 												<td><s:property value="#stat.count"/></td>
+												<td><s:property value="offerNo"/></td>
 												<td><s:property value="bouquetNo"/></td>
 												<s:if test='"2".equals(#session.mfrid)'>
 													<td><s:property value="baseLayer" /></td>

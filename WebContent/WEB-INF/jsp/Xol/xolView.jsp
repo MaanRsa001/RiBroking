@@ -137,6 +137,7 @@
 															<tr>
 																<th width="4%"> <s:text name="label.sno" /> </th>
 																<th width="15%"><s:text name="label.businessType" /></th>
+																<th width="10%"><s:text name="label.offerNo" /></th>
 																<th width="10%"><s:text name="label.baseproposal" /></th>
 																<th width="10%"><s:text name="label.proposalNo" /></th>
 																<th width="10%"><s:text name="label.sectionNoLayer" /></th>
@@ -155,6 +156,9 @@
 																</td>
 																<td>
 																	<s:property value="#list.BUSINESS_TYPE"/>
+																</td>
+																<td>
+																	<s:property value="#list.OFFER_NO"/>
 																</td>
 																<td>
 																	<s:property value="#list.BASE_LAYER"/>
@@ -212,15 +216,23 @@
 												<div class="tbox">
 													<s:textfield name="proposal_no" id="proposal_no" cssClass="inputBox" disabled="true" />
 												</div>
-											</div>											
+											</div>	
 											<div class="textfield">
+												<div class="text">
+													<s:text name="label.offerNo" />
+												</div>
+												<div class="tbox">
+													<s:textfield name="offerNo" cssClass="inputBox" disabled="true" />
+												</div>
+											</div>										
+											<%-- <div class="textfield">
 												<div class="text">
 													<s:text name="label.contractno" />
 												</div>
 												<div class="tbox">
 													<s:textfield name="contNo" cssClass="inputBox" disabled="true" />
 												</div>
-											</div>
+											</div> --%>
 											
 											<br class="clear"></br>
 										</div>

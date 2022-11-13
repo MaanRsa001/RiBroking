@@ -68,6 +68,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setContractNo(map.get("CONTRACT_NO")==null?"":map.get("CONTRACT_NO").toString());
 				bean.setLayerNo(map.get("LAYER_NO")==null?"0":map.get("LAYER_NO").toString());
 				bean.setSectionNo(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString());
+				bean.setOfferNo(map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString());
 				if(StringUtils.isBlank(bean.getEproposalNo()))
 				bean.setEproposalNo(bean.getProposalNo());
 				/*String sql=getQuery("GET_BASE_LAYER_COUNT");
@@ -518,12 +519,11 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			String bouquetNo=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
 			String proposalNo=map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString();
 			String baseproposalNo=map.get("BASE_LAYER")==null?"":map.get("BASE_LAYER").toString();
+			String offerNo=map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString();
 			if(StringUtils.isNotBlank(bouquetNo)) {
-				mailsub=mailsub+" "+bouquetNo+" / ";
-			}if(StringUtils.isNotBlank(baseproposalNo)) {
-				mailsub=mailsub+" "+baseproposalNo+" / ";
-			}if(StringUtils.isNotBlank(proposalNo)) {
-				mailsub=mailsub+" "+proposalNo;
+				mailsub=mailsub+" "+bouquetNo+"";
+			}else if(StringUtils.isNotBlank(offerNo)) {
+				mailsub=mailsub+" "+offerNo+" ";
 			}
 			for (Map.Entry entry: map.entrySet()) {
 				if(mailbody.contains(entry.getKey().toString()) == true) {
@@ -592,6 +592,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Sub Class</th>" + 
 				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Treaty Type</th>" + 
 				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Treaty Name</th>" + 
+				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Layer / Section No</th>" + 
 				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Inception Date</th>" + 
 				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Expiry Date</th>" + 
 				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Max Share Offer %</th>" + 
@@ -602,12 +603,13 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			Map<String,Object>map=agentWiseReport.get(i);
 				messageContent+="<tr>"+
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString())+"</td>" + 
+			"<td style=\"border: 1px solid #000000;\">"+(map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("BUSINESS_TYPE")==null?"":map.get("BUSINESS_TYPE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("CLASS")==null?"":map.get("CLASS").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SUB_CLASS")==null?"":map.get("SUB_CLASS").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("TREATY_TYPE")==null?"":map.get("TREATY_TYPE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("RSK_TREATYID")==null?"":map.get("RSK_TREATYID").toString())+"</td>" + 
+			"<td style=\"border: 1px solid #000000;\">"+(map.get("RSK_TREATYID")==null?"":map.get("RSK_TREATYID").toString())+"</td>" +
+			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SAHRE_MAX")==null?DropDownControllor.formatterpercentage(bean.getMaxSharePercent()):map.get("SAHRE_MAX").toString())+"</td>" + 

@@ -105,6 +105,7 @@
 																	<thead>
 																	<tr>
 																		<th width="5%"> <s:text name="label.sno" /> </th>
+																		<th width="8%"><s:text name="label.offerNo" /></th>
 																		<th width="8%"><s:text name="label.bouquetNo" /></th>
 																		<th width="8%"><s:text name="label.baseproposal" /></th>
 																		<th width="8%"><s:text name="label.proposalNo" /></th>
@@ -127,6 +128,9 @@
 																	<tr>
 																		<td>
 																			<s:property value="%{#stat.count}"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.OFFER_NO"/>
 																		</td>
 																		<td>
 																			<s:property value="#list.BOUQUET_NO"/>

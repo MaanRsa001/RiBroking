@@ -109,6 +109,10 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + res + "%")});
                 		 query += " AND UPPER(E.RSK_UNDERWRITTER) LIKE UPPER(?) ";
                 	}
+            	}if(StringUtils.isNotBlank(beanObj.getOfferNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getOfferNoSearch() + "%")});
+            		query += " AND A.OFFER_NO LIKE ? ";
+            		
             	}
             	
             	beanObj.setType("Yes");
@@ -123,6 +127,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
             	beanObj.setUnderwriterSearch("");
             	beanObj.setUwYearSearch1("");
             	beanObj.setUnderwriterSearch1("");
+            	beanObj.setOfferNoSearch("");
             }
             if ("RP".equalsIgnoreCase(beanObj.getFlag())) {
                 query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_RENEWALPENDING);
@@ -142,6 +147,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 Map<String, Object> tempMap = list.get(i);
                 PortfolioBean tempBean = new PortfolioBean();
                 tempBean.setProposalNo(tempMap.get("PROPOSAL_NO") == null ? "" : tempMap.get("PROPOSAL_NO").toString());
+                tempBean.setOfferNo(tempMap.get("OFFER_NO") == null ? "" : tempMap.get("OFFER_NO").toString());
                 tempBean.setBouquetNo(tempMap.get("Bouquet_No") == null ? "" : tempMap.get("Bouquet_No").toString());
                 tempBean.setAmendId(tempMap.get("AMEND_ID") == null ? "" : tempMap.get("AMEND_ID").toString());
                 tempBean.setCeding_Company_Name(tempMap.get("COMPANY_NAME") == null ? "" : tempMap.get("COMPANY_NAME").toString());
