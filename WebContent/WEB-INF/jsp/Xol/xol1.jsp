@@ -1638,7 +1638,7 @@ function funEditSubmit()
 destroyPopUps();
 	//if(chkAccAmt()){
 	document.xol1.editMode.value="S";
-	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct');
+	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct,rateOnLine');
 	document.xol1.action="FirstPageSaveMethodXol.action";
 	document.xol1.submit();
 	//}
@@ -1654,7 +1654,7 @@ function FunctionSaveOption()
 	document.xol1.limitOrigCur.value=document.getElementById("coverLimitAmount[0]").value;
 	document.xol1.deduc_hunPercent.value=document.getElementById("deductableLimitAmount[0]").value;
 	}
-	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct');
+	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct,rateOnLine');
 	document.xol1.action="FirstPageSaveMethodXol.action";
 	document.xol1.submit();
 }
@@ -1672,7 +1672,7 @@ function FunctionAddLayer()
 	document.getElementById("flag").value='';
 	document.getElementById("proposal_no").value="";
 	document.getElementById("layerMode").value='';
-	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct');
+	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct,rateOnLine');
 	document.xol1.action="FirstPageSaveMethodXol.action";
 	document.xol1.submit();
 }
@@ -1690,7 +1690,7 @@ function FunctionUpdateOption()
 	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value=document.xol1.layerProposalNo.value;
-	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct');
+	replaceComma(document.xol1,'event_limit,coverLimitXL,deductLimitXL,subPremium,egnpipml,epi,minPremium,m_dPremium,anualAggregateLiability,anualAggregateDeduct,rateOnLine');
 	document.xol1.action="FirstPageSaveMethodXol.action";
 	document.xol1.submit();
 }

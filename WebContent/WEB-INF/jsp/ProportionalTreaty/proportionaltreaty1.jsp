@@ -1585,7 +1585,7 @@ gap:20px;
 													<s:if
 														test='"renewal".equals(flagTest) || "Renewal".equals(proposalReference) || "Layer".equals(proposalReference) '>
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="destroyPopUps();return FunctionCancel();" />
-														<s:hidden name="proposalNo1" id="proposalNo1" />
+														<%-- <s:hidden name="proposalNo1" id="proposalNo1" /> --%>
 													</s:if>
 													<s:elseif test='"R".equals(proStatus)'>
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionRejectCancel()" />
@@ -1772,7 +1772,7 @@ var checkedItems='';
 		}
 		document.getElementById("countryExcludedList").value=checkedItems;
 		document.getElementById("countryIncludedList").value=checkedItems1;
-		replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');
+		replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');
 		document.proportional.action="checkRiskDetails.action";
 		document.proportional.submit();
 }
@@ -1794,13 +1794,13 @@ function funsubmit(){
 			 alert("Inception Date Invalid ..You are In Renewal Mode")
 		 }
 		 else{
-		 	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');
+		 	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');
 		 	document.proportional.action="${pageContext.request.contextPath}/checkRiskDetails.action";
 		 	document.proportional.submit();
 		 }
 	</s:if>
 	<s:else>
-			replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');		
+			replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');		
 			document.proportional.action="${pageContext.request.contextPath}/checkRiskDetails.action";
 			document.proportional.submit();
 	</s:else>
@@ -1820,7 +1820,7 @@ function funEditSubmit(){
 
 	document.proportional.editMode.value="S";
 	
-	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
+	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 	document.proportional.action="FirstPageSaveMethodRiskDetails.action";
 	document.proportional.submit();
 	
@@ -1828,7 +1828,7 @@ function funEditSubmit(){
 
 function FunctionSaveOption(){
 
-		replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
+		replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 		document.proportional.action="FirstPageSaveMethodRiskDetails.action";
 		document.proportional.submit();
 }
@@ -1838,7 +1838,7 @@ function FunctionAddLayer()
 	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value="";
 	//document.getElementById("sectionNo").value="";
-	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
+	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 	document.proportional.action="FirstPageSaveMethodRiskDetails.action";
 	document.proportional.submit();
 }
@@ -1847,7 +1847,7 @@ function FunctionUpdateOption()
 	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value=document.proportional.layerProposalNo.value;
-	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
+	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 	document.proportional.action="FirstPageSaveMethodRiskDetails.action";
 	document.proportional.submit();
 }
@@ -1884,7 +1884,7 @@ var checkedItems='';
 	dffDateAlert();
 		document.getElementById("countryExcludedList").value=checkedItems;
 		document.getElementById("countryIncludedList").value=checkedItems1;
-		replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');
+		replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml');
 		document.proportional.action="FirstPageUpdateModeRiskDetails.action";
 		document.proportional.submit();
 }
@@ -2065,9 +2065,14 @@ else if(val=="2"){
 		document.getElementById('commissionSurpPid').style.display="none";
 		document.getElementById('slideScaleCommissionY').disabled=false;
 	}
+var slideScaleCommission = document.proportional.slideScaleCommission.value;
+if(slideScaleCommission!='Y'){
 $("#slideScaleCommissionN").prop("checked", true);
 getSlideInfo('N');
 SlidingScaleEnable();
+}else{
+	getSlideInfo(slideScaleCommission);
+}
 }
 function GetExchangeRate() {
 		var incDate=document.forms['proportional'].incepDate.value;
@@ -2765,7 +2770,7 @@ function getCommInfo(val){
    	 	document.getElementById('commid').style.display = 'none';
    	}
 }
-getSlideInfo('<s:property value="slideScaleCommission"/>');
+//getSlideInfo('<s:property value="slideScaleCommission"/>');
 function  getSlideInfo(id){
 	if(id=="Y"){
     		document.getElementById('ssc').style.display = 'block';
@@ -3440,6 +3445,7 @@ function commissioninsRow(tableID)
 }
 function SlidingScaleEnable(){
 	var treatyType = document.proportional.treatyType.value;
+	var slideScaleCommission = document.proportional.slideScaleCommission.value;
 	//alert(treatyType);
 	if(treatyType=='3'){
 	var premiumQS = document.proportional.commissionQ_S.value;
@@ -3456,8 +3462,10 @@ function SlidingScaleEnable(){
 		document.getElementById('slideScaleCommissionY').disabled=true;
 	}
 	}else{
+		if(slideScaleCommission!='Y'){
 		$("#slideScaleCommissionN").prop("checked", true);
 		getSlideInfo('N');
+		}
 	}
 	
 }

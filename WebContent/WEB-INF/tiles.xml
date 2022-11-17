@@ -518,4 +518,8 @@
         <put-attribute name="title" value="Re-Insurance - Placement" />
         <put-attribute name="body" value="/WEB-INF/jsp/placement/placementStatus.jsp" />
     </definition>
+    <definition name="placementView" extends="CommonTemplate">
+        <put-attribute name="title" value="Re-Insurance - Placement" />
+        <put-attribute name="body" value="/WEB-INF/jsp/placement/placementView.jsp" />
+    </definition>
 </tiles-definitions>

@@ -69,6 +69,23 @@
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent">
+															<div class="textfield" style="display:table;">
+																<div class="text txtB">
+																	<s:text name="label.proposalNo" />
+																</div>
+																<div class="tbox">
+																	<s:property value="proposalNo"/>
+																</div>
+															</div>
+															<div class="textfield" style="display:table;">
+																<div class="text txtB">
+																	<s:text name="label.cedingCompany" />
+																</div>
+																<div class="tbox">
+																	<s:property value="cedingCompany"/>
+																</div>
+															</div>														
+															
 														<div class="textfield">
 															<div class="text txtB">
 																<s:text name="label.emailBy" />

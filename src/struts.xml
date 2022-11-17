@@ -511,6 +511,8 @@
 					<param name="contentType">application/octet-stream</param>
 					<param name="inputName">inputStream</param>
 				</result>
+				<result name="placementView" type="tiles">placementView</result>
+				
 				
 			</action>
 		

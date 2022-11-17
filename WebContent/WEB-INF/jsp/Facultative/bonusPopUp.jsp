@@ -50,7 +50,7 @@
 
                <%--  <s:form id="bonuspopup" name="bonuspopup" theme="simple" action="" method="post" > --%>
                 <s:set var="scaleCommissionListVar" value="scaleCommissionList"/>
-                   <s:if test="'view'.equals(mode) || !''.equals(layerProposalNo)">
+                   <s:if test="'view'.equals(mode)">
                    <div class="table2">
                    <div class="tablerow">
 							<span style="color:red;"><s:iterator value="errorList" var="list" status="stat"><li><s:property /> </li></s:iterator></span></ol>
@@ -433,7 +433,7 @@
 </div>
                 <%-- <s:form id="bonuspopup" name="bonuspopup" theme="simple" action="" method="post" > --%>
                 <s:set var="scaleCommissionListVar" value="scaleCommissionList"/>
-                   <s:if test="'view'.equals(mode) || !''.equals(layerProposalNo) ">
+                   <s:if test="'view'.equals(mode)">
                    <div class="table2">
 	                  <div class="tablerow">
 							<span style="color:red;"><s:iterator value="errorList" var="list" status="stat"><li><s:property /> </li></s:iterator></span>

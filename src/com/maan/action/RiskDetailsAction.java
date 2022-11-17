@@ -3209,7 +3209,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			string.put("1","1");
 			list.add(string);
 			}
-			bean.setScaleCommissionList(list);
+			bean.setScaleCommissionList(list); 
 		}
 		}
 		return forward;

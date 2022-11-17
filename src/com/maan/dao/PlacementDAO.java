@@ -28,6 +28,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.PlacementBean;
@@ -79,6 +80,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -103,6 +105,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 	}
 
@@ -143,6 +146,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 	}
 
@@ -166,6 +170,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 	}
 
@@ -195,6 +200,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -224,6 +230,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -289,6 +296,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -408,6 +416,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return result;
 	}
@@ -444,6 +453,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			updateStatus(bean,"");
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		
 	}
@@ -482,6 +492,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 	}
 
@@ -573,6 +584,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -658,6 +670,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			} 
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 
 	}
@@ -687,6 +700,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return multipart;
 	}
@@ -728,6 +742,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		}
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		
 	}
@@ -802,6 +817,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 	}
 
@@ -827,6 +843,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -846,6 +863,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -869,6 +887,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -893,6 +912,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -921,6 +941,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -953,6 +974,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return result;
 	}
@@ -962,8 +984,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<Map<String,Object>>list=null;
 		String query="";
 		try {
-			Object[] obj=new Object[4];
-			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+			Object[] obj=new Object[5];
+			/*if(StringUtils.isNotBlank(bean.getBouquetNo())) {
 				query=getQuery("GET_EX_DOC_BOUQUET_LIST");
 				obj[0]=bean.getBranchCode();
 				obj[1]=bean.getBouquetNo();
@@ -975,18 +997,20 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				obj[1]=bean.getBaseProposalNo();
 				obj[2]=bean.getReinsurerId();
 				obj[3]=bean.getBrokerId();
-			}else {
+			}else {*/
 				query=getQuery("GET_EX_DOC_PRO_LIST");
 				obj[0]=bean.getBranchCode();
 				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
 				obj[2]=bean.getReinsurerId();
 				obj[3]=bean.getBrokerId();
-			}
+				obj[4]=bean.getCorresId();
+				/* } */
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return list;
 	}
@@ -1006,6 +1030,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return "";
 	}
@@ -1018,7 +1043,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		
 		query=getQuery("DOWNLOAD_ATTACHED_FILE");
 		Object[] obj=new Object[2];
-		obj[0]=bean.getDocId();
+		obj[0]=bean.getDocId().get(0);
 		obj[1]=bean.getFileName();
 		logger.info("Query=>"+query);
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
@@ -1026,6 +1051,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		
 		}catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		return result;
 	}
@@ -1090,6 +1116,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			e.printStackTrace();
 			System.out.println("Mail successfully Not Senrsent");
 			status="Failed";
+			logger.error("Exception:", e);
 		}
     	logger.info("Exit sendResponseMail");
     	return status;
@@ -1155,6 +1182,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 		 
 	 }
@@ -1199,7 +1227,65 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	            System.out.print(ex.getMessage());
 	        }
 	    }
+
+
+	public List<Map<String, Object>> getPlacementViewList(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[4];
+			
+				query=getQuery("GET_PLACEMENT_VIEW");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getEproposalNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+			
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+		return list;
+	}
+	public void getPlacementView(PlacementBean bean) {
+		String query="";
+		Object[]obj=null;
+		List<Map<String,Object>>list=null;
+		try {
+			query=getQuery("GET_PLACEMENT_STATUS_VIEW");
+			obj=new Object[5];
+			obj[0]=bean.getEproposalNo();
+			obj[1]=bean.getBranchCode();
+			obj[2]=bean.getReinsurerId();
+			obj[3]=bean.getBrokerId(); 
+			obj[4]=bean.getNewStatus(); 
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+			if(!CollectionUtils.isEmpty(list)) {
+				Map<String,Object>map=list.get(0);
+				bean.setEmailBy(map.get("EMAIL_BY")==null?"":map.get("EMAIL_BY").toString());
+				bean.setCurrentStatus(map.get("NEW_STATUS")==null?"":map.get("NEW_STATUS").toString());
+				bean.setCedentCorrespondent(map.get("CEDENT_CORRESPONDENCE")==null?"":map.get("CEDENT_CORRESPONDENCE").toString());
+				bean.setReinsurerCorrespondent(map.get("REINSURER_CORRESPONDENCE")==null?"":map.get("REINSURER_CORRESPONDENCE").toString());
+				bean.setTqrCorrespondent(map.get("TQR_CORRESPONDENCE")==null?"":map.get("TQR_CORRESPONDENCE").toString());
+				bean.setUpdateDate(map.get("UPDATE_DATE")==null?"":map.get("UPDATE_DATE").toString());
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+	}
+	
+	
 }
+
+
+	
 	
 
 

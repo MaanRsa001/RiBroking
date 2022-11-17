@@ -240,9 +240,11 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			docList.add(i);
 		bean.setDocuList(docList);
 		bean.setPlacementeditInfo(service.editPlacingDetails(bean));
+		service.proposalInfo(bean);
 		return "placementStatus";
 		 
 	}
+	
 	public String updateStatus() {
 		String forward="placementStatus";
 		validationStatus();
@@ -435,10 +437,19 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		}
 		return "stream";
 	}
-	private String uploadDoc() {
+	public String uploadDoc() {
 		bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
-		String result=service.attachFile(bean);
+		service.attachFile(bean);
 		updateInfo();
 		return "placementStatus";
+	}
+	public String viewInfo() {
+		bean.setMode("viewlist");
+		bean.setPlacementviewInfo(service.getPlacementViewList(bean));
+		return "placementView";
+	}
+	public String viewDetail() {
+		service.getPlacementView(bean);
+		return "placementView";
 	}
 }

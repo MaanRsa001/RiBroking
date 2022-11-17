@@ -1110,7 +1110,7 @@ function toggleXLCostOC(retroType){
 }
 
 <s:if test='baseLayer!=null  && !"".equalsIgnoreCase(baseLayer)'>
-	enableForm1(document.proportional,true,'<s:property value="%{fields}"/>');
+	//enableForm1(document.proportional,true,'<s:property value="%{fields}"/>');
 	//document.getElementById("retDelete").disabled = true;
 	//document.getElementById("retAdd").disabled = true;	
 </s:if>

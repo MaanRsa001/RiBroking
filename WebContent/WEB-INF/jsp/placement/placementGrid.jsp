@@ -48,7 +48,7 @@
 <div class="boxcontent" >										
 	<div class="panel panel-primary">											
 			<div class="panel-heading">
-				<s:text name="label.offerinfo" /><s:property value="newStatus"/>
+				<s:text name="label.offerinfo" />
 			</div>
 			<div class="panel-body">
 				<div  class="col-xs-12 form-horizontal form-label-left" style="overflow-x: scroll;overflow-y: visible;">

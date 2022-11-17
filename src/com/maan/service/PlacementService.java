@@ -82,5 +82,13 @@ public String downloadFile(PlacementBean bean) {
 public void uploadDocument(PlacementBean bean) {
 	 dao.uploadDocument(bean) ; 
 }
+
+public List<Map<String, Object>> getPlacementViewList(PlacementBean bean) {
+	return dao.getPlacementViewList(bean);
+}
+public void getPlacementView(PlacementBean bean) {
+	dao.getPlacementView(bean);
+	
+}
 	
 }

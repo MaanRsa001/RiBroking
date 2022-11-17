@@ -34,6 +34,7 @@ public class PlacementBean {
 	private List<Map<String,Object>>exreinsurerInfoList;
 	private List<Map<String,Object>>placementInfoList;
 	private List<Map<String,Object>>placementeditInfo;
+	private List<Map<String,Object>>placementviewInfo;
 	private String emailBy;
 	private String updateDate;
 	private String mailrecordNo;
@@ -651,6 +652,12 @@ public class PlacementBean {
 	}
 	public void setOfferNo(String offerNo) {
 		this.offerNo = offerNo;
+	}
+	public List<Map<String, Object>> getPlacementviewInfo() {
+		return placementviewInfo;
+	}
+	public void setPlacementviewInfo(List<Map<String, Object>> placementviewInfo) {
+		this.placementviewInfo = placementviewInfo;
 	}
 	
 	

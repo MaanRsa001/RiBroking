@@ -120,6 +120,7 @@
 																		<th width="5%"><s:text name="label.status" /></th>
 																		<s:if test='!"S".equals(searchType)'>
 																		<th width="5%"><s:text name="label.action" /></th>
+																		<th width="5%"><s:text name="label.view" /></th>
 																		</s:if>
 																	</tr>
 																	</thead>
@@ -169,7 +170,7 @@
 																			<s:property value="#list.SHARE_SIGNED"/>
 																		</td>
 																		<td align="right">
-																			<s:property value="#list.BROKERAGE"/>
+																			<s:property value="#list.BROKERAGE_PER"/>
 																		</td>
 																		<td>
 																			<s:property value="#list.STATUS"/>
@@ -177,6 +178,9 @@
 																		<s:if test='!"S".equals(searchType)'>
 																		<td>
 																			<input type="button" value="Update" class="btn btn-sm btn-warning"   onclick="FnUpdate('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
+																		</td>
+																		<td>
+																			<input type="button" value="View" class="btn btn-sm btn-primary"   onclick="FnView('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
 																		</td>
 																		</s:if>
 																	</tr>												
@@ -246,6 +250,13 @@ function FnUpdate(val,val1,val2){
 	document.getElementById('reinsurerId').value=val1;
 	document.getElementById('brokerId').value=val2;
 	document.placement.action='${pageContext.request.contextPath}/updateInfoPlacement.action'
+	document.placement.submit();
+}
+function FnView(val,val1,val2){
+	document.getElementById('eproposalNo').value=val;
+	document.getElementById('reinsurerId').value=val1;
+	document.getElementById('brokerId').value=val2;
+	document.placement.action='${pageContext.request.contextPath}/viewInfoPlacement.action'
 	document.placement.submit();
 }
 function funSearchMode(mode){
