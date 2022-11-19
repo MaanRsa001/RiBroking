@@ -88,6 +88,9 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public List<Map<String,Object>>getExistingReinsurerList(){
 		return service.getExistingReinsurerList(bean);
 	}
+	public List<Map<String,Object>>getExistingBrokerList(){
+		return service.getExistingBrokerList(bean);
+	}
 	public List<Map<String,Object>>getExistingAttachList(){
 		return service.getExistingAttachList(bean);
 	}
@@ -99,7 +102,6 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		String forward="placement";
 		service.proposalInfo(bean);
 		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
-		//bean.setExreinsurerInfoList(service.getExReinsurerInfo(bean));
 		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 			for(int i=0;i<1;i++){
@@ -121,6 +123,10 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		String forward="placementList";
 		service.proposalInfo(bean);
 		bean.setPlacementInfoList(service.getPlacementInfoList(bean));
+		if(StringUtils.isBlank(bean.getSearchType())) {
+			bean.setSearchReinsurerId("");
+			bean.setSearchStatus("");
+		}
 		return forward;
 	}
 	
@@ -129,6 +135,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		List<String> reinsureName=new ArrayList<String>();
 		List<String> placingBroker=new ArrayList<String>();
 		List<String> shareOffer=new ArrayList<String>();
+		List<String> deleteStatus=new ArrayList<String>();
+		List<String> changeStatus=new ArrayList<String>();
 			bean.getReinsSNo().remove(bean.getDeleteId());
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 			for(int i=0;i<bean.getReinsSNo().size();i++){
@@ -144,6 +152,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 					reinsureName.add(bean.getReinsureName().get(k));
 					placingBroker.add(bean.getPlacingBroker().get(k));
 					shareOffer.add(bean.getShareOffer().get(k));
+					deleteStatus.add(bean.getDeleteStatus().get(k));
+					changeStatus.add(bean.getChangeStatus().get(k));
 				}
 				else{
 				if(StringUtils.isNotBlank(bean.getReinsureName().get(j))){
@@ -154,6 +164,12 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 							}
 				if(StringUtils.isNotBlank(bean.getShareOffer().get(j))){
 					shareOffer.add(bean.getShareOffer().get(j));
+				}
+				if(StringUtils.isNotBlank(bean.getDeleteStatus().get(j))){
+					shareOffer.add(bean.getDeleteStatus().get(j));
+				}
+				if(StringUtils.isNotBlank(bean.getChangeStatus().get(j))){
+					shareOffer.add(bean.getChangeStatus().get(j));
 				}
 				}
 				j++;
@@ -252,8 +268,16 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			service.updatePlacement(bean);
 			bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
 			service.uploadDocument(bean);
+			if("email".equals(bean.getMode())) {
+				bean.setMailType(bean.getNewStatus());
+				getMailTemplate();
+				forward="placement";
+			}else {
 			bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 			forward= "placementList";
+			}
+			bean.setSearchReinsurerId("");
+			bean.setSearchStatus("");
 		}else {
 			service.proposalInfo(bean);
 			List<Integer> docList=new ArrayList<Integer>();
@@ -365,20 +389,23 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		return "placement";
 	}
 	public String sendMail() {
+		String forward="placement";
 		validateMail();
 		if(!hasActionErrors()) {
 		bean.setMode("mail");
 		service.proposalInfo(bean);
 		bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");
-		String result=service.attachFile(bean);
+		service.attachFile(bean);
 		service.sendMail(bean);
-		//bean.setExreinsurerInfoList(service.getPlacingInfo(bean));
 		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+		if("PWL".equalsIgnoreCase(bean.getMailType())) {
+			forward=summary();
+		}
 		}else {
-			getMailTemplate();
+			forward=getMailTemplate();
 		}
 		
-		return "placement";
+		return forward;
 	}
 	private void validateMail() {
 		if(StringUtils.isBlank(bean.getMailTo())) {
@@ -387,10 +414,15 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		
 	}
 	public String mailInfo() {
-		bean.setMode("mail");
-		service.proposalInfo(bean);
-		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
-		return "placement";
+		String forward="placement";
+		if("PWL".equalsIgnoreCase(bean.getMailType())) {
+			forward=summary();
+		}else {
+			bean.setMode("mail");
+			service.proposalInfo(bean);
+			bean.setReinsurerInfoList(service.getPlacingInfo(bean));
+		}
+		return forward;
 	}
 	public String getreinsurerInfo() { 
 		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));

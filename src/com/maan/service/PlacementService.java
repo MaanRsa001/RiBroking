@@ -90,5 +90,9 @@ public void getPlacementView(PlacementBean bean) {
 	dao.getPlacementView(bean);
 	
 }
+
+public List<Map<String, Object>> getExistingBrokerList(PlacementBean bean) {
+	return dao.getExistingBrokerList(bean);
+}
 	
 }

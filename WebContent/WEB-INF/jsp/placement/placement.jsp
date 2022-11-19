@@ -231,7 +231,7 @@
 																	<s:text name="label.cedingCompany" />
 																</div>
 																<div class="tbox">
-																	<s:property value="cedingCompany"/>
+																	<s:property value="cedingCompanyName"/>
 																</div>
 															</div>
 															<div class="textfield" style="display:table;">
@@ -347,10 +347,10 @@
 																		<s:hidden name="proposalNos[%{#stat.count-1}]" id="proposalNos[%{#stat.count-1}]"></s:hidden>
 																	</td>
 																	<td>
-																		<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
+																		<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
-																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
+																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
 																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
@@ -362,8 +362,9 @@
 																	
 																	<td align="center">
 																		<s:hidden name="deleteStatus[%{#stat.count-1}]"/>
-																		<s:if test='!"N".equals(deleteStatus[#stat.count-1])'>
-																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count}"/>')" />
+																		<s:hidden name="changeStatus[%{#stat.count-1}]"/>
+																		<s:if test='!"N".equals(changeStatus[#stat.count-1])'>
+																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="disableForm(this.form,false,'');deleteRow('<s:property value="%{#stat.count}"/>')" />
 																		</s:if>
 																	</td>
 																</tr>												
@@ -508,6 +509,7 @@
 									</div>
 									</div>
 									<s:hidden name="placementMode" id="placementMode"></s:hidden>
+									
 									</s:elseif>
 									</div>
 									<br class="clear"/>									
@@ -558,7 +560,7 @@
 						<s:hidden name="prePerilVal" id="prePerilVal"></s:hidden>
 						<s:hidden name="baseProposalNo" id="baseProposalNo"></s:hidden>
 						<s:hidden name="mailRegards" id="mailRegards"></s:hidden>
-						
+						<s:hidden name="statusNo" id="statusNo"></s:hidden>
 						<s:hidden name="docId" id="docId"></s:hidden>
 						<s:hidden name="fileName" id="fileName"></s:hidden>
 					</div>	
@@ -613,6 +615,12 @@ var table = document.getElementById(tableID);
 			element7.name = "deleteStatus["+(rowCount-1)+"]";
       		element7.id = "deleteStatus"+(rowCount-1);
       		element7.value='';
+      		var element8 = document.createElement("input");
+			element8.type = "hidden";
+			element8.name = "changeStatus["+(rowCount-1)+"]";
+      		element8.id = "changeStatus"+(rowCount-1);
+      		element8.value='';
+      		
       		cell5.appendChild(element7);
 			var cell6 = row.insertCell(5);
 			cell6.setAttribute("align","center");

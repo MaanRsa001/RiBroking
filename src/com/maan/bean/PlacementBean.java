@@ -21,12 +21,15 @@ public class PlacementBean {
 	private List<String>shareOffer;
 	private List<String>mailStatus;
 	private String cedingCompany;
+	private String cedingCompanyName;
+	private List<String>cedingCompanyNames=new ArrayList<String>();
 	private String treatyName;
 	private String inceptionDate;
 	private String expiryDate;
 	private String uwYear;
 	private String uwYearTo;
 	private String placementNo;
+	private String statusNo;
 	private String baseProposalNo;
 	private String sectionNo;
 	private String mode;
@@ -75,6 +78,8 @@ public class PlacementBean {
 	private String mailCC;
 	private String mailRegards;
 	private String maxSharePercent;
+	private String maxShareWritten;
+	private String maxShareSigned;
 	private String userId;
 	private String eproposalNo;
 	private String placementMode;
@@ -83,6 +88,7 @@ public class PlacementBean {
 	private String searchType;
 	private String searchReinsurerId;
 	private String searchStatus;
+	private String searchBrokerId;
 	private String notplacedProposal;
 	private String placedProposal;
 	private String productId;
@@ -102,7 +108,10 @@ public class PlacementBean {
 	private String corresId;
 	private String sno;
 	private List<String> deleteStatus;
+	private List<String> changeStatus;
 	private String offerNo;
+	private String amendId;
+	private String placementamendId;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -658,6 +667,60 @@ public class PlacementBean {
 	}
 	public void setPlacementviewInfo(List<Map<String, Object>> placementviewInfo) {
 		this.placementviewInfo = placementviewInfo;
+	}
+	public String getCedingCompanyName() {
+		return cedingCompanyName;
+	}
+	public void setCedingCompanyName(String cedingCompanyName) {
+		this.cedingCompanyName = cedingCompanyName;
+	}
+	public List<String> getCedingCompanyNames() {
+		return cedingCompanyNames;
+	}
+	public void setCedingCompanyNames(List<String> cedingCompanyNames) {
+		this.cedingCompanyNames = cedingCompanyNames;
+	}
+	public String getMaxShareWritten() {
+		return maxShareWritten;
+	}
+	public void setMaxShareWritten(String maxShareWritten) {
+		this.maxShareWritten = maxShareWritten;
+	}
+	public String getMaxShareSigned() {
+		return maxShareSigned;
+	}
+	public void setMaxShareSigned(String maxShareSigned) {
+		this.maxShareSigned = maxShareSigned;
+	}
+	public String getAmendId() {
+		return amendId;
+	}
+	public void setAmendId(String amendId) {
+		this.amendId = amendId;
+	}
+	public String getPlacementamendId() {
+		return placementamendId;
+	}
+	public void setPlacementamendId(String placementamendId) {
+		this.placementamendId = placementamendId;
+	}
+	public String getStatusNo() {
+		return statusNo;
+	}
+	public void setStatusNo(String statusNo) {
+		this.statusNo = statusNo;
+	}
+	public List<String> getChangeStatus() {
+		return changeStatus;
+	}
+	public void setChangeStatus(List<String> changeStatus) {
+		this.changeStatus = changeStatus;
+	}
+	public String getSearchBrokerId() {
+		return searchBrokerId;
+	}
+	public void setSearchBrokerId(String searchBrokerId) {
+		this.searchBrokerId = searchBrokerId;
 	}
 	
 	

@@ -60,6 +60,7 @@
 						<th class="tableColWidth"><s:text name="label.cedingCompany" /></th>
 						<th class="tableColWidth"><s:text name="label.reinsureName" /></th>
 						<th class="tableColWidth"><s:text name="label.placingBroker" /></th>
+						<th class="tableColWidth"><s:text name="label.epi" /></th>
 						<th class="tableColWidth"><s:text name="label.shareOffer" /></th>
 						<s:if test='("A".equals(newStatus)) || (#ero) || (#epwl) || (#enpwl) || (#esl) || (#epsl) || (#ecsl)'>
 						<th class="tableColWidth"><s:text name="label.written" /></th>
@@ -112,8 +113,9 @@
 								<s:hidden name="brokerIds[%{#stat.count-1}]"/>
 							</td>
 							<td>
-								<s:property value="cedingCompanys[#stat.count-1]"/>
+								<s:property value="cedingCompanyNames[#stat.count-1]"/>
 								<s:hidden name="cedingCompanys[%{#stat.count-1}]"/>
+								<s:hidden name="cedingCompanyNames[%{#stat.count-1}]"/>
 							</td>
 							<td>
 								<s:property value="reinsurerNames[#stat.count-1]"/>
@@ -122,6 +124,10 @@
 							<td>
 								<s:property value="brokerNames[#stat.count-1]"/>
 								<s:hidden name="brokerNames[%{#stat.count-1}]"/>
+							</td>
+							<td>
+								<s:property value="epiAmount[#stat.count-1]"/>
+								<s:hidden name="epiAmount[%{#stat.count-1}]"/>
 							</td>
 							<td>
 							<s:if test='("A".equals(newStatus))'>

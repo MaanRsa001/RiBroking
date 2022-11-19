@@ -69,7 +69,7 @@
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-														<div class="textfield">
+														<div class="textfield33">
 															<div class="text txtB">
 																<s:text name="label.reinsureName" />
 															</div> 
@@ -77,7 +77,15 @@
 																<s:select list="existingReinsurerList" listKey="REINSURER_ID" listValue="REINSURER_NAME" name="searchReinsurerId" id="searchReinsurerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" />
 															</div>
 														</div>
-														<div class="textfield">
+														<div class="textfield33">
+															<div class="text txtB">
+																<s:text name="label.reinsureName" />
+															</div> 
+															<div class="tbox">
+																<s:select list="existingBrokerList" listKey="BROKER_ID" listValue="BROKER_NAME" name="searchBrokerId" id="searchBrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" />
+															</div>
+														</div>
+														<div class="textfield33">
 															<div class="text txtB">
 																<s:text name="label.currentStatus" />
 															</div> 
@@ -85,6 +93,7 @@
 																<s:select list="statusList" listKey="STATUS_CODE" listValue="STATUS_NAME" name="searchStatus" id="searchStatus" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"/>
 															</div>
 														</div>
+														<br/>
 														<div  align="center">
 																<input type="button" class="btn btn-sm btn-info" value="Search" style="cursor: pointer;" onclick="funSearchMode('S')" />
 																<input type="button" class="btn btn-sm btn-success" value="Clear Search" style="cursor: pointer;"	onclick="funSearchMode('')" />	 					
@@ -128,7 +137,7 @@
 																	<s:iterator value="#eplacementInfoList" var="list"  status="stat">									
 																	<tr>
 																		<td>
-																			<s:property value="%{#stat.count}"/>
+																			<s:property value="#list.SNO"/>
 																		</td>
 																		<td>
 																			<s:property value="#list.OFFER_NO"/>
@@ -242,6 +251,7 @@
 <script type="text/javascript">
 $('.select1').select2({ });
 function FnCancel(){
+	document.getElementById("searchType").value='';
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.placement.submit();
 }

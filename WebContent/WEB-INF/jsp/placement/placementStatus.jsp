@@ -82,7 +82,7 @@
 																	<s:text name="label.cedingCompany" />
 																</div>
 																<div class="tbox">
-																	<s:property value="cedingCompany"/>
+																	<s:property value="cedingCompanyName"/>
 																</div>
 															</div>														
 															
@@ -239,7 +239,8 @@
 							
 							
 								<input type="button"  value="Back"  class="btn btn-sm btn-danger"  onclick="FnBack()" />
-								<input type="button"  value="Submit"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FnSumbit()" />											
+								<input type="button"  value="Submit"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FnSumbit()" />
+								<div id="emailid" style="display:none"><input type="button"  value="Send Mail & Update"  class="btn btn-sm btn-primary"  onclick="disableForm(this.form,false,'');FnEmailSumbit()" /></div>											
 							</div>
 						</div>	
 						
@@ -252,6 +253,7 @@
 						<s:hidden name="bouquetNo" id="bouquetNo"></s:hidden>
 						<s:hidden name="baseProposalNo" id="baseProposalNo"></s:hidden>
 						<s:hidden name="searchReinsurerId" id="searchReinsurerId"></s:hidden>
+						<s:hidden name="searchBrokerId" id="searchBrokerId"></s:hidden>
 						<s:hidden name="searchStatus" id="searchStatus"></s:hidden>
 					</div>	
 					<div id="premiumSubmit">
@@ -275,10 +277,21 @@ function FnSumbit(){
 	document.placement.action='${pageContext.request.contextPath}/updateStatusPlacement.action';
 	document.placement.submit();
 }
+function FnEmailSumbit(){
+	document.placement.currentStatus.disabled=false;
+	document.placement.action='${pageContext.request.contextPath}/updateStatusPlacement.action?mode=email';
+	document.placement.submit();
+}
+
 <s:if test='newStatus!=null && !"".equals(newStatus) && !hasActionErrors()'>
 getStatuschange('<s:property value="newStatus"/>')
 </s:if>
 function getStatuschange(val){
+	if(val=='PWL' || val=='PSL'){
+		document.getElementById('emailid').style.display="inline";
+	}else{
+		document.getElementById('emailid').style.display="none";
+	}
 	postFormRequest("${pageContext.request.contextPath}/getStatusChangePlacement.action?dropDown=statusChange", "statusChange", "placement");
 	
 }

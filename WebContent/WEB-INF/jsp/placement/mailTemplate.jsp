@@ -76,41 +76,6 @@
 		</div>
 	</div>
 	</div>
-      <%-- <div class="row">
-    	 <label for="cc" class="col-2 col-sm-1 col-form-label">Attachment:</label>
-          <div class="col-5 col-sm-5 mb-2" >
-          <s:file name="upload"  cssClass="inputBox" id="upload"/>
-          </div>
-          <div class="col-5 col-sm-5 mb-2" >
-         <button type="submit" class="btn btn-sm btn-warning" onclick="uploadFile();">Upload File</button>
-          </div>
-      </div>
-      <br/>
-      <div class="row">
-      <div class="boxcontent col-md-4 col-lg-4 col-xl-4" style="width:40%"  align="left">
-	      
-	      <ul class="list-group">
-			      <s:iterator value="existingAttachList" var="list"  status="stat">
-					  <li class="list-group-item">
-					  		<div class="row">
-					  				<div class="col-md-8">
-					  					<s:property value="#list.ORG_FILE_NAME"/>
-					  				</div>
-					  				<div class="col-md-2">
-					  					<button type="submit" class="btn btn-sm btn-primary" onclick="DownloadFile('<s:property value="#list.DOC_ID"/>','<s:property value="#list.ORG_FILE_NAME"/>')"><span class="glyphicon glyphicon-download"></span></button>
-					  				</div>
-					  				<div class="col-md-2">
-					  					<button type="submit" class="btn btn-sm btn-danger" onclick="DeleteFile('<s:property value="#list.DOC_ID"/>','<s:property value="#list.ORG_FILE_NAME"/>')"><span class="glyphicon glyphicon-remove"></span></button>
-					  				</div>
-					  		</div>
-					  
-					  		
-					  			
-					  </li>
-				</s:iterator>
-			</ul>
-     </div>
-      </div> --%>
      <div class="row" style="padding-top:15px">
              <div class="text-center">
              		<button type="submit" class="btn btn-sm btn-danger" onclick="cancelEmail();">Discard</button>

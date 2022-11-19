@@ -1,9 +1,9 @@
 package com.maan.dao;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -14,7 +14,6 @@ import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -33,9 +32,9 @@ import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.PlacementBean;
 import com.maan.common.db.MyJdbcTemplate;
-import com.maan.common.login.LogInService;
 import com.maan.common.util.DropDownControllor;
 import com.maan.common.util.LogUtil;
+import com.maan.service.PlacementMailTemplate;
 
 public class PlacementDAO extends MyJdbcTemplate{
 	
@@ -44,6 +43,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
 	String SMTP_AUTH_USER; 
 	String SMTP_AUTH_PWD;
+	PlacementMailTemplate service=new PlacementMailTemplate();
+	
 	public List<Map<String,Object>> proposalInfo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		try {
@@ -57,7 +58,8 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			list=this.mytemplate.queryForList(query, obj);
 			if(!CollectionUtils.isEmpty(list)) {
 				Map<String,Object>map=list.get(0);
-				bean.setCedingCompany(map.get("COMPANY_NAME")==null?"":map.get("COMPANY_NAME").toString());
+				bean.setCedingCompanyName(map.get("COMPANY_NAME")==null?"":map.get("COMPANY_NAME").toString());
+				bean.setCedingCompany(map.get("RSK_CEDINGID")==null?"":map.get("RSK_CEDINGID").toString());
 				bean.setTreatyName(map.get("TREATY_TYPE")==null?"":map.get("TREATY_TYPE").toString());
 				bean.setInceptionDate(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString());
 				bean.setExpiryDate(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString());
@@ -70,6 +72,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setLayerNo(map.get("LAYER_NO")==null?"0":map.get("LAYER_NO").toString());
 				bean.setSectionNo(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString());
 				bean.setOfferNo(map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString());
+				bean.setAmendId(map.get("AMEND_ID")==null?"":map.get("AMEND_ID").toString());
 				if(StringUtils.isBlank(bean.getEproposalNo()))
 				bean.setEproposalNo(bean.getProposalNo());
 				/*String sql=getQuery("GET_BASE_LAYER_COUNT");
@@ -89,9 +92,11 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	public void savePlacing(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		try {
+			getPlacementNo(bean);
 			if("C".equalsIgnoreCase(bean.getPlacementMode())) {
 				if(StringUtils.isNotBlank(bean.getBouquetNo())) {
 					list=new DropDownControllor().getBouquetExistingList(bean.getBranchCode(),bean.getBouquetNo(),bean.getBouquetModeYN());
+					
 				}else {
 					list=new DropDownControllor().getBaseLayerExistingList(bean.getBranchCode(),bean.getBaseProposalNo());
 				}
@@ -102,27 +107,57 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}else {
 				insertPlacing(bean);
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Exception:", e);
 		}
 	}
-
+public void getPlacementNo(PlacementBean bean) {
+	String placementNo="",statusNo;
+	String query="";
+	List<Map<String,Object>>list=null;
+	try {
+		if("C".equalsIgnoreCase(bean.getPlacementMode())) {
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_PLACEMENT_NO_BOUQUET");
+				list=this.mytemplate.queryForList(query,new Object[] {bean.getBouquetNo()});
+			}else {
+				query=getQuery("GET_PLACEMENT_NO_BASELAYER");
+			 	list=this.mytemplate.queryForList(query,new Object[] {bean.getBaseProposalNo()});
+			}
+		}else {
+			query=getQuery("GET_PLACEMENT_NO_PROPOSAL");
+			list=this.mytemplate.queryForList(query,new Object[] {bean.getEproposalNo()});
+		}
+		if(!CollectionUtils.isEmpty(list)) {
+			placementNo=list.get(0).get("PLACEMENT_NO")==null?"":list.get(0).get("PLACEMENT_NO").toString();
+		}
+		if(StringUtils.isBlank(placementNo)) {
+		 	placementNo=new DropDownControllor().getSequence("PlacementNo",null,"0", bean.getBranchCode(),"","");
+		}
+		statusNo=new DropDownControllor().getSequence("StatusNo",null,"0", bean.getBranchCode(),"","");
+		bean.setStatusNo(statusNo);
+		bean.setPlacementNo(placementNo);
+		bean.setStatusNo(statusNo);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
 	public void insertPlacing(PlacementBean bean) {
-		String placementNo="";
+		String plamendId="0";
 		try {
 			proposalInfo(bean);
-			String query=getQuery("GET_PLACEMENT_NO_SEQ");
-			placementNo=this.mytemplate.queryForObject(query, String.class);
-			bean.setPlacementNo(placementNo);
-			DeletePlacement(bean);
-			query=getQuery("INSERT_PLACEMENT_INFO");
+			
+			//DeletePlacement(bean);
+			
+			String query=getQuery("INSERT_PLACEMENT_INFO");
 			for(int i=0;i<bean.getReinsSNo().size();i++) {
 				bean.setReinsurerId(bean.getReinsureName().get(i));
-				bean.setBrokerId(bean.getPlacingBroker().get(i));;
-				if(!"N".equals(bean.getDeleteStatus().get(i))) {
-					Object[] obj = new Object[15];
+				bean.setBrokerId(bean.getPlacingBroker().get(i));
+				plamendId=getMaxAmendId(bean);
+				bean.setPlacementamendId(StringUtils.isBlank(plamendId)?"0":plamendId);
+				//if(!"N".equals(bean.getDeleteStatus().get(i))) {
+					Object[] obj = new Object[19];
 					obj[0]=bean.getPlacementNo();
 					obj[1]=bean.getReinsSNo().get(i);
 					obj[2]=bean.getBouquetNo();
@@ -131,17 +166,21 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					obj[5]=bean.getContractNo();
 					obj[6]=bean.getLayerNo();
 					obj[7]=bean.getSectionNo();
-					obj[8]="0";
+					obj[8]=bean.getAmendId();
 					obj[9]=bean.getReinsureName().get(i);
 					obj[10]=bean.getPlacingBroker().get(i);
 					obj[11]=bean.getShareOffer().get(i);
 					obj[12]=bean.getBranchCode();
 					obj[13]=bean.getCedingCompany();
 					obj[14]=bean.getPlacementMode();
+					obj[15]=bean.getPlacementamendId();
+					obj[16]=bean.getStatusNo();
+					obj[17]="Y";
+					obj[18]=bean.getUserId();
 					logger.info("Query=>"+query);
 					logger.info("Args=>"+StringUtils.join(obj, ","));	
 					this.mytemplate.update(query,obj);
-				}
+				//}
 					
 			}
 		} catch (Exception e) {
@@ -149,6 +188,23 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			logger.error("Exception:", e);
 		}
 	}
+
+	private String getMaxAmendId(PlacementBean bean) {
+		String query="",plamendId="0";
+		try {
+			query=getQuery("GET_PLACEMENT_MAX_AMENDID");
+			Object[] obj1 = new Object[4];
+			obj1[0]=bean.getBranchCode();
+			obj1[1]=bean.getEproposalNo();
+			obj1[2]=bean.getReinsurerId();
+			obj1[3]=bean.getBrokerId();
+			plamendId=this.mytemplate.queryForObject(query,obj1, String.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return plamendId;
+	}
+
 
 	private void DeletePlacement(PlacementBean bean) {
 		String query="";
@@ -193,8 +249,10 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
 			}
 			if(StringUtils.isNotBlank(bean.getSearchType())) {
-				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
-			} 
+				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.BROKER_ID='"+bean.getSearchBrokerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
+			}
+			//query=query+" ORDER BY P.BASE_PROPOSAL_NO,P.PROPOSAL_NO,P.SNO";
+			
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -223,8 +281,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
 			}
 			if(StringUtils.isNotBlank(bean.getSearchType())) {
-				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
+				query=query+" AND P.REINSURER_ID='"+bean.getSearchReinsurerId()+"' AND P.BROKER_ID='"+bean.getSearchBrokerId()+"' AND P.STATUS='"+bean.getSearchStatus()+"'";
 			}
+			query=query+" ORDER BY OFFER_NO,P.BASE_PROPOSAL_NO,P.PROPOSAL_NO,P.SNO";
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -246,6 +305,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<String> mailStatus=new ArrayList<String>();
 		List<String> proposalNos=new ArrayList<String>();
 		List<String> deleteStatus=new ArrayList<String>();
+		List<String> changeStatus=new ArrayList<String>();
 		try {
 			Object[] obj=new Object[2];
 			query=getQuery("GET_REINSURER_INFO_NOTIN");
@@ -277,7 +337,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					reinsSNo.add(map.get("SNO")==null?"":map.get("SNO").toString());
 					reinsureName.add(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					placingBroker.add(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
-					shareOffer.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
+					shareOffer.add(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formatterpercentage(map.get("SHARE_OFFERED").toString()));
 					mailStatus.add(mailstatus);
 					proposalNos.add(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
 					if(mailcount>0) {
@@ -285,6 +345,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					}else {
 						deleteStatus.add("Y");
 					}
+					changeStatus.add("N");
 				}
 				bean.setReinsSNo(reinsSNo);
 				bean.setReinsureName(reinsureName);
@@ -293,6 +354,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setMailStatus(mailStatus);
 				bean.setProposalNos(proposalNos);
 				bean.setDeleteStatus(deleteStatus);
+				bean.setChangeStatus(changeStatus);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -314,6 +376,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<String> reinsurerNames=new ArrayList<String>();
 		List<String> brokerNames=new ArrayList<String>();
 		List<String>cedingCompanys=new ArrayList<String>();
+		List<String>cedingCompanyNames=new ArrayList<String>();
 		List<String>shareOffered=new ArrayList<String>();
 		List<String>writtenLine=new ArrayList<String>();
 		List<String>brokerage=new ArrayList<String>();
@@ -350,6 +413,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 					reinsurerNames.add(map.get("REINSURER_NAME")==null?"":map.get("REINSURER_NAME").toString());
 					brokerNames.add(map.get("BROKER_NAME")==null?"":map.get("BROKER_NAME").toString());
 					cedingCompanys.add(map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString());
+					cedingCompanyNames.add(map.get("CEDING_COMPANY_NAME")==null?"":map.get("CEDING_COMPANY_NAME").toString());
 					shareOffered.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
 					writtenLine.add(map.get("SHARE_WRITTEN")==null?"":map.get("SHARE_WRITTEN").toString());
 					brokerage.add(map.get("BROKERAGE_PER")==null?"":map.get("BROKERAGE_PER").toString());
@@ -372,6 +436,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setReinsurerNames(reinsurerNames);
 				bean.setBrokerNames(brokerNames);
 				bean.setCedingCompanys(cedingCompanys);
+				bean.setCedingCompanyNames(cedingCompanyNames);
 				bean.setBrokerIds(brokerIds);
 				bean.setProposalNos(proposalNos);
 				bean.setShareOffered(shareOffered);
@@ -389,6 +454,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				bean.setEmailStatus(emailStatus);
 				bean.setPsignedLine(psignedLine);
 			}
+			if(StringUtils.isBlank(bean.getSearchType())) {
 			query=getQuery("GET_PLACEMENT_STATUS_EDIT");
 			obj=new Object[4];
 			obj[0]=bean.getEproposalNo();
@@ -410,8 +476,10 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			}else {
 				if(StringUtils.isBlank(bean.getNewStatus())) {
 				bean.setCurrentStatus(StringUtils.isBlank(bean.getSearchStatus())?"O":bean.getSearchStatus());
-				//bean.setNewStatus(bean.getCurrentStatus());
 				}
+			}
+			}else {
+				bean.setCurrentStatus(StringUtils.isBlank(bean.getSearchStatus())?"O":bean.getSearchStatus());
 			}
 			
 		}catch (Exception e) {
@@ -423,32 +491,59 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 
 
 	public void updatePlacement(PlacementBean bean) {
+		String plamendId="",statusNo="",query="";
 		try {
+			Map<String,Object>result=null;
 			
-			String query=getQuery("UPDATE_PLACEMENT_INFO");
-			Object obj[]=new Object[14];
+			statusNo=new DropDownControllor().getSequence("StatusNo",null,"0", bean.getBranchCode(),"","");
+			bean.setStatusNo(statusNo);
+			
+			query=getQuery("INSERT_PLACEMENT_DETAIL");
 			for(int i=0;i<bean.getProposalNos().size();i++) {
-			obj[0]=bean.getNewStatus();
-			obj[1]=bean.getWrittenLine().get(i);
-			obj[2]=bean.getProposedWL().get(i);
-			obj[3]=bean.getWrittenvaliditydate().get(i);
-			obj[4]=bean.getWrittenvalidityRemarks().get(i);
-			obj[5]=bean.getSignedLine().get(i);
-			obj[6]=bean.getSignedLineValidity().get(i);
-			obj[7]=bean.getSignedLineRemarks().get(i);
-			obj[8]=bean.getProposedSL().get(i);
-			obj[9]=bean.getBrokerage().get(i);
-			if("RO".equalsIgnoreCase(bean.getNewStatus())) {
-				obj[10]=bean.getReoffer().get(i);
-			}else {
-				obj[10]=bean.getShareOffered().get(i);
-			}
-			obj[11]=bean.getProposalNos().get(i);
-			obj[12]=bean.getReinsurerIds().get(i);
-			obj[13]=bean.getBrokerIds().get(i);
-			logger.info("Query=>"+query);   
-			logger.info("Args=>"+StringUtils.join(obj, ",")); 
-			this.mytemplate.update(query,obj);
+				bean.setReinsurerId(bean.getReinsurerIds().get(i));
+				bean.setBrokerId(bean.getBrokerIds().get(i));
+				bean.setEproposalNo(bean.getProposalNos().get(i));
+				plamendId=getMaxAmendId(bean);
+				bean.setPlacementamendId(StringUtils.isBlank(plamendId)?"0":plamendId);
+				
+				result=getPlacementDetails(bean.getEproposalNo(),bean.getReinsurerId(),bean.getBrokerId(),bean.getBranchCode());
+				Object obj[]=new Object[29];
+				obj[0]=result.get("PLACEMENT_NO")==null?"":result.get("PLACEMENT_NO").toString();
+				obj[1]=result.get("SNO")==null?"":result.get("SNO").toString();
+				obj[2]=result.get("BOUQUET_NO")==null?"":result.get("BOUQUET_NO").toString();
+				obj[3]=result.get("BASE_PROPOSAL_NO")==null?"":result.get("BASE_PROPOSAL_NO").toString();
+				obj[4]=result.get("PROPOSAL_NO")==null?"":result.get("PROPOSAL_NO").toString();
+				obj[5]=result.get("CONTRACT_NO")==null?"":result.get("CONTRACT_NO").toString();
+				obj[6]=result.get("LAYER_NO")==null?"":result.get("LAYER_NO").toString();
+				obj[7]=result.get("SECTION_NO")==null?"":result.get("SECTION_NO").toString();
+				obj[8]=result.get("AMEND_ID")==null?"":result.get("AMEND_ID").toString();
+				obj[9]=result.get("CEDING_COMPANY_ID")==null?"":result.get("CEDING_COMPANY_ID").toString();
+				obj[10]=result.get("REINSURER_ID")==null?"":result.get("REINSURER_ID").toString();
+				obj[11]=result.get("BROKER_ID")==null?"":result.get("BROKER_ID").toString();
+				obj[12]=result.get("PLACEMENT_MODE")==null?"":result.get("PLACEMENT_MODE").toString();
+				obj[13]=bean.getNewStatus();
+				if("RO".equalsIgnoreCase(bean.getNewStatus())) {
+					obj[14]=bean.getReoffer().get(i);
+				}else {
+					obj[14]=bean.getShareOffered().get(i);
+				}
+				obj[15]=bean.getWrittenLine().get(i);
+				obj[16]=bean.getProposedWL().get(i);
+				obj[17]=bean.getWrittenvaliditydate().get(i);
+				obj[18]=bean.getWrittenvalidityRemarks().get(i);
+				obj[19]=bean.getSignedLine().get(i);
+				obj[20]=bean.getSignedLineValidity().get(i);
+				obj[21]=bean.getSignedLineRemarks().get(i);
+				obj[22]=bean.getProposedSL().get(i);
+				obj[23]=bean.getBrokerage().get(i);
+				obj[24]=bean.getPlacementamendId();
+				obj[25]=bean.getStatusNo();
+				obj[26]="Y";
+				obj[27]=bean.getUserId();
+				obj[28]=bean.getBranchCode();
+				logger.info("Query=>"+query);   
+				logger.info("Args=>"+StringUtils.join(obj, ",")); 
+				this.mytemplate.update(query,obj);
 			}
 			updateStatus(bean,"");
 		} catch (Exception e) {
@@ -457,14 +552,45 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		}
 		
 	}
-	public void updateStatus(PlacementBean bean,String status) {
-		String corresId="";
+	private Map<String, Object> getPlacementDetails(String proposalNo, String reinsuerId, String brokerId,String branchCode) {
+		List<Map<String,Object>>result=null;
+		Map<String,Object>map=new HashMap<String, Object>();
 		try {
-			String query=getQuery("GET_PLACEMENT_NO_SEQ");
+			String query=getQuery("GET_PLACEMENT_DETAIL");
+			Object[] obj=new Object[4];
+			obj[0]=branchCode;
+			obj[1]=proposalNo;
+			obj[2]=reinsuerId;
+			obj[3]=brokerId;
+			
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			result=this.mytemplate.queryForList(query, obj);
+			if(!CollectionUtils.isEmpty(result)) {
+				map=result.get(0);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+				logger.error("Exception:", e);
+		}	
+		return map;
+	}
+
+
+	public void updateStatus(PlacementBean bean,String status) {
+		String corresId="",statusNo="";
+		try {
+			
+			String query=getQuery("GET_CORRESPONDENT_SEQ");
 			corresId=this.mytemplate.queryForObject(query, String.class);
 			bean.setCorresId(corresId);
+			if(StringUtils.isBlank(bean.getStatusNo())) {
+				statusNo=new DropDownControllor().getSequence("StatusNo",null,"0", bean.getBranchCode(),"","");
+				bean.setStatusNo(statusNo);
+			}
 			 query=getQuery("INSERT_PLACEMENT_STATUS");
-			Object obj[]=new Object[19];
+			Object obj[]=new Object[22];
 			for(int i=0;i<bean.getProposalNos().size();i++) {
 				obj[0]=bean.getSnos().get(i);
 				obj[1]=bean.getBouquetNos().get(i);
@@ -485,7 +611,9 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				obj[16]="Y";
 				obj[17]=bean.getBranchCode();
 				obj[18]=bean.getCorresId();
-				
+				obj[19]=bean.getStatusNo();
+				obj[20]=bean.getUserId();
+				obj[21]="Y";
 				logger.info("Query=>"+query);
 				logger.info("Args=>"+StringUtils.join(obj, ","));
 				this.mytemplate.update(query,obj);
@@ -500,62 +628,107 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	public void getMailTemplate(PlacementBean bean) {
 		
 		List<Map<String,Object>>result=null;
-		String query=getQuery("GET_MAIL_TEMPLATE");
-		Object[] obj=new Object[1];
-		obj[0]=bean.getMailType();
-		
-		logger.info("Query=>"+query);
-		logger.info("Args=>"+StringUtils.join(obj, ","));
-		result=this.mytemplate.queryForList(query, obj);
-		if(!CollectionUtils.isEmpty(result)) {
-			Map<String,Object>map=result.get(0);
-			bean.setMailSubject(map.get("MAIL_SUBJECT")==null?"":map.get("MAIL_SUBJECT").toString());
-			bean.setMailBody(map.get("MAIL_BODY")==null?"":map.get("MAIL_BODY").toString());
-			if(StringUtils.isBlank(bean.getMailTo()))
-			bean.setMailTo(map.get("EMAIL_TO")==null?"":map.get("EMAIL_TO").toString());
-			if(StringUtils.isBlank(bean.getMailCC()))
-			bean.setMailCC(map.get("EMAIL_CC")==null?"":map.get("EMAIL_CC").toString());
-			bean.setMailRegards(map.get("MAIL_REGARDS")==null?"":map.get("MAIL_REGARDS").toString());
+		try {
+			String query=getQuery("GET_MAIL_TEMPLATE");
+			Object[] obj=new Object[1];
+			obj[0]=bean.getMailType();
 			
-	}
-		GetMailBodyFrame(bean);
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			result=this.mytemplate.queryForList(query, obj);
+			if(!CollectionUtils.isEmpty(result)) {
+				Map<String,Object>map=result.get(0);
+				bean.setMailSubject(map.get("MAIL_SUBJECT")==null?"":map.get("MAIL_SUBJECT").toString());
+				bean.setMailBody(map.get("MAIL_BODY")==null?"":map.get("MAIL_BODY").toString());
+				if(StringUtils.isBlank(bean.getMailTo()))
+				bean.setMailTo(map.get("EMAIL_TO")==null?"":map.get("EMAIL_TO").toString());
+				if(StringUtils.isBlank(bean.getMailCC()))
+				bean.setMailCC(map.get("EMAIL_CC")==null?"":map.get("EMAIL_CC").toString());
+				bean.setMailRegards(map.get("MAIL_REGARDS")==null?"":map.get("MAIL_REGARDS").toString());
+				
+			}
+			GetMailBodyFrame(bean);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
 	}
 
 
 	private void GetMailBodyFrame(PlacementBean bean) {
-		String mailbody=bean.getMailBody(),mailsub=bean.getMailSubject();
-		List<Map<String,Object>>list=proposalInfo(bean);
-		if(!CollectionUtils.isEmpty(list)) {
-			Map<String,Object>map=list.get(0);
-			String bouquetNo=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
-			String proposalNo=map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString();
-			String baseproposalNo=map.get("BASE_LAYER")==null?"":map.get("BASE_LAYER").toString();
-			String offerNo=map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString();
-			if(StringUtils.isNotBlank(bouquetNo)) {
-				mailsub=mailsub+" "+bouquetNo+"";
-			}else if(StringUtils.isNotBlank(offerNo)) {
-				mailsub=mailsub+" "+offerNo+" ";
-			}
-			for (Map.Entry entry: map.entrySet()) {
-				if(mailbody.contains(entry.getKey().toString()) == true) {
-					mailbody = mailbody.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
+		try {
+			String mailbody=bean.getMailBody(),mailsub=bean.getMailSubject();
+			List<Map<String,Object>>list=proposalInfo(bean);
+			if(!CollectionUtils.isEmpty(list)) {
+				Map<String,Object>map=list.get(0);
+				String bouquetNo=map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString();
+				String proposalNo=map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString();
+				String baseproposalNo=map.get("BASE_LAYER")==null?"":map.get("BASE_LAYER").toString();
+				String offerNo=map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString();
+				if(StringUtils.isNotBlank(bouquetNo)) {
+					mailsub=mailsub+" "+bouquetNo+"";
+				}else if(StringUtils.isNotBlank(offerNo)) {
+					mailsub=mailsub+" "+offerNo+" ";
+				}
+				for (Map.Entry entry: map.entrySet()) {
+					if(mailbody.contains(entry.getKey().toString()) == true) {
+						mailbody = mailbody.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
+						
+					}
 					
-				}
-				
-				if(mailsub.contains(entry.getKey().toString()) == true) {
-					mailsub = mailsub.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
+					if(mailsub.contains(entry.getKey().toString()) == true) {
+						mailsub = mailsub.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
+					}
 				}
 			}
+			GetPalcementInfo(bean);
+			mailbody+=BodyTableFrame(bean);
+			bean.setMailBody(mailbody);
+			bean.setMailSubject(mailsub);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
-		mailbody+=BodyTableFrame(bean);
-		bean.setMailBody(mailbody);
-		bean.setMailSubject(mailsub);
+	}
+
+
+	private void GetPalcementInfo(PlacementBean bean) {
+		List<Map<String,Object>>result=null;
+		try {
+			String query=getQuery("GET_PLACEMENT_INFO");
+			Object[] obj=new Object[4];
+			obj[0]=bean.getBranchCode();
+			obj[1]=bean.getEproposalNo();
+			obj[2]=bean.getReinsurerId();
+			obj[3]=bean.getBrokerId();
+			
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			result=this.mytemplate.queryForList(query, obj);
+			if(!CollectionUtils.isEmpty(result)) {
+				Map<String,Object>map=result.get(0);
+				bean.setMaxSharePercent(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
+				bean.setMaxShareWritten(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":map.get("SHARE_PROPOSAL_WRITTEN").toString());
+				bean.setMaxShareSigned(map.get("SHARE_PROPOSED_SIGNED")==null?"":map.get("SHARE_PROPOSED_SIGNED").toString());
+				bean.setStatusNo(map.get("STATUS_NO")==null?"":map.get("STATUS_NO").toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
 	}
 
 
 	private String BodyTableFrame(PlacementBean bean) {
 		List<Map<String,Object>>list=MailproposalInfo(bean);
-		String msg=getTableMsg(list,bean);
+		String msg="";
+		if(StringUtils.isBlank(bean.getNewStatus())) {
+			msg=service.getOfferMsg(list,bean);
+		}else if("PWL".equalsIgnoreCase(bean.getNewStatus())) {
+			msg=service.getPropsalWrittenMsg(list,bean);
+		}else if("PSL".equalsIgnoreCase(bean.getNewStatus())) {
+			msg=service.getPropsalSignedMsg(list,bean);
+		}
 		return msg;
 	}
 	private List<Map<String, Object>> MailproposalInfo(PlacementBean bean) {
@@ -563,22 +736,40 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		String query="";
 		try {
 			Object[] obj=new Object[2];
-			if("C".equals(bean.getPlacementMode())) {
-				if(StringUtils.isNotBlank(bean.getBouquetNo())) {
-					query=getQuery("GET_MAILTEPLATE_BOUQUET");
-					obj[0]=bean.getBranchCode();
-					obj[1]=bean.getBouquetNo();
+			if(StringUtils.isBlank(bean.getSearchType())) {
+				if("C".equals(bean.getPlacementMode())) {
+					if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+						query=getQuery("GET_MAILTEPLATE_BOUQUET");
+						obj[0]=bean.getBranchCode();
+						obj[1]=bean.getBouquetNo();
+					}else {
+						query=getQuery("GET_MAILTEPLATE_BASELAYER");
+						obj[0]=bean.getBranchCode();
+						obj[1]=bean.getBaseProposalNo();
+					}
 				}else {
-					query=getQuery("GET_MAILTEPLATE_BASELAYER");
+					query=getQuery("GET_MAILTEPLATE_PROPOSAL");
 					obj[0]=bean.getBranchCode();
-					obj[1]=bean.getBaseProposalNo();
+					obj[1]=bean.getProposalNo();
 				}
 			}else {
-				query=getQuery("GET_MAILTEPLATE_PROPOSAL");
+				obj=new Object[5];
 				obj[0]=bean.getBranchCode();
-				obj[1]=bean.getProposalNo();
+				obj[2]=bean.getSearchReinsurerId();
+				obj[3]=bean.getSearchBrokerId();
+				obj[4]=bean.getNewStatus();
+				
+				if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+					query=getQuery("GET_MAILTEPLATE_BOUQUET_SEARCH");
+					obj[1]=bean.getBouquetNo();
+				}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+					query=getQuery("GET_MAILTEPLATE_BASELAYER_SEARCH");
+					obj[1]=bean.getBaseProposalNo();
+				}else {
+					query=getQuery("GET_MAILTEPLATE_PROPOSAL_SEARCH");
+					obj[1]=bean.getProposalNo();
+				}
 			}
-			
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -590,59 +781,10 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 	}
 
 
-	private String getTableMsg(List<Map<String, Object>> agentWiseReport, PlacementBean bean) {
-		String messageContent ="";
-		messageContent="<!DOCTYPE html>" + 
-				"<html lang=\"en\">" + 
-				"<body>" + 
-				"    <div style=\"width: 80%;\">" + 
-				"<table style=\"width:100%;border: 1px solid #000000;\">" +
-				"<thead> <tr> <th width=\"10%\" style=\"border: 1px solid #000000;\">TQR Bouquet Ref </th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">TQR Offer Ref</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Business Type</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Main Class</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Sub Class</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Treaty Type</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Treaty Name</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Layer / Section No</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Inception Date</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Expiry Date</th>" + 
-				"<th width=\"10%\" style=\"border: 1px solid #000000;\">Max Share Offer %</th>" + 
-				"</tr> </thead> <tbody>" ;
-		
-		
-		for(int i=0;i<agentWiseReport.size();i++) {
-			Map<String,Object>map=agentWiseReport.get(i);
-				messageContent+="<tr>"+
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("OFFER_NO")==null?"":map.get("OFFER_NO").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("BUSINESS_TYPE")==null?"":map.get("BUSINESS_TYPE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("CLASS")==null?"":map.get("CLASS").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("SUB_CLASS")==null?"":map.get("SUB_CLASS").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("TREATY_TYPE")==null?"":map.get("TREATY_TYPE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("RSK_TREATYID")==null?"":map.get("RSK_TREATYID").toString())+"</td>" +
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SAHRE_MAX")==null?DropDownControllor.formatterpercentage(bean.getMaxSharePercent()):map.get("SAHRE_MAX").toString())+"</td>" + 
-			"</tr>";
-		}
-		messageContent+=	"</table>" +
-				"    </div>" + 
-				"</body>" + 
-				"" + 
-				"</html>";
-		
-		
 	
-	return messageContent.toString();
-	}
-
-
 	public void sendMail(PlacementBean bean) {
 		try {
 			Map<String, String> mapt=new CommonDAO().getMailDetails("51");
-			LogInService service=new LogInService();
 			String hostName=(String)mapt.get("SMTP_HOST");
 			String user = mapt.get("SMTP_USER");
 			String pwd = mapt.get("SMTP_PWD");
@@ -837,7 +979,6 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				query=getQuery("GET_PLACEMENT_BASELAYER");
 				obj[1]=bean.getBaseProposalNo();
 			}
-			
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -871,16 +1012,20 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 		List<Map<String,Object>>list=null;
 		String query="";
 		try {
-			Object[] obj=new Object[4];
+			Object[] obj=new Object[5];
 			obj[0]=bean.getBranchCode();
 			obj[2]=bean.getSearchReinsurerId();
-			obj[3]=bean.getSearchStatus();
+			obj[3]=bean.getSearchBrokerId();
+			obj[4]=bean.getSearchStatus();
 			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
 				query=getQuery("GET_PLACEMENT_SEARCHBQ_EDIT");
 				obj[1]=bean.getBouquetNo();
 			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
 				query=getQuery("GET_PLACEMENT_SEARCHBP_EDIT");
 				obj[1]=bean.getBaseProposalNo();
+			}else {
+				query=getQuery("GET_PLACEMENT_SEARCH_EDIT");
+				obj[1]=bean.getEproposalNo();
 			}
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
@@ -1279,6 +1424,36 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 			e.printStackTrace();
 			logger.error("Exception:", e);
 		}
+	}
+
+
+	public List<Map<String, Object>> getExistingBrokerList(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[2];
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_EX_BROKER_BOUQUET_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBouquetNo();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_EX_BROKER_BASE_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
+			}else {
+				query=getQuery("GET_EX_BROKER_PRO_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+			}
+			
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+		return list;
 	}
 	
 	
