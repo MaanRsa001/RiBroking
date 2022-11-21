@@ -4528,38 +4528,54 @@ public String calculateSC() {
 }
 private void validateSCCalculate(RiskDetailsBean bean) {
 	List<String> list=new ArrayList<String>();
+	
 	if(StringUtils.isBlank(bean.getScalementhod())) {
 		list.add(getText("error.scale.method"));
-	}
-	if(StringUtils.isBlank(bean.getScaleminRatio())) {
-		list.add(getText("error.scale.minratio"));
-	}
-	if(StringUtils.isBlank(bean.getScalemaxRatio())) {
-		list.add(getText("error.scale.maxratio"));
-	}
-	if(StringUtils.isBlank(bean.getScalecombine())) {
-		list.add(getText("error.scale.combinedratio"));
-	}
-	if(StringUtils.isBlank(bean.getScalebanding())) {
-		list.add(getText("error.scale.banding"));
-	}
-	if(StringUtils.isBlank(bean.getScaledigit())) {
-		list.add(getText("error.scale.digit"));
-	}
-	if(StringUtils.isNotBlank(bean.getScalecombine()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
-		if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
-			list.add(getText("error.scale.max.cobine.valid"));
+	}else {
+		if("MA".equals(bean.getScalementhod())) {
+			
+			if(StringUtils.isBlank(bean.getScaleminRatio())) {
+				list.add(getText("error.scale.minratio"));
+			}
+			if(StringUtils.isBlank(bean.getScalemaxRatio())) {
+				list.add(getText("error.scale.maxratio"));
+			}
+			if(StringUtils.isBlank(bean.getScalecombine())) {
+				list.add(getText("error.scale.combinedratio"));
+			}
+			if(StringUtils.isBlank(bean.getScalebanding())) {
+				list.add(getText("error.scale.banding"));
+			}
+			if(StringUtils.isBlank(bean.getScaledigit())) {
+				list.add(getText("error.scale.digit"));
+			}
+			if(StringUtils.isNotBlank(bean.getScalecombine()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
+				if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
+					list.add(getText("error.scale.max.cobine.valid"));
+				}
+			}
+			if(StringUtils.isNotBlank(bean.getScaleminRatio()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
+				if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
+					list.add(getText("error.scale.max.cobine.valid"));
+				}
+				Double minus=(Double.parseDouble(bean.getScalemaxRatio())-Double.parseDouble(bean.getScaleminRatio()))/Double.parseDouble(bean.getScalebanding());
+				boolean result = (minus - Math.floor(minus)) != 0; 
+				if(result) {
+					list.add(getText("error.scale.max.cobine.valid"));
+				}
+			}
+		}else {
+			if(StringUtils.isBlank(bean.getScalelossratioFrom())) {
+				list.add(getText("error.scalelossratio.from"));
+			}if(StringUtils.isBlank(bean.getScalelossratioTo())) {
+				list.add(getText("error.scalelossratio.to"));
+			}if(StringUtils.isBlank(bean.getScaledeltalossratio())) {
+				list.add(getText("error.scaledeltalossratio.required"));
+			}if(StringUtils.isBlank(bean.getScaledeltacommission())) {
+				list.add(getText("error.scaledeltacommission.required"));
+			}
 		}
-	}
-	if(StringUtils.isNotBlank(bean.getScaleminRatio()) && StringUtils.isNotBlank(bean.getScalemaxRatio())) {
-		if(Double.parseDouble(bean.getScalemaxRatio())>Double.parseDouble(bean.getScalecombine())) {
-			list.add(getText("error.scale.max.cobine.valid"));
-		}
-		Double minus=(Double.parseDouble(bean.getScalemaxRatio())-Double.parseDouble(bean.getScaleminRatio()))/Double.parseDouble(bean.getScalebanding());
-		boolean result = (minus - Math.floor(minus)) != 0; 
-		if(result) {
-			list.add(getText("error.scale.max.cobine.valid"));
-		}
+	
 	}
 	bean.setErrorList(list);
 }

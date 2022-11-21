@@ -4,6 +4,31 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/dataTables/css/dataTables.responsive.css">
+	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/dataTables/css/dataTables.jqueryui.css">
+	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/dataTables/css/dataTables.tableTools.css">
+	<link href="<%=request.getContextPath()%>/dataTables/css/jquery-start-ui.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/dataTables.jqueryui.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/dataTables.responsive.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/dataTables.tableTools.js"></script>
+	<script type="text/javascript">
+	jQuery(function ($) {
+			try {
+				var data = $('#gridTableMake').dataTable( {
+					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+					"order": [[ 0, "asc" ]],
+					"columnDefs": [ {
+			          "targets": 'no-sort',
+			          "orderable": false
+				    } ],
+				   // "stateSave": true,
+					responsive: true
+				});				 
+			} catch(err){}
+		} );		
+	</script>
 	<style type="text/css">
 		.btn-group {
 		width: 100%;
@@ -110,7 +135,7 @@
 												<div class="panel-body">
 													<div class="boxcontent">
 															<div>
-																<table width="100%" class="table table-bordered" >
+																<table class="display responsive no-wrap" id="gridTableMake" width="100%" cellspacing="0">
 																	<thead>
 																	<tr>
 																		<th width="5%"> <s:text name="label.sno" /> </th>

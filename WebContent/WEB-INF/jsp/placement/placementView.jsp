@@ -245,9 +245,9 @@
 															
 														</tr>
 														</thead>
+														<s:if test="existingAttachList!=null && existingAttachList.size()>0">
 														<tbody>
 														<s:iterator value="existingAttachList" var="list"  status="stat">
-														<tr>
 															<tr>
 																<td>
 																	<s:property value="%{#stat.count}"/>
@@ -266,7 +266,13 @@
 																</td>
 															</tr>
 														</s:iterator>
+														
 														</tbody>
+														</s:if>
+														<s:else>
+														<tfoot><tr><td colspan="5" align="center">Nothing Found</td></tr></tfoot>
+														
+														</s:else>
 													</table>											
 												</div>
 											</div>

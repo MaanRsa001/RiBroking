@@ -133,9 +133,9 @@ public void getPlacementNo(PlacementBean bean) {
 			placementNo=list.get(0).get("PLACEMENT_NO")==null?"":list.get(0).get("PLACEMENT_NO").toString();
 		}
 		if(StringUtils.isBlank(placementNo)) {
-		 	placementNo=new DropDownControllor().getSequence("PlacementNo",null,"0", bean.getBranchCode(),"","");
+		 	placementNo=new DropDownControllor().getSequence("PlacementNo","0","0", bean.getBranchCode(),"","");
 		}
-		statusNo=new DropDownControllor().getSequence("StatusNo",null,"0", bean.getBranchCode(),"","");
+		statusNo=new DropDownControllor().getSequence("StatusNo","0","0", bean.getBranchCode(),"","");
 		bean.setStatusNo(statusNo);
 		bean.setPlacementNo(placementNo);
 		bean.setStatusNo(statusNo);
@@ -495,7 +495,7 @@ public void getPlacementNo(PlacementBean bean) {
 		try {
 			Map<String,Object>result=null;
 			
-			statusNo=new DropDownControllor().getSequence("StatusNo",null,"0", bean.getBranchCode(),"","");
+			statusNo=new DropDownControllor().getSequence("StatusNo","0","0", bean.getBranchCode(),"","");
 			bean.setStatusNo(statusNo);
 			
 			query=getQuery("INSERT_PLACEMENT_DETAIL");
@@ -586,7 +586,7 @@ public void getPlacementNo(PlacementBean bean) {
 			corresId=this.mytemplate.queryForObject(query, String.class);
 			bean.setCorresId(corresId);
 			if(StringUtils.isBlank(bean.getStatusNo())) {
-				statusNo=new DropDownControllor().getSequence("StatusNo",null,"0", bean.getBranchCode(),"","");
+				statusNo=new DropDownControllor().getSequence("StatusNo","0","0", bean.getBranchCode(),"","");
 				bean.setStatusNo(statusNo);
 			}
 			 query=getQuery("INSERT_PLACEMENT_STATUS");
@@ -602,7 +602,7 @@ public void getPlacementNo(PlacementBean bean) {
 				obj[7]=bean.getReinsurerIds().get(i);
 				obj[8]=bean.getBrokerIds().get(i);
 				obj[9]=bean.getEmailBy();
-				obj[10]=bean.getCurrentStatus();
+				obj[10]=StringUtils.isBlank(bean.getCurrentStatus())?"O":bean.getCurrentStatus();
 				obj[11]=StringUtils.isBlank(bean.getNewStatus())?status:bean.getNewStatus();
 				obj[12]=bean.getCedentCorrespondent();
 				obj[13]=bean.getReinsurerCorrespondent();
@@ -805,7 +805,7 @@ public void getPlacementNo(PlacementBean bean) {
 			insertMailDetails(bean);
 			Multipart multipart=GetMailAttachment(bean);
 			String status=sendResponseMail(hostName, user, pwd, mailform, subject, multipart, toAddresses, ccAddresses, shortAddress,port);
-			if("Success".equals(status)) {
+			if("Success".equals(status) && "P".equals(bean.getMailType())) {
 				updateStatus(bean,"P");
 			}
 			updateMailDetails(bean,status);

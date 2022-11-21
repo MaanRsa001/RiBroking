@@ -273,11 +273,14 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 				getMailTemplate();
 				forward="placement";
 			}else {
+				bean.setSearchReinsurerId("");
+				bean.setSearchStatus("");
+				bean.setSearchBrokerId("");
+				bean.setSearchType("");
 			bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 			forward= "placementList";
 			}
-			bean.setSearchReinsurerId("");
-			bean.setSearchStatus("");
+			
 		}else {
 			service.proposalInfo(bean);
 			List<Integer> docList=new ArrayList<Integer>();
