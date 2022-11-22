@@ -98,6 +98,9 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 	public String getDisableStatus(){
     	return dropDownController.getDisableStatus(bean.getContNo(),bean.getLayerNo());
     }
+	public String getPltDisableStatus(){
+    	return dropDownController.gePltDisableStatus(bean.getProposal_no());
+    }
 	public String getDisableStatus1(){
     	return dropDownController.getDisableStatus1(bean.getContNo(),bean.getLayerNo());
     }
@@ -123,7 +126,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
     	return dropDownController.getTerritoryRegionList(branchCode);
     }
 	public List<Map<String,Object>> getUnderwriterList(){
-		return dropDownController.getPersonalInfoDropDown(branchCode,"L",pid);
+		return dropDownController.getPersonalInfoDropDown(branchCode,"R",pid);
 	}
 	public List<Map<String,Object>> getProfitCommissionList(){
 		return dropDownController.getTypeList("34",branchCode);

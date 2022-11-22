@@ -3456,19 +3456,7 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 		return statusList;
 	}
 
-	public List<Map<String, Object>> getMailCCList(PlacementBean bean) {
-		List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
-		String query="";
-		try{
-			query=getQuery("GET_MAIL_CC_LIST");
-			logger.info("Select Query==> " + query);
-			
-			statusList=this.mytemplate.queryForList(query,new Object[]{"63".equals(bean.getBrokerId())?bean.getReinsurerId():bean.getBrokerId()});
-		}catch(Exception e){
-			logger.debug("Exception @ {" + e + "}");	
-		}
-		return statusList;
-	}
+	
 
 	public List<Map<String, Object>> getBaseLayerExistingList(String branchCode, String baseProposalNo) {
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
@@ -3532,6 +3520,21 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 
 		}
 		return result;
+	}
+
+	public String gePltDisableStatus(String proposal_no) {
+		String status="N";
+		try {
+			String query = getQuery("GET_PLDISABLE_STATUS");
+			int count=this.mytemplate.queryForInt(query,new Object[]{proposal_no});
+			if(count>0) {
+				 status="Y";
+			}
+		}
+		catch(Exception e) {
+			logger.debug("Exception @ { " + e + " } ");
+		}
+		return status;
 	}
 	
 }

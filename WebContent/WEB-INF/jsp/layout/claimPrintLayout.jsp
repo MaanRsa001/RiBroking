@@ -171,7 +171,7 @@
 <script>
      $("body").click( function()
         {
-         postRequestID("${pageContext.request.contextPath}/LoginCheck.action?","");
+        // postRequestID("${pageContext.request.contextPath}/LoginCheck.action?","");
         }
      );
 </script> 

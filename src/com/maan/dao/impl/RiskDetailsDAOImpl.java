@@ -737,7 +737,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 			beanObj.setPaymentPartner(resMap.get("PAYMENT_PARTNER")==null?"":resMap.get("PAYMENT_PARTNER").toString());
 			beanObj.setSectionNo(resMap.get("SECTION_NO")==null?"":resMap.get("SECTION_NO").toString());
 			
-			beanObj.setQuotesharePercent(resMap.get("QUOTESHARE_PERCENT")==null?"":resMap.get("QUOTESHARE_PERCENT").toString());
+			beanObj.setQuotesharePercent(resMap.get("QUOTESHARE_PERCENT")==null?"":DropDownControllor.formattereight(resMap.get("QUOTESHARE_PERCENT").toString()));
 			beanObj.setAccountingPeriodNotes(resMap.get("RSK_ACCOUNT_PERIOD_NOTICE")==null?"":resMap.get("RSK_ACCOUNT_PERIOD_NOTICE").toString());
 			beanObj.setStatementConfirm(resMap.get("RSK_STATEMENT_CONFIRM")==null?"":resMap.get("RSK_STATEMENT_CONFIRM").toString());
 			GetRemarksDetails(beanObj);
@@ -1951,7 +1951,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 				beanObj.setSharSign(DropDownControllor.formatterpercentage(secViewDataMap.get("RSK_SHARE_SIGNED")==null?"":secViewDataMap.get("RSK_SHARE_SIGNED").toString()));
 				beanObj.setM_dPremium(DropDownControllor.formatter(secViewDataMap.get("RSK_MD_PREM_OC")==null?"":secViewDataMap.get("RSK_MD_PREM_OC").toString()));
 				beanObj.setMd_premium_Dc(DropDownControllor.formatter(secViewDataMap.get("RSK_MD_PREM_DC")==null?"":secViewDataMap.get("RSK_MD_PREM_DC").toString()));
-				beanObj.setAdjRate(DropDownControllor.formatter(secViewDataMap.get("RSK_ADJRATE")==null?"":secViewDataMap.get("RSK_ADJRATE").toString()));
+				beanObj.setAdjRate(DropDownControllor.formattereight(secViewDataMap.get("RSK_ADJRATE")==null?"":secViewDataMap.get("RSK_ADJRATE").toString()));
 				beanObj.setPortfoloCovered(secViewDataMap.get("RSK_PF_COVERED")==null?"":secViewDataMap.get("RSK_PF_COVERED").toString());
 				beanObj.setSubPremium(DropDownControllor.formatter(secViewDataMap.get("RSK_SUBJ_PREMIUM_OC")==null?"":secViewDataMap.get("RSK_SUBJ_PREMIUM_OC").toString()));
 				beanObj.setSubPremium_Dc(DropDownControllor.formatter(secViewDataMap.get("RSK_SUBJ_PREMIUM_DC")==null?"":secViewDataMap.get("RSK_SUBJ_PREMIUM_DC").toString()));
@@ -2026,7 +2026,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			if (thirdViewDataMap != null) {
 				for (int k = 0; k < thirdViewDataMap.size(); k++) {
 					beanObj.setBrokerage(thirdViewDataMap.get("RSK_BROKERAGE")==null?"":thirdViewDataMap.get("RSK_BROKERAGE").toString());
-					beanObj.setTax(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_TAX")==null?"":thirdViewDataMap.get("RSK_TAX").toString()));
+					beanObj.setTax(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_TAX")==null?"":thirdViewDataMap.get("RSK_TAX").toString()));
 					beanObj.setShare_Profit_Commission(thirdViewDataMap.get("RSK_PROFIT_COMM")==null?"":thirdViewDataMap.get("RSK_PROFIT_COMM").toString());
 					/*if (thirdViewDataMap.get("RSK_PROFIT_COMM") != null) {
 						if (thirdViewDataMap.get("RSK_PROFIT_COMM").toString().equalsIgnoreCase("1")) {
@@ -2049,16 +2049,16 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 					beanObj.setAcquisition_Cost_Dc(thirdViewDataMap.get("RSK_ACQUISTION_COST_DC")==null?"":thirdViewDataMap.get("RSK_ACQUISTION_COST_DC").toString());
 					beanObj.setAcquisition_CostOSOC(getShareVal(beanObj.getAcquisition_Cost().replaceAll(",", ""),beanObj.getSharSign(),"share"));
 					beanObj.setAcquisition_CostOSDC(DropDownControllor.formatter(getDesginationCountry(beanObj.getAcquisition_CostOSOC().replaceAll(",",""),beanObj.getExchRate()).toString()));
-					beanObj.setCommissionQ_S(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_COMM_QUOTASHARE")==null?"":thirdViewDataMap.get("RSK_COMM_QUOTASHARE").toString()));
-					beanObj.setCommission_surp(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_COMM_SURPLUS")==null?"":thirdViewDataMap.get("RSK_COMM_SURPLUS").toString()));
-					beanObj.setOverRidder(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_OVERRIDER_PERC")==null?"":thirdViewDataMap.get("RSK_OVERRIDER_PERC").toString()));
+					beanObj.setCommissionQ_S(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_COMM_QUOTASHARE")==null?"":thirdViewDataMap.get("RSK_COMM_QUOTASHARE").toString()));
+					beanObj.setCommission_surp(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_COMM_SURPLUS")==null?"":thirdViewDataMap.get("RSK_COMM_SURPLUS").toString()));
+					beanObj.setOverRidder(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_OVERRIDER_PERC")==null?"":thirdViewDataMap.get("RSK_OVERRIDER_PERC").toString()));
 					//beanObj.setManagement_Expenses(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_MANAGEMENT_EXPENSES")==null?"":thirdViewDataMap.get("RSK_MANAGEMENT_EXPENSES").toString()));
 					//beanObj.setLossC_F(thirdViewDataMap.get("RSK_LOSS_CARRYFORWARD")==null?"":thirdViewDataMap.get("RSK_LOSS_CARRYFORWARD").toString());
-					beanObj.setPremium_Reserve(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_PREMIUM_RESERVE")==null?"":thirdViewDataMap.get("RSK_PREMIUM_RESERVE").toString()));
-					beanObj.setLoss_reserve(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_LOSS_RESERVE")==null?"":thirdViewDataMap.get("RSK_LOSS_RESERVE").toString()));
-					beanObj.setInterest(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_INTEREST")==null?"":thirdViewDataMap.get("RSK_INTEREST").toString()));
-					beanObj.setPortfolio_inout_Premium(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_PF_INOUT_PREM")==null?"":thirdViewDataMap.get("RSK_PF_INOUT_PREM").toString()));
-					beanObj.setPortfolio_inout_Loss(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_PF_INOUT_LOSS")==null?"":thirdViewDataMap.get("RSK_PF_INOUT_LOSS").toString()));
+					beanObj.setPremium_Reserve(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_PREMIUM_RESERVE")==null?"":thirdViewDataMap.get("RSK_PREMIUM_RESERVE").toString()));
+					beanObj.setLoss_reserve(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_LOSS_RESERVE")==null?"":thirdViewDataMap.get("RSK_LOSS_RESERVE").toString()));
+					beanObj.setInterest(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_INTEREST")==null?"":thirdViewDataMap.get("RSK_INTEREST").toString()));
+					beanObj.setPortfolio_inout_Premium(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_PF_INOUT_PREM")==null?"":thirdViewDataMap.get("RSK_PF_INOUT_PREM").toString()));
+					beanObj.setPortfolio_inout_Loss(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_PF_INOUT_LOSS")==null?"":thirdViewDataMap.get("RSK_PF_INOUT_LOSS").toString()));
 					beanObj.setLoss_Advise(DropDownControllor.formatter(thirdViewDataMap.get("RSK_LOSSADVICE")==null?"":thirdViewDataMap.get("RSK_LOSSADVICE").toString()));
 					beanObj.setLoss_Advise_Dc(DropDownControllor.formatter(thirdViewDataMap.get("RSK_LOSSADVICE_DC")==null?"":thirdViewDataMap.get("RSK_LOSSADVICE_DC").toString()));
 					beanObj.setLoss_AdviseOSOC(getShareVal(beanObj.getLoss_Advise().replaceAll(",", ""),beanObj.getSharSign(),"share"));
@@ -2081,14 +2081,14 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 						//beanObj.setLeader_Underwriter("ITI Reinsurance Ltd");
 						beanObj.setLeader_Underwriter(getUGUWName(beanObj.getBranchCode(),beanObj.getLeader_Underwriter()));
 					}
-					beanObj.setLeader_Underwriter_share(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_LEAD_UW_SHARE")==null?"":thirdViewDataMap.get("RSK_LEAD_UW_SHARE").toString()));
+					beanObj.setLeader_Underwriter_share(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_LEAD_UW_SHARE")==null?"":thirdViewDataMap.get("RSK_LEAD_UW_SHARE").toString()));
 					beanObj.setAccounts(thirdViewDataMap.get("RSK_ACCOUNTS")==null?"":thirdViewDataMap.get("RSK_ACCOUNTS").toString());
 					beanObj.setExclusion(thirdViewDataMap.get("RSK_EXCLUSION")==null?"":thirdViewDataMap.get("RSK_EXCLUSION").toString());
 					beanObj.setRemarks(thirdViewDataMap.get("RSK_REMARKS")==null?"":thirdViewDataMap.get("RSK_REMARKS").toString());
 					beanObj.setUnderwriter_Recommendations(thirdViewDataMap.get("RSK_UW_RECOMM")==null?"":thirdViewDataMap.get("RSK_UW_RECOMM").toString());
 					beanObj.setGms_Approval(thirdViewDataMap.get("RSK_GM_APPROVAL")==null?"":thirdViewDataMap.get("RSK_GM_APPROVAL").toString());
 					beanObj.setDecision(thirdViewDataMap.get("RSK_DECISION")==null?"":thirdViewDataMap.get("RSK_DECISION").toString()); 
-					beanObj.setOthercost(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_OTHER_COST")==null?"":thirdViewDataMap.get("RSK_OTHER_COST").toString()));
+					beanObj.setOthercost(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_OTHER_COST")==null?"":thirdViewDataMap.get("RSK_OTHER_COST").toString()));
 					beanObj.setReinstAdditionalPremium(DropDownControllor.formatter(thirdViewDataMap.get("RSK_REINSTATE_ADDL_PREM_PCT")==null?"":thirdViewDataMap.get("RSK_REINSTATE_ADDL_PREM_PCT").toString()));
 					beanObj.setBurningCost(DropDownControllor.formatter(thirdViewDataMap.get("RSK_BURNING_COST_PCT")==null?"":thirdViewDataMap.get("RSK_BURNING_COST_PCT").toString()));
 					beanObj.setCommissionQ_SAmt(DropDownControllor.formatter(thirdViewDataMap.get("COMM_QS_AMT")==null?"":thirdViewDataMap.get("COMM_QS_AMT").toString()));
@@ -2102,7 +2102,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 					//beanObj.setProfit_commission(thirdViewDataMap.get("RSK_SHARE_PROFIT_COMMISSION")==null?"":thirdViewDataMap.get("RSK_SHARE_PROFIT_COMMISSION").toString());
 					beanObj.setReinstAditionalPremium_percent_Dc(DropDownControllor.formatter(thirdViewDataMap.get("RSK_REINSTATE_ADDL_PREM_PCT")==null?"":thirdViewDataMap.get("RSK_REINSTATE_ADDL_PREM_PCT").toString()));
 					beanObj.setBurningCost(DropDownControllor.formatter(thirdViewDataMap.get("RSK_BURNING_COST_PCT")==null?"":thirdViewDataMap.get("RSK_BURNING_COST_PCT").toString()));
-					beanObj.setBrokerage(DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_BROKERAGE")==null?"":thirdViewDataMap.get("RSK_BROKERAGE").toString()));
+					beanObj.setBrokerage(DropDownControllor.formattereight(thirdViewDataMap.get("RSK_BROKERAGE")==null?"":thirdViewDataMap.get("RSK_BROKERAGE").toString()));
 					beanObj.setLimitPerVesselOC(DropDownControllor.formatter(thirdViewDataMap.get("LIMIT_PER_VESSEL_OC")==null?"0":thirdViewDataMap.get("LIMIT_PER_VESSEL_OC").toString()));
 					beanObj.setLimitPerVesselDC(DropDownControllor.formatter(thirdViewDataMap.get("LIMIT_PER_VESSEL_DC")==null?"":thirdViewDataMap.get("LIMIT_PER_VESSEL_DC").toString()));
 					beanObj.setLimitPerVesselOSOC(getShareVal(beanObj.getLimitPerVesselOC().replaceAll(",", ""),beanObj.getSharSign(),"share"));
@@ -2139,7 +2139,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 					beanObj.setCrestacommissionSubClass(thirdViewDataMap.get("RSK_CRESTA_COMBIN_SUB_CLASS")==null?"":thirdViewDataMap.get("RSK_CRESTA_COMBIN_SUB_CLASS").toString());
 					beanObj.setManagementExpenses(thirdViewDataMap.get("RSK_PRO_MANAGEMENT_EXP")==null?"":thirdViewDataMap.get("RSK_PRO_MANAGEMENT_EXP").toString());
 					beanObj.setCommissionType(thirdViewDataMap.get("RSK_PRO_COMM_TYPE")==null?"":thirdViewDataMap.get("RSK_PRO_COMM_TYPE").toString());
-					beanObj.setProfitCommissionPer(thirdViewDataMap.get("RSK_PRO_COMM_PER")==null?"":DropDownControllor.formatterpercentage(thirdViewDataMap.get("RSK_PRO_COMM_PER").toString()));
+					beanObj.setProfitCommissionPer(thirdViewDataMap.get("RSK_PRO_COMM_PER")==null?"":DropDownControllor.formattereight(thirdViewDataMap.get("RSK_PRO_COMM_PER").toString()));
 					beanObj.setSetup(thirdViewDataMap.get("RSK_PRO_SET_UP")==null?"":thirdViewDataMap.get("RSK_PRO_SET_UP").toString());
 					beanObj.setSuperProfitCommission(thirdViewDataMap.get("RSK_PRO_SUP_PRO_COM")==null?"":thirdViewDataMap.get("RSK_PRO_SUP_PRO_COM").toString());
 					beanObj.setLossCarried(thirdViewDataMap.get("RSK_PRO_LOSS_CARY_TYPE")==null?"":thirdViewDataMap.get("RSK_PRO_LOSS_CARY_TYPE").toString());

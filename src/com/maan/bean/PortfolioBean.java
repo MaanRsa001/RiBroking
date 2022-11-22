@@ -136,7 +136,8 @@ public class PortfolioBean
 	private String bouquetNoSearch;
 	private String subclassSearch;
 	private String bouquetNo;
-	
+	private String sectionNo;
+	private String baseProposalNoSearch;
 	public String getAttachedUW() {
 		return attachedUW;
 	}
@@ -975,6 +976,18 @@ public void setEndorsmentTypeName(String endorsmentTypeName) {
 	}
 	public void setOfferNoSearch(String offerNoSearch) {
 		this.offerNoSearch = offerNoSearch;
+	}
+	public String getSectionNo() {
+		return sectionNo;
+	}
+	public void setSectionNo(String sectionNo) {
+		this.sectionNo = sectionNo;
+	}
+	public String getBaseProposalNoSearch() {
+		return baseProposalNoSearch;
+	}
+	public void setBaseProposalNoSearch(String baseProposalNoSearch) {
+		this.baseProposalNoSearch = baseProposalNoSearch;
 	}
     
 }

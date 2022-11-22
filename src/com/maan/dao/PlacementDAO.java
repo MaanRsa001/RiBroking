@@ -60,6 +60,7 @@ private static final Logger logger = LogUtil.getLogger(PlacementDAO.class);
 				Map<String,Object>map=list.get(0);
 				bean.setCedingCompanyName(map.get("COMPANY_NAME")==null?"":map.get("COMPANY_NAME").toString());
 				bean.setCedingCompany(map.get("RSK_CEDINGID")==null?"":map.get("RSK_CEDINGID").toString());
+				bean.setBrokerCompany(map.get("RSK_BROKERID")==null?"":map.get("RSK_BROKERID").toString());
 				bean.setTreatyName(map.get("TREATY_TYPE")==null?"":map.get("TREATY_TYPE").toString());
 				bean.setInceptionDate(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString());
 				bean.setExpiryDate(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString());
@@ -144,7 +145,8 @@ public void getPlacementNo(PlacementBean bean) {
 	}
 }
 	public void insertPlacing(PlacementBean bean) {
-		String plamendId="0";
+		String plamendId="0",currentStatus="O";
+		Map<String,Object>result=null;
 		try {
 			proposalInfo(bean);
 			
@@ -156,8 +158,12 @@ public void getPlacementNo(PlacementBean bean) {
 				bean.setBrokerId(bean.getPlacingBroker().get(i));
 				plamendId=getMaxAmendId(bean);
 				bean.setPlacementamendId(StringUtils.isBlank(plamendId)?"0":plamendId);
+				result=getPlacementDetails(bean.getEproposalNo(),bean.getReinsurerId(),bean.getBrokerId(),bean.getBranchCode());
+				if(result!=null) {
+					currentStatus=result.get("STATUS")==null?"O":result.get("STATUS").toString();
+				}
 				//if(!"N".equals(bean.getDeleteStatus().get(i))) {
-					Object[] obj = new Object[19];
+					Object[] obj = new Object[20];
 					obj[0]=bean.getPlacementNo();
 					obj[1]=bean.getReinsSNo().get(i);
 					obj[2]=bean.getBouquetNo();
@@ -173,10 +179,11 @@ public void getPlacementNo(PlacementBean bean) {
 					obj[12]=bean.getBranchCode();
 					obj[13]=bean.getCedingCompany();
 					obj[14]=bean.getPlacementMode();
-					obj[15]=bean.getPlacementamendId();
-					obj[16]=bean.getStatusNo();
-					obj[17]="Y";
-					obj[18]=bean.getUserId();
+					obj[15]=currentStatus;
+					obj[16]=bean.getPlacementamendId();
+					obj[17]=bean.getStatusNo();
+					obj[18]="Y";
+					obj[19]=bean.getUserId();
 					logger.info("Query=>"+query);
 					logger.info("Args=>"+StringUtils.join(obj, ","));	
 					this.mytemplate.update(query,obj);
@@ -337,7 +344,7 @@ public void getPlacementNo(PlacementBean bean) {
 					reinsSNo.add(map.get("SNO")==null?"":map.get("SNO").toString());
 					reinsureName.add(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
 					placingBroker.add(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
-					shareOffer.add(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formatterpercentage(map.get("SHARE_OFFERED").toString()));
+					shareOffer.add(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()));
 					mailStatus.add(mailstatus);
 					proposalNos.add(map.get("PROPOSAL_NO")==null?"":map.get("PROPOSAL_NO").toString());
 					if(mailcount>0) {
@@ -414,17 +421,17 @@ public void getPlacementNo(PlacementBean bean) {
 					brokerNames.add(map.get("BROKER_NAME")==null?"":map.get("BROKER_NAME").toString());
 					cedingCompanys.add(map.get("CEDING_COMPANY_ID")==null?"":map.get("CEDING_COMPANY_ID").toString());
 					cedingCompanyNames.add(map.get("CEDING_COMPANY_NAME")==null?"":map.get("CEDING_COMPANY_NAME").toString());
-					shareOffered.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
-					writtenLine.add(map.get("SHARE_WRITTEN")==null?"":map.get("SHARE_WRITTEN").toString());
+					shareOffered.add(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()));
+					writtenLine.add(map.get("SHARE_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_WRITTEN").toString()));
 					brokerage.add(map.get("BROKERAGE_PER")==null?"":map.get("BROKERAGE_PER").toString());
 					writtenvaliditydate.add(map.get("WRITTEN_LINE_VALIDITY")==null?"":map.get("WRITTEN_LINE_VALIDITY").toString());
 					writtenvalidityRemarks.add(map.get("WRITTEN_LINE_REMARKS")==null?"":map.get("WRITTEN_LINE_REMARKS").toString());
-					proposedWL.add(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":map.get("SHARE_PROPOSAL_WRITTEN").toString());
-					signedLine.add(map.get("SHARE_SIGNED")==null?"":map.get("SHARE_SIGNED").toString());
-					psignedLine.add(map.get("SHARE_SIGNED")==null?"":map.get("SHARE_SIGNED").toString());
-					proposedSL.add(map.get("SHARE_PROPOSED_SIGNED")==null?"":map.get("SHARE_PROPOSED_SIGNED").toString());
-					reoffer.add(map.get("SHARE_OFFERED")==null?"":map.get("SHARE_OFFERED").toString());
-					tqrBrokerageAmt.add(map.get("TQR_BROKERAGE_AMT")==null?"":map.get("TQR_BROKERAGE_AMT").toString());
+					proposedWL.add(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSAL_WRITTEN").toString()));
+					signedLine.add(map.get("SHARE_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_SIGNED").toString()));
+					psignedLine.add(map.get("SHARE_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_SIGNED").toString()));
+					proposedSL.add(map.get("SHARE_PROPOSED_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSED_SIGNED").toString()));
+					reoffer.add(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()));
+					tqrBrokerageAmt.add(map.get("TQR_BROKERAGE_AMT")==null?"":DropDownControllor.formattereight(map.get("TQR_BROKERAGE_AMT").toString()));
 					signedLineValidity.add(map.get("SHARE_LINE_VALIDITY")==null?"":map.get("SHARE_LINE_VALIDITY").toString());
 					signedLineRemarks.add(map.get("SHARE_LINE_REMARKS")==null?"":map.get("SHARE_LINE_REMARKS").toString());
 					emailStatus.add(map.get("MAIL_STATUS")==null?"":map.get("MAIL_STATUS").toString());
@@ -524,18 +531,28 @@ public void getPlacementNo(PlacementBean bean) {
 				obj[13]=bean.getNewStatus();
 				if("RO".equalsIgnoreCase(bean.getNewStatus())) {
 					obj[14]=bean.getReoffer().get(i);
+					obj[15]="";
+					obj[16]="";
+					obj[17]="";
+					obj[18]="";
+					obj[19]="";
+					obj[20]="";
+					obj[21]="";
+					obj[22]="";
+					obj[23]="";
 				}else {
 					obj[14]=bean.getShareOffered().get(i);
+					obj[15]=bean.getWrittenLine().get(i);
+					obj[16]=bean.getProposedWL().get(i);
+					obj[17]=bean.getWrittenvaliditydate().get(i);
+					obj[18]=bean.getWrittenvalidityRemarks().get(i);
+					obj[19]=bean.getSignedLine().get(i);
+					obj[20]=bean.getSignedLineValidity().get(i);
+					obj[21]=bean.getSignedLineRemarks().get(i);
+					obj[22]=bean.getProposedSL().get(i);
+					obj[23]=bean.getBrokerage().get(i);
 				}
-				obj[15]=bean.getWrittenLine().get(i);
-				obj[16]=bean.getProposedWL().get(i);
-				obj[17]=bean.getWrittenvaliditydate().get(i);
-				obj[18]=bean.getWrittenvalidityRemarks().get(i);
-				obj[19]=bean.getSignedLine().get(i);
-				obj[20]=bean.getSignedLineValidity().get(i);
-				obj[21]=bean.getSignedLineRemarks().get(i);
-				obj[22]=bean.getProposedSL().get(i);
-				obj[23]=bean.getBrokerage().get(i);
+				
 				obj[24]=bean.getPlacementamendId();
 				obj[25]=bean.getStatusNo();
 				obj[26]="Y";
@@ -670,7 +687,15 @@ public void getPlacementNo(PlacementBean bean) {
 				}else if(StringUtils.isNotBlank(offerNo)) {
 					mailsub=mailsub+" "+offerNo+" ";
 				}
+				GetPalcementInfo(bean);
+				 if("PWL".equalsIgnoreCase(bean.getNewStatus())) {
+					if(mailbody.contains("COMPANY_NAME") == true) {
+						mailbody = mailbody.replace("{COMPANY_NAME}", bean.getReinsurerName());
+						
+					}
+				 }
 				for (Map.Entry entry: map.entrySet()) {
+					
 					if(mailbody.contains(entry.getKey().toString()) == true) {
 						mailbody = mailbody.replace("{"+entry.getKey().toString()+"}", entry.getValue()==null?"":entry.getValue().toString());
 						
@@ -681,7 +706,7 @@ public void getPlacementNo(PlacementBean bean) {
 					}
 				}
 			}
-			GetPalcementInfo(bean);
+			
 			mailbody+=BodyTableFrame(bean);
 			bean.setMailBody(mailbody);
 			bean.setMailSubject(mailsub);
@@ -711,6 +736,7 @@ public void getPlacementNo(PlacementBean bean) {
 				bean.setMaxShareWritten(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":map.get("SHARE_PROPOSAL_WRITTEN").toString());
 				bean.setMaxShareSigned(map.get("SHARE_PROPOSED_SIGNED")==null?"":map.get("SHARE_PROPOSED_SIGNED").toString());
 				bean.setStatusNo(map.get("STATUS_NO")==null?"":map.get("STATUS_NO").toString());
+				bean.setReinsurerName(map.get("BROKER_NAME")==null?"":map.get("BROKER_NAME").toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1454,6 +1480,29 @@ public void getPlacementNo(PlacementBean bean) {
 			logger.error("Exception:", e);
 		}
 		return list;
+	}
+
+
+	public List<Map<String, Object>> getMailToList(PlacementBean bean) {
+			List<Map<String, Object>> statusList=new ArrayList<Map<String,Object>>();
+			String query="",cedeingId="";
+			try{
+				if("A".equals(bean.getCurrentStatus())  && "PWL".equals(bean.getNewStatus())) {
+					proposalInfo(bean);
+					cedeingId="63".equals(bean.getBrokerCompany())?bean.getCedingCompany():bean.getBrokerCompany();
+					
+				}else {
+					cedeingId="63".equals(bean.getBrokerId())?bean.getReinsurerId():bean.getBrokerId();
+				}
+				query=getQuery("GET_MAIL_CC_LIST");
+				logger.info("Select Query==> " + query);
+				
+				statusList=this.mytemplate.queryForList(query,new Object[]{cedeingId});
+			}catch(Exception e){
+				logger.debug("Exception @ {" + e + "}");	
+			}
+			return statusList;
+		
 	}
 	
 	

@@ -82,8 +82,8 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	public List<Map<String,Object>>getNotPlacedProposalList(){
 		return dropDownController.getNotPlacedProposalList(bean);
 	}
-	public List<Map<String,Object>>getMailCCList(){
-		return dropDownController.getMailCCList(bean);
+	public List<Map<String,Object>>getMailToList(){
+		return service.getMailToList(bean);
 	}
 	public List<Map<String,Object>>getExistingReinsurerList(){
 		return service.getExistingReinsurerList(bean);
@@ -125,6 +125,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 		if(StringUtils.isBlank(bean.getSearchType())) {
 			bean.setSearchReinsurerId("");
+			bean.setSearchBrokerId("");
 			bean.setSearchStatus("");
 		}
 		return forward;

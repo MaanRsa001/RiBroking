@@ -15,4 +15,5 @@ public interface PortfolioDAO
     boolean validateOpenPeriod(PortfolioBean bean);
 
     void procAuto(PortfolioBean bean, String type, String countryId);
+	List<PortfolioBean> getConfirmedList(PortfolioBean bean, Object menuRights);
 }

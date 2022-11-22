@@ -275,12 +275,11 @@
 									</div>
 								</div>                    	
 							</div>
-							<div class="boxcontent" align="center">
+							<div class="boxcontent" align="center" id="scalecal">
 								<input type="button"  value="Calculate"  class="btn btn-sm btn-primary" onclick="scalecalculate();" /><s:property value="scaleCommissionListVar.size()"/>
 							</div>
 							<br/>
 	                    </div>
-	                    <s:if test="scaleCommissionList!=null">
 						<div class="panel panel-primary"  id="scalegrid">
 	                    	<div class="panel-body">
 	                    	<div id="tb1" >
@@ -341,7 +340,6 @@
 					</div>
 					</div>
 					</div>
-					</s:if>
 					<div class="panel panel-primary">
 					<div class="panel-body">
 					
@@ -355,7 +353,7 @@
 							<s:textfield name="scfistpc" id="scfistpc"  cssClass="inputBox" cssStyle="text-align: right;width: 33.3%; float:left;" onkeyup="middleMinusRestriction(this);checkNumbers(this);"  />
 							</div>
 							<div id="periodid" style="display:none"> 
-							<s:textfield name="fpcfixedDate" id="periodDate"  cssClass="inputBox" cssStyle="width: 33.3%; float:left;"   />
+							<s:textfield name="fpcfixedDate" id="fpcfixedDate"  cssClass="inputBox" cssStyle="width: 33.3%; float:left;"   />
 							</div>
 							<div id="scseid" >
 							<s:select  list="profitCommissionListVar"  name="scprofitMont" id="scprofitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 33.3%; float:right;"/>
@@ -626,7 +624,7 @@
 					
 						<div class=textfieldA100>
 							<div class="text" style="float: left;width: 25%;">
-								<s:text name="label.firstslideprofitcom" />
+								<s:text name="label.firstlossprofitcom" />
 							</div>
 							<div style="float: left;width: 75%;">
 							<s:select  list="slidingScalePeriodList"  name="fpcType" id="fpcType" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="TYPE"  listValue="DETAIL_NAME"   cssStyle="width: 33.3%; float:left;" onchange="getscalePeriod(this.value);"/>
@@ -634,7 +632,7 @@
 							<s:textfield name="scfistpc" id="scfistpc"  cssClass="inputBox" cssStyle="text-align: right;width: 33.3%; float:left;" onkeyup="middleMinusRestriction(this);checkNumbers(this);"  />
 							</div>
 							<div id="periodid" style="display:none">
-							<s:textfield name="fpcfixedDate" id="periodDate"  cssClass="inputBox" cssStyle="width: 33.3%; float:left;"   />
+							<s:textfield name="fpcfixedDate" id="fpcfixedDate"  cssClass="inputBox" cssStyle="width: 33.3%; float:left;"   />
 							</div>
 							<div id="scseid" >
 							<s:select  list="profitCommissionListVar"  name="scprofitMont" id="scprofitMont" cssClass="inputBox"   headerKey="" headerValue="---Select---" listKey="DETAIL_NAME"  listValue="REMARKS"   cssStyle="width: 33.3%; float:right;"/>
@@ -865,6 +863,12 @@ getLossRatio('<s:property value="bonusTypeId"/>')
 <s:if test='scalementhod!=null && !"".equals(scalementhod)'>
 getMethod('<s:property value="scalementhod"/>')
 </s:if>
+$( "#fpcfixedDate" ).datepicker({
+	changeMonth : true,
+	changeYear : true,
+	dateFormat : "dd/mm/yy"
+	//yearRange: "-100:+0"
+});
 </script>
 
 	</body>

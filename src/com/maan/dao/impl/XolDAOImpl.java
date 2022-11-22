@@ -597,7 +597,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setSharSign(DropDownControllor.formatterpercentage(secViewDataMap.get("RSK_SHARE_SIGNED")==null?"":secViewDataMap.get("RSK_SHARE_SIGNED").toString()));
 				beanObj.setM_dPremium(DropDownControllor.formatter(secViewDataMap.get("RSK_MD_PREM_OC")==null?"":secViewDataMap.get("RSK_MD_PREM_OC").toString()));
 				beanObj.setMd_premium_Dc(DropDownControllor.formatter(secViewDataMap.get("RSK_MD_PREM_DC")==null?"":secViewDataMap.get("RSK_MD_PREM_DC").toString()));
-				beanObj.setAdjRate(DropDownControllor.formatterpercentage(secViewDataMap.get("RSK_ADJRATE")==null?"":secViewDataMap.get("RSK_ADJRATE").toString()));
+				beanObj.setAdjRate(DropDownControllor.formattereight(secViewDataMap.get("RSK_ADJRATE")==null?"":secViewDataMap.get("RSK_ADJRATE").toString()));
 				beanObj.setPortfoloCovered(secViewDataMap.get("RSK_PF_COVERED")==null?"":secViewDataMap.get("RSK_PF_COVERED").toString());
 				beanObj.setSubPremium(DropDownControllor.formatter(secViewDataMap.get("RSK_SUBJ_PREMIUM_OC")==null?"":secViewDataMap.get("RSK_SUBJ_PREMIUM_OC").toString()));
 				beanObj.setSubPremiumOSOC(getShareVal(beanObj.getSubPremium().replaceAll(",", ""),beanObj.getSharSign(),"share"));
@@ -785,7 +785,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 					beanObj.setReInstatementPremium(thirdViewDataMap.get("RSK_REINSTATEMENT_PREMIUM")==null?"":thirdViewDataMap.get("RSK_REINSTATEMENT_PREMIUM").toString());
 					beanObj.setCrestaStatus(thirdViewDataMap.get("RSK_CREASTA_STATUS")==null?"":thirdViewDataMap.get("RSK_CREASTA_STATUS").toString());
 					beanObj.setAcqBonus(thirdViewDataMap.get("RSK_BONUS_ID")==null?"":thirdViewDataMap.get("RSK_BONUS_ID").toString());
-					beanObj.setAcqBonusPercentage(thirdViewDataMap.get("RSK_NOCLAIMBONUS_PRCENT")==null?"":thirdViewDataMap.get("RSK_NOCLAIMBONUS_PRCENT").toString());
+					beanObj.setAcqBonusPercentage(thirdViewDataMap.get("RSK_NOCLAIMBONUS_PRCENT")==null?"":DropDownControllor.formattereight(thirdViewDataMap.get("RSK_NOCLAIMBONUS_PRCENT").toString()));
 					if("LCB".equalsIgnoreCase(beanObj.getAcqBonus())){
 						beanObj.setAcqBonusName("Low Claim Bonus");
 					}
@@ -1490,7 +1490,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 							beanObj.setAcqBonus(resMap.get("RSK_BONUS_ID").toString().equalsIgnoreCase("") ? "" : resMap.get("RSK_BONUS_ID").toString());
 						}
 						if (resMap.get("RSK_NOCLAIMBONUS_PRCENT") != null) {
-							beanObj.setAcqBonusPercentage(resMap.get("RSK_NOCLAIMBONUS_PRCENT").toString().equalsIgnoreCase("") ? "0" : resMap.get("RSK_NOCLAIMBONUS_PRCENT").toString());
+							beanObj.setAcqBonusPercentage(resMap.get("RSK_NOCLAIMBONUS_PRCENT").toString().equalsIgnoreCase("") ? "0" : DropDownControllor.formattereight(resMap.get("RSK_NOCLAIMBONUS_PRCENT").toString()));
 						}
 						if (resMap.get("RSK_OCCURRENT_LIMIT_OC") != null) {
 							beanObj.setOcc_limit(resMap.get("RSK_OCCURRENT_LIMIT_OC").toString().equalsIgnoreCase("") ? "" : resMap.get("RSK_OCCURRENT_LIMIT_OC").toString());

@@ -743,13 +743,13 @@ gap:20px;
 																				<s:textfield name="coverLimitAmount[%{#stat.count-1}]" id="coverLimitAmount[%{#stat.count-1}]"  cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this); middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 																				</td>
 																				<td>
-																				<s:textfield name="coverLimitPercent[%{#stat.count-1}]" id="coverLimitPercent[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this); middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);" maxlength="10" theme="simple" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																				<s:textfield name="coverLimitPercent[%{#stat.count-1}]" id="coverLimitPercent[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this); middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);" maxlength="12" theme="simple" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 																				</td>
 																				<td>
 																				<s:textfield name="deductableLimitAmount[%{#stat.count-1}]" id="deductableLimitAmount[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow2DigitDecValues(this); middleMinusRestriction(this);javascript:this.value=Comma(this.value)" maxlength="30" theme="simple" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 																				</td>
 																				<td>
-																				<s:textfield name="deductableLimitPercent[%{#stat.count-1}]" id="deductableLimitPercent[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this); middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);" maxlength="10" theme="simple" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																				<s:textfield name="deductableLimitPercent[%{#stat.count-1}]" id="deductableLimitPercent[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this); middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);" maxlength="12" theme="simple" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 																				</td>
 																				<td>
 																				<s:textfield name="egnpiAsPerOffSlide[%{#stat.count-1}]" id="egnpiAsPerOffSlide%{#stat.count-1}" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="Itnegative(this.id,this.value); middleMinusRestrictionNeg(this);allow2DigitDecValues(this);javascript:this.value=Comma(this.value);" maxlength="30" />
@@ -853,7 +853,7 @@ gap:20px;
 																<s:text name="label.leadUnderwritterShareP" /> 
 															</div>
 															<div class="tbox">
-																<s:textfield name="leader_Underwriter_share" id="leader_Underwriter_share" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);" maxlength="8" disabled="false"/>
+																<s:textfield name="leader_Underwriter_share" id="leader_Underwriter_share" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);" maxlength="12" disabled="false"/>
 															</div>
 														</div>
 														<br class="clear"></br>
@@ -899,7 +899,7 @@ gap:20px;
 																<s:text name="label.premiumAdjustmentRateP" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="adjRate" id="adjRate" cssClass="inputBox" cssStyle="text-align: right;" onblur="CalculateEpi()" onkeyup="checkDecimals(this); middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);" maxlength="26"/>													
+																<s:textfield name="adjRate" id="adjRate" cssClass="inputBox" cssStyle="text-align: right;" onblur="CalculateEpi()" onkeyup="allow8DigitDecValues(this); middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);" maxlength="26"/>													
 															</div>
 														</div>
 														<div class="textfield" id="rate1" style="display:none">
@@ -907,7 +907,7 @@ gap:20px;
 																<s:text name="label.minimumRate" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="minimumRate" id="minimumRate" cssClass="inputBox" cssStyle="text-align: right;" onblur="CalculateminimumrateEpi();CalculateEpi()"   onkeyup="checkDecimals(this); middleMinusRestrictionNeg(this);negative(this.id,this.value)" maxlength="26"/>													
+																<s:textfield name="minimumRate" id="minimumRate" cssClass="inputBox" cssStyle="text-align: right;" onblur="CalculateminimumrateEpi();CalculateEpi()"   onkeyup="allow8DigitDecValues(this); middleMinusRestrictionNeg(this);negative(this.id,this.value)" maxlength="26"/>													
 															</div>
 														</div>
 														<div class="textfield" id="rate2" style="display:none">
@@ -915,7 +915,7 @@ gap:20px;
 																<s:text name="label.maximumRate" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="maximumRate" id="maximumRate" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="checkDecimals(this); middleMinusRestrictionNeg(this);negative(this.id,this.value)" maxlength="26"/>													
+																<s:textfield name="maximumRate" id="maximumRate" cssClass="inputBox" cssStyle="text-align: right;"   onkeyup="allow8DigitDecValues(this); middleMinusRestrictionNeg(this);negative(this.id,this.value)" maxlength="26"/>													
 															</div>
 														</div>
 														<div class="textfield" id="rate3" style="display:none">
@@ -1053,10 +1053,10 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<s:if test="(broker.toString().trim()).equalsIgnoreCase('DIRECT')">
-																	<s:textfield name="brokerage" id="BrokeragerValue" cssClass="inputBox" readonly="true" value="0" cssStyle="text-align:right;" onkeyup="negative(this.id,this.value);middleMinusRestrictionNeg(this);checkDecimals10(this);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="GetAcqCost()" maxlength="14"/>
+																	<s:textfield name="brokerage" id="BrokeragerValue" cssClass="inputBox" readonly="true" value="0" cssStyle="text-align:right;" onkeyup="negative(this.id,this.value);middleMinusRestrictionNeg(this);allow8DigitDecValues(this);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="GetAcqCost()" maxlength="12"/>
 																</s:if>
 																<s:else>
-																	<s:textfield name="brokerage" id="BrokeragerValue" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="GetAcqCost()"  maxlength="14" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																	<s:textfield name="brokerage" id="BrokeragerValue" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="GetAcqCost()"  maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 																</s:else>
 															</div>
 														</div>
@@ -1065,7 +1065,7 @@ gap:20px;
 																<s:text name="label.taxP" /> 
 															</div>
 															<div class="tbox">
-																<s:textfield name="tax" id="TaxValue" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D1".equals(profit_Center)?0.00:tax}' onchange="GetAcqCost()" maxlength="8" disabled='"Y".equals(disableStatus1) || "D1".equals(profit_Center)'/>
+																<s:textfield name="tax" id="TaxValue" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D1".equals(profit_Center)?0.00:tax}' onchange="GetAcqCost()" maxlength="12" disabled='"Y".equals(disableStatus1) || "D1".equals(profit_Center)'/>
 															</div>
 														</div>
 														<div class="textfield">
@@ -1073,7 +1073,7 @@ gap:20px;
 																<s:text name="label.otherCostP" /> 
 															</div>
 															<div class="tbox">
-																<s:textfield name="othercost" id="CostOther" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="GetAcqCost()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																<s:textfield name="othercost" id="CostOther" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="GetAcqCost()" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 															</div>
 														</div>	
 														
@@ -1090,7 +1090,7 @@ gap:20px;
 																<s:text name="label.acqBonusPer" />
 															</div>
 															<div class="tbox">
-																	<s:textfield name="acqBonusPercentage" cssClass="inputBox"  cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="7" disabled='%{"Y".equals(disableStatus1)?true:false}' />
+																	<s:textfield name="acqBonusPercentage" cssClass="inputBox"  cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}' />
 															</div>
 														</div>
 														<div class="textfield" id="lcb" style="display:none">
@@ -1911,6 +1911,8 @@ function Commas(value) {
 		document.xol1.coverLimitXL.value=Comma(document.xol1.coverLimitXL.value);
 		document.xol1.deductLimitXL.value=Comma(document.xol1.deductLimitXL.value);
 		document.xol1.minPremium.value=Comma(document.xol1.minPremium.value);
+		document.xol1.anualAggregateDeduct.value=Comma(document.xol1.anualAggregateDeduct.value);
+		document.xol1.anualAggregateLiability.value=Comma(document.xol1.anualAggregateLiability.value);
 	} else if(value=="4") {
 		document.xol1.epi_origCur.value=Comma(document.xol1.epi_origCur.value);
 		document.xol1.limitOrigCur.value=Comma(document.xol1.limitOrigCur.value);
@@ -2382,9 +2384,9 @@ var table = document.getElementById(tableID);
 			element3.name = "coverLimitPercent["+(rowCount-2)+"]";
       		element3.id = "coverLimitPercent["+(rowCount-2)+"]";
 			element3.value=document.getElementById("coverLimitPercent["+(rowCount-3)+"]").value;
-      		element3.setAttribute("onkeyup", "checkDecimals(this);middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);");
+      		element3.setAttribute("onkeyup", "allow8DigitDecValues(this);middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);");
 			element3.className = "inputBox";
-			element3.setAttribute("maxlength",'3'); 
+			element3.setAttribute("maxlength",'12'); 
 			element3.setAttribute("style", "text-align:right;");
 			//element3.setAttribute("disabled",'%{"Y".equals(disableStatus1)?true:false}');
 			cell4.appendChild(element3);
@@ -2409,8 +2411,8 @@ var table = document.getElementById(tableID);
       		element5.id = "deductableLimitPercent["+(rowCount-2)+"]";
 			element5.value=document.getElementById("deductableLimitPercent["+(rowCount-3)+"]").value;
 			element5.className = "inputBox";
-			element5.setAttribute("onkeyup", "checkDecimals(this);middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);");
-			element5.setAttribute("maxlength",'3'); 
+			element5.setAttribute("onkeyup", "allow8DigitDecValues(this);middleMinusRestrictionNeg(this);Itnegative(this.id,this.value);allowOneDot(this);");
+			element5.setAttribute("maxlength",'12'); 
 			element5.setAttribute("style", "text-align:right;");
 			//element5.setAttribute("disabled",'{"Y".equals(disableStatus1)?true:false}');
 			cell6.appendChild(element5);

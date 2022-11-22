@@ -235,6 +235,26 @@ function callManual() {
 	strOpen.focus();
 	return false;
 }
+function postRequestID(strUrl, id) {
+	$.ajax( {
+		url : strUrl,
+		error : function() {
+			$('#' + id).html('<p>An error has occurred in jquery Ajax</p>');
+		},
+		success : function(data) {
+			$('#' + id).html(data);
+		},
+		beforeSend : function() {
+			$('#loading').show();
+			$('.ajaxLoader').show();
+		},
+		complete : function() {
+			$('#loading').hide();
+			$('.ajaxLoader').hide();
+		},
+		type : 'POST'
+	});
+}
 </script>
 
 </body>

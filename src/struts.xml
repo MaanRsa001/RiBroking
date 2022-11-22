@@ -263,6 +263,7 @@
 				<result name="gridAjax" type="json"/>
 				<result name="ajaxSearch"></result>
 				<result name="copyPage" type="tiles">copyPage</result>
+				<result name="confirmedList" type="tiles">confirmedList</result>
 			</action>
 			<action name="*Statistics" class="com.maan.action.StatisticsAction" method="{1}">
 				<result name="statistics" type="tiles">statistics</result>

@@ -104,7 +104,7 @@
 														</div>
 														<div class="textfield33">
 															<div class="text txtB">
-																<s:text name="label.reinsureName" />
+																<s:text name="label.placingBroker" />
 															</div> 
 															<div class="tbox">
 																<s:select list="existingBrokerList" listKey="BROKER_ID" listValue="BROKER_NAME" name="searchBrokerId" id="searchBrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" />

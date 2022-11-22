@@ -79,7 +79,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 	}
 	
 	public List<Map<String,Object>> getUnderwriterList(){
-		return dropDownController.getPersonalInfoDropDown(branchCode,"L",pid);
+		return dropDownController.getPersonalInfoDropDown(branchCode,"R",pid);
 	}
 	public List<Map<String,Object>> getEndosTypelist(){
     	return dropDownController.getConstantDropDownET("37",bean.getContNo());

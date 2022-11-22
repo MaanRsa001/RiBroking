@@ -513,20 +513,29 @@ function detailsClick(val) {
 		//document.getElementById('claimOverflow').style.height='59vh';		    
     }
 }
-$('#proposalNoSearch').on( 'keyup', function () {
+$('#offerNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(1).search(this.value).draw();
 } );
-$('#companyNameSearch').on( 'keyup', function () {
+$('#bouquetNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(2).search(this.value).draw();
 } );
-$('#brokerNameSearch').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(3).search(this.value).draw();
-} );
-$('#departmentNameSearch').on( 'keyup', function () {
+$('#proposalNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(4).search(this.value).draw();
 } );
-$('#insuredNameSearch').on( 'keyup', function () {
+$('#companyNameSearch').on( 'keyup', function () {
+$('#gridTableMake').DataTable().columns(5).search(this.value).draw();
+} );
+$('#brokerNameSearch').on( 'keyup', function () {
+$('#gridTableMake').DataTable().columns(6).search(this.value).draw();
+} );
+$('#departmentNameSearch').on( 'keyup', function () {
+$('#gridTableMake').DataTable().columns(7).search(this.value).draw();
+} );
+$('#subclassSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(8).search(this.value).draw();
+} );
+$('#uwYearSearch').on( 'keyup', function () {
+$('#gridTableMake').DataTable().columns(9).search(this.value).draw();
 } );
 $('#underwriterSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(10).search(this.value).draw();
@@ -534,11 +543,9 @@ $('#gridTableMake').DataTable().columns(10).search(this.value).draw();
 $('#underwriterSearch1').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(9).search(this.value).draw();
 } );
-$('#uwYearSearch').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(9).search(this.value).draw();
-} );
+
 $('#uwYearSearch1').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(8).search(this.value).draw();
+$('#gridTableMake').DataTable().columns(9).search(this.value).draw();
 } );
 function funSearchMode(mode){
 var flag = document.getElementById("flag").value;

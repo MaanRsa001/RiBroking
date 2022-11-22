@@ -116,7 +116,27 @@ public class PortfolioAction extends ActionSupport implements
 		System.gc();
 		return forward;
 	}
-
+	public String InitC() {
+		logger.info("PortfolioDispatchAction InitC() || Enter");
+		
+		List<PortfolioBean> PortfolioList = null;
+		final PortfolioService BussinessCB = new PortfolioService();
+		bean.setProductId(session.get(MFRID).toString());
+		bean.setBranchCode(session.get("BRANCH_CODE").toString());
+		bean.setUserType(session.get("UserType").toString());
+		bean.setLoginId(session.get("UserId").toString());
+		bean.setAttachedUW(session.get("ATTACHED_UW").toString());
+		try {
+			PortfolioList = BussinessCB.getConfirmedList(bean,session.get("MenuRights"));
+			bean.setPortfolioList(PortfolioList);
+			
+		} catch (Exception exe) {
+			exe.printStackTrace();
+		}
+		logger.info("PortfolioDispatchAction Init() || Exit");
+		System.gc();
+		return "confirmedList";
+	}
 	public String gridList() {
 		logger.info("PortfolioDispatchAction gridList() || Exit");
 		List<PortfolioBean> PortfolioList = null;

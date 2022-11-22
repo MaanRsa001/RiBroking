@@ -112,6 +112,8 @@ public class PlacementBean {
 	private String offerNo;
 	private String amendId;
 	private String placementamendId;
+	private String reinsurerName;
+	private String brokerCompany;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -721,6 +723,18 @@ public class PlacementBean {
 	}
 	public void setSearchBrokerId(String searchBrokerId) {
 		this.searchBrokerId = searchBrokerId;
+	}
+	public String getReinsurerName() {
+		return reinsurerName;
+	}
+	public void setReinsurerName(String reinsurerName) {
+		this.reinsurerName = reinsurerName;
+	}
+	public String getBrokerCompany() {
+		return brokerCompany;
+	}
+	public void setBrokerCompany(String brokerCompany) {
+		this.brokerCompany = brokerCompany;
 	}
 	
 	

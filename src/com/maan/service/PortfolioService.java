@@ -74,4 +74,7 @@ public class PortfolioService
     public void procAuto(PortfolioBean bean, String type, String countryId) {
         portfolioDAO.procAuto(bean,type,countryId);
     }
+	public List<PortfolioBean> getConfirmedList(PortfolioBean bean, Object menuRights) {
+		return portfolioDAO.getConfirmedList( bean, menuRights);
+	}
 }

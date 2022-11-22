@@ -77,6 +77,31 @@
 											<div class="panel-body">
 												<div class="textfield">
 													<div class="text">
+													<s:text name="Bouquet No" />
+														
+													</div>
+													<div class="tbox txtB">
+													 <s:textfield name="bouquetNoSearch" id="bouquetNoSearch" cssClass="inputBox" />
+													</div>
+												</div>
+												<div class="textfield">
+													<div class="text">
+													<s:text name="Offer No" />
+													</div>
+													<div class="tbox txtB">
+													 <s:textfield name="offerNoSearch" id="offerNoSearch" cssClass="inputBox" />
+													</div>
+												</div>
+												<div class="textfield">
+													<div class="text">
+													<s:text name="Base Proposal No" />
+													</div>
+													<div class="tbox txtB">
+													 <s:textfield name="baseProposalNoSearch" id="baseProposalNoSearch" cssClass="inputBox" />
+													</div>
+												</div>
+												<div class="textfield">
+													<div class="text">
 														<s:text name="Proposal No" />
 													</div>
 													<div class="tbox txtB">
@@ -96,7 +121,7 @@
 													<div class="textfield">
 														<div class="text">
 															<s:if test=' !"5".equals(#session.mfrid)'>
-																<s:text name="Company Name" />
+																<s:text name="Ceding Company Name" />
 															</s:if>
 															<s:else>
 																<s:text name="Lead Retrocessionaire" />
@@ -115,21 +140,12 @@
 																cssClass="inputBox" />
 														</div>
 													</div>
-													<div class="textfield">
-														<div class="text">
-															<s:text name="label.class" />
-														</div>
-														<div class="tbox txtB">
-															<s:textfield name="departmentNameSearch1" id="departmentNameSearch1"
-																cssClass="inputBox" />
-														</div>
-													</div>
 												</s:if>
 												<s:else>
 													<div class="textfield">
 														<div class="text">
 															<s:if test=' !"4".equals(#session.mfrid)'>
-																<s:text name="Company Name" />
+																<s:text name="Ceding Company Name" />
 															</s:if>
 															<s:else>
 																<s:text name="Lead Retrocessionaire" />
@@ -146,15 +162,6 @@
 														</div>
 														<div class="tbox txtB">
 															<s:textfield name="brokerNameSearch" id="brokerNameSearch"
-																cssClass="inputBox" />
-														</div>
-													</div>
-													<div class="textfield">
-														<div class="text">
-															<s:text name="label.class" />
-														</div>
-														<div class="tbox txtB">
-															<s:textfield name="departmentNameSearch" id="departmentNameSearch"
 																cssClass="inputBox" />
 														</div>
 													</div>
@@ -180,16 +187,6 @@
 																cssClass="inputBox" />
 														</div>
 													</div>
-													<div class="textfield">
-														<div class="text">
-															<s:text name="Underwriter" />
-														</div>
-														<div class="tbox txtB">
-															<s:textfield name="underwriterSearch" id="underwriterSearch"
-																cssClass="inputBox" />
-														</div>
-													</div>
-
 												</s:if>
 												<s:else>
 													<div class="textfield">
@@ -198,15 +195,6 @@
 														</div>
 														<div class="tbox txtB">
 															<s:textfield name="uwYearSearch3" id="uwYearSearch3"
-																cssClass="inputBox" />
-														</div>
-													</div>
-													<div class="textfield">
-														<div class="text">
-															<s:text name="Underwriter" />
-														</div>
-														<div class="tbox txtB">
-															<s:textfield name="underwriterSearch1" id="underwriterSearch1"
 																cssClass="inputBox" />
 														</div>
 													</div>
@@ -230,19 +218,7 @@
 									<div class="panel panel-primary">
 										<div class="panel-heading">
 											<div class="tablerow">
-												<s:if test='"RD".equals(flag)'>
-													<s:text name="Heading.RENEWALDUELIST" />
-												</s:if>
-
-												<s:else>
-													<s:text name="Heading.CONTRACTSLIST" />
-												</s:else>
-												<s:if test='#session.MenuRights.indexOf("R")!=-1'>
-													<span class="pullRight"> <input type="button"
-															value="New Contract" class="btn btn-sm btn-success"
-															onclick="AddNewContract();" /> </span>
-												</s:if>
-
+												<s:text name="Heading.CONTRACTSLIST" />
 											</div>
 										</div>
 										<s:if test='"2".equals(#session.mfrid) || "1".equals(#session.mfrid) || "4".equals(#session.mfrid)'>
@@ -314,10 +290,19 @@
 																			<s:property value="proposalNo" />
 																		</td>
 																		<td>
+																			<s:property value="contractNo" />
+																		</td>
+																		<td>
+																			<s:property value="sectionNo" />
+																		</td>
+																		<td>
 																			<s:property value="ceding_Company_Name" />
 																		</td>
 																		<td>
 																			<s:property value="brokerName" />
+																		</td>
+																		<td>
+																			<s:property value="department_Name" />
 																		</td>
 																		<td>
 																			<s:property value="department_Name" />
@@ -336,15 +321,11 @@
 																		<td>
 																			<s:property value="uwYear" />
 																		</td>
-																		<td>
-																			<s:property value="underwritter" />
-																		</td>
+																		
 																		<td>
 																			<s:property value="old_Contract" />
 																		</td>
-																		<s:if test='"2".equals(#session.mfrid)'>
-																		<td><s:property value="baseLayer" /></td>
-																		</s:if>
+																		
 																		<td style="text-align: center; vertical-align: middle;">
 																			<div><s:select list="buttonSelectionList" name="buttonVal[%{#stat.count-1}]" id="buttonVal%{#stat.count-1}" cssClass=" inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:65%;float:left;" />
 																			 <span class="pull-right"><input type="button"  value="Go"  size="2" class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalId" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
@@ -1124,44 +1105,26 @@ function detailsClick(val) {
 		document.getElementById('detailsPlus').style.display='block';
     }
 }
-$('#proposalNoSearch').on( 'keyup', function () {
+$('#offerNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(1).search(this.value).draw();
 } );
-$('#contractNoSearch').on( 'keyup', function () {
+$('#bouquetNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(2).search(this.value).draw();
 } );
-$('#companyNameSearch').on( 'keyup', function () {
+$('#baseProposalNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(3).search(this.value).draw();
 } );
-$('#brokerNameSearch').on( 'keyup', function () {
+$('#contractNoSearch').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(4).search(this.value).draw();
-} );
-$('#departmentNameSearch').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(5).search(this.value).draw();
-} );
-$('#insuredNameSearch').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(8).search(this.value).draw();
-} );
-$('#underwriterSearch').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(10).search(this.value).draw();
-} );
-$('#underwriterSearch1').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(9).search(this.value).draw();
 } );
 $('#companyNameSearch1').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(4).search(this.value).draw();
-} );
-$('#brokerNameSearch1').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(5).search(this.value).draw();
 } );
-$('#departmentNameSearch1').on( 'keyup', function () {
+$('#brokerNameSearch1').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(6).search(this.value).draw();
 } );
-$('#uwYearSearch2').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(9).search(this.value).draw();
-} );
 $('#uwYearSearch3').on( 'keyup', function () {
-$('#gridTableMake').DataTable().columns(8).search(this.value).draw();
+$('#gridTableMake').DataTable().columns(13).search(this.value).draw();
 } );
 
 function ButtonAction(contractno,ceddingcompanyid,proposalno,baseLayer,deptId,flag,amendId,layerNo,inception_Date,ceding_Company_Name,brokerName,flag,row){
@@ -1216,15 +1179,8 @@ function funDupliacteCopyMode(proposalno){
 }
 
 function funSearchMode(mode){
-var flag = document.getElementById("flag").value;
-	if(flag!="C"&&flag!="RD"){
-	  document.portfolioview.action="${pageContext.request.contextPath}/commonListPortfolio.action?SearchType="+mode;
+	  document.portfolioview.action="${pageContext.request.contextPath}/InitCPortfolio.action?SearchType="+mode;
 	  document.portfolioview.submit();
-	  }
-	  else{
-	  document.portfolioview.action="${pageContext.request.contextPath}/InitPortfolio.action?SearchType="+mode;
-	  document.portfolioview.submit();
-	 }
 }
 </script>
 </html>

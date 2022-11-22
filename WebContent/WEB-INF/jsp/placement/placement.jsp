@@ -343,7 +343,7 @@
 																<s:iterator value="#ereinsurerInfoList" var="list"  status="stat">									
 																<tr>
 																	<td align="center">
-																		<s:textfield name="reinsSNo[%{#stat.count-1}]" id="reinsSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple" cssStyle="text-align: center;"/>
+																		<s:textfield name="reinsSNo[%{#stat.count-1}]" id="reinsSNo[%{#stat.count-1}]" cssClass="inputBox"  readonly="true" theme="simple" cssStyle="text-align: center;"/>
 																		<s:hidden name="proposalNos[%{#stat.count-1}]" id="proposalNos[%{#stat.count-1}]"></s:hidden>
 																	</td>
 																	<td>
@@ -353,7 +353,7 @@
 																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
-																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
+																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
 																	<s:property value="mailStatus[#stat.count-1]"/>
@@ -408,7 +408,7 @@
 															<s:iterator value="#ereinsurerInfoList" var="list"  status="stat">									
 															<tr>
 																<td align="center"> 
-																	<s:property value="%{#stat.count}"/>
+																	<s:property value="#list.SNO"/>
 																</td>
 																<td>
 																	<s:property value="#list.REINSURER_NAME"/>
@@ -425,7 +425,7 @@
 																</td>
 																
 																<td align="center">
-																	<s:if test='!"Success".equals(#list.MAIL_STATUS)'>
+																	<s:if test='"Y".equals(#list.OFFER_STATUS)'>
 																		<input type="button" value="Send Mail" class="btn btn-sm btn-primary"    onclick="getMailTemplate('P','<s:property value="#list.SHARE_OFFERED"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>','<s:property value="#list.PROPOSAL_NO"/>');"/>
 																	</s:if>
 																</td>
@@ -604,7 +604,7 @@ var table = document.getElementById(tableID);
 			element2.name = "shareOffer["+(rowCount-1)+"]";
       		element2.id = "shareOffer["+(rowCount-1)+"]";
 			element2.className = "inputBox";
-			element2.setAttribute("onkeyup", "checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);");
+			element2.setAttribute("onkeyup", "allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);");
 			element2.setAttribute("onchange", "decimal(this.id,this.value);");
 			element2.setAttribute("style", "text-align:right;");
 			cell4.appendChild(element2);
@@ -787,7 +787,8 @@ function DownloadFile(id,name){
 	document.placement.submit();
 }
 function decimal(id,val){
-	document.getElementById(id).value=parseFloat(val).toFixed(4);
+	if(val!=null && val!='')
+	document.getElementById(id).value=parseFloat(val).toFixed(8);
 }
 function functionview(id){
 	var cedding="";
@@ -851,6 +852,15 @@ if (el.parentNode && el.parentNode.rows.length > 1) {
 document.getElementById(id).checked=false;
 }	   
 }
+}
+function hundredCheck(id,val){
+	if(parseFloat(val)>100){
+	alert("This field value is not exceed 100");
+	document.getElementById(id).value='';
+	}
+	else if(val=='-'){
+		document.getElementById(id).value='';
+	}
 }
 </script>	
 	

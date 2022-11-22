@@ -94,5 +94,10 @@ public void getPlacementView(PlacementBean bean) {
 public List<Map<String, Object>> getExistingBrokerList(PlacementBean bean) {
 	return dao.getExistingBrokerList(bean);
 }
+
+public List<Map<String, Object>> getMailToList(PlacementBean bean) {
+	// TODO Auto-generated method stub
+	return dao.getMailToList(bean);
+}
 	
 }

@@ -48,6 +48,9 @@
 	<definition name="portfolioList" extends="CommonTemplate">
 		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/PortfolioView.jsp" />
 	</definition>
+	<definition name="confirmedList" extends="CommonTemplate">
+		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/ConfirmedList.jsp" />
+	</definition>
 	<definition name="first" extends="CommonTemplate">
 		<put-attribute name="body" value="/WEB-INF/jsp/Portfolio/firstPage.jsp" />
 	</definition>

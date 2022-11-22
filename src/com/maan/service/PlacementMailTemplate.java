@@ -42,7 +42,7 @@ public class PlacementMailTemplate {
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SAHRE_MAX")==null?DropDownControllor.formatterpercentage(bean.getMaxSharePercent()):map.get("SAHRE_MAX").toString())+"</td>" + 
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SAHRE_MAX")==null?DropDownControllor.formattereight(bean.getMaxSharePercent()):map.get("SAHRE_MAX").toString())+"</td>" + 
 			"</tr>";
 		}
 		messageContent+=	"</table>" +
@@ -87,8 +87,8 @@ public class PlacementMailTemplate {
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formatterpercentage(bean.getMaxSharePercent()))+"</td>" +
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formatterpercentage(bean.getMaxShareWritten()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxSharePercent()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxShareWritten()))+"</td>" +
 			"</tr>";
 		}
 		messageContent+=	"</table>" +
@@ -135,9 +135,9 @@ public class PlacementMailTemplate {
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formatterpercentage(bean.getMaxSharePercent()))+"</td>" +
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formatterpercentage(bean.getMaxShareWritten()))+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formatterpercentage(bean.getMaxShareSigned()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxSharePercent()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxShareWritten()))+"</td>" + 
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxShareSigned()))+"</td>" +
 			"</tr>";
 		}
 		messageContent+=	"</table>" +

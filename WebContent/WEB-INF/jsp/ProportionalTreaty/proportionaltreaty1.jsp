@@ -71,6 +71,7 @@ gap:20px;
 		<s:set var="elayerInfo" value='%{sectionInfo}'/>
 		<s:set var="dislayer" value="%{'layer'.equals(layerMode)}"/>
 		<s:set var="baselayer" value='%{!(("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no)))}'/>
+		<s:set var="displ" value='%{!"Y".equals(pltDisableStatus)}'/>
 		
 		<s:set var="ebouquetExistingList" value='%{bouquetExistingList}'/>
 		<div class="table0" style="width: 100%; margin: 0 auto;">
@@ -410,7 +411,7 @@ gap:20px;
 										<div class="boxcontent" id="laydet">
 											<div class="panel panel-primary">											
 												<div class="panel-heading" style="display: flex;justify-content: space-between;">
-													<div><s:text name="label.sectioninfo" /></div><div><button type="button"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');funNewMode('<s:property value='proposal_no'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','new');" tabindex="1"> New </button></div>
+													<div><s:text name="label.sectioninfo" /></div><div><s:if test='#displ'><button type="button"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');funNewMode('<s:property value='proposal_no'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','new');" tabindex="1"> New </button></s:if></div>
 												</div>
 												<div class="panel-body">
 													<div class="boxcontent" style="width:75%">
@@ -456,12 +457,16 @@ gap:20px;
 																			<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','');" tabindex="1"> Edit </button>
 																		</td>
 																		<td align="center">
+																		<s:if test='#displ'>
 																			<button type="button"  class="btn btn-sm btn-warning"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
+																		</s:if>
 																		</td>
 																		<td align="center">
+																		<s:if test='#displ'>
 																			<s:if test='(#list.PROPOSAL_NO!=#list.BASE_LAYER)'>
 																			<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
 																			</s:if>
+																		</s:if>
 																		</td>
 																	</tr>												
 																	</s:iterator>
@@ -606,7 +611,7 @@ gap:20px;
 																				<s:text name="label.quotesharePercent" />
 																			</div>
 																			<div class="tbox">
-																				<s:textfield name="quotesharePercent" id="quotesharePercent" cssClass="inputBox" cssStyle="text-align: right;" maxlength="20" onkeyup="middleMinusRestrictionNeg(this);negative(this.id,this.value);checkDecimals(this);allowOneDot(this);hundredCheck(this.id,this.value)"  />
+																				<s:textfield name="quotesharePercent" id="quotesharePercent" cssClass="inputBox" cssStyle="text-align: right;" maxlength="20" onkeyup="middleMinusRestrictionNeg(this);negative(this.id,this.value);allow8DigitDecValues(this);allowOneDot(this);hundredCheck(this.id,this.value)"  />
 																			</div>
 																		</div>
 																		<div class="textfield" id="treatySurp1"
@@ -738,7 +743,7 @@ gap:20px;
 																				<s:text name="label.leadUnderwritterShareP" />&nbsp; <sup style="color:red;"></sup>
 																			</div>
 																			<div class="tbox">
-																				<s:textfield name="leader_Underwriter_share" id="leader_Underwriter_share" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled="false"/>
+																				<s:textfield name="leader_Underwriter_share" id="leader_Underwriter_share" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="12" disabled="false"/>
 																			</div>
 																		</div>
 																		</div>
@@ -920,7 +925,7 @@ gap:20px;
 																						<s:text name="label.commissionQSP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="commissionQ_S" id="commissionQ_S" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue();SlidingScaleEnable();" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}' />													
+																						<s:textfield name="commissionQ_S" id="commissionQ_S" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue();SlidingScaleEnable();" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}' />													
 																					</div>
 																				</div>
 																				<div class="textfield" id="commissionSurpPid">
@@ -928,7 +933,7 @@ gap:20px;
 																						<s:text name="label.commissionSurpP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="commission_surp" id="commission_surp" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue();SlidingScaleEnable();" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>													
+																						<s:textfield name="commission_surp" id="commission_surp" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue();SlidingScaleEnable();" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>													
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -936,7 +941,7 @@ gap:20px;
 																						<s:text name="label.overriderP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="overRidder" id="overRidder" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<s:textfield name="overRidder" id="overRidder" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -945,10 +950,10 @@ gap:20px;
 																					</div>
 																					<div class="tbox">
 																						<s:if test="(broker.toString().trim()).equalsIgnoreCase('DIRECT')">
-																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" value="0" readonly="true" cssStyle="text-align:right;" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="14" />
+																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" value="0" readonly="true" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="12" />
 																						</s:if>
 																						<s:else>
-																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="14" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																							<s:textfield name="brokerage" id="brokerageIDD" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 																						</s:else>
 																					</div>
 																				</div>
@@ -957,7 +962,7 @@ gap:20px;
 																						<s:text name="label.taxP" />&nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="tax" id="taxIDDD" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" value='%{"D".equals(profit_Center) ?0.00:tax}' onblur="CalculateValue()"  maxlength="8" disabled='"Y".equals(disableStatus1)'/>
+																						<s:textfield name="tax" id="taxIDDD" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"  onblur="CalculateValue()"  maxlength="12" disabled='"Y".equals(disableStatus1)'/>
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -965,7 +970,7 @@ gap:20px;
 																						<s:text name="label.otherCostP" />
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="othercost" id="CostOther" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<s:textfield name="othercost" id="CostOther" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 																					</div>
 																				</div>
 																				<s:hidden name="acquisition_Cost" id="acquisition_Cost"></s:hidden>
@@ -1060,7 +1065,7 @@ gap:20px;
 																								<s:text name="label.manexp" />
 																							</div>
 																							<div class="tbox">												
-																							<s:textfield name="managementExpenses" id="managementExpenses"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>	<br/>											
+																							<s:textfield name="managementExpenses" id="managementExpenses"  cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>	<br/>											
 																							</div>
 																						</div>
 																						<div class="textfield">
@@ -1095,7 +1100,7 @@ gap:20px;
 																								<s:text name="label.procomper" /> 
 																							</div>
 																							<div class="tbox">												
-																								<s:textfield name="profitCommissionPer" id="profitCommissionPer"  cssClass="inputBox" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" cssStyle="text-align: right;" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>		<br/>										
+																								<s:textfield name="profitCommissionPer" id="profitCommissionPer"  cssClass="inputBox" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" cssStyle="text-align: right;" maxlength="26" readonly='"Y".equals(disableStatus1)||"Y"==profitCommissionEnable?true:false'/>		<br/>										
 																						</div>
 																						</div>
 																						<div class="textfield" id="setup" style="display:none;">
@@ -1277,7 +1282,7 @@ gap:20px;
 																						<div class="input-group" style="display: flex;">
 																							<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="premiumResType" id="premiumResType" cssClass="inputBoxS" cssStyle="width:50%;" headerKey="" headerValue="---Select---" />
 																							<%-- <span class="input-group-addon"> --%>
-																								<s:textfield name="premium_Reserve" id="premium_Reserve" cssClass="inputBox"   cssStyle="width:40%;text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																								<s:textfield name="premium_Reserve" id="premium_Reserve" cssClass="inputBox"   cssStyle="width:40%;text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 														     								<%-- </span> --%>
 																						</div>
 																					</div>
@@ -1287,7 +1292,7 @@ gap:20px;
 																						<s:text name="label.lossReserveP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="loss_reserve" cssClass="inputBox" cssStyle="text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<s:textfield name="loss_reserve" cssClass="inputBox" cssStyle="text-align:right;" onchange="GetPremiumReserveIntr()" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -1295,7 +1300,7 @@ gap:20px;
 																						<s:text name="label.interestP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="interest" id="interset" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<s:textfield name="interest" id="interset" cssClass="inputBox" cssStyle="text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -1303,7 +1308,7 @@ gap:20px;
 																						<s:text name="label.portfolioinoutLossP" /> &nbsp; <sup style="color:red;"></sup>
 																					</div>
 																					<div class="tbox">
-																						<s:textfield name="portfolio_inout_Loss" id="InoutLoss" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																						<s:textfield name="portfolio_inout_Loss" id="InoutLoss" cssClass="inputBox" cssStyle="text-align:right;"  onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 																					</div>
 																				</div>
 																				<div class="textfield">
@@ -1315,7 +1320,7 @@ gap:20px;
 																						<div class="input-group" style="display: flex;">
 																						<s:select list="premiumReserveList" listKey="TYPE" listValue="DETAIL_NAME" name="portfolioType" id="portfolioType" cssClass="inputBoxS" cssStyle="width:50%;" headerKey="" headerValue="---Select---" />
 																						<%-- <span class="input-group-addon"> --%>
-																							<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="width:40%;text-align:right;" onkeyup="checkDecimals(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="8" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
+																							<s:textfield name="portfolio_inout_Premium" cssClass="inputBox" cssStyle="width:40%;text-align:right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onblur="CalculateValue()" maxlength="12" disabled='%{"Y".equals(disableStatus1)?true:false}'/>
 													     								<%-- </span> --%>
 																					</div>
 																					</div>
@@ -2129,6 +2134,12 @@ function Commas(value) {
 		if(document.proportional.limitPerLocationOC.value!=null && document.proportional.limitPerLocationOC.value!="") {
 			document.proportional.limitPerLocationOC.value=Comma(document.proportional.limitPerLocationOC.value);
 		}
+		document.proportional.loss_Advise.value=Comma(document.proportional.loss_Advise.value);
+		document.proportional.cash_Loss_Limit.value=Comma(document.proportional.cash_Loss_Limit.value);
+		document.proportional.event_limit.value=Comma(document.proportional.event_limit.value);
+		document.proportional.aggregate_Limit.value=Comma(document.proportional.aggregate_Limit.value);
+		document.proportional.occurrent_Limit.value=Comma(document.proportional.occurrent_Limit.value);
+		
 	} else if(value=="3") {
 		document.proportional.deduc_hunPercent.value=Comma(document.proportional.deduc_hunPercent.value);
 		document.proportional.maxLimit_Product.value=Comma(document.proportional.maxLimit_Product.value);
@@ -2508,7 +2519,7 @@ $(document).ready(function() {
 		document.getElementById(id).value='';
 	}
 }
-getRateField('<s:property value="proposalType"/>');
+getRateField('<s:property value="proposalType"/>');commission_surp
 function getRateField(val){
 if( val=='R' || val=='H'){
 document.getElementById('ratId').style.display='inline';
@@ -2945,7 +2956,7 @@ function getPopUpDetails(pageFor,contractNo,endorsmentno,proposalNo,flag,renewal
 	        success: function(data){
 	            $('#companyAjaxId1').html(data);
 	           
-	    			$( "#periodDate" ).datepicker({
+	    			$( "#fpcfixedDate" ).datepicker({
 	    				changeMonth : true,
 	    				changeYear : true,
 	    				dateFormat : "dd/mm/yy"
@@ -3293,13 +3304,15 @@ function getMethod(val){
 	if (val=='MA') {
          document.getElementById('methodida').style.display = 'block';
          document.getElementById('methodidb').style.display = 'none';
-         //document.getElementById('scalegrid').style.display = 'block';
+         document.getElementById('scalegrid').style.display = 'block';
+         document.getElementById('scalecal').style.display = 'block';
          
      }
      else {
     	 document.getElementById('methodida').style.display = 'none';
          document.getElementById('methodidb').style.display = 'block';
-         //document.getElementById('scalegrid').style.display = 'none';
+         document.getElementById('scalegrid').style.display = 'none';
+         document.getElementById('scalecal').style.display = 'none';
      }
     
 }

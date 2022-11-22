@@ -1185,4 +1185,191 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 percentd = parseNumber(percent.replaceAll(",", "").trim());
         return premd * (percentd / 100);
     }
+
+	@Override
+	public List<PortfolioBean> getConfirmedList(PortfolioBean beanObj, Object MenuRights) {
+		List<PortfolioBean> finalList = new ArrayList<PortfolioBean>();
+        try {
+            String query = "";
+            Object[] obj = new Object[7];
+            obj[0] = beanObj.getProductId();
+            obj[1] = beanObj.getBranchCode();
+            obj[2] = beanObj.getBranchCode();
+            obj[3] = beanObj.getProductId();
+            obj[4] = beanObj.getBranchCode();
+            obj[5] = beanObj.getBranchCode();
+            obj[6] = beanObj.getBranchCode();
+            query = getQuery("GET_NEW_CONTRACT_LIST");
+           
+            
+            if(StringUtils.isNotBlank(beanObj.getSearchType()) && null !=beanObj.getSearchType()){
+            	if(StringUtils.isNotBlank(beanObj.getProposalNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getProposalNoSearch() + "%")});
+                    query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_PERNO);
+            	}
+            	if(StringUtils.isNotBlank(beanObj.getContractNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getContractNoSearch() + "%")});
+                    query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_CONNO);
+            	}
+        		if(StringUtils.isNotBlank(beanObj.getCompanyNameSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getCompanyNameSearch() + "%")});
+                    query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_COMNAME);
+            	}
+        		if(StringUtils.isNotBlank(beanObj.getBrokerNameSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getBrokerNameSearch() + "%")});
+                    query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_BRONAME);
+            	}
+        		if(StringUtils.isNotBlank(beanObj.getDepartmentNameSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getDepartmentNameSearch() + "%")});
+            		 query += " AND UPPER(B.TMAS_DEPARTMENT_NAME) LIKE UPPER(?)";
+            	}
+        		if(StringUtils.isNotBlank(beanObj.getBouquetNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getBouquetNoSearch() + "%")});
+            		 query += " AND UPPER(A.Bouquet_No) LIKE UPPER(?)";
+            	}
+        		if(StringUtils.isNotBlank(beanObj.getSubclassSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getSubclassSearch() + "%")});
+            		 query += " AND UPPER((select RTRIM(XMLAGG(XMLELEMENT(E,TMAS_SPFC_NAME,',')).EXTRACT('//text()'),',')  from TMAS_SPFC_MASTER SPFC where SPFC.TMAS_SPFC_ID in(select * from table(SPLIT_TEXT_FN(replace(E.RSK_SPFCID,' ', '')))) AND  SPFC.TMAS_PRODUCT_ID = E.RSK_PRODUCTID AND SPFC.BRANCH_CODE = E.BRANCH_CODE)) LIKE UPPER(?)";
+            	}
+            	if("1".equalsIgnoreCase(beanObj.getProductId())){
+        		if(StringUtils.isNotBlank(beanObj.getInsuredNameSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getInsuredNameSearch() + "%")});
+            		 query += " AND UPPER(E.RSK_INSURED_NAME) LIKE UPPER(?)";
+            	}
+            	if(StringUtils.isNotBlank(beanObj.getUwYearSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getUwYearSearch() + "%")});
+                    query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_UYEAR);
+            	}if(StringUtils.isNotBlank(beanObj.getUnderwriterSearch())){
+            		String qry ="SELECT UWR_CODE FROM UNDERWRITTER_MASTER WHERE BRANCH_CODE="+beanObj.getBranchCode()+" and UPPER(UNDERWRITTER) like UPPER('%" + beanObj.getUnderwriterSearch()+ "%') and UWR_STATUS='Y'";
+            		String res =this.mytemplate.queryForObject(qry,String.class);
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + res + "%")});
+            		 query += " AND UPPER(E.RSK_UNDERWRITTER) LIKE UPPER(?) ";
+            	}
+            	}else{
+            		if(StringUtils.isNotBlank(beanObj.getUwYearSearch1())){
+                		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getUwYearSearch1() + "%")});
+                        query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_UYEAR);
+                	}if(StringUtils.isNotBlank(beanObj.getUnderwriterSearch1())){
+                		String qry ="SELECT UWR_CODE FROM UNDERWRITTER_MASTER WHERE BRANCH_CODE="+beanObj.getBranchCode()+" and UPPER(UNDERWRITTER) like UPPER('%" + beanObj.getUnderwriterSearch1()+ "%') and UWR_STATUS='Y'";
+                		String res =this.mytemplate.queryForObject(qry,String.class);
+                		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + res + "%")});
+                		 query += " AND UPPER(E.RSK_UNDERWRITTER) LIKE UPPER(?) ";
+                	}
+            	}if(StringUtils.isNotBlank(beanObj.getOfferNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getOfferNoSearch() + "%")});
+            		query += " AND A.OFFER_NO LIKE ? ";
+            		
+            	}
+            	
+            	beanObj.setType("Yes");
+            }else{
+            	beanObj.setProposalNoSearch("");
+            	beanObj.setContractNoSearch("");
+            	beanObj.setCompanyNameSearch("");
+            	beanObj.setBrokerNameSearch("");
+            	beanObj.setDepartmentNameSearch("");
+            	beanObj.setInsuredNameSearch("");
+            	beanObj.setUwYearSearch("");
+            	beanObj.setUnderwriterSearch("");
+            	beanObj.setUwYearSearch1("");
+            	beanObj.setUnderwriterSearch1("");
+            	beanObj.setOfferNoSearch("");
+            }
+            if ("RP".equalsIgnoreCase(beanObj.getFlag())) {
+                query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_RENEWALPENDING);
+            } else {
+                query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_PENDING);
+            }
+            if(StringUtils.isNotBlank(beanObj.getAttachedUW()) && !"ALL".equalsIgnoreCase(beanObj.getAttachedUW())) {
+        		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{(beanObj.getAttachedUW())});
+        		 query += " AND UPPER(E.RSK_UNDERWRITTER) IN (select * from table(SPLIT_TEXT_FN(?)))";
+        	}
+            query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_ORDERBYPRONO);
+            logger.info("Query=>" + query);
+            logger.info("Obj[]=>" + StringUtils.join(obj, ","));
+            List<Map<String, Object>> list = this.mytemplate.queryForList(query, obj);
+            //if(list!=null && list.size()>0){
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> tempMap = list.get(i);
+                PortfolioBean tempBean = new PortfolioBean();
+                tempBean.setContractNo(tempMap.get("CONTRACT_NO") == null ? "" : tempMap.get("CONTRACT_NO").toString());
+                tempBean.setProposalNo(tempMap.get("PROPOSAL_NO") == null ? "" : tempMap.get("PROPOSAL_NO").toString());
+                tempBean.setOfferNo(tempMap.get("OFFER_NO") == null ? "" : tempMap.get("OFFER_NO").toString());
+                tempBean.setBouquetNo(tempMap.get("Bouquet_No") == null ? "" : tempMap.get("Bouquet_No").toString());
+                tempBean.setAmendId(tempMap.get("AMEND_ID") == null ? "" : tempMap.get("AMEND_ID").toString());
+                tempBean.setCeding_Company_Name(tempMap.get("COMPANY_NAME") == null ? "" : tempMap.get("COMPANY_NAME").toString());
+                tempBean.setDepartment_Name(tempMap.get("TMAS_DEPARTMENT_NAME") == null ? "" : tempMap.get("TMAS_DEPARTMENT_NAME").toString());
+                tempBean.setSubClass(tempMap.get("TMAS_SPFC_NAME") == null ? "" : tempMap.get("TMAS_SPFC_NAME").toString());
+                tempBean.setDepartmentId(tempMap.get("TMAS_DEPARTMENT_ID") == null ? "" : tempMap.get("TMAS_DEPARTMENT_ID").toString());
+                tempBean.setInception_Date(tempMap.get("INCEPTION_DATE") == null ? "" : tempMap.get("INCEPTION_DATE").toString());
+                tempBean.setExpiry_Date(tempMap.get("EXPIRY_DATE") == null ? "" : tempMap.get("EXPIRY_DATE").toString());
+                tempBean.setInsuredName(tempMap.get("RSK_INSURED_NAME") == null ? "" : tempMap.get("RSK_INSURED_NAME").toString());
+                tempBean.setQuote_Gendrated_date(tempMap.get("ACCOUNT_DATE") == null ? "" : tempMap.get("ACCOUNT_DATE").toString());
+                tempBean.setCedding_company_id(tempMap.get("CEDING_COMPANY_ID") == null ? "" : tempMap.get("CEDING_COMPANY_ID").toString());
+                tempBean.setLayerNo(tempMap.get("LAYER_NO") == null ? "" : tempMap.get("LAYER_NO").toString());
+                tempBean.setSectionNo(tempMap.get("SECTION_NO") == null ? "" : tempMap.get("SECTION_NO").toString());
+                if (beanObj.getFlag() != null && "N".equalsIgnoreCase(beanObj.getFlag())) {
+                    tempBean.setFlag("N");
+                } else if ("RP".equalsIgnoreCase(beanObj.getFlag())) {
+                    tempBean.setFlag("RP");
+                    tempBean.setTitle("RP");
+                   
+                } else {
+                    tempBean.setFlag("P");
+                }
+				/*if(tempMap.get("BASE_LAYER")!=null)
+					tempBean.setBaseLayer(tempMap.get("BASE_LAYER")==null?"":tempMap.get("BASE_LAYER").toString());
+				else
+					tempBean.setBaseLayer("");*/
+                if (tempMap.get("BASE_LAYER") != null) {
+                    tempBean.setBaseLayer(tempMap.get("BASE_LAYER").toString());
+                    tempBean.setContractno1(tempMap.get("CONTRACT_NO") == null ? "" : tempMap.get("CONTRACT_NO").toString());
+                    tempBean.setLay1("layer");
+                } else {
+                    tempBean.setBaseLayer("");
+                }
+                tempBean.setUwYear(tempMap.get("UW_YEAR") == null ? "" : tempMap.get("UW_YEAR").toString());
+                tempBean.setUwMonth(tempMap.get("UW_MONTH") == null ? "" : tempMap.get("UW_MONTH").toString());
+                tempBean.setUnderwritter(tempMap.get("UNDERWRITTER") == null ? "" : tempMap.get("UNDERWRITTER").toString());
+                tempBean.setBrokerName(tempMap.get("BROKER_NAME") == null ? "" : tempMap.get("BROKER_NAME").toString());
+                tempBean.setOld_Contract(tempMap.get("OLD_CONTRACTNO") == null ? "" : "0".equals(tempMap.get("OLD_CONTRACTNO")) == true ? "" : tempMap.get("OLD_CONTRACTNO").toString());
+                tempBean.setButtonSelectionList(getConfimedButtonList(tempBean,MenuRights));
+                finalList.add(tempBean);
+            }
+        } catch (Exception e) {
+            logger.debug("Exception @ {" + e + "}");
+        }
+        return finalList;
+	}
+
+	private List<Map<String, Object>> getConfimedButtonList(PortfolioBean tempBean, Object menuRights) {
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Map<String,Object> map=new HashMap<String,Object>();
+		try{
+			
+			
+			if( menuRights.toString().contains("V")){
+				map.put("TYPE","V");
+				map.put("DETAIL_NAME","View");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			if( menuRights.toString().contains("V")){
+				map.put("TYPE","PL");
+				map.put("DETAIL_NAME","Pl. Summar");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			if( menuRights.toString().contains("V")){
+				map.put("TYPE","C");
+				map.put("DETAIL_NAME","Contract");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

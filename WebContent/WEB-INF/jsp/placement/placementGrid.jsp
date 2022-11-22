@@ -131,16 +131,16 @@
 							</td>
 							<td>
 							<s:if test='("A".equals(newStatus))'>
-								<s:textfield name="shareOffered[%{#stat.count-1}]" id="shareOffered[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>
+								<s:textfield name="shareOffered[%{#stat.count-1}]" id="shareOffered[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>
 							</s:if>
 							<s:else>
-								<s:textfield name="shareOffered[%{#stat.count-1}]" id="shareOffered[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#emailstatus) || (#ero) || (#epwl) || (#esl) || (#epsl) || (#ecsl)}"/>
+								<s:textfield name="shareOffered[%{#stat.count-1}]" id="shareOffered[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#emailstatus) || (#ero) || (#epwl) || (#esl) || (#epsl) || (#ecsl)}"/>
 							</s:else>
 								
 							</td>
 							<s:if test='("A".equals(newStatus)) || (#ero) || (#epwl) || (#enpwl) || (#esl) || (#epsl) || (#ecsl)'>
 							<td>
-								<s:textfield name="writtenLine[%{#stat.count-1}]" id="writtenLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero) || (#epwl) || (#esl) || (#epsl) || (#ecsl)}"/>
+								<s:textfield name="writtenLine[%{#stat.count-1}]" id="writtenLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero) || (#epwl) || (#esl) || (#epsl) || (#ecsl)}"/>
 								
 							</td>
 							</s:if>
@@ -161,7 +161,7 @@
 							</s:else>
 							<s:if test='(#ero) || (#epwl) || (#enpwl) || (#esl) || (#epsl) || (#ecsl)'>
 							<td>
-								<s:textfield name="proposedWL[%{#stat.count-1}]" id="proposedWL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero)|| (#esl) || (#epsl) || (#ecsl)}"/>
+								<s:textfield name="proposedWL[%{#stat.count-1}]" id="proposedWL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero)|| (#esl) || (#epsl) || (#ecsl)}"/>
 							</td>
 							</s:if>
 							<s:else>
@@ -169,7 +169,7 @@
 							</s:else>
 							<s:if test='(#ero) || (#esl) || (#epsl) || (#ecsl)'>
 							<td>
-								<s:textfield name="signedLine[%{#stat.count-1}]" id="signedLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero) || (#epsl)}"/>
+								<s:textfield name="signedLine[%{#stat.count-1}]" id="signedLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero) || (#epsl)}"/>
 								<s:hidden name="psignedLine[%{#stat.count-1}]"/>
 							</td>
 							</s:if>
@@ -191,7 +191,7 @@
 							</s:else>
 							<s:if test='(#ero) || (#epsl) || (#ecsl)'>
 							<td>
-								<s:textfield name="proposedSL[%{#stat.count-1}]" id="proposedSL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero) || (#ecsl)}"/>
+								<s:textfield name="proposedSL[%{#stat.count-1}]" id="proposedSL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="%{(#ero) || (#ecsl)}"/>
 							</td>
 							</s:if>
 							<s:else>
@@ -199,7 +199,7 @@
 							</s:else>
 							<s:if test='(#ero)'>
 							<td>
-								<s:textfield name="reoffer[%{#stat.count-1}]" id="reoffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
+								<s:textfield name="reoffer[%{#stat.count-1}]" id="reoffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"/>
 							</td>
 							</s:if>
 							<s:else>

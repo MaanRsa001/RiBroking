@@ -18,7 +18,7 @@
             <div class="row">
                 <label for="to" class="col-2 col-sm-1 col-form-label">To:</label>
                 <div class="col-10 col-sm-10 mb-2" style="padding-bottom: 10px;">
-                <s:select list="mailCCList" listKey="CODE" listValue="CODEDESC" name="mailTo" id="mailTo"  multiple="true" cssClass="inputBoxS"   />
+                <s:select list="mailToList" listKey="CODE" listValue="CODEDESC" name="mailTo" id="mailTo"  multiple="true" cssClass="inputBoxS"   />
                  <%-- <s:textfield name="mailTo" id="mailTo" cssClass="inputBox"/> --%>
                 </div>
             </div>
