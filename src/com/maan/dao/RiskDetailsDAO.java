@@ -48,4 +48,5 @@ public interface RiskDetailsDAO {
 		void getcalculateSC(RiskDetailsBean bean);
 		void getSectionEditMode(RiskDetailsBean bean);
 		boolean getSectionDuplicationCheck(RiskDetailsBean bean);
+		void convertPolicy(RiskDetailsBean bean, String pid);
 }

@@ -118,7 +118,19 @@ public class PortfolioAction extends ActionSupport implements
 	}
 	public String InitC() {
 		logger.info("PortfolioDispatchAction InitC() || Enter");
-		
+		if (null != bean.getProposalNo() && StringUtils.isNotBlank(bean.getProposalNo())) {
+			new DropDownControllor().updateEditMode(bean.getProposalNo(), "N","");
+			new DropDownControllor().updateBqEditMode(bean.getBouquetNo(),"N","");
+			// if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
+			String proposal = new DropDownControllor().getBaseProposal(bean.getProposalNo());
+			new DropDownControllor().updateEditMode(proposal, "N","");
+			new DropDownControllor().updateSubEditMode(proposal, "N","");
+			// }
+			// else{
+			new DropDownControllor().updateSubEditMode(bean.getProposalNo(),"N","");
+			// }
+			new DropDownControllor().updateRenewalEditMode(bean.getProposalNo(),"N","");
+		}
 		List<PortfolioBean> PortfolioList = null;
 		final PortfolioService BussinessCB = new PortfolioService();
 		bean.setProductId(session.get(MFRID).toString());

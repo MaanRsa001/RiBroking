@@ -3328,7 +3328,8 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	public int getEditMode(String proposalNo){
 		int mode=0;
 		try {
-			String selectQry = getQuery(DBConstants.RISK_SELECT_GETRSKCONTRACTNO);
+			//String selectQry = getQuery(DBConstants.RISK_SELECT_GETRSKCONTRACTNO);
+			String selectQry = getQuery("RISK_SELECT_GETRSKCONTRACTNO");
 			logger.info("select Query==>" + selectQry);
 			logger.info("Args[0]=>"+proposalNo);
 			String string = (String) this.mytemplate.queryForObject(selectQry,new Object[] {proposalNo},String.class);

@@ -284,8 +284,8 @@
 									<s:if test='"placing".equals(mode)'>
 									<div class="boxcontent" >
 									<div class="panel panel-primary">											
-										<div class="panel-heading">
-											<s:text name="label.Reinsureinfo" />
+										<div class="panel-heading" style="display: flex;justify-content: space-between;">
+											<div><s:text name="label.Reinsureinfo" /></div><div><button type="button"  class="btn btn-sm btn-success"  onclick="funEdit();" tabindex="1"> Edit </button></div>
 										</div>
 										<div class="panel-body">
 											<div class="boxcontent">
@@ -372,7 +372,9 @@
 																</tbody>
 															</table> 
 															<div class="boxcontent" align="center">
+																<s:if test='"Y".equals(reinsurerType)'>
 																<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="reinsureRow('reinsTbl');" />
+																</s:if>
 															</div>
 															</s:if>
 															</div>
@@ -540,9 +542,15 @@
 							<div class="boxcontent" align="center">
 								<button type="submit" class="btn btn-sm btn-danger" onclick="FnCancel();">Cancel</button>
 								<s:if test='"placing".equals(mode)'>
-								<input type="button"  value="Save"  class="btn btn-sm btn-primary"  onclick="disableForm(this.form,false,'');FnSave('Save')" />	
-								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FnNext('')" />	
+								<s:if test='"Y".equals(reinsurerType)'>
+								<input type="button"  value="Save"  class="btn btn-sm btn-primary"  onclick="disableForm(this.form,false,'');FnSave('Save')" />
+								</s:if>
+								<s:if test='"N".equals(reinsurerType)'>
+								<input type="button"  value="Next"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FnNext('Next')" />
+								</s:if>	
+								<%-- <s:if test='"Y".equals(reinsurerType)'>	
 								<input type="button"  value="Submit"  class="btn btn-sm btn-warning"  onclick="disableForm(this.form,false,'');FnNext('Submit')" />
+								</s:if> --%>
 								</s:if>											
 							</div>
 						</div>	
@@ -563,6 +571,8 @@
 						<s:hidden name="statusNo" id="statusNo"></s:hidden>
 						<s:hidden name="docId" id="docId"></s:hidden>
 						<s:hidden name="fileName" id="fileName"></s:hidden>
+						<s:hidden name="reinsurerType" id="reinsurerType"></s:hidden>
+						
 					</div>	
 					<div id="premiumSubmit">
 					</div>									
@@ -746,6 +756,11 @@ function getMailTemplate(mailType,share,reinsurerId,brokerId,proposalNos){
 }
 function cancelEmail(){
 	document.placement.action='${pageContext.request.contextPath}/mailInfoPlacement.action';
+	document.placement.submit();
+}
+function funEdit(){
+	document.getElementById('reinsurerType').value='Y';
+	document.placement.action='${pageContext.request.contextPath}/initPlacement.action';
 	document.placement.submit();
 }
 function getPlacement(){

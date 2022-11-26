@@ -215,6 +215,10 @@ public class RiskDetailsService {
 	public boolean getSectionDuplicationCheck(RiskDetailsBean bean) {
 		return dao.getSectionDuplicationCheck(bean);
 	}
+	public void convertPolicy(RiskDetailsBean bean, String pid) {
+		dao.convertPolicy( bean,pid);
+		
+	}
 	
 	
 

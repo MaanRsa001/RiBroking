@@ -179,10 +179,10 @@
 							</s:else>
 							<s:if test='(#esl)'>
 							<td>
-								<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox signedLineValidity" cssStyle="text-align: right;" theme="simple"/>
+								<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox signedLineValidity"  theme="simple"/>
 							</td>
 							<td>
-								<s:textfield name="signedLineRemarks[%{#stat.count-1}]" id="signedLineRemarks[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" theme="simple"/>
+								<s:textfield name="signedLineRemarks[%{#stat.count-1}]" id="signedLineRemarks[%{#stat.count-1}]" cssClass="inputBox"  theme="simple"/>
 							</td>
 							</s:if>
 							<s:else>

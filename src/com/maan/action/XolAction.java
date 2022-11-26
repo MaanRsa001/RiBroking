@@ -71,6 +71,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 	public String getDisableStatus1(){
     	return dropDownController.getDisableStatus1(bean.getContNo(),bean.getLayerNo());
     }
+	public String getPltDisableStatus(){
+    	return dropDownController.gePltDisableStatus(bean.getProposal_no());
+    }
 	public List<Map<String,Object>> getReinstatementOptionList(){
 		return dropDownController.getReinstatementOptionList(bean);
 	}
@@ -89,6 +92,24 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
     }
 	public List<Map<String,Object>> getBouquetExistingList(){
 		return dropDownController.getBouquetExistingList(branchCode,bean.getBouquetNo(),bean.getBouquetModeYN());
+	}
+	public List<Map<String,Object>> getNewContractInfo(){
+		return dropDownController.getNewContractInfo(bean);
+	}
+	public List<Map<String,Object>> getPlacementInfoList(){
+		return dropDownController.getPlacementInfoList(bean);
+	}
+	public List<Map<String,Object>>getReinsurerList(){
+		return dropDownController.getPersonalInfoDropDown(branchCode,"R",pid);
+	}
+	public List<Map<String,Object>>getBrokerList(){
+		return dropDownController.getPersonalInfoDropDown(branchCode,"B",pid);
+	}
+	public List<Map<String,Object>>getStatusList(){
+		return dropDownController.getStatusDropDown(branchCode);
+	}
+	public List<Map<String,Object>>getSubStatusList(){
+		return dropDownController.getSubStatusDropDown(branchCode,"O");
 	}
 	public String UnderwritingLimit(){
 		//bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, (String)session.get("DepartmentId")));
@@ -246,13 +267,11 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				forward="retroxol1";
 			}
 			bean.setRskCountCheck("Yes");
-			validateoffer();
-			/*if("A".equalsIgnoreCase(bean.getProStatus())|| "5".equalsIgnoreCase(pid)){
+			if("Y".equals(bean.getContractMode())) {
 				validatenext();
+			}else {
+				validateoffer();
 			}
-			else{
-				validatesave();
-			}*/
 			if (!hasActionErrors()) {
 				bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 				boolean  SaveFlag=false;
@@ -263,13 +282,17 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				}
 				if (SaveFlag) {
 					service.saveSecondPage(bean, bean.getProduct_id());
-					bean.setStatus(bean.getContractGendration());
+					
 					if(StringUtils.isBlank(bean.getBaseLayer()) && !hasActionErrors()){
 						dropDownController.updateSubClass(bean.getProposal_no(),"Save");
 					}
 					if(StringUtils.isNotBlank(bean.getReferenceNo())) {
 						dropDownController.updateProposalno(bean);
 					}
+					if("Y".equals(bean.getContractMode())) {
+						new RiskDetailsService().convertPolicy(bean,pid);
+					}
+					bean.setStatus(bean.getContractGendration());
 					if(StringUtils.isNotBlank(bean.getContNo())) {
 						bean.setBackmode("Con");
 					}
@@ -300,7 +323,7 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 						dropDownController.updateSubEditMode(bean.getProposal_no(),"N","");
 					}
 					
-					if("S".equals(bean.getEditMode())) {
+					if("S".equals(bean.getEditMode()) || "Y".equals(bean.getContractMode())) {
 						forward="SucusssFac";
 					}else {
 						ShowDropDown("edit");
@@ -2614,13 +2637,13 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 						addActionError(getText("errors.acquisition_Cost.second1"));
 					}
 					else{
-						String ans = calcu.calculateXOL(bean,"AcqCost",0,sourceId);
+						/*String ans = calcu.calculateXOL(bean,"AcqCost",0,sourceId);
 						if(Double.parseDouble(ans)!=Double.parseDouble(bean.getAcquisition_Cost().replaceAll(",",""))){
 							addActionError(getText("error.calcul.mistake"));
 							logger.info("Insertion Failed. Please retry. If problem persists, please contact support.");
 						}else{
 							bean.setAcquisition_Cost(ans);
-						}
+						}*/
 
 					}
 				}
@@ -4499,6 +4522,15 @@ public String EditLayer(){
 		bean.setTreatyName_type("");
 		bean.setDepartId("");
 		bean.setSubProfit_center("");
+	}if("Y".equals(bean.getContractMode())) {
+		bean.setRiskdetailYN("Y");
+		bean.setBrokerdetYN("Y");
+		//bean.setCoverdetYN("Y");
+		bean.setPremiumdetailYN("Y");
+		bean.setAcqdetailYN("Y");
+		//bean.setCommissiondetailYN("Y");
+		bean.setReinstdetailYN("Y");
+		bean.setInstallYN("Y");
 	}
 	} catch (Exception e) {
 		logger.debug("Exception @ {" + e + "}");

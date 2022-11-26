@@ -513,7 +513,7 @@
 					<param name="inputName">inputStream</param>
 				</result>
 				<result name="placementView" type="tiles">placementView</result>
-				
+				<result name="placementSummary" type="tiles">placementSummary</result>
 				
 			</action>
 		

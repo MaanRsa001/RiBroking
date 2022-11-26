@@ -154,6 +154,24 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 	public List<Map<String,Object>> getLossRationList(){
 		return dropDownController.getConstantDropDown("54");
 	}
+	public List<Map<String,Object>> getNewContractInfo(){
+		return dropDownController.getNewContractInfo(bean);
+	}
+	public List<Map<String,Object>> getPlacementInfoList(){
+		return dropDownController.getPlacementInfoList(bean);
+	}
+	public List<Map<String,Object>>getReinsurerList(){
+		return dropDownController.getPersonalInfoDropDown(branchCode,"R",pid);
+	}
+	public List<Map<String,Object>>getBrokerList(){
+		return dropDownController.getPersonalInfoDropDown(branchCode,"B",pid);
+	}
+	public List<Map<String,Object>>getStatusList(){
+		return dropDownController.getStatusDropDown(branchCode);
+	}
+	public List<Map<String,Object>>getSubStatusList(){
+		return dropDownController.getSubStatusDropDown(branchCode,"O");
+	}
 	public String UnderwritingLimit(){
 		//bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, (String)session.get("DepartmentId")));
 		bean.setMaxLimit_Product(dropDownController.getUnderWriterLimmit(bean.getUnderwriter(),(String)session.get("processId"), pid, "0"));
@@ -162,6 +180,13 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 	 public List<Map<String,Object>> getDocType(){
 	    	return dropDownController.getDocType(branchCode,pid,"RDS");
 	    }
+	 public String getCedentBroker(){
+		 if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				dropDownController.getBouquetCedentBrokerInfo(bean);
+		 }
+		return "dropdownajax";
+	}
+	 
 	public  String Init() {
 		//new DropDownControllor().insertSessionTrackingdetails(session);
 		ShowDropDown();
@@ -204,6 +229,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			//bean.setMaxLimit_Product(dropDownController.getUWLimmit((String)session.get("UserId"),(String)session.get("processId"),pid, "0"));
 			if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
 				dropDownController.getBouquetCedentBrokerInfo(bean);
+				bean.setYearList(getYearList());
+				bean.setYearToList(getYearToList());
 			}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
@@ -248,8 +275,11 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				session.put("DepartmentId",bean.getDepartId());
 			}
 			bean.setRskCountCheck("Yes");
-			//validatenext();
-			validateoffer();
+			if("Y".equals(bean.getContractMode())) {
+				validatenext();
+			}else {
+				validateoffer();
+			}
 			if (!hasActionErrors()) {
 				bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 				boolean  SaveFlag=false;
@@ -265,6 +295,9 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 					}
 					if(StringUtils.isNotBlank(bean.getReferenceNo())) {
 						dropDownController.updateProposalno(bean);
+					}
+					if("Y".equals(bean.getContractMode())) {
+						service.convertPolicy(bean,pid);
 					}
 					bean.setStatus(bean.getContractGendration());
 					if(StringUtils.isNotBlank(bean.getContNo())) {
@@ -293,7 +326,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 					else{
 						dropDownController.updateSubEditMode(bean.getProposal_no(),"N","");
 					}
-					if("S".equals(bean.getEditMode())) {
+					if("S".equals(bean.getEditMode()) || "Y".equals(bean.getContractMode())) {
 						forward="SucusssFac";
 					}else {
 					ShowDropDown();
@@ -336,6 +369,35 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		return forward;
 	}
 
+	public String convertContract() {
+		String forward="protreaty1";
+		bean.setProduct_id(pid);
+		bean.setLoginId(userId);
+		bean.setProcessId(session.get("processId").toString());
+		bean.setBranchCode(branchCode);
+		validatenext();
+		if(!hasActionErrors()) {
+			service.convertPolicy(bean,pid);
+			forward="SucusssFac";
+		}else {
+			logger.info("##########Validation Message Start###########");
+			Iterator<String> error = getActionErrors().iterator();
+			while(error.hasNext()){
+				logger.info(error.next());
+			}
+			logger.info("##########Validation Message End###########");
+			if(bean.getDepartId().equalsIgnoreCase("")||bean.getDepartId()==null){
+				bean.setSubProfitList(new ArrayList<Map<String,Object>>());
+			}else{
+				bean.setSubProfitList(dropDownController.getSubProfitCentreDropDown(bean.getDepartId(),branchCode,pid));
+			}
+			ShowDropDown();
+			resetRemarks();
+			resetCedentRetention();
+		}
+		return forward;
+		
+	}
 	private void validateoffer() {
 		try {
 		
@@ -394,6 +456,8 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
 				if (dropDownController.getBouquetCedentBrokercheck(bean)) {
 					addActionError(getText("error.brokercedent.duplicate"));
+				}if (dropDownController.getUWFromTocheck(bean)) {
+					addActionError(getText("error.uwyearto.duplicate"));
 				}
 			}
 			if(StringUtils.isBlank(bean.getRiskdetailYN())) {
@@ -420,7 +484,6 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			if(StringUtils.isBlank(bean.getLossdetailYN())) {
 				addActionError(getText("error.alldetails.required"));
 			}
-			
 			
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
@@ -1610,27 +1673,14 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			double amt = 0.0;
 			boolean flags = true;
 			boolean cedCheck = true;
-			boolean cedflag = true;
 			final Validation val = new Validation();
 			final String tear_nt = val.isNull(bean.getTreatyName_type());
-			final String brok = val.isSelect(bean.getBroker());
 			final String incDate = val.checkDate(bean.getIncepDate());
 			final String expdate = val.checkDate(bean.getExpDate());
-			final String accDate = val.checkDate(bean.getAccDate());
 			final String exchRate = val.isNull(bean.getExchRate());
-			final String riskCover = val.isNull(bean.getRiskCovered());
-			final String terrtyscope = val.isNull(bean.getTerritoryscope());
 			final String limitPercent = val.isNull(bean.getLimitOrigCur());
-			final String ourEst = val.isNull(bean.getOurEstimate());
-			final String epiPercent = val.isNull(bean.getEpi_origCur());
 			final String Epi = val.isNull(bean.getEpi());
-			final String xlCost = val.isNull(bean.getXlCost());
-			final String cenRent = val.isNull(bean.getCedReten());
-			final String proStatus = val.isSelect(bean.getProStatus());
-			final String shareWrit = val.isNull(bean.getShareWritt());
-			final String shareSign = val.isNull(bean.getSharSign());
 			final String orginalCurrency = val.isSelect(bean.getOrginalCurrency());
-			final String maxLimit_Product = val.isNull(bean.getMaxLimit_Product());
 			
 			Map<String, Object> map = null;
 			List<Map<String, Object>> list = service.getValidation(bean);
@@ -4490,6 +4540,15 @@ public String EditSection(){
 		bean.setDepartId("");
 		bean.setSubProfit_center("");
 		//bean.setProposal_no("");
+	}if("Y".equals(bean.getContractMode())) {
+		bean.setRiskdetailYN("Y");
+		bean.setBrokerdetYN("Y");
+		bean.setCoverdetYN("Y");
+		bean.setPremiumdetailYN("Y");
+		bean.setAcqdetailYN("Y");
+		bean.setCommissiondetailYN("Y");
+		bean.setDepositdetailYN("Y");
+		bean.setLossdetailYN("Y");
 	}
 	if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
 		dropDownController.getBouquetCedentBrokerInfo(bean);

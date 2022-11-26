@@ -92,7 +92,6 @@
 													</div>
 												</div>
 												<s:if test='"3".equals(#session.mfrid) || "5".equals(#session.mfrid)'>
-													
 													<div class="textfield">
 														<div class="text">
 															<s:if test=' !"5".equals(#session.mfrid)'>
@@ -314,6 +313,12 @@
 																			<s:property value="proposalNo" />
 																		</td>
 																		<td>
+																			<s:property value="contractNo" />
+																		</td>
+																		<td>
+																			<s:property value="sectionNo" />
+																		</td>
+																		<td>
 																			<s:property value="ceding_Company_Name" />
 																		</td>
 																		<td>
@@ -323,8 +328,12 @@
 																			<s:property value="department_Name" />
 																		</td>
 																		<td>
+																			<s:property value="subClass" />
+																		</td>
+																		<td>
 																			<s:property value="inception_Date" />
 																		</td>
+																		
 																		<td>
 																			<s:property value="expiry_Date" />
 																		</td>
@@ -337,14 +346,8 @@
 																			<s:property value="uwYear" />
 																		</td>
 																		<td>
-																			<s:property value="underwritter" />
-																		</td>
-																		<td>
 																			<s:property value="old_Contract" />
 																		</td>
-																		<s:if test='"2".equals(#session.mfrid)'>
-																		<td><s:property value="baseLayer" /></td>
-																		</s:if>
 																		<td style="text-align: center; vertical-align: middle;">
 																			<div><s:select list="buttonSelectionList" name="buttonVal[%{#stat.count-1}]" id="buttonVal%{#stat.count-1}" cssClass=" inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:65%;float:left;" />
 																			 <span class="pull-right"><input type="button"  value="Go"  size="2" class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalId" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
@@ -366,16 +369,12 @@
 															id="gridTableMake" width="100%" cellspacing="0">
 															<thead>
 																<tr>
-																	<th style="text-align: center; vertical-align: middle;"
-																		class="no-sort">
-																		<s:text name="S.No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Proposal No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Contract No" />
-																	</th>
+																	<th style="text-align: center; vertical-align: middle;" class="no-sort" > <s:text name="SNo" /> </th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Offer No" /></th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
+																	<th style="text-align: center; vertical-align: middle;" > <s:text name="Proposal No" /> </th>
+																	<th style="text-align: center; vertical-align: middle;" > <s:text name="Contract No" /> </th>
 																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="Layer No" />
 																	</th>
@@ -397,6 +396,7 @@
 																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="label.class" />
 																	</th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="label.subClass" /></th>
 																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="InceptionDate" />
 																	</th>
@@ -407,13 +407,7 @@
 																		<s:text name="UW Year" />
 																	</th>
 																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="UnderWriter" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="Old Contract No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Base" />
 																	</th>
 																	<th style="text-align: center; vertical-align: middle;" width="150px">
 																		<s:text name="Select Option" />
@@ -427,11 +421,16 @@
 																		<td>
 																			<s:property value="#stat.count" />
 																		</td>
+																		<td><s:property value="offerNo"/></td>
+																		<td><s:property value="bouquetNo"/></td>
 																		<td>
-																			<s:property value="proposalId" />
-																		</td>
+																			<s:property value="baseLayer"/>
+																		</td>	
 																		<td>
 																			<s:property value="proposalNo" />
+																		</td>
+																		<td>
+																			<s:property value="contractNo" />
 																		</td>
 																		<td>
 																			<s:property value="layerNo" />
@@ -446,6 +445,9 @@
 																			<s:property value="department_Name" />
 																		</td>
 																		<td>
+																			<s:property value="subClass" />
+																		</td>
+																		<td>
 																			<s:property value="inception_Date" />
 																		</td>
 																		<td>
@@ -455,13 +457,7 @@
 																			<s:property value="uwYear" />
 																		</td>
 																		<td>
-																			<s:property value="underwritter" />
-																		</td>
-																		<td>
 																			<s:property value="old_Contract" />
-																		</td>
-																		<td>
-																			<s:property value="baseLayer" />
 																		</td>
 																		<td style="text-align: center; vertical-align: middle;">
 																			<div><s:select list="buttonSelectionList" name="buttonVal[%{#stat.count-1}]" id="buttonVal%{#stat.count-1}" cssClass="inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:70%;float:left;"/>
@@ -475,6 +471,7 @@
 												</div>
 											</div>
 										</s:else>
+										
 									</div>
 								</s:if>
 								<s:else>
@@ -1226,5 +1223,6 @@ var flag = document.getElementById("flag").value;
 	  document.portfolioview.submit();
 	 }
 }
+
 </script>
 </html>

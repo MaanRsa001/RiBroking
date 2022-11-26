@@ -289,13 +289,13 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
             Object[] obj = new Object[0];
             obj = new Object[8];
             obj[0] = beanObj.getProductId();
-            obj[1] = beanObj.getProductId();
+            obj[1] = beanObj.getBranchCode();
             obj[2] = beanObj.getBranchCode();
             obj[3] = beanObj.getBranchCode();
-            obj[4] = beanObj.getBranchCode();
-            obj[5] = beanObj.getBranchCode();
+            obj[4] = beanObj.getProductId();
+            obj[5] = beanObj.getBranchCode(); 
             obj[6] = beanObj.getProductId();
-            obj[7] = beanObj.getBranchCode();
+            obj[7] = beanObj.getBranchCode(); 
             query = getQuery(DBConstants.PORTFOLIO_SELECT_CONTRACTLIST1);
             if (!"1".equals(beanObj.getProductId()))
                 query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_CONTRACTLISTLAYERNO1);
@@ -448,14 +448,17 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
             for (int i = 0; i < list.size(); i++) {
                 Map<String, Object> tempMap = list.get(i);
                 PortfolioBean tempBean = new PortfolioBean();
-
-                tempBean.setProposalNo(tempMap.get("CONTRACT_NO") == null ? "" : tempMap.get("CONTRACT_NO").toString());
+                tempBean.setProposalNo(tempMap.get("PROPOSAL_NO") == null ? "" : tempMap.get("PROPOSAL_NO").toString());
+                tempBean.setOfferNo(tempMap.get("OFFER_NO") == null ? "" : tempMap.get("OFFER_NO").toString());
+                tempBean.setBouquetNo(tempMap.get("BOUQUET_NO") == null ? "" : tempMap.get("BOUQUET_NO").toString());
+                tempBean.setContractNo(tempMap.get("CONTRACT_NO") == null ? "" : tempMap.get("CONTRACT_NO").toString());
                 tempBean.setProposalId(tempMap.get("PROPOSAL_NO") == null ? "" : tempMap.get("PROPOSAL_NO").toString());
                 tempBean.setAmendId(tempMap.get("AMEND_ID") == null ? "" : tempMap.get("AMEND_ID").toString());
                 tempBean.setProposalStatus(tempMap.get("PROPOSAL_STATUS")==null?"":tempMap.get("PROPOSAL_STATUS").toString());
                 tempBean.setContractStatus(tempMap.get("CONTRACT_STATUS")==null?"":tempMap.get("CONTRACT_STATUS").toString());
                 tempBean.setCeding_Company_Name(tempMap.get("COMPANY_NAME") == null ? "" : tempMap.get("COMPANY_NAME").toString());
                 tempBean.setDepartment_Name(tempMap.get("TMAS_DEPARTMENT_NAME") == null ? "" : tempMap.get("TMAS_DEPARTMENT_NAME").toString());
+                tempBean.setSubClass(tempMap.get("TMAS_SPFC_NAME") == null ? "" : tempMap.get("TMAS_SPFC_NAME").toString());
                 tempBean.setDepartmentId(tempMap.get("TMAS_DEPARTMENT_ID") == null ? "" : tempMap.get("TMAS_DEPARTMENT_ID").toString());
                 tempBean.setInception_Date(tempMap.get("INCEPTION_DATE") == null ? "" : tempMap.get("INCEPTION_DATE").toString());
                 tempBean.setExpiry_Date(tempMap.get("EXPIRY_DATE") == null ? "" : tempMap.get("EXPIRY_DATE").toString());
@@ -483,6 +486,8 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 tempBean.setUnderwritter(tempMap.get("UNDERWRITTER") == null ? "" : tempMap.get("UNDERWRITTER").toString());
                 tempBean.setBrokerName(tempMap.get("BROKER_NAME") == null ? "" : tempMap.get("BROKER_NAME").toString());
                 tempBean.setEditMode(tempMap.get("EDIT_MODE") == null ? "" : tempMap.get("EDIT_MODE").toString());
+                tempBean.setLayerNo(tempMap.get("LAYER_NO") == null ? "" : tempMap.get("LAYER_NO").toString());
+                tempBean.setSectionNo(tempMap.get("SECTION_NO") == null ? "" : tempMap.get("SECTION_NO").toString());
                 if ("C".equalsIgnoreCase(beanObj.getFlag())) {
                     tempBean.setFlag("C");
                 } else if ("RD".equalsIgnoreCase(beanObj.getFlag())) {
@@ -946,6 +951,8 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 tempBean.setUwMonth(tempMap.get("UW_MONTH") == null ? "" : tempMap.get("UW_MONTH").toString());
                 tempBean.setUnderwritter(tempMap.get("UNDERWRITTER") == null ? "" : tempMap.get("UNDERWRITTER").toString());
                 tempBean.setBrokerName(tempMap.get("BROKER_NAME") == null ? "" : tempMap.get("BROKER_NAME").toString());
+                tempBean.setLayerNo(tempMap.get("LAYER_NO") == null ? "" : tempMap.get("LAYER_NO").toString());
+                tempBean.setSectionNo(tempMap.get("SECTION_NO") == null ? "" : tempMap.get("SECTION_NO").toString());
                 if ("C".equalsIgnoreCase(beanObj.getFlag())) {
                     tempBean.setFlag("C");
                 } else if ("RD".equalsIgnoreCase(beanObj.getFlag())) {

@@ -99,5 +99,9 @@ public List<Map<String, Object>> getMailToList(PlacementBean bean) {
 	// TODO Auto-generated method stub
 	return dao.getMailToList(bean);
 }
+
+public List<Map<String, Object>> placementSummary(PlacementBean bean) {
+	return dao.placementSummary(bean);
+}
 	
 }

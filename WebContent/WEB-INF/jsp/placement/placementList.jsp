@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/dataTables.jqueryui.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/dataTables.responsive.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/dataTables/js/dataTables.tableTools.js"></script>
+	
 	<script type="text/javascript">
 	jQuery(function ($) {
 			try {
@@ -274,7 +275,9 @@
 	</div>
 </div>
 <script type="text/javascript">
-$('.select1').select2({ });
+$(function() {
+	$('.select1').select2({ });
+	});
 function FnCancel(){
 	document.getElementById("searchType").value='';
 	document.placement.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';

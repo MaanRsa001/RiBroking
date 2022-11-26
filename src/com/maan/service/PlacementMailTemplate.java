@@ -42,7 +42,7 @@ public class PlacementMailTemplate {
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SAHRE_MAX")==null?DropDownControllor.formattereight(bean.getMaxSharePercent()):map.get("SAHRE_MAX").toString())+"</td>" + 
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()))+"</td>" + 
 			"</tr>";
 		}
 		messageContent+=	"</table>" +
@@ -87,8 +87,8 @@ public class PlacementMailTemplate {
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxSharePercent()))+"</td>" +
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxShareWritten()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSAL_WRITTEN").toString()))+"</td>" +
 			"</tr>";
 		}
 		messageContent+=	"</table>" +
@@ -135,11 +135,11 @@ public class PlacementMailTemplate {
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("SECTION_NO")==null?"":map.get("SECTION_NO").toString())+"</td>" +
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("INS_DATE")==null?"":map.get("INS_DATE").toString())+"</td>" + 
 			"<td style=\"border: 1px solid #000000;\">"+(map.get("EXP_DATE")==null?"":map.get("EXP_DATE").toString())+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxSharePercent()))+"</td>" +
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxShareWritten()))+"</td>" + 
-			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(DropDownControllor.formattereight(bean.getMaxShareSigned()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSAL_WRITTEN").toString()))+"</td>" +
+			"<td style=\"border: 1px solid #000000;text-align: right;\">"+(map.get("SHARE_PROPOSED_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSED_SIGNED").toString()))+"</td>" +
 			"</tr>";
-		}
+		} 
 		messageContent+=	"</table>" +
 				"    </div>" + 
 				"</body>" + 

@@ -31,6 +31,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.PlacementBean;
+import com.maan.common.db.DBConstants;
 import com.maan.common.db.MyJdbcTemplate;
 import com.maan.common.util.DropDownControllor;
 import com.maan.common.util.LogUtil;
@@ -501,9 +502,10 @@ public void getPlacementNo(PlacementBean bean) {
 		String plamendId="",statusNo="",query="";
 		try {
 			Map<String,Object>result=null;
-			
+			if(StringUtils.isBlank(bean.getStatusNo())) {
 			statusNo=new DropDownControllor().getSequence("StatusNo","0","0", bean.getBranchCode(),"","");
 			bean.setStatusNo(statusNo);
+			}
 			
 			query=getQuery("INSERT_PLACEMENT_DETAIL");
 			for(int i=0;i<bean.getProposalNos().size();i++) {
@@ -761,22 +763,28 @@ public void getPlacementNo(PlacementBean bean) {
 		List<Map<String,Object>>list=null;
 		String query="";
 		try {
-			Object[] obj=new Object[2];
+			Object[] obj=new Object[4];
 			if(StringUtils.isBlank(bean.getSearchType())) {
 				if("C".equals(bean.getPlacementMode())) {
 					if(StringUtils.isNotBlank(bean.getBouquetNo())) {
 						query=getQuery("GET_MAILTEPLATE_BOUQUET");
 						obj[0]=bean.getBranchCode();
 						obj[1]=bean.getBouquetNo();
+						obj[2]=bean.getReinsurerId();
+						obj[3]=bean.getBrokerId();
 					}else {
 						query=getQuery("GET_MAILTEPLATE_BASELAYER");
 						obj[0]=bean.getBranchCode();
 						obj[1]=bean.getBaseProposalNo();
+						obj[2]=bean.getReinsurerId();
+						obj[3]=bean.getBrokerId();
 					}
 				}else {
 					query=getQuery("GET_MAILTEPLATE_PROPOSAL");
 					obj[0]=bean.getBranchCode();
 					obj[1]=bean.getProposalNo();
+					obj[2]=bean.getReinsurerId();
+					obj[3]=bean.getBrokerId();
 				}
 			}else {
 				obj=new Object[5];
@@ -880,12 +888,13 @@ public void getPlacementNo(PlacementBean bean) {
 		
 		for(int i=0;i<bean.getProposalNos().size();i++) {
 		query=getQuery("UPDATE_MAIL_NOTIFICATION");
-		Object[] obj=new Object[5];
+		Object[] obj=new Object[6];
 		obj[0]=status;
-		obj[1]=bean.getProposalNos().get(i);;
-		obj[2]=bean.getReinsurerIds().get(i);
-		obj[3]=bean.getBrokerIds().get(i);
-		obj[4]=bean.getBranchCode();
+		obj[1]=bean.getStatusNo();
+		obj[2]=bean.getProposalNos().get(i);;
+		obj[3]=bean.getReinsurerIds().get(i);
+		obj[4]=bean.getBrokerIds().get(i);
+		obj[5]=bean.getBranchCode();
 		logger.info("Query=>"+query);
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
@@ -896,12 +905,23 @@ public void getPlacementNo(PlacementBean bean) {
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
 		
+		obj=new Object[5];
+		obj[0]=bean.getStatusNo();
+		obj[1]=bean.getProposalNos().get(i);;
+		obj[2]=bean.getReinsurerIds().get(i);
+		obj[3]=bean.getBrokerIds().get(i);
+		obj[4]=bean.getBranchCode();
+		query=getQuery("UPDATE_ATTACHMENT_MAIL");
+		logger.info("Query=>"+query);
+		logger.info("Args=>"+StringUtils.join(obj, ","));	
+		this.mytemplate.update(query,obj);
+		
 		obj=new Object[4];
 		obj[0]=bean.getProposalNos().get(i);;
 		obj[1]=bean.getReinsurerIds().get(i);
 		obj[2]=bean.getBrokerIds().get(i);
 		obj[3]=bean.getBranchCode();
-		query=getQuery("UPDATE_ATTACHMENT_MAIL");
+		query=getQuery("UPDATE_PLACEMENT_STATUS_MAIL");
 		logger.info("Query=>"+query);
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
@@ -1503,6 +1523,65 @@ public void getPlacementNo(PlacementBean bean) {
 			}
 			return statusList;
 		
+	}
+
+
+	public List<Map<String, Object>> placementSummary(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[2];
+			query=getQuery("NEW_CONTRACT_PL_SUMMARY");
+			obj[0]=bean.getBranchCode();
+			obj[1]=bean.getProposalNo();
+			
+			if(StringUtils.isNotBlank(bean.getSearchType()) && null !=bean.getSearchType()){
+            	
+        		if(StringUtils.isNotBlank(bean.getCompanyNameSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + bean.getCompanyNameSearch() + "%")});
+                    query += " " + " AND UPPER((SELECT CASE WHEN PI.CUSTOMER_TYPE = 'C' THEN PI.COMPANY_NAME ELSE PI.FIRST_NAME || ' ' || PI.LAST_NAME END NAME FROM PERSONAL_INFO PI WHERE CUSTOMER_TYPE='R'  AND CUSTOMER_ID=TRP.REINSURER_ID AND BRANCH_CODE=TRP.BRANCH_CODE  AND AMEND_ID=(SELECT MAX(AMEND_ID) FROM PERSONAL_INFO WHERE CUSTOMER_ID=PI.CUSTOMER_ID))) LIKE UPPER(?)";
+            	}
+        		if(StringUtils.isNotBlank(bean.getBrokerNameSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + bean.getBrokerNameSearch() + "%")});
+                    query += " " + " AND UPPER((SELECT CASE WHEN PI.CUSTOMER_TYPE = 'C' THEN PI.COMPANY_NAME ELSE PI.FIRST_NAME || ' ' || PI.LAST_NAME END NAME FROM PERSONAL_INFO PI WHERE CUSTOMER_TYPE='B'  AND CUSTOMER_ID=TRP.BROKER_ID AND BRANCH_CODE=TRP.BRANCH_CODE AND AMEND_ID=(SELECT MAX(AMEND_ID) FROM PERSONAL_INFO WHERE CUSTOMER_ID=PI.CUSTOMER_ID))) LIKE UPPER(?)";
+            	}
+            	if(StringUtils.isNotBlank(bean.getUwYearSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + bean.getUwYearSearch() + "%")});
+                    query += " " +" AND UPPER(UW_YEAR) LIKE UPPER(?)";
+            	}
+            	if(StringUtils.isNotBlank(bean.getUwYearToSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + bean.getUwYearToSearch() + "%")});
+                    query += " " +" AND UPPER(UW_YEAR_TO) LIKE UPPER(?)";
+            	}
+            	if(StringUtils.isNotBlank(bean.getIncepDateSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + bean.getIncepDateSearch() + "%")});
+                    query += " "  +" AND TO_CHAR(INCEPTION_DATE,'DD/MM/YYYY') LIKE ?";;
+            	}
+            	if(StringUtils.isNotBlank(bean.getExpDateSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + bean.getExpDateSearch() + "%")});
+                    query += " " +" AND TO_CHAR(EXPIRY_DATE,'DD/MM/YYYY') LIKE ?";;
+            	}
+            	query += " " + "ORDER BY PM.PROPOSAL_NO, TRP.SNO";
+            	
+            }else{
+            	
+            	bean.setCompanyNameSearch("");
+            	bean.setBrokerNameSearch("");
+            	bean.setUwYearSearch("");
+            	bean.setUwYearToSearch("");
+            	bean.setIncepDateSearch("");
+            	bean.setExpDateSearch("");
+            }
+			
+			
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+		return list;
 	}
 	
 	

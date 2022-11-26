@@ -104,16 +104,22 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		bean.setReinsurerInfoList(service.getReinsurerInfo(bean));
 		if(CollectionUtils.isEmpty(bean.getReinsurerInfoList())) {
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+			List<String> reinsSNo=new ArrayList<String>();
 			for(int i=0;i<1;i++){
 			Map<String,Object> string = new HashMap<String,Object>();
 			string.put("1","1");
 			list.add(string);
+			reinsSNo.add("1");
 			}
 			bean.setReinsurerInfoList(list);
+			bean.setReinsSNo(reinsSNo);
 			bean.setMode("placing");
+			if(StringUtils.isBlank(bean.getReinsurerType()))
+			bean.setReinsurerType("Y");
 		}else {
 			bean.setMode("placing");
-			
+			if(StringUtils.isBlank(bean.getReinsurerType()))
+			bean.setReinsurerType("N");
 		}
 		
 		return forward;
@@ -133,6 +139,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	
 	public String removeRow(){
 		String forward = "dropdownajax";
+		List<String> reinsSNo=new ArrayList<String>();
 		List<String> reinsureName=new ArrayList<String>();
 		List<String> placingBroker=new ArrayList<String>();
 		List<String> shareOffer=new ArrayList<String>();
@@ -150,6 +157,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			for(int k=0;k<bean.getReinsSNo().size();k++){
 				int value=Integer.parseInt(bean.getDeleteId());
 				if(k<value){
+					reinsSNo.add(bean.getReinsSNo().get(k));
 					reinsureName.add(bean.getReinsureName().get(k));
 					placingBroker.add(bean.getPlacingBroker().get(k));
 					shareOffer.add(bean.getShareOffer().get(k));
@@ -157,6 +165,9 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 					changeStatus.add(bean.getChangeStatus().get(k));
 				}
 				else{
+					if(StringUtils.isNotBlank(bean.getReinsSNo().get(j))){
+						reinsSNo.add(bean.getReinsSNo().get(j));
+					}
 				if(StringUtils.isNotBlank(bean.getReinsureName().get(j))){
 					reinsureName.add(bean.getReinsureName().get(j));
 				}
@@ -175,6 +186,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 				}
 				j++;
 			}
+			bean.setReinsSNo(reinsSNo);
 			bean.setReinsureName(reinsureName);
 			bean.setPlacingBroker(placingBroker);
 			bean.setShareOffer(shareOffer);
@@ -186,11 +198,13 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		String forward="placement";
 		validatePlacing();
 		if(!hasActionErrors()) {
+			if(!"Next".equals(bean.getMode()))
 			service.savePlacing(bean);			
 			if("Submit".equals(bean.getMode())) {
 				forward="pendingList";
 			}else if("Save".equals(bean.getMode())) {
 				bean.setMode("placing");
+				bean.setReinsurerType("N");
 				init();
 			}else {
 				bean.setReinsurerInfoList(service.getPlacingInfo(bean));
@@ -488,4 +502,9 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		service.getPlacementView(bean);
 		return "placementView";
 	}
+	public String plSummary() {
+		bean.setPlSummaryInfo(service.placementSummary(bean));
+		return "placementSummary";
+	}
+	
 }

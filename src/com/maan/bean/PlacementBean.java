@@ -38,6 +38,7 @@ public class PlacementBean {
 	private List<Map<String,Object>>placementInfoList;
 	private List<Map<String,Object>>placementeditInfo;
 	private List<Map<String,Object>>placementviewInfo;
+	private List<Map<String,Object>>plSummaryInfo;
 	private String emailBy;
 	private String updateDate;
 	private String mailrecordNo;
@@ -114,6 +115,13 @@ public class PlacementBean {
 	private String placementamendId;
 	private String reinsurerName;
 	private String brokerCompany;
+	private String reinsurerType;
+	private String companyNameSearch;
+	private String brokerNameSearch;
+	private String uwYearSearch;
+	private String uwYearToSearch;
+	private String incepDateSearch;
+	private String expDateSearch;
 	public String getBranchCode() {
 		return branchCode;
 	}
@@ -735,6 +743,54 @@ public class PlacementBean {
 	}
 	public void setBrokerCompany(String brokerCompany) {
 		this.brokerCompany = brokerCompany;
+	}
+	public String getReinsurerType() {
+		return reinsurerType;
+	}
+	public void setReinsurerType(String reinsurerType) {
+		this.reinsurerType = reinsurerType;
+	}
+	public List<Map<String, Object>> getPlSummaryInfo() {
+		return plSummaryInfo;
+	}
+	public void setPlSummaryInfo(List<Map<String, Object>> plSummaryInfo) {
+		this.plSummaryInfo = plSummaryInfo;
+	}
+	public String getCompanyNameSearch() {
+		return companyNameSearch;
+	}
+	public void setCompanyNameSearch(String companyNameSearch) {
+		this.companyNameSearch = companyNameSearch;
+	}
+	public String getBrokerNameSearch() {
+		return brokerNameSearch;
+	}
+	public void setBrokerNameSearch(String brokerNameSearch) {
+		this.brokerNameSearch = brokerNameSearch;
+	}
+	public String getUwYearSearch() {
+		return uwYearSearch;
+	}
+	public void setUwYearSearch(String uwYearSearch) {
+		this.uwYearSearch = uwYearSearch;
+	}
+	public String getUwYearToSearch() {
+		return uwYearToSearch;
+	}
+	public void setUwYearToSearch(String uwYearToSearch) {
+		this.uwYearToSearch = uwYearToSearch;
+	}
+	public String getIncepDateSearch() {
+		return incepDateSearch;
+	}
+	public void setIncepDateSearch(String incepDateSearch) {
+		this.incepDateSearch = incepDateSearch;
+	}
+	public String getExpDateSearch() {
+		return expDateSearch;
+	}
+	public void setExpDateSearch(String expDateSearch) {
+		this.expDateSearch = expDateSearch;
 	}
 	
 	

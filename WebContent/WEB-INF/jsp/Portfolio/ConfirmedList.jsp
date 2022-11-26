@@ -305,7 +305,7 @@
 																			<s:property value="department_Name" />
 																		</td>
 																		<td>
-																			<s:property value="department_Name" />
+																			<s:property value="subClass" />
 																		</td>
 																		<td>
 																			<s:property value="inception_Date" />
@@ -328,7 +328,7 @@
 																		
 																		<td style="text-align: center; vertical-align: middle;">
 																			<div><s:select list="buttonSelectionList" name="buttonVal[%{#stat.count-1}]" id="buttonVal%{#stat.count-1}" cssClass=" inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:65%;float:left;" />
-																			 <span class="pull-right"><input type="button"  value="Go"  size="2" class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalId" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
+																			  <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="#session.mfrid" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
 																		</td>
 																	
 																	</tr>
@@ -347,19 +347,14 @@
 															id="gridTableMake" width="100%" cellspacing="0">
 															<thead>
 																<tr>
-																	<th style="text-align: center; vertical-align: middle;"
-																		class="no-sort">
-																		<s:text name="S.No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Proposal No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Contract No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Layer No" />
-																	</th>
+																	<th style="text-align: center; vertical-align: middle;" class="no-sort" > <s:text name="SNo" /> </th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Offer No" /></th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Bouquet No" /></th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Base" /></th>
+																	
+																	<th style="text-align: center; vertical-align: middle;" > <s:text name="Proposal No" /> </th>
+																	<th style="text-align: center; vertical-align: middle;" > <s:text name="Contract No" /> </th>
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="Layer No" /></th>
 																	<s:if test='"5".equals(#session.mfrid)'>
 																		<th
 																			style="text-align: center; vertical-align: middle;">
@@ -378,23 +373,18 @@
 																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="label.class" />
 																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="InceptionDate" />
+																	<th style="text-align: center; vertical-align: middle;"><s:text name="label.subClass" /></th>
+																	<th style="text-align: center; vertical-align: middle;" >
+																		<s:text name="Inception Date" />
 																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="ExpiryDate" />
+																	<th style="text-align: center; vertical-align: middle;" >
+																		<s:text name="Expiry Date" />
 																	</th>
 																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="UW Year" />
 																	</th>
 																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="UnderWriter" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
 																		<s:text name="Old Contract No" />
-																	</th>
-																	<th style="text-align: center; vertical-align: middle;">
-																		<s:text name="Base" />
 																	</th>
 																	<th style="text-align: center; vertical-align: middle;" width="150px">
 																		<s:text name="Select Option" />
@@ -408,11 +398,16 @@
 																		<td>
 																			<s:property value="#stat.count" />
 																		</td>
+																		<td><s:property value="offerNo"/></td>
+																		<td><s:property value="bouquetNo"/></td>
 																		<td>
-																			<s:property value="proposalId" />
-																		</td>
+																			<s:property value="baseLayer"/>
+																		</td>	
 																		<td>
 																			<s:property value="proposalNo" />
+																		</td>
+																		<td>
+																			<s:property value="contractNo" />
 																		</td>
 																		<td>
 																			<s:property value="layerNo" />
@@ -427,6 +422,9 @@
 																			<s:property value="department_Name" />
 																		</td>
 																		<td>
+																			<s:property value="subClass" />
+																		</td>
+																		<td>
 																			<s:property value="inception_Date" />
 																		</td>
 																		<td>
@@ -436,17 +434,11 @@
 																			<s:property value="uwYear" />
 																		</td>
 																		<td>
-																			<s:property value="underwritter" />
-																		</td>
-																		<td>
 																			<s:property value="old_Contract" />
-																		</td>
-																		<td>
-																			<s:property value="baseLayer" />
 																		</td>
 																		<td style="text-align: center; vertical-align: middle;">
 																			<div><s:select list="buttonSelectionList" name="buttonVal[%{#stat.count-1}]" id="buttonVal%{#stat.count-1}" cssClass="inputBoxS" headerKey="" headerValue="--Select--"  listKey="TYPE" listValue="DETAIL_NAME" cssStyle="width:70%;float:left;"/>
-																			 <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="proposalId" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
+																			  <span class="pull-right"><input type="button"  value="Go"   class="btn btn-xs btn-info"  style="cursor: pointer;float:left;" onclick="ButtonAction('<s:property value="proposalNo" />','<s:property value="cedding_company_id" />','<s:property value="#session.mfrid" />','<s:property value="baseLayer" />','<s:property value="departmentId" />','<s:property value="flag" />','<s:property value="amendId" />','<s:property value="layerNo" />','<s:property value="inception_Date" />','<s:property value="ceding_Company_Name" />','<s:property value="brokerName" />','<s:property value="flag" />','<s:property value="#stat.count-1" />')" /></span></div>
 																		</td>
 																	</tr>
 																</s:iterator>
@@ -457,6 +449,11 @@
 											</div>
 										</s:else>
 									</div>
+									<div class="tablerow">							
+										<div class="boxcontent" align="center">
+											<input type="button"  value="Back"  class="btn btn-sm btn-danger"  onclick="FnCancel()" />
+										</div>
+									</div>	
 								</s:if>
 								<s:else>
 									<div class="panel panel-primary">
@@ -782,7 +779,9 @@
 								<s:hidden name="type" id="type" />
 								<s:hidden name="reMode" id="reMode" />
 								<s:hidden name="renewalEditMode" id="renewalEditMode" />
-								
+								<s:hidden name="contractMode" id="contractMode" />
+								<s:hidden name="contractno1" id="contractno1" />
+								<s:hidden name="lay1" id="lay1" />
 								<s:hidden name="multiuserError" id="multiuserError" />
 							</s:form>
 						</div>
@@ -811,36 +810,31 @@ $('#input'+id).keyup(function() {
   document.portfolioview.submit();
  }
  
-     function funEditMode(contractno,ceddingcompanyid,proposalno,baseLayer,deptId)
-     {
-		//document.getElementById("searchType").value=searchType;
-     	//document.getElementById("searchValue").value=searchValue;
-       document.getElementById("contractno").value=contractno;
-	   document.getElementById("CustomerId").value=ceddingcompanyid;
-	   document.getElementById("proposal_no").value=proposalno;
-	   document.getElementById("proposalNo").value=proposalno;
-	   document.getElementById("baseLayer").value=baseLayer;
-	   document.getElementById("mode").value='endorsment';
-	   if(document.portfolioview.pro.value==2)
-       {
-	    document.portfolioview.action="EditModeRiskDetails.action?endtMode=endorsment&departmentId="+deptId;
-	   }
-	   else if(document.portfolioview.pro.value==4)
-	   {
-	   document.portfolioview.action="EditModeRetro.action?endtMode=endorsment";
-	   }
-	   else if(document.portfolioview.pro.value==3 ||document.portfolioview.pro.value==5)
-	   {
-	   	document.portfolioview.action="EditModeXol.action?endtMode=endorsment";
-	   }
-	   else if(document.portfolioview.pro.value==1)
-	   {
-	    document.portfolioview.action="${pageContext.request.contextPath}/EditMethodFacultative.action?endtMode=endorsment";
-	   }
-       
-	    document.portfolioview.submit();
+ function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId) {
+     //document.getElementById("proposal_no").value=proposalno;
+     document.getElementById("proposal_no").value=baseLayer;
+     document.getElementById("CustomerId").value=ceddingcompanyid;
+     document.getElementById("baseLayer").value=baseLayer;
+     document.getElementById("mode").value='edit';
+     document.getElementById("contractMode").value='Y';
+     if(productId==2){
+     		document.portfolioview.action="EditModeRiskDetails.action?departmentId="+deptId;
      }
-      
+     else if(productId==3 || productId==5) {
+		/* if(baseLayer.length>0){
+         document.getElementById("contractno1").value=baseContract;
+         document.getElementById("lay1").value='layer';
+       } */
+     	document.portfolioview.action="EditModeXol.action"
+     }else if(productId==4){
+     	document.portfolioview.action="EditModeRetro.action"
+     }else if(productId==1){
+     	document.portfolioview.action="EditMethodFacultative.action";
+     }
+     
+     document.portfolioview.submit();
+ }
+
        function funViewMode(proposalno,amendId,flag,baseLayer)
       {
       		document.getElementById("amendId").value=amendId;
@@ -1127,60 +1121,35 @@ $('#uwYearSearch3').on( 'keyup', function () {
 $('#gridTableMake').DataTable().columns(13).search(this.value).draw();
 } );
 
-function ButtonAction(contractno,ceddingcompanyid,proposalno,baseLayer,deptId,flag,amendId,layerNo,inception_Date,ceding_Company_Name,brokerName,flag,row){
-var sel = document.getElementById("buttonVal"+row).value;
-if("E"==sel){
-funEditMode(contractno,ceddingcompanyid,proposalno,baseLayer,deptId);
+function ButtonAction(proposalno,ceddingcompanyid,productId,baseLayer,deptId,flag,amendId,layerNo,inception_Date,ceding_Company_Name,brokerName,flag,row){	
+	var sel = document.getElementById("buttonVal"+row).value;
+	if("C"==sel){
+		funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,'',deptId);
+		
+	}
+	else if("V"==sel){
+		funViewMode(proposalno,productId,flag,amendId);
+	}
+	else if("PL"==sel){
+		funplacingMode(proposalno,amendId,flag,baseLayer);
+	}
 }
-else if("V"==sel){
-funViewMode(proposalno,amendId,flag,baseLayer);
+function funplacingMode(proposalno,mfrid,flag,amendId)
+{
+	document.getElementById("amendId").value=amendId;
+    document.getElementById("flag").value=flag;
+    document.getElementById("proposalNo").value=proposalno;
+ 
+    document.portfolioview.action="plSummaryPlacement.action"
+    document.portfolioview.submit();
 }
-else if("H"==sel){
-getHistory(proposalno,flag);
-}
-else if("P"==sel){
-funPremiumMode(contractno,layerNo,deptId,proposalno);
-}
-else if("C"==sel){
-funCliamMode(contractno,layerNo,proposalno,inception_Date,deptId);
-}
-else if("S"==sel){
-funStatisticMode(proposalno,contractno,deptId,layerNo,inception_Date);
-}
-else if("CS"==sel){
-funClassMode(proposalno,ceddingcompanyid,contractno);
-}
-else if("R"==sel){
-funRenewalMode(proposalno,contractno);
-}
-else if("IE"==sel){
-funIEMode(contractno,layerNo,proposalno,inception_Date,deptId);
-}
-else if("L"==sel){
-funLayerMode(proposalno,ceddingcompanyid,contractno,layerNo);
-}
-else if("CP"==sel){
-funDupliacteCopyMode(proposalno);
-}
-else if("D"==sel){
-var val = "contract";
-if("C"!=flag){
-val="RD";
-}
-getDocList(proposalno,contractno,layerNo,ceding_Company_Name,brokerName,val);
-}
-
-}
-function funDupliacteCopyMode(proposalno){
-	  document.getElementById("proposal_no").value=proposalno;
-      document.getElementById("proposalNo").value=proposalno;  
-	  document.portfolioview.action="${pageContext.request.contextPath}/DuplicateCopyPortfolio.action";
-	  document.portfolioview.submit();
-}
-
 function funSearchMode(mode){
 	  document.portfolioview.action="${pageContext.request.contextPath}/InitCPortfolio.action?SearchType="+mode;
 	  document.portfolioview.submit();
+}
+function FnCancel(){
+	document.portfolioview.action='${pageContext.request.contextPath}/InitPortfolio.action?flag=C';
+	document.portfolioview.submit();
 }
 </script>
 </html>

@@ -36,6 +36,31 @@ display: flex;
 gap:20px;
 }
 </style>
+<style type="text/css">
+ .tableColWidth {
+ 	min-width: 200px;
+ 	max-width: 750px;
+ 	width: 200px;
+ 	white-space: normal;
+ }
+ 
+  .tableColWidth1 {
+ 	min-width: 80px;
+ 	max-width: 750px;
+ 	width: 450px;
+ 	white-space: normal;
+ }
+ 
+ .tableColNoWrap {
+ 	min-width: 100px;
+ 	max-width: 750px;
+ 	width: 100px;
+ 	white-space: nowrap;
+ }
+ .table-overflow{
+    overflow: scrollX;
+ }
+ </style>
 		<script type="text/javascript">
  $(function() {
     $( "#incepDate" ).datepicker({
@@ -129,6 +154,85 @@ gap:20px;
 											</div>
 										</div>
 									</s:if>
+									<s:if test='"Y".equals(contractMode)'>
+										<div class="boxcontent" >
+											<div class="panel panel-primary">											
+												<div class="panel-heading">
+													<s:text name="label.summaryinfo" />
+												</div>
+												<div class="panel-body">
+													<div class="boxcontent">
+															<div>
+																<table width="100%" class="table table-bordered" >
+																	<thead>
+																	<tr>
+																		<th width="5%"> <s:text name="label.sno" /> </th>
+																		<th width="8%"><s:text name="label.offerNo" /></th>
+																		<th width="8%"><s:text name="label.baseproposal" /></th>
+																		<th width="8%"><s:text name="label.proposalNo" /></th>
+																		<th width="8%"><s:text name="label.treatyNameType" /></th>
+																		<th width="8%"><s:text name="label.layerSectionNo" /></th>
+																		<th width="8%"><s:text name="label.reinsureName" /></th>
+																		<th width="8%"><s:text name="label.placingBroker" /></th>
+																		<th width="5%"><s:text name="label.status" /></th>
+																		<th width="6%"><s:text name="label.signedLine" /></th>
+																		<th width="5%"><s:text name="label.brokerage" /></th>
+																		<th width="5%"><s:text name="label.tqrBrokerageAmt" /></th>
+																		<th width="5%"><s:text name="label.contractno" /></th>
+																	</tr>
+																	</thead>
+																	<tbody>	
+																	<s:iterator value="newContractInfo" var="list"  status="stat">									
+																		<tr>
+																			<td>
+																			<s:property value="#list.SNO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.OFFER_NO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.BASE_PROPOSAL_NO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.PROPOSAL_NO"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.TREATY_NAME"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.LAYER_SECTION"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.REINSURER_NAME"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.BROKER_NAME"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.PLACING_STATUS"/>
+																		</td>
+																		<td align="right">
+																			<s:property value="#list.SHARE_SIGNED"/>
+																		</td>
+																		<td align="right">
+																			<s:property value="#list.BROKERAGE"/>
+																		</td>
+																		<td align="right">
+																			<s:property value="#list.BROKERAGE_AMT"/>
+																		</td>
+																		<td>
+																			<s:property value="#list.CONTRACT_NO"/>
+																		</td>
+																	</tr>												
+																	</s:iterator>
+																	</tbody>
+																</table>											
+															</div> 
+													</div>
+												</div>
+											</div>
+											</div>
+									</s:if>
 									<div class="tablerow">
 										<div class="boxcontent">
 											<div class="panel panel-primary">
@@ -137,25 +241,45 @@ gap:20px;
 													</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-														<div class="textfield33">
+														<div class="textfield">
 															<div class="text">
 																<s:text name="label.bouquetModeYN" />
 															</div>
 															<div class="tbox">
 																<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{bouquetModeYN!=null}"></s:radio>													
 															</div>
-														</div>										
-														<div class="textfield33">
-															<div id="bouquetid">
-																<div class="text">
-																	<s:text name="label.bouquetMode" />
-																</div>
-																<div class="tbox">
-																	<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}"/>
-																</div>
+														</div>	
+														<div id="bouquetid">									
+														<div class="textfield">
+															<div class="text">
+																<s:text name="label.bouquetMode" />
+															</div>
+															<div class="tbox">
+																<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}" onchange="getCedentBroker(this.value);"/>
 															</div>
 														</div>
-														<div class="textfield33" >
+														<div id="cedentbroker">
+														<s:if test="cedingCompanyName!=null && brokerName!=null">
+															<div class="textfield">
+																<div class="text">
+																	<s:text name="label.cedingCompany" />
+																</div>
+																<div class="tbox">
+																	<s:property value="cedingCompanyName"/>													
+																</div>
+															</div>	
+															<div class="textfield">
+																<div class="text">
+																	<s:text name="label.broker" />
+																</div>
+																<div class="tbox">
+																	<s:property value="brokerName"/>													
+																</div>
+															</div>
+															</s:if>	
+														</div>
+														</div>
+														<div align="center">
 															<div id="bouquetpds">
 																<div class="boxcontent" align="center">
 																<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
@@ -430,6 +554,7 @@ gap:20px;
 																		<th width="10%"><s:text name="label.edit" /></th>
 																		<th width="10%"><s:text name="label.seccopy" /></th>
 																		<th width="10%" > <s:text name="Delete" /> </th>
+																		
 																	</tr>
 																	</thead>
 																	<tbody>	
@@ -467,6 +592,8 @@ gap:20px;
 																			<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
 																			</s:if>
 																		</s:if>
+																		
+																		
 																		</td>
 																	</tr>												
 																	</s:iterator>
@@ -521,6 +648,7 @@ gap:20px;
 																	<s:text name="label.riskdetails" />
 																</div>
 																<div class="panel-body">
+																	<s:if test='!"Y".equals(contractMode)'>
 																	<div class="textfield">
 																		<div class="text">
 																			<s:text name="label.insdetails" />
@@ -529,6 +657,10 @@ gap:20px;
 																			<s:radio list="#{'Y':'Yes','N':'No' }" name="riskdetailYN" id="riskdetailYN" value="%{riskdetailYN==null?'N':riskdetailYN}" onchange="getRiskInfo(this.value)"></s:radio>													
 																		</div>
 																	</div>
+																	</s:if>
+																	<s:else>
+																	<s:hidden name="riskdetailYN" id="riskdetailYN" ></s:hidden>
+																	</s:else>
 																	<div class="boxcontent" id="riskid">
 																		<div class="textfield">
 																			<div class="text">
@@ -677,6 +809,7 @@ gap:20px;
 																</div>
 																<div class="panel-body">
 																	<div class="boxcontent">
+																		<s:if test='!"Y".equals(contractMode)'>
 																		<div class="textfield">
 																			<div class="text">
 																				<s:text name="label.insdetails" />
@@ -685,6 +818,10 @@ gap:20px;
 																				<s:radio list="#{'Y':'Yes','N':'No' }" name="brokerdetYN" id="brokerdetYN" value="%{brokerdetYN==null?'N':brokerdetYN}" onchange="getBrokerInfo(this.value)"></s:radio>													
 																			</div>
 																		</div>
+																		</s:if>
+																		<s:else>
+																		<s:hidden name="brokerdetYN" id="brokerdetYN" />
+																		</s:else>
 																		<div class="boxcontent" id="brokerid">
 																		<div class="textfield">
 																			<div class="text">
@@ -758,6 +895,7 @@ gap:20px;
 																</div>
 																<div class="panel-body">
 																	<div class="boxcontent">
+																		<s:if test='!"Y".equals(contractMode)'>
 																		<div class="textfield">
 																			<div class="text">
 																				<s:text name="label.insdetails" />
@@ -766,6 +904,10 @@ gap:20px;
 																				<s:radio list="#{'Y':'Yes','N':'No' }" name="coverdetYN" id="coverdetYN" value="%{coverdetYN==null?'N':coverdetYN}" onchange="getCoverInfo(this.value)"></s:radio>													
 																			</div>
 																		</div>
+																		</s:if>
+																		<s:else>
+																		<s:hidden name="coverdetYN" id="coverdetYN" />
+																		</s:else>
 																		<div class="boxcontent" id="coverid">
 																		<div class="textfield">
 																			<div class="text">
@@ -803,6 +945,7 @@ gap:20px;
 																</div>
 																<div class="panel-body">
 																	<div class="boxcontent">
+																			<s:if test='!"Y".equals(contractMode)'>
 																			<div class="textfield">
 																				<div class="text">
 																					<s:text name="label.insdetails" />
@@ -811,6 +954,10 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="premiumdetailYN" id="premiumdetailYN" value="%{premiumdetailYN==null?'N':premiumdetailYN}" onchange="getPremiumInfo(this.value)"></s:radio>													
 																				</div>
 																			</div>
+																			</s:if>
+																			<s:else>
+																			<s:hidden name="premiumdetailYN" id="premiumdetailYN" />
+																			</s:else>
 																			<div class="boxcontent" id="premiumid">
 																			<div class="textfield">
 																				<div class="text">
@@ -911,6 +1058,7 @@ gap:20px;
 																	</div>
 																	<div class="panel-body">
 																		<div class="boxcontent">
+																			<s:if test='!"Y".equals(contractMode)'>
 																			<div class="textfield">
 																				<div class="text">
 																					<s:text name="label.insdetails" />
@@ -919,6 +1067,10 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="acqdetailYN" id="acqdetailYN" value="%{acqdetailYN==null?'N':acqdetailYN}" onchange="getAcqInfo(this.value);"></s:radio>													
 																				</div>
 																			</div>
+																			</s:if>
+																			<s:else>
+																			<s:hidden name="acqdetailYN" id="acqdetailYN" />
+																			</s:else>
 																			<div class="boxcontent" id="aquid">
 																				<div class="textfield" id="commissionQSPid">
 																					<div class="text">
@@ -994,6 +1146,7 @@ gap:20px;
 																	</div>
 																	<div class="panel-body">
 																		<div class="boxcontent">
+																			<s:if test='!"Y".equals(contractMode)'>
 																			<div class="textfield">
 																				<div class="text">
 																					<s:text name="label.insdetails" />
@@ -1002,6 +1155,10 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="commissiondetailYN" id="premiumdetailYN" value="%{commissiondetailYN==null?'N':commissiondetailYN}" onchange="getCommInfo(this.value)"></s:radio>													
 																				</div>
 																			</div>
+																			</s:if>
+																			<s:else>
+																			<s:hidden name="commissiondetailYN" id="commissiondetailYN" />
+																			</s:else>
 																			<div class="boxcontent" id="commid">
 																				<div class="textfield">
 																					<div class="text">
@@ -1265,6 +1422,7 @@ gap:20px;
 																	</div>
 																	<div class="panel-body">
 																		<div class="boxcontent">
+																			<s:if test='!"Y".equals(contractMode)'>
 																			<div class="textfield">
 																				<div class="text">
 																					<s:text name="label.insdetails" />
@@ -1273,6 +1431,10 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="depositdetailYN" id="depositdetailYN" value="%{depositdetailYN==null?'N':depositdetailYN}" onchange="getDepositInfo(this.value)"></s:radio>													
 																				</div>
 																			</div>
+																			</s:if>
+																			<s:else>
+																			<s:hidden name="depositdetailYN" id="depositdetailYN" />
+																			</s:else>
 																			<div class="boxcontent" id="depositid">													
 																				<div class="textfield">
 																					<div class="text">
@@ -1338,6 +1500,7 @@ gap:20px;
 																	</div>
 																	<div class="panel-body">
 																		<div class="boxcontent">
+																			<s:if test='!"Y".equals(contractMode)'>
 																			<div class="textfield">
 																				<div class="text">
 																					<s:text name="label.insdetails" />
@@ -1346,6 +1509,10 @@ gap:20px;
 																					<s:radio list="#{'Y':'Yes','N':'No' }" name="lossdetailYN" id="lossdetailYN" value="%{lossdetailYN==null?'N':lossdetailYN}" onchange="getLossdetInfo(this.value)"></s:radio>													
 																				</div>
 																			</div>
+																			</s:if>
+																			<s:else>
+																			<s:hidden name="lossdetailYN" id="lossdetailYN" />
+																			</s:else>
 																			<div class="boxcontent" id="lossid">													
 																				<div class="textfield">
 																					<div class="text">
@@ -1393,8 +1560,13 @@ gap:20px;
 																	</div>
 																</div>
 															</div>
+															
 														</div>
 														<jsp:include page="/WEB-INF/jsp/common/remarks.jsp" />
+														<s:if test='"Y".equals(contractMode)'>
+														<jsp:include page="/WEB-INF/jsp/placement/placementReinsInfo.jsp" />
+														
+														</s:if>
 														<div class="boxcontent" align="center">
 														<s:if test='"layer".equals(layerMode) && "layer".equals(flag)'>
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
@@ -1404,8 +1576,9 @@ gap:20px;
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 														<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionAddLayer()">Add Section</button>
 														</s:elseif>
-														<s:else>
-														</s:else>
+														<s:if test='"Y".equals(contractMode)'>
+															<input type="button" value="Convert To Contract" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionContract()" />
+														</s:if>
 															
 														</div>
 														<%-- <div class="boxcontent">
@@ -1599,7 +1772,13 @@ gap:20px;
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionNotTakenCancel()" />
 													</s:elseif>
 													<s:else>
-														<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
+														<s:if test='"Y".equals(contractMode)'>
+															<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCCancel()" />
+														</s:if>
+														<s:else>
+															<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
+														</s:else>
+														
 													</s:else>
 													<%-- <s:if test='!"layer".equals(flag) && !"copy".equals(flag)'>
 														 <input type="button"  value="Save"   class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FunctionSaveOption()" /> 
@@ -1657,6 +1836,7 @@ gap:20px;
 								 <s:hidden name="editMode" id="editMode"></s:hidden>
 								 <s:hidden name="referenceNo" id="referenceNo"></s:hidden>
 								 <s:hidden name="sectionMode" id="sectionMode"></s:hidden>
+								 <s:hidden name="contractMode" id="contractMode"></s:hidden>
 								 
 							</s:form>
 						</div>
@@ -1671,7 +1851,7 @@ document.getElementById("sectionid").style.display = "inline";
 <s:else>
 document.getElementById("sectionid").style.display = "none";
 </s:else>
-$('.select1').select2({ });
+
 var mtbChildWin = new Array();
 var mtbWinCound = 0;
 function destroyPopUps() 
@@ -1824,7 +2004,7 @@ function FunctionEdit(){
 function funEditSubmit(){
 
 	document.proportional.editMode.value="S";
-	
+	document.getElementById("contractMode").value='N';
 	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
 	document.proportional.action="FirstPageSaveMethodRiskDetails.action";
 	document.proportional.submit();
@@ -1839,6 +2019,7 @@ function FunctionSaveOption(){
 }
 function FunctionAddLayer()
 {
+	document.getElementById("contractMode").value='N';
 	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value="";
@@ -1849,6 +2030,17 @@ function FunctionAddLayer()
 }
 function FunctionUpdateOption()
 {
+	document.getElementById("contractMode").value='N';
+	document.getElementById("flag").value='';
+	document.getElementById("layerMode").value='';
+	document.getElementById("proposal_no").value=document.proportional.layerProposalNo.value;
+	replaceComma(document.proportional,'maxLimit_Product,limitPerVesselOC,limitPerLocationOC,limitOrigCur,faclimitOrigCur,treatyLimitsurplusOC,epi_origCur,epi,xlCost,limitOrigCurPml,treatyLimitsurplusOCPml,epipml,premiumQuotaShare,premiumSurplus,acquisition_Cost,loss_Advise,cash_Loss_Limit,event_limit,aggregate_Limit,occurrent_Limit');
+	document.proportional.action="FirstPageSaveMethodRiskDetails.action";
+	document.proportional.submit();
+}
+function FunctionContract()
+{
+	document.getElementById("contractMode").value='Y';
 	document.getElementById("flag").value='';
 	document.getElementById("layerMode").value='';
 	document.getElementById("proposal_no").value=document.proportional.layerProposalNo.value;
@@ -1904,6 +2096,13 @@ function FunctionEditCancel(){
 	document.proportional.action='${pageContext.request.contextPath}/commonListPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.proportional.submit();
 }
+function FunctionEditCCancel(){
+	document.getElementById("bouquetNo").disabled=false;
+	document.getElementById("flag").value='CSL';
+	document.proportional.action='${pageContext.request.contextPath}/InitCPortfolio.action?flag=CSL';
+	document.proportional.submit();
+}
+
 function FunctionRejectCancel(){
 	document.proportional.action='${pageContext.request.contextPath}/menuPortfolio.action?manufactureID=<s:property value="#session.mfrid"/>';
 	document.proportional.submit();
@@ -2078,6 +2277,10 @@ SlidingScaleEnable();
 }else{
 	getSlideInfo(slideScaleCommission);
 }
+}
+function getCedentBroker(val){
+	var URL='${pageContext.request.contextPath}/getCedentBrokerRiskDetails.action?bouquetNo='+val+'&dropDown=cedentbroker';
+		postRequest(URL,'cedentbroker');
 }
 function GetExchangeRate() {
 		var incDate=document.forms['proportional'].incepDate.value;
@@ -3140,6 +3343,14 @@ function funDeleteLayer(no){
 	document.proportional.submit();
 	
 }
+function funContract(no){
+	destroyPopUps();
+	document.getElementById("proposal_no").value=no;
+	document.proportional.action='${pageContext.request.contextPath}/convertContractRiskDetails.action';
+	document.proportional.submit();
+	
+}
+
 function funCopyMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId) {
 	document.getElementById("laydet").style.display = "none";
     document.getElementById("proposalNo1").value=proposalno;
@@ -3482,6 +3693,9 @@ function SlidingScaleEnable(){
 	}
 	
 }
+$(function() {
+$('.select1').select2({ });
+});
 </script>
 	</body>
 </html>

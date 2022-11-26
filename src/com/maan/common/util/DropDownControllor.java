@@ -28,6 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.springframework.dao.DataAccessException;
+import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.ClaimBean;
 import com.maan.bean.FaculPremiumBean;
@@ -3486,6 +3487,12 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 			if(list!=null && list.size()>0){
 				bean.setCedingCo(list.get(0).get("CEDING_COMPANY_ID")==null?"":list.get(0).get("CEDING_COMPANY_ID").toString());
 				bean.setBroker(list.get(0).get("BROKER_ID")==null?"":list.get(0).get("BROKER_ID").toString());
+				bean.setCedingCompanyName(list.get(0).get("CEDING_COMPANY_NAME")==null?"":list.get(0).get("CEDING_COMPANY_NAME").toString());
+				bean.setBrokerName(list.get(0).get("BROKER_NAME")==null?"":list.get(0).get("BROKER_NAME").toString());
+				bean.setUwYear(list.get(0).get("UW_YEAR")==null?"":list.get(0).get("UW_YEAR").toString());
+				bean.setUwYearTo(list.get(0).get("UW_YEAR_TO")==null?"":list.get(0).get("UW_YEAR_TO").toString());
+				bean.setIncepDate(list.get(0).get("INCEPTION_DATE")==null?"":list.get(0).get("INCEPTION_DATE").toString());
+				bean.setExpDate(list.get(0).get("EXPIRY_DATE")==null?"":list.get(0).get("EXPIRY_DATE").toString());
 			}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
@@ -3535,6 +3542,116 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 			logger.debug("Exception @ { " + e + " } ");
 		}
 		return status;
+	}
+
+	public boolean getUWFromTocheck(RiskDetailsBean bean) {
+		boolean result=false;
+		List<Map<String, Object>> list=null;
+		String query="";
+		try{
+				query= getQuery("GET_BOUQUET_CEDENT_BROKER");
+				logger.info("Select Query=>"+query);
+				logger.info("Args[0]=>"+bean.getBouquetNo());
+				list=this.mytemplate.queryForList(query,new Object[]{bean.getBouquetNo()});
+				logger.info("Result=>"+list.size());
+				if(list!=null && list.size()>0){
+					for(int i=0;i<list.size();i++){
+						Map<String, Object> map=(Map<String, Object>)list.get(i);
+						String res=map.get("UW_YEAR")==null?"":map.get("UW_YEAR").toString();
+						String res1=map.get("UW_YEAR_TO")==null?"":map.get("UW_YEAR_TO").toString();
+						if(!res.equalsIgnoreCase(bean.getUwYear())){
+							result=true;
+						}else if(!res1.equalsIgnoreCase(bean.getUwYearTo())){
+							result=true;
+						}
+					}
+				}
+		}catch(Exception e){
+			logger.debug("Exception @ {" + e + "}");
+
+		}
+		return result;
+	}
+
+	public List<Map<String, Object>> getNewContractInfo(RiskDetailsBean bean) {
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+		try{
+			String query="";
+			query=getQuery("NEW_CONTRACT_SUMMARY");
+			logger.info("Select Query==> " + query);
+			list=this.mytemplate.queryForList(query, new Object[]{bean.getBranchCode(),bean.getProposal_no()});
+			
+		}
+		catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+		}
+		return list;
+	}
+	public List<Map<String, Object>> getPlacementInfoList(RiskDetailsBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		List<String> snos=new ArrayList<String>();
+		List<String> bouquetNos=new ArrayList<String>();
+		List<String>baseproposalNos=new ArrayList<String>();
+		List<String> reinsurerIds=new ArrayList<String>();
+		List<String> brokerIds=new ArrayList<String>();
+		List<String>shareOffered=new ArrayList<String>();
+		List<String>writtenLine=new ArrayList<String>();
+		List<String>brokerage=new ArrayList<String>();
+		List<String>proposedWL=new ArrayList<String>();
+		List<String>signedLine=new ArrayList<String>();
+		List<String>proposedSL=new ArrayList<String>();
+		List<String>currentStatus=new ArrayList<String>();
+		List<String>newStatus=new ArrayList<String>();
+		List<String>statusNo=new ArrayList<String>(); 
+		try {
+			Object[] obj=new Object[2];
+			query=getQuery("GET_REINSURER_INFO");
+			obj[0]=bean.getBranchCode();
+			obj[1]=bean.getLayerProposalNo();
+			
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+			if(!CollectionUtils.isEmpty(list)) {
+				for(int i=0;i<list.size();i++) {
+					Map<String,Object>map=list.get(i);
+					snos.add(map.get("SNO")==null?"":map.get("SNO").toString());
+					bouquetNos.add(map.get("BOUQUET_NO")==null?"":map.get("BOUQUET_NO").toString());
+					baseproposalNos.add(map.get("BASE_PROPOSAL_NO")==null?"":map.get("BASE_PROPOSAL_NO").toString());
+					reinsurerIds.add(map.get("REINSURER_ID")==null?"":map.get("REINSURER_ID").toString());
+					brokerIds.add(map.get("BROKER_ID")==null?"":map.get("BROKER_ID").toString());
+					shareOffered.add(map.get("SHARE_OFFERED")==null?"":DropDownControllor.formattereight(map.get("SHARE_OFFERED").toString()));
+					writtenLine.add(map.get("SHARE_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_WRITTEN").toString()));
+					brokerage.add(map.get("BROKERAGE_PER")==null?"":map.get("BROKERAGE_PER").toString());
+					proposedWL.add(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSAL_WRITTEN").toString()));
+					signedLine.add(map.get("SHARE_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_SIGNED").toString()));
+					proposedSL.add(map.get("SHARE_PROPOSED_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSED_SIGNED").toString()));
+					currentStatus.add(map.get("CURRENT_STATUS")==null?"":map.get("CURRENT_STATUS").toString());
+					newStatus.add(map.get("NEW_STATUS")==null?"":map.get("NEW_STATUS").toString());
+					statusNo.add(map.get("STATUS_NO")==null?"":map.get("STATUS_NO").toString());
+					
+				}
+				bean.setSnos(snos);
+				bean.setBaseproposalNos(baseproposalNos);
+				bean.setBouquetNos(bouquetNos);
+				bean.setReinsurerIds(reinsurerIds);
+				bean.setBrokerIds(brokerIds);
+				bean.setShareOffered(shareOffered);
+				bean.setWrittenLine(writtenLine);
+				bean.setBrokerages(brokerage);
+				bean.setProposedWL(proposedWL);
+				bean.setSignedLine(signedLine);
+				bean.setProposedSL(proposedSL);
+				bean.setCurrentStatus(currentStatus);
+				bean.setNewStatus(newStatus);
+				bean.setStatusNo(statusNo);
+			}	
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+		return list;
 	}
 	
 }

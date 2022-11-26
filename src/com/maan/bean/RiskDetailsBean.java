@@ -17,6 +17,8 @@ public class RiskDetailsBean  {
 	private String polBr;
 	private String contNo;
 	private String cedingCo;
+	private String cedingCompanyName;
+	private String brokerName;
 	private String treatyName_type;
 	private String treatyName;
 	private String broker;
@@ -110,7 +112,8 @@ public class RiskDetailsBean  {
 	private String spRetro;	
 	private String no_Insurer;	
 	private String edit;	
-	private	String contractno;	
+	private	String contractno;
+	private	String subcontractNo;
 	private	String lay;	
 	private String branchCode;
 	private String md_premium_our_service;
@@ -532,8 +535,21 @@ public class RiskDetailsBean  {
 	private String sectionMode;
 	private String reinsdelete;
 	private String offerNo;
-	
-	
+	private String contractMode;
+	private List<String> snos=new ArrayList<String>();
+	private List<String> bouquetNos=new ArrayList<String>();
+	private List<String>baseproposalNos=new ArrayList<String>();
+	private List<String> reinsurerIds=new ArrayList<String>();
+	private List<String> brokerIds=new ArrayList<String>();
+	private List<String>shareOffered=new ArrayList<String>();
+	private List<String>writtenLine=new ArrayList<String>();
+	private List<String>brokerages=new ArrayList<String>();
+	private List<String>proposedWL=new ArrayList<String>();
+	private List<String>signedLine=new ArrayList<String>();
+	private List<String>proposedSL=new ArrayList<String>();
+	private List<String>statusNo=new ArrayList<String>();
+	private List<String>currentStatus=new ArrayList<String>();
+	private List<String>newStatus=new ArrayList<String>();
 	public String getMinPremiumOSOC() {
 		return minPremiumOSOC;
 	}
@@ -5615,6 +5631,114 @@ public class RiskDetailsBean  {
 	}
 	public void setOfferNo(String offerNo) {
 		this.offerNo = offerNo;
+	}
+	public String getCedingCompanyName() {
+		return cedingCompanyName;
+	} 
+	public void setCedingCompanyName(String cedingCompanyName) {
+		this.cedingCompanyName = cedingCompanyName;
+	}
+	public String getBrokerName() {
+		return brokerName;
+	}
+	public void setBrokerName(String brokerName) {
+		this.brokerName = brokerName;
+	}
+	public String getContractMode() {
+		return contractMode;
+	}
+	public void setContractMode(String contractMode) {
+		this.contractMode = contractMode;
+	}
+	public List<String> getSnos() {
+		return snos;
+	}
+	public void setSnos(List<String> snos) {
+		this.snos = snos;
+	}
+	public List<String> getReinsurerIds() {
+		return reinsurerIds;
+	}
+	public void setReinsurerIds(List<String> reinsurerIds) {
+		this.reinsurerIds = reinsurerIds;
+	}
+	public List<String> getBrokerIds() {
+		return brokerIds;
+	}
+	public void setBrokerIds(List<String> brokerIds) {
+		this.brokerIds = brokerIds;
+	}
+	public List<String> getShareOffered() {
+		return shareOffered;
+	}
+	public void setShareOffered(List<String> shareOffered) {
+		this.shareOffered = shareOffered;
+	}
+	public List<String> getWrittenLine() {
+		return writtenLine;
+	}
+	public void setWrittenLine(List<String> writtenLine) {
+		this.writtenLine = writtenLine;
+	}
+	public List<String> getBrokerages() {
+		return brokerages;
+	}
+	public void setBrokerages(List<String> brokerages) {
+		this.brokerages = brokerages;
+	}
+	public List<String> getProposedWL() {
+		return proposedWL;
+	}
+	public void setProposedWL(List<String> proposedWL) {
+		this.proposedWL = proposedWL;
+	}
+	public List<String> getSignedLine() {
+		return signedLine;
+	}
+	public void setSignedLine(List<String> signedLine) {
+		this.signedLine = signedLine;
+	}
+	public List<String> getProposedSL() {
+		return proposedSL;
+	}
+	public void setProposedSL(List<String> proposedSL) {
+		this.proposedSL = proposedSL;
+	}
+	public List<String> getStatusNo() {
+		return statusNo;
+	}
+	public void setStatusNo(List<String> statusNo) {
+		this.statusNo = statusNo;
+	}
+	public String getSubcontractNo() {
+		return subcontractNo;
+	}
+	public void setSubcontractNo(String subcontractNo) {
+		this.subcontractNo = subcontractNo;
+	}
+	public List<String> getCurrentStatus() {
+		return currentStatus;
+	}
+	public void setCurrentStatus(List<String> currentStatus) {
+		this.currentStatus = currentStatus;
+	}
+	public List<String> getNewStatus() {
+		return newStatus;
+	}
+	public void setNewStatus(List<String> newStatus) {
+		this.newStatus = newStatus;
+	}
+	public List<String> getBouquetNos() {
+		return bouquetNos;
+	}
+	public void setBouquetNos(List<String> bouquetNos) {
+		this.bouquetNos = bouquetNos;
+	}
+	public List<String> getBaseproposalNos() {
+		return baseproposalNos;
+	}
+	public void setBaseproposalNos(List<String> baseproposalNos) {
+		this.baseproposalNos = baseproposalNos;
 	}
 	
 	

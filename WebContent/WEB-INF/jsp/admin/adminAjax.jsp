@@ -2793,4 +2793,22 @@ alert("This action is not allowed because a previous transaction is pending for 
 </s:elseif>	
 <s:elseif test='"statusChange".equalsIgnoreCase(dropDown)'>
 <s:include value="/WEB-INF/jsp/placement/placementGrid.jsp"></s:include>
-</s:elseif>							
+</s:elseif>	
+<s:elseif test='"cedentbroker".equalsIgnoreCase(dropDown)'>
+<div class="textfield">
+	<div class="text">
+		<s:text name="label.cedingCompany" />
+	</div>
+	<div class="tbox">
+		<s:property value="cedingCompanyName"/>													
+	</div>
+</div>	
+<div class="textfield">
+	<div class="text">
+		<s:text name="label.broker" />
+	</div>
+	<div class="tbox">
+		<s:property value="brokerName"/>													
+	</div>
+</div>
+</s:elseif>					

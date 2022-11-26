@@ -14,12 +14,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.util.CollectionUtils;
 
 import com.maan.bean.FaculitivesBean;
+import com.maan.bean.PlacementBean;
 import com.maan.bean.RiskDetailsBean;
 import com.maan.common.db.DBConstants;
 import com.maan.common.db.MyJdbcTemplate;
 import com.maan.common.util.DropDownControllor;
 import com.maan.common.util.LogUtil;
 import com.maan.dao.RiskDetailsDAO;
+import com.maan.service.PlacementService;
 
 public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO {
 	final Logger logger = LogUtil.getLogger(getClass());
@@ -5350,4 +5352,325 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 		}
 		return result;
 	}
+
+	@Override
+	public void convertPolicy(RiskDetailsBean beanObj,String productId) {
+		try {
+			try {
+				String updateQry ="", selectQry="";
+				Object[] args=null;
+				int out=0;
+				int chkSecPageMode = checkSecondPageMode(beanObj, productId); //commission table count 0 mode=1 else 2
+				int ContractEditMode = contractEditMode(beanObj, productId); // get contract no from risk details if empty mode=1 else 2
+				if (ContractEditMode == 1) {
+					if (chkSecPageMode == 2) {
+
+						args = new Object[3];
+						args[0] = beanObj.getProposal_no();
+						args[1] = beanObj.getProposal_no();
+						args[2] = beanObj.getProposal_no();
+						selectQry = getQuery(DBConstants.RISK_SELECT_CHECHPROPOSALSTATUS);
+						logger.info("Query=>" + selectQry);
+						logger.info("Args[0]..[1]=>" +  beanObj.getProposal_no());
+						List<Map<String, Object>> res = this.mytemplate.queryForList(selectQry,args);
+						logger.info("List<Map<String, Object>> Size=>" + res.size());
+
+						Map<String, Object> resMap = null;
+						if(res!=null && res.size()>0)
+							resMap = (Map<String, Object>)res.get(0);
+						if(resMap!=null){
+							beanObj.setProStatus(resMap.get("RSK_STATUS")==null?"":resMap.get("RSK_STATUS").toString());
+							beanObj.setSharSign(resMap.get("RSK_SHARE_SIGNED")==null?"":resMap.get("RSK_SHARE_SIGNED").toString());
+							beanObj.setContNo(resMap.get("RSK_CONTRACT_NO")==null?"":resMap.get("RSK_CONTRACT_NO").toString());
+							if (beanObj.getProStatus().matches("A") /* && !beanObj.getSharSign().matches("0") */) {
+								String maxContarctNo = null;
+								
+								String query=getQuery("GET_BASE_LAYER_DETAILS");
+								logger.info("selectQry " + selectQry);
+								logger.info("Args[0]" + beanObj.getProposal_no());
+								List<Map<String, Object>> res1 = this.mytemplate.queryForList(query,new Object[]{productId,beanObj.getBranchCode(),beanObj.getProposal_no()});
+								logger.info("Result Size=>" +  res1.size());
+								Map<String, Object> resMap1 = null;
+								if(res1!=null && res1.size()>0)
+									resMap1 = (Map<String, Object>)res1.get(0);
+								if (resMap1 != null) {
+										beanObj.setBaseLayerYN(resMap1.get("BASE_LAYER")==null?"":resMap1.get("BASE_LAYER").toString());
+								}
+								
+								logger.info("Contract No=>"+ beanObj.getContractno() + "Layer No=>"+ beanObj.getLay());
+								String prodid=productId;
+								if ("layer".equalsIgnoreCase(beanObj.getLay())) {
+									logger.info("Mode Layer");
+									maxContarctNo = beanObj.getContractno();
+								}
+								else if(StringUtils.isNotBlank(beanObj.getBaseLayerYN())){
+									query=getQuery("GET_BASE_LAYER_DETAILS");
+									logger.info("selectQry " + query);
+									logger.info("Args[0]" + beanObj.getProposal_no());
+									res1 = this.mytemplate.queryForList(query,new Object[]{productId,beanObj.getBranchCode(),beanObj.getBaseLayerYN()});
+									logger.info("Result Size=>" +  res1.size());
+									resMap1 = null;
+									if(res1!=null && res1.size()>0)
+										resMap1 = (Map<String, Object>)res1.get(0);
+									if (resMap1 != null) {
+											beanObj.setContNo(resMap1.get("CONTRACT_NO")==null?"":resMap1.get("CONTRACT_NO").toString());
+									}
+									maxContarctNo=beanObj.getContNo();
+								}
+								
+								else {
+									logger.info("Mode Not a Layer");
+									if(!"".equals(beanObj.getRenewal_contract_no())&&!"0".equals(beanObj.getRenewal_contract_no())&&"OLDCONTNO".equals(beanObj.getRenewalFlag())){
+										maxContarctNo=beanObj.getRenewal_contract_no();
+									}else{
+										//if("06".equalsIgnoreCase(beanObj.getBranchCode())){
+											maxContarctNo=new DropDownControllor().getSequence("Contract",prodid,beanObj.getDepartmentId(), beanObj.getBranchCode(),beanObj.getProposal_no(),beanObj.getUwYear());
+										/*}else
+										maxContarctNo=new DropDownControllor().getPolicyNo("2",prodid,beanObj.getBranchCode());*/
+										if("RI01".equalsIgnoreCase(beanObj.getSourceId())){
+											insertSectionValue(beanObj,maxContarctNo);
+										}
+										logger.info("Result=>" + maxContarctNo);
+									}
+								}
+								logger.info("Proposal Number=>"	+ beanObj.getProposal_no() + " Contract No=>"+ maxContarctNo);
+								args = new String[2];
+								args[0] = maxContarctNo;
+								args[1] = beanObj.getProposal_no();
+								updateQry = getQuery(DBConstants.RISK_UPDATE_CONTNO);
+								logger.info("updateQry " + updateQry);
+								logger.info("Args[0]=>" + maxContarctNo);
+								logger.info("Args[1]=>" +  beanObj.getProposal_no());
+								out=this.mytemplate.update(updateQry,args);
+								logger.info("Result=>" +  out);
+								updateQry=getQuery(DBConstants.RISK_UPDATE_HOMECONTNO);
+								args = new String[4];
+								args[0] = maxContarctNo;
+								beanObj.setContNo((String)args[0]);
+								args[1] = "A";
+								args[2] = "A";
+								args[3] = beanObj.getProposal_no();
+								logger.info("updateQry " + updateQry);
+								logger.info("Args[0]=>" + maxContarctNo);
+								logger.info("Args[1]..[2]=>" + "A");
+								logger.info("Args[3]=>" +  beanObj.getProposal_no());
+								out=this.mytemplate.update(updateQry,args);
+								logger.info("Result=>" +  out);
+								beanObj.setContNo(maxContarctNo);
+								if("".equals(beanObj.getRenewal_contract_no())||"0".equals(beanObj.getRenewal_contract_no())||"NEWCONTNO".equals(beanObj.getRenewalFlag())){
+									beanObj.setContractGendration("Your Proposal is converted to Contract with Proposal No : "+beanObj.getProposal_no() +" and Contract No : "+maxContarctNo+".");
+								}else{
+									beanObj.setContractGendration("Your Proposal is Renewaled with Proposal No : "+beanObj.getProposal_no() +", Old Contract No:"+maxContarctNo+" and New Contract No : "+maxContarctNo+".");
+								}
+							} else {
+								args = new String[4];
+								args[0] = beanObj.getContNo();
+								args[1] = getproposalStatus(beanObj
+										.getProposal_no());
+								args[2] = args[1];
+								if (args != null) {
+
+									if (((String) args[1]).equalsIgnoreCase("P")) {
+										beanObj.setContractGendration("Your Proposal is saved in Pending Stage with Proposal No : "+ beanObj.getProposal_no());
+									}	if (((String) args[1]).equalsIgnoreCase("N")) {
+										beanObj.setContractGendration("Your Proposal is saved in Not Taken Up Stage with Proposal No : "+ beanObj.getProposal_no());
+									}  else if (((String) args[1]).equalsIgnoreCase("A")) {
+										beanObj.setContractGendration("Your Contract is updated with Proposal No : "+beanObj.getProposal_no()+" and Contract No : "+beanObj.getContNo()+".");
+									} else if (((String) args[1]).equalsIgnoreCase("R")) {
+										beanObj.setContractGendration("Your Proposal is saved in Rejected Stage with Proposal No : "+ beanObj.getProposal_no());
+									}
+								}
+								args[3] = beanObj.getProposal_no();
+								updateQry=getQuery(DBConstants.RISK_UPDATE_HOMECONTNO);
+								logger.info("updateQry " + updateQry);
+								int k=0;
+								for(Object str:args)
+									logger.info("Args["+k+++"]" +str);	
+								out=this.mytemplate.update(getQuery(DBConstants.RISK_UPDATE_HOMECONTNO),args);
+								logger.info("Result=>" +  out);
+							}
+						}
+					}
+				}
+				InsertPlacement(beanObj);
+				insertRiDetails(beanObj);
+				updateRiContractStatus(beanObj);
+				//insertRetroContracts(beanObj,productId);
+				//insertCrestaMaintable(beanObj);
+				beanObj.setProduct_id(productId);
+				//insertBonusDetails(beanObj,"scale");
+				//insertBonusDetails(beanObj,"lossparticipate");
+				//insertProfitCommissionMain(beanObj,"main");
+				//InsertRemarkDetails(beanObj);
+				updateRetentionContractNo(beanObj);
+				DropDownControllor dropDownController = new DropDownControllor();
+				dropDownController.updatepositionMasterEndtStatus(beanObj.getProposal_no(),productId,beanObj.getEndorsementDate(),beanObj.getCeaseStatus());
+				if(StringUtils.isNotBlank(beanObj.getContNo())){
+				new DropDownControllor().getSOATableInsert(beanObj.getProposal_no(), beanObj.getContNo(),beanObj.getBranchCode());
+				}
+			} catch (Exception e) {
+				logger.debug("Exception @ {" + e + "}");
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void InsertPlacement(RiskDetailsBean beanObj) {
+		PlacementBean bean=new PlacementBean();
+		PlacementService service=new PlacementService();
+		try {
+			String statusNo=new DropDownControllor().getSequence("StatusNo","0","0", beanObj.getBranchCode(),"","");
+			List<String> snos=new ArrayList<String>();
+			List<String> bouquetNos=new ArrayList<String>();
+			List<String>baseproposalNos=new ArrayList<String>();
+			List<String> reinsurerIds=new ArrayList<String>();
+			List<String> brokerIds=new ArrayList<String>();
+			List<String>proposalNos=new ArrayList<String>();
+			List<String>statusNos=new ArrayList<String>();
+			List<String>shareOffered=new ArrayList<String>();
+			List<String>writtenLine=new ArrayList<String>();
+			List<String>brokerage=new ArrayList<String>();
+			List<String>writtenvaliditydate=new ArrayList<String>();
+			List<String>writtenvalidityRemarks=new ArrayList<String>();
+			List<String>proposedWL=new ArrayList<String>();
+			List<String>signedLine=new ArrayList<String>();
+			List<String>proposedSL=new ArrayList<String>();
+			List<String>signedLineValidity=new ArrayList<String>();
+			List<String>signedLineRemarks=new ArrayList<String>();
+			List<String>emailStatus=new ArrayList<String>();
+			List<String>psignedLine=new ArrayList<String>();
+			for(int i=0;i<beanObj.getReinsurerIds().size();i++) {
+				if("CSL".equalsIgnoreCase(beanObj.getNewStatus().get(i))) {
+					snos.add(beanObj.getSnos().get(i));
+					bouquetNos.add(beanObj.getBouquetNos().get(i));
+					baseproposalNos.add(beanObj.getBaseproposalNos().get(i));
+					proposalNos.add(beanObj.getProposalNo());
+					reinsurerIds.add(beanObj.getReinsurerIds().get(i));
+					brokerIds.add(beanObj.getBrokerIds().get(i));
+					shareOffered.add(beanObj.getShareOffered().get(i));
+					writtenLine.add(beanObj.getWrittenLine().get(i));
+					proposedWL.add(beanObj.getProposedWL().get(i));
+					writtenvaliditydate.add("");
+					writtenvalidityRemarks.add("");
+					signedLine.add(beanObj.getSignedLine().get(i));
+					signedLineValidity.add("");
+					signedLineRemarks.add("");
+					proposedSL.add(beanObj.getProposedSL().get(i));
+					brokerage.add(beanObj.getBrokerages().get(i));
+					statusNos.add(statusNo);
+				}
+			}
+			bean.setSnos(snos);
+			bean.setBaseproposalNos(baseproposalNos);
+			bean.setBouquetNos(bouquetNos);
+			bean.setReinsurerIds(reinsurerIds);
+			bean.setBrokerIds(brokerIds);
+			bean.setProposalNos(proposalNos);
+			bean.setShareOffered(shareOffered);
+			bean.setWrittenLine(writtenLine);
+			bean.setBrokerage(brokerage);
+			bean.setWrittenvaliditydate(writtenvaliditydate);
+			bean.setWrittenvalidityRemarks(writtenvalidityRemarks);
+			bean.setProposedWL(proposedWL);
+			bean.setSignedLine(signedLine);
+			bean.setProposedSL(proposedSL);
+			bean.setSignedLineValidity(signedLineValidity);
+			bean.setSignedLineRemarks(signedLineRemarks);
+			bean.setEmailStatus(emailStatus);
+			bean.setPsignedLine(psignedLine);
+			bean.setBranchCode(beanObj.getBranchCode());
+			bean.setNewStatus("C");
+			bean.setCurrentStatus("CSL");
+			bean.setUserId(beanObj.getLoginId());
+			beanObj.setStatusNo(statusNos);
+			bean.setStatusNo(statusNo);
+			service.updatePlacement(bean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void updateRiContractStatus(RiskDetailsBean bean) {
+		String query="";
+		try {
+			for(int i=0;i<bean.getReinsurerIds().size();i++) {
+				if("CSL".equalsIgnoreCase(bean.getNewStatus().get(i))) {
+					Object obj[]=new Object[7];
+					obj[0]=bean.getContNo();
+					obj[1]=bean.getAmendId();
+					obj[2]=bean.getProposal_no();
+					obj[3]=bean.getReinsurerIds().get(i);
+					obj[4]=bean.getBrokerIds().get(i);
+					obj[5]=bean.getBranchCode();
+					obj[6]=bean.getStatusNo().get(i);
+					query=getQuery("UPDATE_RI_CONTRACT");
+					logger.info("Query=>"+query);   
+					logger.info("Args=>"+StringUtils.join(obj, ",")); 
+					this.mytemplate.update(query,obj);
+					obj=new Object[6];
+					obj[0]=bean.getContNo();
+					obj[1]=bean.getProposal_no();
+					obj[2]=bean.getReinsurerIds().get(i);
+					obj[3]=bean.getBrokerIds().get(i);
+					obj[4]=bean.getBranchCode();
+					obj[5]=bean.getStatusNo().get(i);
+					query=getQuery("UPDATE_MAIL_CONTRACT");
+					logger.info("Query=>"+query);   
+					logger.info("Args=>"+StringUtils.join(obj, ",")); 
+					this.mytemplate.update(query,obj);
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+	}
+
+	private void insertRiDetails(RiskDetailsBean bean) {
+		String query="";
+		try {
+			
+			query=getQuery("INSERT_RI_DETAILS");
+			for(int i=0;i<bean.getReinsurerIds().size();i++) {
+				if("CSL".equalsIgnoreCase(bean.getNewStatus().get(i))) {
+					bean.setSubcontractNo(bean.getContNo()+(StringUtils.isBlank(bean.getLayerNo())?bean.getSectionNo():bean.getLayerNo())+bean.getSnos().get(i));
+					Object obj[]=new Object[23];
+					obj[0]=bean.getStatusNo().get(i);
+					obj[1]=bean.getSnos().get(i);
+					obj[2]=bean.getBouquetNos().get(i);
+					obj[3]=bean.getBaseproposalNos().get(i);
+					obj[4]=bean.getProposal_no();
+					obj[5]=bean.getContNo();
+					obj[6]=bean.getSubcontractNo();
+					obj[7]=bean.getLayerNo();
+					obj[8]=bean.getSectionNo();
+					obj[9]=bean.getAmendId();
+					obj[10]=bean.getReinsurerIds().get(i);
+					obj[11]=bean.getBrokerIds().get(i);
+					obj[12]=bean.getShareOffered().get(i);
+					obj[13]=bean.getWrittenLine().get(i);
+					obj[14]=bean.getProposedWL().get(i);
+					obj[15]=bean.getSignedLine().get(i);
+					obj[16]=bean.getProposedSL().get(i);
+					obj[17]=bean.getBrokerages().get(i);
+					obj[18]="CSL";
+					obj[19]="C";
+					obj[20]="Y";
+					obj[21]=bean.getLoginId();
+					obj[22]=bean.getBranchCode();
+					logger.info("Query=>"+query);   
+					logger.info("Args=>"+StringUtils.join(obj, ",")); 
+					this.mytemplate.update(query,obj);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+	}
+	
 }
