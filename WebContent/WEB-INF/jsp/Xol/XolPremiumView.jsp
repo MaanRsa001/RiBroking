@@ -457,6 +457,14 @@ function AuthendicationBack(){
 													:&nbsp;&nbsp;&nbsp;<s:property value="account_Period"/>
 												</div>
 											</div>
+											<div class="textfield">
+												<div class="text txtB">
+													<s:text name="label.documentType" />
+												</div>
+												<div class="tbox">
+													:&nbsp;&nbsp;&nbsp;<s:property value="documentType"/>
+												</div>
+											</div>
 											<s:if test="'RVP'.equals(account_Period)">
 												<div class="textfield" >
 													<div class="text txtB">
@@ -554,12 +562,12 @@ function AuthendicationBack(){
 													<s:text name="RiskDetails.M&DPremium" />
 												</td>
 												<td align="right">
-													<s:if test="!md_premium.equals('0')">
+													<s:if test="!md_premium.equals('0.00')">
 														<s:property value="md_premium"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!md_premium_usd.equals('0')">
+													<s:if test="!md_premium_usd.equals('0.00')">
 														<s:property value="md_premium_usd"/>
 													</s:if>
 												</td>
@@ -568,12 +576,12 @@ function AuthendicationBack(){
 													<s:text name="Premium.BroKerage" />
 												</td>
 												<td align="right">
-													<s:if test="!brokerage.equals('0')">		
+													<s:if test="!brokerage.equals('0.00')">		
 														<div style="align:right;"><s:property value="brokerage"/></div>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!brokerage_usd.equals('0')">		
+													<s:if test="!brokerage_usd.equals('0.00')">		
 														<div style="align:right;"><s:property value="brokerage_usd"/></div>
 													</s:if>
 												</td>
@@ -583,12 +591,12 @@ function AuthendicationBack(){
 														<s:text name="label.tax" />
 												</td>
 												<td align="right">
-													<s:if test="!tax.equals('0')">						
+													<s:if test="!tax.equals('0.00')">						
 														<s:property value="tax"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!tax_usd.equals('0')">				
+													<s:if test="!tax_usd.equals('0.00')">				
 														<s:property value="tax_usd"/>
 													</s:if>
 												</td>
@@ -599,12 +607,12 @@ function AuthendicationBack(){
 													<s:text name="Premium.AdjustmentPremiun" />
 												</td>
 												<td align="right">										
-													<s:if test="!adjustment_premium.equals('0')">						
+													<s:if test="!adjustment_premium.equals('0.00')">						
 														<s:property value="adjustment_premium"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!adjustment_premium_usd.equals('0')">				
+													<s:if test="!adjustment_premium_usd.equals('0.00')">				
 														<s:property value="adjustment_premium_usd"/>
 													</s:if>
 												</td>
@@ -615,12 +623,12 @@ function AuthendicationBack(){
 														
 												</td>
 												<td align="right">
-													<s:if test="!tax.equals('0')">						
+													<s:if test="!tax.equals('0.00')">						
 														<s:property value="tax"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!tax_usd.equals('0')">				
+													<s:if test="!tax_usd.equals('0.00')">				
 														<s:property value="tax_usd"/>
 													</s:if>
 												</td>
@@ -630,12 +638,12 @@ function AuthendicationBack(){
 													<s:text name="Premium.OtherCost" />
 												</td>
 												<td align="right">
-													<s:if test="!otherCost.equals('0')">
+													<s:if test="!otherCost.equals('0.00')">
 														<s:property value="otherCost"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!otherCostUSD.equals('0')">
+													<s:if test="!otherCostUSD.equals('0.00')">
 													<s:property value="otherCostUSD"/>
 													</s:if>
 												</td>	
@@ -647,12 +655,12 @@ function AuthendicationBack(){
 													<s:text name="Premium.ReinstatementPremium" />
 												</td>
 												<td align="right">
-													<s:if test="!recuirement_premium.equals('0')">
+													<s:if test="!recuirement_premium.equals('0.00')">
 													<s:property value="recuirement_premium"/>
 													</s:if>
 												</td>
 												<td align="right">
-												    <s:if test="!recuirement_premium_usd.equals('0')">
+												    <s:if test="!recuirement_premium_usd.equals('0.00')">
 													<s:property value="recuirement_premium_usd" />
 													</s:if>
 												</td>
@@ -661,12 +669,12 @@ function AuthendicationBack(){
                                                     <s:text name="label.WithHoldingTax" />
                                                 </td>
                                                 <td align="right">
-                                                    <s:if test="!withHoldingTaxOC.equals('0')">
+                                                    <s:if test="!withHoldingTaxOC.equals('0.00')">
                                                         <s:property value="withHoldingTaxOC"/>
                                                     </s:if>
                                                 </td>
                                                 <td align="right">
-                                                    <s:if test="!withHoldingTaxDC.equals('0')">
+                                                    <s:if test="!withHoldingTaxDC.equals('0.00')">
                                                         <s:property value="withHoldingTaxDC"/>
                                                     </s:if>
                                                 </td>
@@ -682,12 +690,12 @@ function AuthendicationBack(){
 													<s:text name="label.taxdedect" />
 												</td>
 												<td align="right">
-													<s:if test="!taxDedectSource.equals('0')">
+													<s:if test="!taxDedectSource.equals('0.00')">
 														<s:property value="taxDedectSource"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!taxDedectSourceDc.equals('0')">
+													<s:if test="!taxDedectSourceDc.equals('0.00')">
 														<s:property value="taxDedectSourceDc"/>
 													</s:if>
 												</td> 
@@ -699,45 +707,66 @@ function AuthendicationBack(){
                                                     <s:text name="label.BonusVal" />
                                                 </td>
                                                 <td align="right">
-                                                    <s:if test="!bonus.equals('0')">
+                                                    <s:if test="!bonus.equals('0.00')">
                                                         <s:property value="bonus"/>
                                                     </s:if>
                                                 </td>
                                                 <td align="right">
-                                                    <s:if test="!bonusDc.equals('0')">
+                                                    <s:if test="!bonusDc.equals('0.00')">
                                                         <s:property value="bonusDc"/>
                                                     </s:if>
                                                 </td>
                                             </tr>
+											
 											<tr>
-											<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
-												 <td>
-                                                    <s:text name="label.gst" />
-                                                </td>
-                                                <td align="right">
-                                                    <s:if test="!serviceTax.equals('0')">
-                                                        <s:property value="serviceTax"/>
-                                                    </s:if>
-                                                </td>
-                                                <td align="right">
-                                                    <s:if test="!serviceTaxDc.equals('0')">
-                                                        <s:property value="serviceTaxDc"/>
-                                                    </s:if>
-                                                </td>
-                                                </s:if><s:else>
-                                                <td colspan="3"></td>
-                                                </s:else>
+												<td>
+													<s:text name="" />
+												</td>
+												<td align="right">
+													<s:property value=""/>
+												</td>
+												<td align="right">
+													<s:property value=""/>
+												</td>
                                                 <td>
 													<s:text name="Premium.OtherCost" />
 												</td>
 												<td align="right">
-													<s:if test="!otherCost.equals('0')">
+													<s:if test="!otherCost.equals('0.00')">
 														<s:property value="otherCost"/>
 													</s:if>
 												</td>
 												<td align="right">
-													<s:if test="!otherCostUSD.equals('0')">
+													<s:if test="!otherCostUSD.equals('0.00')">
 													<s:property value="otherCostUSD"/>
+													</s:if>
+												</td>	
+											</tr>
+											<tr>
+												 <td>
+                                                    <s:text name="label.vat" />
+                                                </td>
+                                                <td align="right">
+                                                    <s:if test="!vatPremium.equals('0.00')">
+                                                        <s:property value="vatPremium"/>
+                                                    </s:if>
+                                                </td>
+                                                <td align="right">
+                                                    <s:if test="!vatPremiumDc.equals('0.00')">
+                                                        <s:property value="vatPremiumDc"/>
+                                                    </s:if>
+                                                </td>
+                                                <td>
+													<s:text name="label.brokerageVat" />
+												</td>
+												<td align="right">
+													<s:if test="!brokerageVat.equals('0.00')">
+														<s:property value="brokerageVat"/>
+													</s:if>
+												</td>
+												<td align="right">
+													<s:if test="!brokerageVatDc.equals('0.00')">
+													<s:property value="brokerageVatDc"/>
 													</s:if>
 												</td>	
 											</tr>
@@ -1161,7 +1190,7 @@ function AuthendicationBack(){
 														<s:text name="RiskDetails.M&DPremium" />
 													</td>
 													<td align="right" width="25%">
-														<s:if test="!md_premium.equals('0')">
+														<s:if test="!md_premium.equals('0.00')">
 															<s:property value="md_premium" />
 														</s:if>
 													</td>
@@ -1169,7 +1198,7 @@ function AuthendicationBack(){
 														<s:text name="Premium.BroKerage" />
 													</td>
 													<td align="right" width="25%">
-														<s:if test="!brokerage.equals('0')">
+														<s:if test="!brokerage.equals('0.00')">
 															<div style="align: right;">
 																<s:property value="brokerage" />
 															</div>
@@ -1181,7 +1210,7 @@ function AuthendicationBack(){
 														<s:text name="Premium.AdjustmentPremiun" />
 													</td>
 													<td align="right">
-														<s:if test="!adjustment_premium.equals('0')">
+														<s:if test="!adjustment_premium.equals('0.00')">
 															<s:property value="adjustment_premium" />
 														</s:if>
 													</td>
@@ -1189,7 +1218,7 @@ function AuthendicationBack(){
 														<s:text name="RiskDetails.Tax" />
 													</td>
 													<td align="right">
-														<s:if test="!tax.equals('0')">
+														<s:if test="!tax.equals('0.00')">
 															<s:property value="tax" />
 														</s:if>
 													</td>
@@ -1200,7 +1229,7 @@ function AuthendicationBack(){
 														<s:text name="Premium.ReinstatementPremium" />
 													</td>
 													<td align="right">
-														<s:if test="!recuirement_premium.equals('0')">
+														<s:if test="!recuirement_premium.equals('0.00')">
 															<s:property value="recuirement_premium" />
 														</s:if>
 													</td>
@@ -1208,7 +1237,7 @@ function AuthendicationBack(){
 														<s:text name="label.WithHoldingTax" />
 													</td>
 													<td align="right">
-														<s:if test="!withHoldingTaxOC.equals('0')">
+														<s:if test="!withHoldingTaxOC.equals('0.00')">
 															<s:property value="withHoldingTaxOC" />
 														</s:if>
 													</td>
@@ -1218,7 +1247,7 @@ function AuthendicationBack(){
 														<s:text name="label.taxdedect" />
 													</td>
 													<td align="right">
-														<s:if test="!taxDedectSource.equals('0')">
+														<s:if test="!taxDedectSource.equals('0.00')">
 															<s:property value="taxDedectSource"/>
 														</s:if>
 													</td>
@@ -1226,7 +1255,7 @@ function AuthendicationBack(){
 														<s:text name="Premium.OtherCost" />
 													</td>
 													<td align="right">
-														<s:if test="!otherCost.equals('0')">
+														<s:if test="!otherCost.equals('0.00')">
 															<s:property value="otherCost" />
 														</s:if>
 													</td>
@@ -1236,7 +1265,7 @@ function AuthendicationBack(){
 	                                                    <s:text name="label.sertax" />
 	                                                </td>
 	                                                <td align="right">
-	                                                    <s:if test="!serviceTax.equals('0')">
+	                                                    <s:if test="!serviceTax.equals('0.00')">
 	                                                        <s:property value="serviceTax"/>
 	                                                    </s:if>
 	                                                </td>

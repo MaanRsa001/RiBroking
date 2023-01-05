@@ -54,5 +54,11 @@ public interface XolPremiumDAO {
 
 		String getDepartmentId(FaculPremiumBean bean);
 
+		void getVatInfo(FaculPremiumBean bean);
+
+		List<Map<String, Object>> getRipremiumList(FaculPremiumBean bean);
+
+		void updateRiStatus(FaculPremiumBean bean);
+
 	}
 

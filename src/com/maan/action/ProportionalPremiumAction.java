@@ -142,21 +142,20 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			}else{
 				bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 			}
-			bean.setProposal_No(dropDownController.getProposalNo(productId,bean.getContNo(),bean.getDepartmentId(),bean.getLayerNo()));
+			//bean.setProposal_No(dropDownController.getProposalNo(productId,bean.getContNo(),bean.getDepartmentId(),bean.getLayerNo()));
 			if(StringUtils.isNotBlank(bean.getProposal_No())){
 			 editMode = dropDownController.EditModeStatus(bean.getProposal_No(),"0");
 			}
 			if(!"N".equalsIgnoreCase(editMode)&& (null==bean.getMultiuserError() || StringUtils.isBlank(bean.getMultiuserError()) )){
-						bean.setMultiuserError("error");
-						if("premiumDisplay".equalsIgnoreCase(bean.getPremiumDisplay())){
-							bean.setType("premium");
-							forward = "masterList";
-						}else{
+					bean.setMultiuserError("error");
+					if("premiumDisplay".equalsIgnoreCase(bean.getPremiumDisplay())){
+						bean.setType("premium");
+						forward = "masterList";
+					}else{
 						bean.setFlag("C");
 						forward= "portfoliList";
-						}
-					}else{
-			
+					}
+			}else{
 				//bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 				bean.setBranchCode(branchCode);
 				bean1.setBranchCode(branchCode);
@@ -181,6 +180,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 		        	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));	
 		        	bean.setDepartmentName(new DropDownControllor().getDepartmentName((String)session.get("BRANCH_CODE"), (String)session.get("mfrid"), (String)session.get("DepartmentId")));
 		        	bean.setPremiumaccperiod(SERVICE.getConstantPeriodDropDown("49",bean.getContNo(),bean));
+		        	bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 		        	bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
 		        	SERVICE.ContractDetails(bean,countryId);
 		        	 bean.setContractPremium(SERVICE.GetContractPremium(bean));
@@ -240,7 +240,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			if(StringUtils.isNotBlank(bean.getDepartmentId())){
 				session.put("DepartmentId",bean.getDepartmentId());
 			}
-			bean.setProposal_No(dropDownController.getProposalNo(productId,bean.getContNo(),bean.getDepartmentId(),bean.getLayerNo()));
+			//bean.setProposal_No(dropDownController.getProposalNo(productId,bean.getContNo(),bean.getDepartmentId(),bean.getLayerNo()));
 			if(StringUtils.isNotBlank(bean.getProposal_No())){
 			 editMode = dropDownController.EditModeStatus(bean.getProposal_No(),"0");
 			}
@@ -258,6 +258,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			
 		    	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));
 	        	bean.setPremiumaccperiod(SERVICE.getConstantPeriodDropDown("49",bean.getContNo(),bean));
+	        	bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 				/*if(StringUtils.isBlank(bean.getProductId())||bean.getProductId().equalsIgnoreCase("")){
 					bean.setProductId(productId);	
 				}
@@ -273,7 +274,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 		        bean.setBranchCode(branchCode);
 		        bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
 		        bean.setContractPremium(SERVICE.GetContractPremium(bean));
-		        bean.setContractDeptId(dropDownController.getContractLayerNo(bean.getContNo(),bean.getDepartmentId(),branchCode,(String) session.get("mfrid"),bean.getProposal_No()));
+		        bean.setContractDeptId(dropDownController.getContractLayerNo(bean.getContNo(),bean.getSectionNo(),branchCode,(String) session.get("mfrid"),bean.getProposal_No()));
 		        //if("0".equalsIgnoreCase(bean.getPreviousPremium()) || "".equalsIgnoreCase( bean.getContractPremium())){
 		        if(StringUtils.isBlank(bean.getContractDeptId())){
 		        	bean.setBranchCode(branchCode);
@@ -305,7 +306,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			    
 			    CliamList = SERVICE1.CliamList(bean2, 1);
 			   
-		        if("edit".equals(bean.getMode()))
+		        if("edit".equals(bean.getMode()) || "transEdit".equals(bean.getMode()))
 		        {
 				SERVICE.PremiumEdit(bean,countryId);	
 		        }
@@ -352,43 +353,42 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 		        bean.setClaimNos(SERVICE.getClaimNosDropDown(bean.getContNo()));
 		        if("edit".equalsIgnoreCase(bean.getMode())){
 		        bean.setPreamendmentDate(new DropDownControllor().getpremiumPreamendDate(bean));
-		        //if(StringUtils.isNotBlank(bean.getTransaction()) && StringUtils.isNotBlank(bean.getPreamendmentDate())){
+		        if(StringUtils.isNotBlank( bean.getPreamendmentDate())){
 				bean.setMaxDate(Validation.getMaxDateValidate(bean.getTransaction(), bean.getPreamendmentDate()));
-		       // }
+		        }
 		        }
 		        //getAccountperiodDate(bean);
 				new DropDownControllor().getOpenPeriod(bean1);
-				if("N".equalsIgnoreCase(editMode)){
-					validateProportionPremium();
-				}
+				if("add".equalsIgnoreCase(bean.getMode()) || "transEdit".equalsIgnoreCase(bean.getMode())) {
+				     SERVICE.InsertPremium(bean,countryId);
+				     if("RI02".equalsIgnoreCase(sourceId)){
+				    	 if("A".equalsIgnoreCase(bean.getCashlossType())) {
+				    		 SERVICE.InsertCashLossCredit(bean);
+				    	 }else if("R".equalsIgnoreCase(bean.getCashlossType())) {
+				    		 SERVICE.InsertReverseCashLossCredit(bean);
+				    	 }
+				     }
+	    		 }
+	    		 else if("edit".equalsIgnoreCase(bean.getMode()))
+	    		 {
+		    		 SERVICE.UpdatePremium(bean);
+	    		 }
+				validation();
 	    		 if (!hasActionErrors() && "N".equalsIgnoreCase(editMode)) 
 				 {
-	    			/* if(session.get("PremiumOc")!=null){
-	    				 getSessionValue("slide");
-	    			 }
-	    			 else if(session.get("portfolioPremium")!=null){
-	    				 getSessionValue("profit");
-	    			 } getLossDetails();*/
-	    			 
-	    			 	if("add".equalsIgnoreCase(bean.getMode())) {
-						     SERVICE.InsertPremium(bean,countryId);
-						     if("RI02".equalsIgnoreCase(sourceId)){
-						    	 if("A".equalsIgnoreCase(bean.getCashlossType())) {
-						    		 SERVICE.InsertCashLossCredit(bean);
-						    	 }else if("R".equalsIgnoreCase(bean.getCashlossType())) {
-						    		 SERVICE.InsertReverseCashLossCredit(bean);
-						    	 }
-						     }
-			    		 }
-			    		 else if("edit".equalsIgnoreCase(bean.getMode()))
-			    		 {
-				    		 SERVICE.UpdatePremium(bean);
-			    		 }
 			    		 SERVICE.ContractDetails(bean,countryId);
-						 SERVICE.GetPremiumDetails(bean,bean.getTransactionNo(),countryId);
-						// setSessionValuNull();
 						 SERVICE.cashLossmailTrigger(bean);
-						return "PremiumSucuss";
+						 
+						String forward="";
+						 if("submit".equalsIgnoreCase(bean.getButtonStatus())){
+							 bean.setRipremiumList(SERVICE.getRipremiumList(bean));
+						 	forward= "PremiumRiSucuss";
+						 }else{
+							 SERVICE.GetPremiumDetails(bean,bean.getTransactionNo(),countryId);
+							forward= "PremiumSucuss";
+						 }
+						return forward;
+						
 				 }
 				 else
 				 {	
@@ -399,6 +399,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 						}
 					 logger.info("##########Validation Message End###########");
     		         bean.setPremiumaccperiod(SERVICE.getConstantPeriodDropDown("49",bean.getContNo(),bean));
+    		         bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 					 SERVICE.ContractDetails(bean,countryId);
 					 bean.setDepartmentName(new DropDownControllor().getDepartmentName((String)session.get("BRANCH_CODE"), (String)session.get("mfrid"), bean.getDepartmentId()));
 					 bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
@@ -483,6 +484,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 				if("popup".equalsIgnoreCase(bean.getMode())){
 					forward="propView";
 				}
+				
 			return forward;	
 		}
 		private void validateProportionPremium()
@@ -1304,6 +1306,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			        	bean.setClaimNos(SERVICE.getClaimNosDropDown(bean.getContNo())); 
 			        	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));		        	
 			        	bean.setPremiumaccperiod(SERVICE.getConstantPeriodDropDown("49",bean.getContNo(),bean));
+			        	bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 			        	bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
 			        	SERVICE.ContractDetails(bean,countryId);
 			        	bean.setContractPremium(SERVICE.GetContractPremium(bean));
@@ -1915,14 +1918,14 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 						bean.setManualconProfitRatio(DropDownControllor.formatter(Double.toString(conProfitRatio)));
 						bean.setManualconLossRatio(DropDownControllor.formatter(Double.toString(conLossRatio)));
 						}
-				if("recal".equalsIgnoreCase(bean.getFlag()) && "slideRage".equalsIgnoreCase(bean.getMode())){
-					getManualValues();
-				}else if("recal".equalsIgnoreCase(bean.getFlag()) && "lossRage".equalsIgnoreCase(bean.getMode())){
-					getManualLPCValues();
-				}
-				else if("Calculation".equalsIgnoreCase(bean.getFlag()) && "profitRage".equalsIgnoreCase(bean.getMode())){
-					getManualProfitValues();
-				}
+						if("recal".equalsIgnoreCase(bean.getFlag()) && "slideRage".equalsIgnoreCase(bean.getMode())){
+							getManualValues();
+						}else if("recal".equalsIgnoreCase(bean.getFlag()) && "lossRage".equalsIgnoreCase(bean.getMode())){
+							getManualLPCValues();
+						}
+						else if("Calculation".equalsIgnoreCase(bean.getFlag()) && "profitRage".equalsIgnoreCase(bean.getMode())){
+							getManualProfitValues();
+						}
 				
 			}
 		
@@ -2586,6 +2589,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			}
 			
 			 bean.setPremiumaccperiod(SERVICE.getConstantPeriodDropDown("49",bean.getContNo(),bean));
+			 bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 			 SERVICE.ContractDetails(bean,countryId);
 			 bean.setDepartmentName(new DropDownControllor().getDepartmentName((String)session.get("BRANCH_CODE"), (String)session.get("mfrid"), bean.getDepartmentId()));
 			 bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
@@ -2599,7 +2603,11 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 					insertPremium();
 					if (!hasActionErrors()) 
 					 {
-					 forward =  "PremiumSucuss";
+					 if("submit".equalsIgnoreCase(bean.getButtonStatus())){
+						 	forward= "PremiumRiSucuss";
+						 }else{
+							forward= "PremiumSucuss";
+						 }
 					 }else{
 						 logger.info("##########Validation Message Start###########");
 							Iterator<String> error = getActionErrors().iterator();
@@ -2652,6 +2660,24 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 					}
 				}
 			}
+		}
+		public void validation() {
+			if(bean.getErrors()!=null && bean.getErrors().size()>0) {
+				for (int i =0;i<bean.getErrors().size();i++) {
+					HashMap<String, Object> map=bean.getErrors().get(i);
+					addActionError(map.get("ErrorDescription").toString());
+				}
+			}
+		}	
+		public String updateRiStatus() {
+			String forward="PremiumRiSucuss";
+			bean.setBranchCode(branchCode);
+			SERVICE.updateRiStatus(bean);
+			if(!hasActionErrors()) {
+				premiumList();
+				forward="premiumList";
+			}
+			return forward;
 		}
 		}
 

@@ -83,5 +83,15 @@ public class XolPremiumService {
 		public String getDepartmentId(FaculPremiumBean bean) {
 			return DAO.getDepartmentId(bean);
 		}
+		public void getVatInfo(FaculPremiumBean bean) {
+			DAO.getVatInfo(bean);
+		}
+		public List<Map<String, Object>> getRipremiumList(FaculPremiumBean bean) {
+			return DAO.getRipremiumList(bean);
+		}
+		public void updateRiStatus(FaculPremiumBean bean) {
+			DAO.updateRiStatus(bean);
+			
+		}
 		
 }

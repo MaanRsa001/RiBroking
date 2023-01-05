@@ -357,7 +357,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
             		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getContractNoSearch() + "%")});
                     query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_CONNO);
             	}
-            	if("3".equalsIgnoreCase(beanObj.getProductId()) || "5".equalsIgnoreCase(beanObj.getProductId())){
+            	/*if("3".equalsIgnoreCase(beanObj.getProductId()) || "5".equalsIgnoreCase(beanObj.getProductId())){
 	            	if(StringUtils.isNotBlank(beanObj.getCompanyNameSearch1())){
 	            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getCompanyNameSearch1() + "%")});
 	                    query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_COMNAME);
@@ -370,7 +370,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 	            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getDepartmentNameSearch1() + "%")});
 	            		 query += " AND UPPER(B.TMAS_DEPARTMENT_NAME) LIKE UPPER(?)";
 	            	}
-            	}else{
+            	}else{*/
             		if(StringUtils.isNotBlank(beanObj.getCompanyNameSearch())){
                 		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getCompanyNameSearch() + "%")});
                         query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_COMNAME);
@@ -383,7 +383,11 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getDepartmentNameSearch() + "%")});
                 		 query += " AND UPPER(B.TMAS_DEPARTMENT_NAME) LIKE UPPER(?)";
                 	}
-            	}
+            		if(StringUtils.isNotBlank(beanObj.getSubclassSearch())){
+                		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getSubclassSearch() + "%")});
+                		 query += " AND UPPER((select RTRIM(XMLAGG(XMLELEMENT(E,TMAS_SPFC_NAME,',')).EXTRACT('//text()'),',')  from TMAS_SPFC_MASTER SPFC where SPFC.TMAS_SPFC_ID in(select * from table(SPLIT_TEXT_FN(replace(E.RSK_SPFCID,' ', '')))) AND  SPFC.TMAS_PRODUCT_ID = E.RSK_PRODUCTID AND SPFC.BRANCH_CODE = E.BRANCH_CODE)) LIKE UPPER(?)";
+                	}
+					/* } */
             	if("1".equalsIgnoreCase(beanObj.getProductId()) ){
             	if(StringUtils.isNotBlank(beanObj.getInsuredNameSearch())){
             		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getInsuredNameSearch() + "%")});
@@ -411,7 +415,11 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
                 		 query += " AND UPPER(D.RSK_UNDERWRITTER) LIKE UPPER(?) ";
                 	}
             	}
-            	
+            	if(StringUtils.isNotBlank(beanObj.getOfferNoSearch())){
+            		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{("%" + beanObj.getOfferNoSearch() + "%")});
+            		query += " AND A.OFFER_NO LIKE ? ";
+            		
+            	}
             	beanObj.setType("Yes");
             }else{
             	beanObj.setProposalNoSearch("");
@@ -593,21 +601,9 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
     	List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		Map<String,Object> map=new HashMap<String,Object>();
 		try{
-			if( menuRights.toString().contains("EN") ){//&&"N".equalsIgnoreCase(tempBean.getEditMode())&&!"".equalsIgnoreCase(tempBean.getEditMode())){
-				map.put("TYPE","E");
-				map.put("DETAIL_NAME","Edit");
-				list.add(map);
-				map=new HashMap<String,Object>();
-			}
 			if( menuRights.toString().contains("V")){
 				map.put("TYPE","V");
 				map.put("DETAIL_NAME","View");
-				list.add(map);
-				map=new HashMap<String,Object>();
-			}
-			if( menuRights.toString().contains("V")){
-				map.put("TYPE","PL");
-				map.put("DETAIL_NAME","Placing");
 				list.add(map);
 				map=new HashMap<String,Object>();
 			}
@@ -618,6 +614,12 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 				list.add(map);
 				map=new HashMap<String,Object>();
 				}
+			if( menuRights.toString().contains("EN") ){//&&"N".equalsIgnoreCase(tempBean.getEditMode())&&!"".equalsIgnoreCase(tempBean.getEditMode())){
+				map.put("TYPE","E");
+				map.put("DETAIL_NAME","Edit");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
 			if( menuRights.toString().contains("P") &&!"Y".equalsIgnoreCase(tempBean.getDisableStatus()) && !"Y".equalsIgnoreCase(tempBean.getPremiumStatus()) &&!"4".equalsIgnoreCase(tempBean.getProductId())){
 				map.put("TYPE","P");
 				map.put("DETAIL_NAME","Premium");
@@ -630,6 +632,14 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 				list.add(map);
 				map=new HashMap<String,Object>();
 			}
+			/*if( menuRights.toString().contains("V")){
+				map.put("TYPE","PL");
+				map.put("DETAIL_NAME","Placing");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			
+			
 			if("5".equalsIgnoreCase(tempBean.getProductId())){
 				map.put("TYPE","IE");
 				map.put("DETAIL_NAME","IE Module");
@@ -663,7 +673,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 				map.put("DETAIL_NAME","Renewal");
 				list.add(map);
 				map=new HashMap<String,Object>();
-				}*/
+				}
 				if(StringUtils.isBlank(tempBean.getBaseLayer())){
 					map.put("TYPE","R");
 					map.put("DETAIL_NAME","Renewal");
@@ -680,7 +690,7 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 			map.put("TYPE","D");
 			map.put("DETAIL_NAME","Document");
 			list.add(map);
-			map=new HashMap<String,Object>();
+			map=new HashMap<String,Object>();*/
 		}
 		catch(Exception e){
 			e.printStackTrace();

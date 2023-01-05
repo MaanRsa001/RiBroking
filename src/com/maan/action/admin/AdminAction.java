@@ -3290,6 +3290,10 @@ if(StringUtils.isNotBlank(bean.getCountry()) && "356".equalsIgnoreCase(bean.getC
 				addActionError(getText("error.lastrating.invalid"));
 			}
 		}
+	}if("Y".equals(bean.getVatRegYN())) {
+		if(StringUtils.isBlank(bean.getVatRegNo())) {
+			addActionError(getText("error.varreg.required"));
+		}
 	}
 }
 	public String docUpload(){

@@ -2811,4 +2811,19 @@ alert("This action is not allowed because a previous transaction is pending for 
 		<s:property value="brokerName"/>													
 	</div>
 </div>
-</s:elseif>					
+</s:elseif>		
+<s:elseif test='"vattaxid".equalsIgnoreCase(dropDown)'>
+	<td><s:text name="label.vat" /> </td>
+	<td>
+		<s:textfield cssClass="inputBox" name="vatPremium" id="vatPremium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();setCalculateVal();"  onblur="this.value=Comma(this.value);xolNetDue();" cssStyle="text-align: right;" onclick="this.select();" value="%{vatPremium==null?'0.00':vatPremium}" maxlength="26"  theme="simple"/>														
+	</td>
+	<td>
+		<s:text name="label.brokerageVat" />
+	</td>
+	<td>
+		<s:textfield name="brokerageVat" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"   cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{brokerageVat==null?'0.00':brokerageVat}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true" theme="simple"/>
+	</td>
+<script type="text/javascript">
+	
+</script>
+</s:elseif>			

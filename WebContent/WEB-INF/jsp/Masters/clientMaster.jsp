@@ -166,7 +166,7 @@ jQuery(function ($) {
 													<s:text name="ceding.country" /> &nbsp;<span style="color: red;">*</span>
 												</div>
 												<div class="tbox">
-												<s:select list="brokercountryList" name="country" id="country" listKey="COUNTRY_ID" listValue="COUNTRY_NAME" cssClass="inputBoxS" headerKey=""  headerValue="---Select---" />
+												<s:select list="brokercountryList" name="country" id="country" listKey="COUNTRY_ID" listValue="COUNTRY_NAME" cssClass="inputBoxS" headerKey=""  headerValue="---Select---" onchange="getVATInfo(this.value);"/>
 												</div>
 											</div>
 											<div class="textfield">
@@ -407,6 +407,36 @@ jQuery(function ($) {
 						<s:hidden name="isNonResident" id="isNonResident"/>
 						<s:hidden name="specialRate" id="specialRate"/>
 						</s:else>
+						<div class="tablerow" id="vatregId" style="display:none">							
+							<div class="boxcontent">
+								<div class="panel panel-primary">											
+									<div class="panel-heading">
+											<s:text name="label.vatdetails" />
+									</div>
+									<div class="panel-body">
+										<div class="boxcontent">
+											<div class="textfield">
+													<div class="text">
+														<s:text name="label.isVatReg" />&nbsp;
+													</div>
+													<div class="tbox">
+														<s:radio list="#{'Y':'Yes','N':'No' }" name="vatRegYN" id="vatRegYN" value="%{vatRegYN==null?'N':vatRegYN}"></s:radio>
+													</div>
+											</div>
+											<div class="textfield">
+													<div class="text">
+														<s:text name="label.vatRegNo" />&nbsp;
+													</div>
+													<div class="tbox">
+														<s:textfield name="vatRegNo" id="vatRegNo" cssClass="inputBox"  />
+													</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="tablerow">							
 							<div class="boxcontent">
 								<div class="panel panel-primary">											
@@ -886,6 +916,14 @@ function deleteRow1(val){
 			postFormRequest("${pageContext.request.contextPath}/removeRowBankAdmin.action?dropDown=bankid&deleteId="+val, "bankid", "client");
 			}
 		}
+}
+getVATInfo('<s:property value="country"/>');
+function getVATInfo(val){
+	if(val=='764'){
+		document.getElementById('vatregId').style.display='inline';
+	}else{
+		document.getElementById('vatregId').style.display='none';
+	}
 }
 </script>
 </body>

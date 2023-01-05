@@ -1,6 +1,7 @@
 package com.maan.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -531,8 +532,26 @@ public class FaculPremiumBean {
 	private String acceptenceDate;
 	private String cashlossType;
 	private String contractsearch;
-	
-	
+	private String vatPremium;
+	private String brokerageVat;
+	private String premiumAmount;
+	private String documentType;
+	private String vatPremiumDc;
+	private String brokerageVatDc;
+	private List<Map<String,Object>> documentTypeList;
+	private List<Map<String,Object>> ripremiumList;
+	private String sectionNo;
+	private String mipremium1;
+	private String mipremium2;
+	private String mipremium3;
+	private List<HashMap<String,Object>> errors=new ArrayList<HashMap<String,Object>>();
+
+	public List<HashMap<String, Object>> getErrors() {
+		return errors;
+	}
+	public void setErrors(List<HashMap<String, Object>> errors) {
+		this.errors = errors;
+	}
 	public String getContractsearch() {
 		return contractsearch;
 	}
@@ -3653,6 +3672,77 @@ public class FaculPremiumBean {
 	public void setExcessRatePercent(String excessRatePercent) {
 		this.excessRatePercent = excessRatePercent;
 	}
-
+	public String getVatPremium() {
+		return vatPremium;
+	}
+	public void setVatPremium(String vatPremium) {
+		this.vatPremium = vatPremium;
+	}
+	public String getBrokerageVat() {
+		return brokerageVat;
+	}
+	public void setBrokerageVat(String brokerageVat) {
+		this.brokerageVat = brokerageVat;
+	}
+	public String getPremiumAmount() {
+		return premiumAmount;
+	}
+	public void setPremiumAmount(String premiumAmount) {
+		this.premiumAmount = premiumAmount;
+	}
+	public String getDocumentType() {
+		return documentType;
+	}
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
+	}
+	public List<Map<String, Object>> getDocumentTypeList() {
+		return documentTypeList;
+	}
+	public void setDocumentTypeList(List<Map<String, Object>> documentTypeList) {
+		this.documentTypeList = documentTypeList;
+	}
+	public String getVatPremiumDc() {
+		return vatPremiumDc;
+	}
+	public void setVatPremiumDc(String vatPremiumDc) {
+		this.vatPremiumDc = vatPremiumDc;
+	}
+	public String getBrokerageVatDc() {
+		return brokerageVatDc;
+	}
+	public void setBrokerageVatDc(String brokerageVatDc) {
+		this.brokerageVatDc = brokerageVatDc;
+	}
+	public List<Map<String, Object>> getRipremiumList() {
+		return ripremiumList;
+	}
+	public void setRipremiumList(List<Map<String, Object>> ripremiumList) {
+		this.ripremiumList = ripremiumList;
+	}
+	public String getSectionNo() {
+		return sectionNo;
+	}
+	public void setSectionNo(String sectionNo) {
+		this.sectionNo = sectionNo;
+	}
+	public String getMipremium1() {
+		return mipremium1;
+	}
+	public void setMipremium1(String mipremium1) {
+		this.mipremium1 = mipremium1;
+	}
+	public String getMipremium2() {
+		return mipremium2;
+	}
+	public void setMipremium2(String mipremium2) {
+		this.mipremium2 = mipremium2;
+	}
+	public String getMipremium3() {
+		return mipremium3;
+	}
+	public void setMipremium3(String mipremium3) {
+		this.mipremium3 = mipremium3;
+	}
 	
 }

@@ -351,11 +351,19 @@
 												</div>
 												<div class="tbox">	
 													<s:if test="'edit'!=mode">
-														<s:select list="mdList" listKey="KEY1" listValue="VALUE" headerKey="" headerValue="---Select---" name="account_Period" id="account_Period" cssClass="inputBoxS" onchange="GetMdInstalment(this.value);getGnpi(this.value);getDateDisable(this.value);xolNetDue();getTrasView(this.value);getTransactionData();" />
+														<s:select list="mdList" listKey="Key1" listValue="Value" headerKey="" headerValue="---Select---" name="account_Period" id="account_Period" cssClass="inputBoxS" onchange="GetMdInstalment(this.value);getGnpi(this.value);getDateDisable(this.value);proposalNetDue();" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 													</s:if>
 													<s:else>
 														<s:textfield name="account_Period" id="account_Period" readonly="true" cssClass="inputBox" />
 													</s:else>													
+												</div>
+											</div>
+											<div class="textfield">
+												<div class="text">
+													<s:text name="label.documentType" />
+												</div>
+												<div class="tbox">	
+													<s:select list="documentTypeList" listKey="TYPE" listValue="DETAIL_NAME" headerKey="" headerValue="---Select---" name="documentType" id="documentType" cssClass="inputBoxS" onchange="getTransactionData();getTrasView(this.value);" />
 												</div>
 											</div>
 											<div class="textfield" id="transactionView" style="display:none">
@@ -448,7 +456,7 @@
 													</td>
 													<td>
 														<div id="mdpremium" >
-														<s:textfield name="md_premium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);CalculationXOL(this.value);xolNetDue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssClass="inputBox" cssStyle="text-align:right;"  value="%{md_premium==null?'0.00':md_premium}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="md_premium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);CalculationXOL(this.value);proposalNetDue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssClass="inputBox" cssStyle="text-align:right;"  value="%{md_premium==null?'0.00':md_premium}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true" onchange="getVATInfo(this.value,'vattaxid');"/>
 														</div>
 													</td>
 													<s:if test='"3".equals(productId)'>
@@ -456,7 +464,7 @@
 														<s:text name="label.brokerage" />
 													</td>
 													<td>
-														<s:textfield name="brokerage" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();"   onblur="this.value=Comma(this.value);" onclick="this.select();" id="BrokerAgeXol" cssStyle="text-align:right;" cssClass="inputBox"  maxlength="26" value="%{brokerage==null?'0.00':brokerage}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="brokerage" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"   onblur="this.value=Comma(this.value);" onclick="this.select();" id="BrokerAgeXol" cssStyle="text-align:right;" cssClass="inputBox"  maxlength="26" value="%{brokerage==null?'0.00':brokerage}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 													</td>
 													</s:if>
 													<s:else>
@@ -465,7 +473,7 @@
 														<s:text name="label.tax" />
 													</td>
 													<td>
-														<s:textfield name="tax" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{tax==null?'0.00':tax}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="tax" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{tax==null?'0.00':tax}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 													</td>
 													</s:else>
 												</tr>
@@ -474,7 +482,7 @@
 														<s:text name="label.adjustmentPremium" />
 													</td>
 													<td id="adjPrem">
-														<s:textfield name="adjustment_premium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);CalculationXOL(this.value);xolNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{adjustment_premium==null?'0.00':adjustment_premium}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="adjustment_premium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);CalculationXOL(this.value);proposalNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{adjustment_premium==null?'0.00':adjustment_premium}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true" onchange="getVATInfo(this.value,'vattaxid');"/>
 													</td>
 													<s:if test='"3".equals(productId)'>
 													<td>
@@ -483,7 +491,7 @@
 														
 													</td>
 													<td>
-														<s:textfield name="tax" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"  cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{tax==null?'0.00':tax}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="tax" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"  cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{tax==null?'0.00':tax}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 													</td>
 													</s:if>
 													<s:else>
@@ -492,7 +500,7 @@
 														<s:text name="label.otherCost" />
 													</td>
 													<td>
-														<s:textfield name="otherCost" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{otherCost==null?'0.00':otherCost}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="otherCost" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{otherCost==null?'0.00':otherCost}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 													</td>	
 													</s:if>	
 													</s:else>
@@ -503,14 +511,14 @@
 														<s:text name="label.reinstatementPremium" />
 													</td>
 													<td>
-														<s:textfield name="recuirement_premium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);ReInstmentPremium(this.value);xolNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{recuirement_premium==null?'0.00':recuirement_premium}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="recuirement_premium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);ReInstmentPremium(this.value);proposalNetDue();"  onblur="this.value=Comma(this.value);" onclick="this.select();" cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{recuirement_premium==null?'0.00':recuirement_premium}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true" onchange="getVATInfo(this.value,'vattaxid');"/>
 													</td>
 													<s:if test='"3".equals(productId)'>
 													<td>
 														<s:text name="label.WithHoldingTax" />
 													</td>
 													<td>
-                                                        <s:textfield name="withHoldingTaxOC" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();" onblur="this.value=Comma(this.value);" cssStyle="text-align:right;"  onclick="this.select();" cssClass="inputBox" maxlength="26" value="%{withHoldingTaxOC==null?'0.00':withHoldingTaxOC}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+                                                        <s:textfield name="withHoldingTaxOC" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" cssStyle="text-align:right;"  onclick="this.select();" cssClass="inputBox" maxlength="26" value="%{withHoldingTaxOC==null?'0.00':withHoldingTaxOC}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
                                                     </td>
 													</s:if>
 													<s:else>
@@ -525,7 +533,7 @@
                                                 	<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
 													<td><s:text name="label.taxdedect" /> </td>
 													<td>
-														<s:textfield cssClass="inputBox" name="taxDedectSource" id="taxDedectSource" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();setCalculateVal();"  onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" value="%{taxDedectSource==null?'0.00':taxDedectSource}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>														
+														<s:textfield cssClass="inputBox" name="taxDedectSource" id="taxDedectSource" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();setCalculateVal();"  onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" value="%{taxDedectSource==null?'0.00':taxDedectSource}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>														
 													</td>
 													</s:if>
 													<s:else>
@@ -536,27 +544,30 @@
 													
 													<td> <s:text name="label.BonusVal" /> </td>
 													<td>
-														<s:textfield cssClass="inputBox" name="bonus" id="bonus" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{bonus==null?'0.00':bonus}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield cssClass="inputBox" name="bonus" id="bonus" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{bonus==null?'0.00':bonus}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 														<input type="button"  size="2"  value="..." onclick="BonusPopup()" class="pullRight"/>
 													</td>	
                                                 </tr>
 												<tr>
-												<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
-													<td><s:text name="label.gst" /> </td>
-													<td>
-														<s:textfield cssClass="inputBox" name="serviceTax" id="serviceTax" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();setCalculateVal();"  onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{serviceTax==null?'0.00':serviceTax}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>														
-													</td>
-												</s:if>
-												<s:else>
-													<td colspan="2">
-													<s:hidden name="serviceTax" id="serviceTax" value="0"/>
-													</td>
-												</s:else>
+												
+													<td colspan="2">&nbsp;</td>
 													<td>
 														<s:text name="label.otherCost" />
 													</td>
 													<td>
-														<s:textfield name="otherCost" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);xolNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"   cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{otherCost==null?'0.00':otherCost}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+														<s:textfield name="otherCost" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"   cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{otherCost==null?'0.00':otherCost}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+													</td>	
+												</tr>
+												<tr id="vattaxid">
+													<td><s:text name="label.vat" /> </td>
+													<td>
+														<s:textfield cssClass="inputBox" name="vatPremium" id="vatPremium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();setCalculateVal();"  onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{vatPremium==null?'0.00':vatPremium}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>														
+													</td>
+													<td>
+														<s:text name="label.brokerageVat" />
+													</td>
+													<td>
+														<s:textfield name="brokerageVat" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"   cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{brokerageVat==null?'0.00':brokerageVat}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 													</td>	
 												</tr>
 												</s:if>	
@@ -612,7 +623,7 @@
 							<s:if test='premiumDisplay.equals("premiumDisplay")'>
 								<input type="button" value="Back" id="back" class="btn btn-sm btn-danger" onclick="cancel1()" /> &nbsp;&nbsp;&nbsp;
 								<s:if test='#session.MenuRights.indexOf("PST")!=-1 || #session.MenuRights.indexOf("AST")!=-1'>	
-									<input type="button" value="Submit" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');insertupdate1('Submit')" />		&nbsp;&nbsp;&nbsp;						
+									<input type="button" value="Next" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');insertupdate1('Submit')" />		&nbsp;&nbsp;&nbsp;						
 								</s:if>
 								<s:if test='(#session.MenuRights.indexOf("PSV")!=-1 || #session.MenuRights.indexOf("ASE")!=-1)&& "Main"!=tableType'>								
 									<input type="button" value="Save" class="btn btn-sm btn-info" onClick="disableForm(this.form,false,'');insertupdate1('Save');"/>
@@ -627,7 +638,7 @@
 									<input type="button" value="Back" class="btn btn-sm btn-danger" onclick='AuthendicationBack()' /> &nbsp;&nbsp;&nbsp;
 								</s:if>
 								<s:if test='#session.MenuRights.indexOf("PST")!=-1 || #session.MenuRights.indexOf("AST")!=-1'>								
-									<input type="button" value="Submit" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');insertupdate1('Submit');"/>
+									<input type="button" value="Next" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');insertupdate1('Submit');"/>
 									&nbsp;&nbsp;&nbsp;
 								</s:if>
 								<s:if test='(#session.MenuRights.indexOf("PSV")!=-1 || #session.MenuRights.indexOf("ASE")!=-1)&& "Main"!=tableType'>								
@@ -676,7 +687,7 @@
 						<s:hidden name="disableStatus" id="disableStatus"/>
 						<s:hidden name="CalculateTax" id="CalculateTax"/>
 						<s:hidden name="premiumDisplay" id="premiumDisplay"/>
-						<s:hidden name="premiumMasterMode" id="premiumMasterMode"/>
+						<%-- <s:hidden name="premiumMasterMode" id="premiumMasterMode"/> --%>
 						<s:hidden name="multiuserError" id="multiuserError"/>
 						<s:hidden name="tableType" id="tableType"/>	
 						<s:hidden name="requestNo" id="requestNo"/>
@@ -700,7 +711,7 @@ for (mtbWinCound = 0; mtbWinCound < mtbChildWin.length; mtbWinCound++) {
  mtbChildWin[mtbWinCound].close();
  }
  }
- function xolNetDue()
+ function proposalNetDue()
 		{
 		//var mode=document.getElementById("mode").value;
 		//if(mode!="transEdit"){
@@ -747,16 +758,16 @@ for (mtbWinCound = 0; mtbWinCound < mtbChildWin.length; mtbWinCound++) {
 				else
 				 	taxDedectSource=0;
 				 	
-				 var serviceTax=document.premium.serviceTax.value;
-				if(serviceTax!=null && serviceTax!="")
-					serviceTax=serviceTax.replace(new RegExp(',', 'g'),'');
+				 var vatPremium=document.premium.vatPremium.value;
+				if(vatPremium!=null && vatPremium!="")
+					vatPremium=vatPremium.replace(new RegExp(',', 'g'),'');
 				else
-				 	serviceTax=0;
+				 	vatPremium=0;
 				 	
 				 	}else{
 				 	var Brokerage=0;
 				 	
-				 	var serviceTax=0;
+				 	var vatPremium=0;
 				 	var taxDedectSource=0;
 				 	
 				 	}
@@ -777,11 +788,17 @@ for (mtbWinCound = 0; mtbWinCound < mtbChildWin.length; mtbWinCound++) {
 				if(bonus!=null && bonus!="")
 					bonus=bonus.replace(new RegExp(',', 'g'),'');
 				else
-				 	bonus=0;	
+				 	bonus=0;
+				
+				var broVat=document.premium.brokerageVat.value;
+				if(broVat!=null && broVat!="")
+					broVat=broVat.replace(new RegExp(',', 'g'),'');
+				else
+					broVat=0;
 				 		
 								
-				var A=NetDue=parseFloat(Premium) + parseFloat(taxDedectSource)+ parseFloat(serviceTax);
-				var B=parseFloat(Brokerage)+parseFloat(Tax)+parseFloat(OtherCost) + parseFloat(whTax)+ parseFloat(bonus);
+				var A=NetDue=parseFloat(Premium) + parseFloat(taxDedectSource)+ parseFloat(vatPremium);
+				var B=parseFloat(Brokerage)+parseFloat(Tax)+parseFloat(OtherCost) + parseFloat(whTax)+ parseFloat(bonus)+parseFloat(broVat);
 				document.premium.totalCredit.value=Comma(A.toFixed(2));
 				document.premium.totalDebit.value=Comma(B.toFixed(2)); 
 				var NetDue = A-B;
@@ -970,24 +987,38 @@ function BonusPopup(){
 				var otherCost_view=document.premium.otherCost_S.value;
 				var otherCost_percen=parseFloat(otherCost_view)/100;
 		        if(value!="RP" && value!="AP" && value!="RTP" && value!="RVP")
-		        {		        							        	
-		        	var URL='<%=request.getContextPath()%>/instalmentPremiumXolPremium.action?contNo='+contract+'&layerno='+layerno+'&instalmentdate='+value+'&dropDown=mdpremium';
-  	 				postRequest(URL,'mdpremium');   	 				
-			       	 	document.premium.recuirement_premium.style.display='None';
-						document.premium.md_premium.style.display='Inline';
-						document.premium.adjustment_premium.style.display='None';
-						document.premium.recuirement_premium.value='';
-						document.premium.adjustment_premium.value='';
-						document.premium.brokerage.value='';
-						document.premium.tax.value='';
-						document.premium.otherCost.value='';
-						setTimeout(function() {	XolCal( document.premium.md_premium.value,brokerpercentage,tax_percen,otherCost_percen); xolNetDue(); }, 100);										
+		        {	
+		        	$.ajax( {
+		        		url : 'instalmentPremiumXolPremium.action?contNo='+contract+'&layerno='+layerno+'&instalmentdate='+value+'&dropDown=mdpremium',
+		        		error : function() {
+		        			$('#' + 'mdpremium').html('<p>An error has occurred in jquery Ajax</p>');
+		        		},
+		        		success : function(data) {
+		        			document.getElementById('mdpremium').innerHTML=data;
+		        		},
+		        		beforeSend : function() {
+		        			//$('#loading').show();
+		        			//$('.ajaxLoader').show();
+		        		},
+		        		complete : function() {
+		        			document.premium.recuirement_premium.style.display='None';
+							document.premium.md_premium.style.display='Inline';
+							document.premium.adjustment_premium.style.display='None'; 
+							document.premium.recuirement_premium.value='';
+							document.premium.adjustment_premium.value='';
+							document.premium.brokerage.value='';
+							document.premium.tax.value='';
+							document.premium.otherCost.value='';
+		        			XolCal( document.premium.md_premium.value,brokerpercentage,tax_percen,otherCost_percen); getVATInfo(document.premium.md_premium.value,'vattaxid');proposalNetDue();
+		        		},
+		        		type : 'POST'
+		        	});
 				}
 				else if(value=='RP')
 				{
-				 	document.premium.recuirement_premium.style.display='Inline';
+				    document.premium.recuirement_premium.style.display='Inline';
 					document.premium.md_premium.style.display='None';
-					document.premium.adjustment_premium.style.display='None';
+					document.premium.adjustment_premium.style.display='None'; 
 					document.premium.md_premium.value='0.00';
 					document.premium.recuirement_premium.value='0.00';
 					document.premium.adjustment_premium.value='0.00';
@@ -999,7 +1030,7 @@ function BonusPopup(){
 				{
 					document.premium.adjustment_premium.style.display='Inline';
 					document.premium.recuirement_premium.style.display='none';
-					document.premium.md_premium.style.display='none';
+					document.premium.md_premium.style.display='none'; 
 					//document.premium.adjustment_premium.value=document.premium.adjustment_premium_temp.value;
 					document.premium.recuirement_premium.value='0.00';
 					document.premium.md_premium.value='0.00';
@@ -1038,7 +1069,7 @@ function BonusPopup(){
 	    }
 	    function XolCal(value,brokerpercentage,tax_percen,otherCost_percen)
 	    {
-	    //alert(XolCal);
+	   // alert(value);
 	   	 	var a=0;
 	   	 	value = document.premium.md_premium.value;
 	    	var pid = '<s:property value="productId"/>';
@@ -1181,7 +1212,7 @@ function BonusPopup(){
 				var tax_percen=parseFloat(tax_view)/100;
 				var otherCost_view=document.premium.otherCost_S.value;
 				var otherCost_percen=parseFloat(otherCost_view)/100;
-		setTimeout(function() {	XolCal(document.premium.adjustment_premium.value,brokerpercentage,tax_percen,otherCost_percen); xolNetDue(); }, 100);
+		setTimeout(function() {	XolCal(document.premium.adjustment_premium.value,brokerpercentage,tax_percen,otherCost_percen); proposalNetDue(); }, 100);
 		
 		}
 		function GetExchangeRate()
@@ -1209,12 +1240,12 @@ function BonusPopup(){
 			<s:if test='"3".equals(productId)'>
 			document.premium.brokerage.value=Comma(document.premium.brokerage.value);
 			document.premium.taxDedectSource.value=Comma(document.premium.taxDedectSource.value);
-			document.premium.serviceTax.value=Comma(document.premium.serviceTax.value);
+			document.premium.vatPremium.value=Comma(document.premium.vatPremium.value);
 			document.premium.bonus.value=Comma(document.premium.bonus.value);
 			AdjustmentPremium(document.premium.account_Period.value);
 			</s:if>
 			
-			xolNetDue();	   
+			proposalNetDue();	   
 				
 		}
 		function twoDecimal(){
@@ -1238,8 +1269,8 @@ function BonusPopup(){
 		document.premium.tax.value=Comma(parseFloat(c).toFixed(2));
 		
 		
-		var i=document.premium.serviceTax.value.replace(new RegExp(',', 'g'),'');
-		document.premium.serviceTax.value=Comma(parseFloat(i).toFixed(2));
+		var i=document.premium.vatPremium.value.replace(new RegExp(',', 'g'),'');
+		document.premium.vatPremium.value=Comma(parseFloat(i).toFixed(2));
 		}
 		AdjustmentPremium(document.premium.account_Period.value);
 		
@@ -1410,7 +1441,7 @@ function GetStatementDate(){
    }
    
    function setCalculateVal(){
-   document.getElementById("CalculateTax").value = "Completed";
+   //document.getElementById("CalculateTax").value = "Completed";
    }
    editModeStatus();
 function editModeStatus(){
@@ -1440,9 +1471,9 @@ function middleMinusRestriction(txt) {
     txt.value= prevValue;
     return false;
 }
-getTrasView('<s:property value="account_Period"/>');
+getTrasView('<s:property value="documentType"/>');
 function getTrasView(val){
-	if(val=="RVP"){
+	if(val=="R"){
 		document.getElementById("transactionView").style.display='inline';
 		getTransactionDropDown('<s:property value="chooseTransaction"/>','trans');
 	}else {
@@ -1484,19 +1515,19 @@ var val = document.premium.chooseTransaction.value;
 
 function getTransactionData(){
 var val=document.getElementById("transDropDownVal").value;
-var account_Period = document.premium.account_Period.value;
+var documentType = document.premium.documentType.value;
 var transactionNo = document.getElementById("transactionNo").value;
 if(val!=''){
 document.premium.mode.value="transEdit";
 }else{
 	if(transactionNo==""){
-			document.premium.mode.value="add";
-			}else{
-			document.premium.mode.value="edit";
-			}
+		document.premium.mode.value="add";
+	}else{
+		document.premium.mode.value="edit";
+	}
 }
 
-if(account_Period==("RVP") || account_Period==("RP")||account_Period==("RTP") ||account_Period==("AP") ){
+if(documentType==("R") ){
 document.premium.action="${pageContext.request.contextPath}/editPremiumXolPremium.do";
 document.premium.submit();
 }
@@ -1540,7 +1571,26 @@ function insertPremiumDet(val){
 	     	return false;
 	}
 }
-
+function getVATInfo(val,id){
+	var proposal_No = document.getElementById("proposal_No").value;
+  	$.ajax( {
+		url : '${pageContext.request.contextPath}/getVatInfoXolPremium.action?proposal_No='+proposal_No+'&premiumAmount='+val+'&dropDown='+id,
+		error : function() {
+			$('#' + id).html('<p>An error has occurred in jquery Ajax</p>');
+		},
+		success : function(data) {
+			document.getElementById(id).innerHTML=data;
+		},
+		beforeSend : function() {
+			//$('#loading').show();
+			//$('.ajaxLoader').show();
+		},
+		complete : function() {
+			proposalNetDue();
+		},
+		type : 'POST'
+	});
+}
 </script>		
 </body>
 </html>

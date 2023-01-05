@@ -457,7 +457,7 @@ gap:20px;
 														</s:if>
 														<s:else>
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:else>
 													</s:else>													
@@ -475,7 +475,7 @@ gap:20px;
 													</s:if>
 													<s:else>
 													<div class="">
-													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
+													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();" disabled='%{proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
 													 </div>
 													</s:else>
 												</div>
@@ -485,7 +485,7 @@ gap:20px;
 													<s:text name="label.uwYearFrom" /> &nbsp; <sup style="color:red;">#</sup>
 												</div>
 												<div class="tbox" id="yearId">
-													<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer) ||(contNo != "" && contNo != null)?true:false}' />
+													<s:select list="yearList" listKey="YEAR" listValue="YEAR" name="uwYear" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer)?true:false}' />
 												</div>
 											</div>
 											<div class="textfield">
@@ -493,7 +493,7 @@ gap:20px;
 													<s:text name="label.uwYearto" /> &nbsp; <sup style="color:red;">#</sup>
 												</div>
 												<div class="tbox" id="yearIdto">
-													<s:select list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer) ||(contNo != "" && contNo != null)?true:false}' />
+													<s:select list="yearToList" listKey="YEAR" listValue="YEAR" name="uwYearTo" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{"Layer".equals(proposalReference) || (#dislayer) || (#baselayer)?true:false}' />
 												</div>
 											</div>
 											
@@ -549,7 +549,13 @@ gap:20px;
 																	<s:property value="#list.RSK_TREATYID"/>
 																</td>
 																<td align="center">
-																	<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
+																	<s:if test="contNo != null && contNo != ''">
+																		<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditContMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
+																	</s:if>
+																	<s:else>
+																		<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
+																	</s:else>
+																	
 																</td>
 																<td align="center">
 																<s:if test='#displ'>
@@ -703,7 +709,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<div id="rdsBasis">
-																	<s:select list="Basislist" listValue="DETAIL_NAME" listKey="TYPE" name="basis" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(contNo != "" && contNo != null)?true:false}'/>													
+																	<s:select list="Basislist" listValue="DETAIL_NAME" listKey="TYPE" name="basis" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" />	<!-- disabled='%{(contNo != "" && contNo != null)?true:false}'	 -->											
 																</div>
 															</div>
 														</div>
@@ -1440,9 +1446,9 @@ gap:20px;
 									</s:else>
 								</s:if>
 								<s:else>
-									<input type="button"  value="Cancel"  class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
+									<input type="button"  value="Back"  class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
 									<!--<input type="button"  value="Save"   class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FunctionSaveOption()"  />
-									--><input type="button"  value="Next"   class="btn btn-sm btn-warning" id="mybutton1"  onclick="disableForm(this.form,false,'');destroyPopUps();funAmendsubmit()" />
+									<input type="button"  value="Next"   class="btn btn-sm btn-warning" id="mybutton1"  onclick="disableForm(this.form,false,'');destroyPopUps();funAmendsubmit()" />-->
 								</s:else>								
 							</div>
 						</div>
@@ -2386,9 +2392,6 @@ function toggleXLCostOC(retroType)
 		document.xol1.insuredName.readOnly=true; 
 	}
 	
-}
-if('<s:property value="endtMode"/>'=="endorsment"){
-getUWLimit(document.xol1.underwriter.value);
 }
 function getUWLimit(value){
    //var x= (sel.options[sel.selectedIndex].text);
@@ -3949,6 +3952,18 @@ function removeInst(val){
 			//postFormRequest("${pageContext.request.contextPath}/removeRowXol.action?mode=delete&deleteId="+val, "companyAjaxId1", "xol1");
 			}
 		}
+}
+function funEditContMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId){
+	document.getElementById("laydet").style.display = "none";
+    document.getElementById("proposalNo1").value=proposalno;
+    document.getElementById("CustomerId").value=ceddingcompanyid;
+    document.getElementById("baseLayer").value=baseLayer;
+    document.getElementById("layerMode").value='layer';
+	document.getElementById("flag").value='layer';
+	document.getElementById("contractMode").value='Y';
+	document.xol1.layerProposalNo.value=proposalno;
+	document.xol1.action="EditLayerXol.action?endtMode=endorsment&mode=endorsment";
+    document.xol1.submit();
 }
 function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId) {
 	

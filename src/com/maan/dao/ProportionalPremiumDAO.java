@@ -112,4 +112,8 @@ public interface ProportionalPremiumDAO {
 	void InsertReverseCashLossCredit(FaculPremiumBean bean);
 
 	void cashLossmailTrigger(FaculPremiumBean bean);
+
+	List<Map<String, Object>> getRipremiumList(FaculPremiumBean bean);
+
+	void updateRiStatus(FaculPremiumBean bean);
 }

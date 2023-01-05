@@ -177,5 +177,12 @@ private static final ProportionalPremiumDAO DAO=new ProportionalPremiumDaoImpl()
 	public void cashLossmailTrigger(FaculPremiumBean bean) {
 		DAO.cashLossmailTrigger(bean);
 	}
+	public List<Map<String, Object>> getRipremiumList(FaculPremiumBean bean) {
+		return DAO.getRipremiumList(bean);
+	}
+	public void updateRiStatus(FaculPremiumBean bean) {
+		DAO.updateRiStatus(bean);
+		
+	}
 	
 }

@@ -240,7 +240,8 @@ public class AdminBean {
 	private String lastRating;
 	private String attachedUW;
 	private String dropDown;
-	
+	private String vatRegYN;
+	private String vatRegNo;
 	public String getAttachedUW() {
 		return attachedUW;
 	}
@@ -2252,6 +2253,22 @@ public class AdminBean {
 
 	public void setDropDown(String dropDown) {
 		this.dropDown = dropDown;
+	}
+
+	public String getVatRegYN() {
+		return vatRegYN;
+	}
+
+	public void setVatRegYN(String vatRegYN) {
+		this.vatRegYN = vatRegYN;
+	}
+
+	public String getVatRegNo() {
+		return vatRegNo;
+	}
+
+	public void setVatRegNo(String vatRegNo) {
+		this.vatRegNo = vatRegNo;
 	}
 
 

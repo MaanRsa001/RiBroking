@@ -462,10 +462,28 @@
 													<s:text name="label.accountPeriod" />
 												</div>
 												<div class="tbox">													
-													<s:select list="premiumaccperiod" listKey="TYPE" listValue="DETAIL_NAME" headerKey="0" headerValue="---Select---" name="account_Period" id="account_Period" onchange="GetOSBDisplay();GetOSBValue();getoutStanding();getAccDate();" cssClass="inputBoxS" cssStyle="width: 45%; float:left;" />
+													<s:select list="premiumaccperiod" listKey="PremiumType" listValue="DetailName" headerKey="0" headerValue="---Select---" name="account_Period" id="account_Period" onchange="GetOSBDisplay();GetOSBValue();getoutStanding();getAccDate();" cssClass="inputBoxS" cssStyle="width: 45%; float:left;" />
 													<s:set name="insDate" id="date" />
 													<s:select list="yearList" headerKey="0" headerValue="YEAR" name="account_Period_year" id="account_Period_year"  cssClass="inputBoxS" cssStyle="width: 45%; float:left;" onchange="getoutStanding();getAccDate();"/>
 												</div>
+											</div>
+											<div class="textfield">
+												<div class="text">
+													<s:text name="label.documentType" />
+												</div>
+												<div class="tbox">	
+													<s:select list="documentTypeList" listKey="TYPE" listValue="DETAIL_NAME" headerKey="" headerValue="---Select---" name="documentType" id="documentType" cssClass="inputBoxS" onchange="getTransactionData();getTrasView(this.value);" />
+												</div>
+											</div>
+											<div class="textfield" id="transactionView" style="display:none">
+												<div class="text">
+													<s:text name="label.transactionChoose" />
+												</div>
+												<div class="tbox" id="trans">
+													<s:radio list="#{'Yes':'Yes','No':'No'}" name="chooseTransaction" id="chooseTransaction" value="%{(chooseTransaction==null || chooseTransaction=='')?'Yes':chooseTransaction}" onchange="getTransactionDropDown(this.value,'trans');" disabled='mode.equals("edit")?true:false'/>												
+													<s:hidden name="transDropDownVal" id="transDropDownVal"/>
+												</div>
+												
 											</div>
 											<div class="textfield">
 												<div class="text">
@@ -513,470 +531,335 @@
 								<div class="panel panel-primary">
 									<div class="panel-body">
 										<div class="boxcontent">
-											<table width="100%" class="table table-bordered">
-												<tr >
-												<td width="50%" >
 													<table width="100%" class="table table-bordered">
 														<thead>
 														<tr>
-															<th width="50%"></th>
-															<th width="50%"><s:text name="label.credit" /></th>
+															<th width="25%"></th>
+															<th width="25%"><s:text name="label.credit" /></th>
+															<th width="25%"></th>
+															<th width="25%"><s:text name="label.debit" /></th>
 
 														</tr>
 														</thead>
 														<tbody>
-														<s:if test='"1"==treatyType ||"3"==treatyType || "4"==treatyType ||"5"==treatyType'>
 															<tr>
 																<td>
-																	<s:if test='"1"==treatyType ||"3"==treatyType'>
-																	<s:text name="label.premiumQuotaShare" />
-																</s:if>
-																<s:if test='"4"==treatyType ||"5"==treatyType'>
 																	<s:text name="label.premium" />
-																</s:if>
-														
 																</td>
 																<td>
-																	<s:textfield name="premiumQuotaShare" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);Calculation(this.value);proposalNetDue();getpremiumDeposit('N');" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;"  onclick="this.select();getpremiumDeposit()"  maxlength="30" value="%{premiumQuotaShare==null?'0.00':premiumQuotaShare}" />
+																	<s:textfield name="premiumQuotaShare" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);Calculation(this.value);proposalNetDue();getpremiumDeposit('N');" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;"  onclick="this.select();getpremiumDeposit()"  maxlength="30" value="%{premiumQuotaShare==null?'0.00':premiumQuotaShare}" onchange="getVATInfo(this.value,'vattaxid');" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<s:hidden name="premiumSurplus" id="premiumSurplus" value="0.00"/>
+																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" class="pullRight">
+													 			     	<span class="glyphicon glyphicon-list"></span>
+													 			    </button>
 																</td>
-
+																<td>
+																	<s:text name="label.commission" />
+																</td>
+																<td>
+																	<s:textfield name="commissionQuotaShare" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();chkPremiumQS();" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;"  onclick="this.select();" maxlength="30" value="%{commissionQuotaShare==null?'0.00':commissionQuotaShare}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<s:hidden name="commissionSurplus" id="commissionSurplus" value="0.00"/>
+																</td>
 															</tr>
-														</s:if>
-														<s:else>
-														<s:hidden name="premiumQuotaShare" id="premiumQuotaShare" value="0.00"/>
-														</s:else>
-														
-														<s:if test='"2"==treatyType ||"3"==treatyType'>
-														
+															<tr>
+																<td >
+																	<s:text name="label.premiumPortfolioIn" />
+																</td>
+																<td>
+																	<s:textfield name="premiumportifolioIn" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" maxlength="30" value="%{premiumportifolioIn==null?'0.00':premiumportifolioIn}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+																<td >
+																	<s:text name="label.slideScaleComm" />
+																</td>
+																<td  >
+																	<s:textfield name="slideScaleCom" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);checkDecimals15(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{slideScaleCom==null?'0.00':slideScaleCom}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<%-- <input type="button"  size="2"  value="..." onclick="SlideCommission('slide')" class="pullRight"/>--%>
+																</td>
+	
+															</tr>
 															<tr>
 																<td>
-																	<s:text name="label.premiumSurplus" />
+																	<s:text name="label.claimPortfolioIn" />
 																</td>
 																<td>
-																	<s:textfield name="premiumSurplus" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);calculationSurplus(this.value);proposalNetDue();getpremiumDeposit('N');" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{premiumSurplus==null?'0.00':premiumSurplus}"/>
+																	<s:textfield name="cliamPortfolioin" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();GetOSBValue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{cliamPortfolioin==null?'0.00':cliamPortfolioin}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
 																</td>
-
+																<td>
+																	<s:text name="label.brokerage" />
+																</td>
+																<td>
+																	<s:textfield name="brokerage" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{brokerage==null?'0.00':brokerage}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+	
 															</tr>
-														
-														</s:if>
-														<s:else>
-														<s:hidden name="premiumSurplus" id="premiumSurplus" value="0.00"/>
-														</s:else>
-														<tr>
-															<td >
-																<s:text name="label.premiumPortfolioIn" />
-															</td>
-															<td>
-																<s:textfield name="premiumportifolioIn" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" maxlength="30" value="%{premiumportifolioIn==null?'0.00':premiumportifolioIn}"/>
-															</td>
-
-														</tr>
-														<tr>
-															<td>
-																<s:text name="label.claimPortfolioIn" />
-															</td>
-															<td>
-																<s:textfield name="cliamPortfolioin" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();GetOSBValue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{cliamPortfolioin==null?'0.00':cliamPortfolioin}"/>
-															</td>
-
-														</tr>
-														<tr>
-															<td>
-																<s:text name="label.premiumReserveReleased" />
-															</td>
-															<td>
-																<s:textfield name="premium_Reserve_Released" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{premium_Reserve_Released==null?'0.00':premium_Reserve_Released}" readonly="true"/>
-																<s:if test='"edit".equals(mode)'>
-																	<input type="button"  size="2"  value="..." onclick="premuimReserved('PRR');" class="pullRight" disabled="disabled"/>
-																</s:if>
-																<s:else>
-																	<input type="button"  size="2"  value="..." onclick="premuimReserved('PRR');" class="pullRight"/>
-																</s:else>
-															</td>
-
-														</tr>
-														<tr>
-															<td>
-																<s:text name="label.lossReserveReleased" />
-															</td>
-															<td>
-																<s:textfield name="lossReserveReleased" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" maxlength="30" value="%{lossReserveReleased==null?'0.00':lossReserveReleased}"  readonly="true"/>
-																<s:if test='"edit".equals(mode)'>
-																	<input type="button"  size="2"  value="..." onclick="premuimReserved('LRR');" class="pullRight" disabled="disabled"/>
-																</s:if>
-																<s:else>
-																	<input type="button"  size="2"  value="..." onclick="premuimReserved('LRR');" class="pullRight"/>
-																</s:else>
-															</td>
-
-														</tr>
-														<tr>
-															<td>
-																<s:text name="label.interest" />
-															</td>
-															<td>
-																<s:textfield name="interest" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" maxlength="30" value="%{interest==null?'0.00':interest}"/>
-															</td>
-
-														</tr>
-														<tr>
-															<td>
-																<s:text name="label.cashLossCredit" />
-															</td>
-															<td >
-																<s:textfield name="cashLoss_Credit" cssClass="inputBox"  onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{cashLoss_Credit==null?'0.00':cashLoss_Credit}" readonly='"RI02".equals(#session.SOURCE_CODE)?true:flase'/>
-																<s:if test='"RI02".equals(#session.SOURCE_CODE)'> 
-																		<s:if test='"edit".equals(mode)'>
-																			<input type="button"  size="2"  value="..." onclick="CashLossCredit()" class="pullRight" disabled="disabled"/>
-																		</s:if>
-																		<s:else>
-																			<input type="button"  size="2"  value="..." onclick="CashLossCredit()" class="pullRight"/>
-																		</s:else>
-																 </s:if> 
-															</td>
-
-														</tr>
-														<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
-														<tr>
-															<td><s:text name="label.taxdedect" /> </td>
-															<td>
-																<s:textfield cssClass="inputBox" name="taxDedectSource" id="taxDedectSource" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);Caculate(this.value);proposalNetDue();" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{taxDedectSource==null?'0.00':taxDedectSource}" maxlength="26"/>
-															</td>
-
-														</tr>
-
-														<tr>
-															<td><s:text name="label.gst" /> </td>
-															<td>
-																<s:textfield cssClass="inputBox" name="serviceTax" id="serviceTax" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();Caculate(this.value)" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;"  onclick="this.select();" value="%{serviceTax==null?'0.00':serviceTax}" maxlength="26"/>
-															</td>
-
-														</tr>
-														</s:if>
-														<s:else>
-															<s:hidden name="taxDedectSource" id="taxDedectSource" value="0"/>
-															<s:hidden name="serviceTax" id="serviceTax" value="0"/>
-															
-														</s:else>
-														<tr>
-															<td><s:text name="label.lossPor" /> </td>
-															<td>
-																<s:textfield cssClass="inputBox" name="lossParticipation" id="lossParticipation" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{lossParticipation==null?'0.00':lossParticipation}" maxlength="26"/>
-																<%--<span id="lossPat"><input type="button"  size="2"  value="..." onclick="SlideCommission('loss')" class="pullRight"/></span>		--%>												
-															</td>
-														</tr>
-														<tr>
-															<td colspan="2">&nbsp;</td>
-
-														</tr>
-														<tr>
-															<td colspan="2">&nbsp;</td>
-
-														</tr>
-														<tr>
-															<td colspan="2">&nbsp;</td>
-
-														</tr>
-														<tr>
+															<tr>
+																<td>
+																	<s:text name="label.premiumReserveReleased" />
+																</td>
+																<td>
+																	<s:textfield name="premium_Reserve_Released" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{premium_Reserve_Released==null?'0.00':premium_Reserve_Released}" readonly="true" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<s:if test='"edit".equals(mode)'>
+																		<input type="button"  size="2"  value="..." onclick="premuimReserved('PRR');" class="pullRight" disabled="disabled"/>
+																	</s:if>
+																	<s:else>
+																		<input type="button"  size="2"  value="..." onclick="premuimReserved('PRR');" class="pullRight"/>
+																	</s:else>
+																</td>
+																<td>
+																	<s:text name="label.taxExpense" />
+																</td>
+																<td>
+																	<s:textfield name="tax" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{tax==null?'0.00':tax}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<s:text name="label.lossReserveReleased" />
+																</td>
+																<td>
+																	<s:textfield name="lossReserveReleased" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" maxlength="30" value="%{lossReserveReleased==null?'0.00':lossReserveReleased}"  readonly="true" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<s:if test='"edit".equals(mode)'>
+																		<input type="button"  size="2"  value="..." onclick="premuimReserved('LRR');" class="pullRight" disabled="disabled"/>
+																	</s:if>
+																	<s:else>
+																		<input type="button"  size="2"  value="..." onclick="premuimReserved('LRR');" class="pullRight"/>
+																	</s:else>
+																</td>
+																<td>
+																	<s:text name="label.WithHoldingTax" />
+																</td>
+																<td>
+																	<s:textfield name="withHoldingTaxOC" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{withHoldingTaxOC==null?'0.00':withHoldingTaxOC}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<s:text name="label.interest" />
+																</td>
+																<td>
+																	<s:textfield name="interest" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  cssStyle="text-align: right;" onclick="this.select();" maxlength="30" value="%{interest==null?'0.00':interest}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+																<td>
+																	<s:text name="label.iwOverrider" />
+																</td>
+																<td>
+																	<s:textfield name="overrider" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{overrider==null?'0.00':overrider}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<s:text name="label.cashLossCredit" />
+																</td>
+																<td >
+																	<s:textfield name="cashLoss_Credit" cssClass="inputBox"  onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);"  onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{cashLoss_Credit==null?'0.00':cashLoss_Credit}" readonly='"RI02".equals(#session.SOURCE_CODE)?true:flase' disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<s:if test='"RI02".equals(#session.SOURCE_CODE)'> 
+																			<s:if test='"edit".equals(mode)'>
+																				<input type="button"  size="2"  value="..." onclick="CashLossCredit()" class="pullRight" disabled="disabled"/>
+																			</s:if>
+																			<s:else>
+																				<input type="button"  size="2"  value="..." onclick="CashLossCredit()" class="pullRight"/>
+																			</s:else>
+																	 </s:if> 
+																</td>
+																<td>
+																	<s:text name="label.otherCost" />
+																</td>
+																<td>
+																	<s:textfield name="otherCost" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{otherCost==null?'0.00':otherCost}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<s:if test='"RI02".equals(#session.SOURCE_CODE)'>
+															<tr>
+																<td><s:text name="label.taxdedect" /> </td>
+																<td>
+																	<s:textfield cssClass="inputBox" name="taxDedectSource" id="taxDedectSource" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);Caculate(this.value);proposalNetDue();" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{taxDedectSource==null?'0.00':taxDedectSource}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+																<%-- <td>
+																	<s:text name="label.xlCost" />
+																</td>
+																<td>
+																	<s:textfield name="xl_Cost" cssClass="inputBox" cssStyle="text-align: right;" onblur="allow2DigitDecValues(this);proposalNetDue();this.value=Comma(this.value);"  onclick="this.select();" onkeyup="allow2DigitDecValues(this);" maxlength="30" value="%{xl_Cost==null?'0.00':xl_Cost}"/>
+																</td> --%>
+															</tr>
+															</s:if>
+															<s:else>
+																<s:hidden name="taxDedectSource" id="taxDedectSource" value="0"/>
+																<s:hidden name="xl_Cost" id="xl_Cost" value="0"/>
+															</s:else>
+															<tr>
+																<td><s:text name="label.lossPor" /> </td>
+																<td>
+																	<s:textfield cssClass="inputBox" name="lossParticipation" id="lossParticipation" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{lossParticipation==null?'0.00':lossParticipation}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<%--<span id="lossPat"><input type="button"  size="2"  value="..." onclick="SlideCommission('loss')" class="pullRight"/></span>		--%>												
+																</td>
+																<td>
+																	<s:text name="label.premiumPortfolioOut" />
+																</td>
+																<td>
+																	<s:textfield name="premiumportifolioout" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{premiumportifolioout==null?'0.00':premiumportifolioout}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
 																<td colspan="2">&nbsp;</td>
-
-														</tr>
-														
-														<tr>
-															<td colspan="2">&nbsp;</td>
-
-														</tr>
-														<tr>
-															<td colspan="2">&nbsp;</td>
-
-														</tr>
-														<tr>
-															<td>
-																<s:text name="label.total" />
-															</td>
-															<td>
-																<s:textfield name="totalCredit" cssClass="inputBox" readonly="true"   onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{totalCredit==null?'0.00':totalCredit}"/>
-															</td>
-
-														</tr>
-														<tr>
-															<td colspan="2">&nbsp;</td>
-
-														</tr>
+																<td>
+																	<s:text name="label.claimPortfolioOut" />
+																</td>
+																<td>
+																	<s:textfield name="cliam_portfolio_out" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{cliam_portfolio_out==null?'0.00':cliam_portfolio_out}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="2">&nbsp;</td>
+																<td>
+																	<s:text name="label.premiumReserveRetained" />
+																</td>
+																<td>
+																	<s:textfield name="premiumReserve_QuotaShare" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();getpremiumDeposit('Y');"  onclick="this.select();" onblur="this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30" value="%{premiumReserve_QuotaShare==null?'0.00':premiumReserve_QuotaShare}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="2">&nbsp;</td>
+																<td>
+																	<s:text name="label.lossReserveRetained" />
+																</td>
+																<td>
+																	<s:textfield name="loss_ReserveRetained" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30" value="%{loss_ReserveRetained==null?'0.00':loss_ReserveRetained}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="2">&nbsp;</td>
+																<td>
+																	<s:text name="label.profitCommission" />
+																</td>
+																<td>
+																	<s:textfield name="profit_Commission" id="profit_Commission" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{profit_Commission==null?'0.00':profit_Commission}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																	<%--<span id="ProfitComm"><input type="button"  size="2"  value="..." onclick="SlideCommission('profit')" class="pullRight"/></span>--%>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="2">&nbsp;</td>
+																<td>
+																	<s:text name="label.cashLossPaid" />
+																</td>
+																<td>
+																	<s:textfield name="cash_LossPaid" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{cash_LossPaid==null?'0.00':cash_LossPaid}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="2">&nbsp;</td>
+																<td>
+																	<s:text name="label.claimsPaid" />
+																</td>
+																<td>
+																	<s:textfield name="claims_paid" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{claims_paid==null?'0.00':claims_paid}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr id="vattaxid">
+																<td><s:text name="label.vat" /> </td>
+																<td>
+																	<s:textfield cssClass="inputBox" name="vatPremium" id="vatPremium" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();setCalculateVal();"  onblur="this.value=Comma(this.value);" cssStyle="text-align: right;" onclick="this.select();" value="%{vatPremium==null?'0.00':vatPremium}" maxlength="26" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>														
+																</td>
+																<td>
+																	<s:text name="label.brokerageVat" />
+																</td>
+																<td>
+																	<s:textfield name="brokerageVat" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();" onblur="this.value=Comma(this.value);" onclick="this.select();"   cssStyle="text-align:right;" cssClass="inputBox" maxlength="26" value="%{brokerageVat==null?'0.00':brokerageVat}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>	
+															</tr>
+															<tr>
+																<td>
+																	<s:text name="label.total" />
+																</td>
+																<td>
+																	<s:textfield name="totalCredit" cssClass="inputBox" readonly="true"   onclick="this.select();" cssStyle="text-align: right;" maxlength="30" value="%{totalCredit==null?'0.00':totalCredit}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+																<td>
+																	<s:text name="label.total" />
+																</td>
+																<td>
+																	<s:textfield name="totalDebit" cssClass="inputBox" cssStyle="text-align: right;" readonly="true"  onclick="this.select();" maxlength="30" value="%{totalDebit==null?'0.00':totalDebit}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="2">&nbsp;</td>
+																<td>
+																	<s:text name="label.netDue" />
+																</td>
+																<td>
+																	<s:textfield name="netDue" cssClass="inputBox" cssStyle="text-align: right;"  readonly="true"  onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);" onclick="allow2DigitDecValues(this);this.select();" value="%{netDue==null?'0.00':netDue}" disabled="(transDropDownVal==null||transDropDownVal=='')?false:true"/>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<s:text name="label.remarks" />
+																</td>
+																<td colspan="3">
+																	<s:textarea rows="3" id="remarks" name="remarks" cssClass="inputBoxA" cssStyle="width: 100%;" />
+																	<br/>
+																	<span class="textAreaRemaining"><label id="remarks_left"></label> &nbsp; <s:text name="Characters Remaining" /> </span>
+																</td>
+															</tr>
+															<tr>
+																<td colspan="4">
+																	<table class="table table-bordered" >
+																	<tr >
+																	<td>
+																	<s:text name="Do you want to record Outstanding Loss Update?" />
+																	
+																	</td>
+																	<td>
+																	<s:radio list="#{'Yes':'Yes','No':'No'}" name="osbYN" id="osbYN" value="%{osbYN==null?'Yes':osbYN}" onchange="getoutStanding();"/>
+																	
+																	</td>
+																	</tr>
+																		<tr>
+																			<td>
+																				<s:text name="label.outStandingClaimsLossUpdate" /><span id="accountPrd" style="display:none"> </span>
+																			</td>
+																			<td>
+																				<s:textfield name="osClaimsLossUpdateOC" cssClass="inputBox" cssStyle="text-align: right;" onblur="allow2DigitDecValues(this);middleMinusRestriction(this);this.value=Comma(this.value);" maxlength="30" value="%{osClaimsLossUpdateOC==null?'0.00':osClaimsLossUpdateOC}" />
+																			</td>
+																		</tr>
+																	</table>
+																</td>
+																<td colspan="3">
+																<table width="100%" class="table table-bordered">
+																		<tbody>
+																		<s:if test="osClaimLoss.size()>0">
+																			<tr>
+																			<td>
+																				<s:text name="Previous Outstanding Loss position " />
+																			</td>
+																			<td>
+																			<a title="View" style="cursor: pointer;" onclick="ViewOSB()">View</a>
+																			</td>
+																				
+																			</tr>
+																		</s:if>
+																		</tbody>
+																	</table>
+																	<%-- <table width="100%" class="table table-bordered">
+																		<tbody>
+																		<s:iterator id="OSClaim" value="osClaimLoss">
+																			<tr>
+																				<td width="33.33%">
+																					<s:property value="Key" /> <!-- name="OSClaim" property="key" -->
+																				</td>
+																				<td width="33.33%">
+																					<s:property value="value" /> <!-- name="OSClaim" property="value" format="###,###,###,###.00" -->
+																				</td>
+																				<td width="33.33%">
+																				<a title="View" style="cursor: pointer;" onclick="ViewOSB()">View</a>
+																				</td>
+																			</tr>
+																		</s:iterator>
+																		</tbody>
+																	</table>--%>
+																</td>
+															</tr>
 														</tbody>
 													</table>
-
-												</td>
-												<td width="50%" >
-												<table width="100%" class="table table-bordered">
-													<thead>
-													<tr>
-														<th width="50%"></th>
-														<th width="50%"><s:text name="label.debit" /></th>
-													</tr>
-													</thead>
-													<tbody>
-													<s:if test='"1"==treatyType ||"3"==treatyType || "4"==treatyType ||"5"==treatyType'>
-														<tr>
-															<td>
-																<s:if test='"1"==treatyType ||"3"==treatyType'>
-																	<s:text name="label.CommissionQuotaShare" />
-																</s:if>
-																<s:if test='"4"==treatyType ||"5"==treatyType'>
-																	<s:text name="label.commission" />
-																</s:if>
-															</td>
-															<td>
-																<s:textfield name="commissionQuotaShare" cssClass="inputBox" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();chkPremiumQS();" onblur="this.value=Comma(this.value);" cssStyle="text-align: right;"  onclick="this.select();" maxlength="30" value="%{commissionQuotaShare==null?'0.00':commissionQuotaShare}"/>
-															</td>
-														</tr>
-													</s:if>
-													<s:else>
-														<s:hidden name="commissionQuotaShare" id="commissionQuotaShare" value="0.00"/>
-														</s:else>
-													<s:if test='"2"==treatyType ||"3"==treatyType'>
-														<tr>
-															<td>
-																<s:text name="label.commissionSurplus" />
-															</td>
-															<td>
-																<s:textfield name="commissionSurplus" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();chkPremiumSurplus();checkDecimals15(this);" onblur="this.value=Comma(this.value);" onclick="this.select();" maxlength="30" value="%{commissionSurplus==null?'0.00':commissionSurplus}"/>
-															</td>
-														</tr>
-													</s:if>
-													<s:else>
-														<s:hidden name="commissionSurplus" id="commissionSurplus" value="0.00"/>
-														</s:else>
-													<tr >
-
-														<td >
-															<s:text name="label.slideScaleComm" />
-														</td>
-														<td  >
-															<s:textfield name="slideScaleCom" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);checkDecimals15(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{slideScaleCom==null?'0.00':slideScaleCom}"/>
-															<%-- <input type="button"  size="2"  value="..." onclick="SlideCommission('slide')" class="pullRight"/>--%>
-														</td>
-													</tr>
 													
-													<tr>
-
-														<td>
-															<s:text name="label.brokerage" />
-														</td>
-														<td>
-															<s:textfield name="brokerage" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{brokerage==null?'0.00':brokerage}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.taxExpense" />
-														</td>
-														<td>
-															<s:textfield name="tax" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{tax==null?'0.00':tax}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.WithHoldingTax" />
-														</td>
-														<td>
-															<s:textfield name="withHoldingTaxOC" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{withHoldingTaxOC==null?'0.00':withHoldingTaxOC}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.iwOverrider" />
-														</td>
-														<td>
-															<s:textfield name="overrider" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{overrider==null?'0.00':overrider}"/>
-														</td>
-
-
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.otherCost" />
-														</td>
-														<td>
-															<s:textfield name="otherCost" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{otherCost==null?'0.00':otherCost}"/>
-														</td>
-
-
-													</tr>
-													<%-- <tr>
-
-														<td>
-															<s:text name="label.xlCost" />
-														</td>
-														<td>
-															<s:textfield name="xl_Cost" cssClass="inputBox" cssStyle="text-align: right;" onblur="allow2DigitDecValues(this);proposalNetDue();this.value=Comma(this.value);"  onclick="this.select();" onkeyup="allow2DigitDecValues(this);" maxlength="30" value="%{xl_Cost==null?'0.00':xl_Cost}"/>
-														</td>
-
-													</tr>--%>
-													<s:hidden name="xl_Cost" id="xl_Cost" value="0"/>
-
-													<tr>
-
-														<td>
-															<s:text name="label.premiumPortfolioOut" />
-														</td>
-														<td>
-															<s:textfield name="premiumportifolioout" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{premiumportifolioout==null?'0.00':premiumportifolioout}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.claimPortfolioOut" />
-														</td>
-														<td>
-															<s:textfield name="cliam_portfolio_out" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{cliam_portfolio_out==null?'0.00':cliam_portfolio_out}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.premiumReserveRetained" />
-														</td>
-														<td>
-															<s:textfield name="premiumReserve_QuotaShare" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();getpremiumDeposit('Y');"  onclick="this.select();" onblur="this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30" value="%{premiumReserve_QuotaShare==null?'0.00':premiumReserve_QuotaShare}" />
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.lossReserveRetained" />
-														</td>
-														<td>
-															<s:textfield name="loss_ReserveRetained" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);negative(this.id,this.value);" maxlength="30" value="%{loss_ReserveRetained==null?'0.00':loss_ReserveRetained}"/>
-														</td>
-													</tr>
-														<tr>
-
-															<td>
-																<s:text name="label.profitCommission" />
-															</td>
-															<td>
-																<s:textfield name="profit_Commission" id="profit_Commission" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{profit_Commission==null?'0.00':profit_Commission}"/>
-																<%--<span id="ProfitComm"><input type="button"  size="2"  value="..." onclick="SlideCommission('profit')" class="pullRight"/></span>--%>
-															</td>
-														</tr>
-													
-													<tr>
-
-														<td>
-															<s:text name="label.cashLossPaid" />
-														</td>
-														<td>
-															<s:textfield name="cash_LossPaid" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{cash_LossPaid==null?'0.00':cash_LossPaid}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.claimsPaid" />
-														</td>
-														<td>
-															<s:textfield name="claims_paid" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow2DigitDecValues(this);middleMinusRestriction(this);proposalNetDue();"  onclick="this.select();" onblur="this.value=Comma(this.value);" maxlength="30" value="%{claims_paid==null?'0.00':claims_paid}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.total" />
-														</td>
-														<td>
-															<s:textfield name="totalDebit" cssClass="inputBox" cssStyle="text-align: right;" readonly="true"  onclick="this.select();" maxlength="30" value="%{totalDebit==null?'0.00':totalDebit}"/>
-														</td>
-													</tr>
-													<tr>
-
-														<td>
-															<s:text name="label.netDue" />
-														</td>
-														<td>
-															<s:textfield name="netDue" readonly="true" cssClass="inputBox" cssStyle="text-align: right;"  onclick="this.select();" maxlength="30" value="%{netDue==null?'0.00':netDue}"/>
-														</td>
-													</tr>
-
-
-													</tbody>
-												</table>
-												</td>
-												</tr>
-												<tr>
-													<td>
-														<s:text name="label.remarks" />
-													</td>
-													<td colspan="3">
-														<s:textarea rows="3" id="remarks" name="remarks" cssClass="inputBoxA" cssStyle="width: 100%;" />
-														<br/>
-														<span class="textAreaRemaining"><label id="remarks_left"></label> &nbsp; <s:text name="Characters Remaining" /> </span>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<table class="table table-bordered" >
-														<tr >
-														<td>
-														<s:text name="Do you want to record Outstanding Loss Update?" />
-														
-														</td>
-														<td>
-														<s:radio list="#{'Yes':'Yes','No':'No'}" name="osbYN" id="osbYN" value="%{osbYN==null?'Yes':osbYN}" onchange="getoutStanding();"/>
-														
-														</td>
-														</tr>
-															<tr>
-																<td>
-																	<s:text name="label.outStandingClaimsLossUpdate" /><span id="accountPrd" style="display:none"> </span>
-																</td>
-																<td>
-																	<s:textfield name="osClaimsLossUpdateOC" cssClass="inputBox" cssStyle="text-align: right;" onblur="allow2DigitDecValues(this);middleMinusRestriction(this);this.value=Comma(this.value);" maxlength="30" value="%{osClaimsLossUpdateOC==null?'0.00':osClaimsLossUpdateOC}" />
-																</td>
-															</tr>
-														</table>
-													</td>
-													<td colspan="3">
-													<table width="100%" class="table table-bordered">
-															<tbody>
-															<s:if test="osClaimLoss.size()>0">
-																<tr>
-																<td>
-																	<s:text name="Previous Outstanding Loss position " />
-																</td>
-																<td>
-																<a title="View" style="cursor: pointer;" onclick="ViewOSB()">View</a>
-																</td>
-																	
-																</tr>
-															</s:if>
-															</tbody>
-														</table>
-														<%-- <table width="100%" class="table table-bordered">
-															<tbody>
-															<s:iterator id="OSClaim" value="osClaimLoss">
-																<tr>
-																	<td width="33.33%">
-																		<s:property value="Key" /> <!-- name="OSClaim" property="key" -->
-																	</td>
-																	<td width="33.33%">
-																		<s:property value="value" /> <!-- name="OSClaim" property="value" format="###,###,###,###.00" -->
-																	</td>
-																	<td width="33.33%">
-																	<a title="View" style="cursor: pointer;" onclick="ViewOSB()">View</a>
-																	</td>
-																</tr>
-															</s:iterator>
-															</tbody>
-														</table>--%>
-													</td>
-												</tr>
-											</table>
 											<br class="clear"/>
 											<div id="obsList"></div>
 											
@@ -1145,11 +1028,69 @@
 						<s:hidden name="acceptenceDate" id="acceptenceDate"/>
 						<s:hidden name="cashlosstranId" id="cashlosstranId"/>
 						<s:hidden name="cashlossType" id="cashlossType"/>
+						<s:hidden name="sectionNo" id="sectionNo"/>
 					</div>
 						<div id="countStatus">
 						</div>	
 						<div id="cashcountStatus">
-						</div>		
+						</div>
+						<div id="companyModal" class="modal fade" role="dialog">
+						  <div class="modal-dialog modal-lg">
+						    <!-- Modal content-->
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal">&times;</button>
+						      </div>
+						      <div class="modal-body" >
+						        <div class="container-fluid">
+						        	<div class="tablerow">
+						        	<div class="boxcontent">
+										<div class="textfield25">
+											<div class="text">
+												<s:text name="label.mipremium1" />
+											</div>
+											<div class="tbox">
+												<s:textfield name="mipremium1" id="mipremium1" cssClass="inputBox" cssStyle="text-align:right;"  maxlength="10" onkeyup="negative(this.id,this.value);allow2DigitDecValues(this);middleMinusRestriction(this);getMiPremium();"  onclick="this.select();" />													
+											</div>
+										</div>
+										<div class="textfield25">
+											<div class="text">
+												<s:text name="label.mipremium2" />
+											</div>
+											<div class="tbox">
+												<s:textfield name="mipremium2" id="mipremium2" cssClass="inputBox" cssStyle="text-align:right;"  maxlength="10" onkeyup="negative(this.id,this.value);allow2DigitDecValues(this);middleMinusRestriction(this);getMiPremium();"/>													
+											</div>
+										</div>
+										<div class="textfield25">
+											<div class="text">
+												<s:text name="label.mipremium3" />
+											</div>
+											<div class="tbox">
+												<s:textfield name="mipremium3" id="mipremium3" cssClass="inputBox" cssStyle="text-align:right;"  maxlength="10" onkeyup="negative(this.id,this.value);allow2DigitDecValues(this);middleMinusRestriction(this);getMiPremium();"/>													
+											</div>
+										</div>
+										<div class="textfield25">
+											<div class="text">
+												<s:text name="label.mipremium" />
+											</div>
+											<div class="tbox">
+												<s:textfield name="mipremium" id="mipremium" cssClass="inputBox" cssStyle="text-align:right;" readonly="true" maxlength="10"/>													
+											</div>
+										</div>
+									</div>
+									</div>
+									<br/>
+									<br/>
+									<br/>
+									<div class="boxcontent" align="center">
+										<input type="button" id="print" value="Sumbit" class="btn btn-sm btn-success" data-dismiss="modal" onclick="misumit();"/>
+										<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+								   </div>
+						        </div>
+						      </div>
+						    </div>
+						  </div>
+						</div>			
 					</s:form>
 				</div>
 			</div>
@@ -1594,8 +1535,9 @@ function premuimReserved(value){
 		{
 		destroyPopUps();
 		var contNo=document.getElementById("contNo").value;   
-		var proposal_No = document.getElementById("proposal_No").value;  
-		document.forms[0].action="${pageContext.request.contextPath}/premiumListProportionPremium.do?mode=add&contNo="+contNo+"&premiumMasterMode="+premiumMasterMode+"&proposal_No="+proposal_No;
+		var proposal_No = document.getElementById("proposal_No").value; 
+		var sectionNo= document.getElementById("sectionNo").value; 
+		document.forms[0].action="${pageContext.request.contextPath}/premiumListProportionPremium.do?mode=add&contNo="+contNo+"&premiumMasterMode="+premiumMasterMode+"&proposal_No="+proposal_No+"&sectionNo="+sectionNo;
 		document.forms[0].submit();	
 		}
 		 function cancel()
@@ -1928,7 +1870,7 @@ function premuimReserved(value){
 			    document.premium.premiumQuotaShare.value=Comma(document.premium.premiumQuotaShare.value);
 			    document.premium.netDue.value=Comma(document.premium.netDue.value);
 			    document.premium.taxDedectSource.value=Comma(document.premium.taxDedectSource.value);
-			    document.premium.serviceTax.value=Comma(document.premium.serviceTax.value);
+			    document.premium.vatPremium.value=Comma(document.premium.vatPremium.value);
 			     document.premium.lossParticipation.value=Comma(document.premium.lossParticipation.value);
 			    proposalNetDue();							
 		}
@@ -2009,8 +1951,8 @@ function premuimReserved(value){
 		var y=document.premium.taxDedectSource.value.replace(new RegExp(',', 'g'),'');
 		document.premium.taxDedectSource.value=Comma(parseFloat(y).toFixed(2));
 		
-		var z=document.premium.serviceTax.value.replace(new RegExp(',', 'g'),'');
-		document.premium.serviceTax.value=Comma(parseFloat(z).toFixed(2));
+		var z=document.premium.vatPremium.value.replace(new RegExp(',', 'g'),'');
+		document.premium.vatPremium.value=Comma(parseFloat(z).toFixed(2));
 		
 		var aa=document.premium.lossParticipation.value.replace(new RegExp(',', 'g'),'');
 		document.premium.lossParticipation.value=Comma(parseFloat(aa).toFixed(2));
@@ -2078,6 +2020,37 @@ function premuimReserved(value){
 				var NetDue = A-B;
 //            NetDue = parseFloat(PremiumQshare) - parseFloat(CommissionQshare) - parseFloat(Brokerage) - parseFloat(Tax) - parseFloat(OtherCost);
 				document.premium.netDue.value=Comma(NetDue.toFixed(2));
+		}
+		function getMiPremium(){
+			var m1premium=document.premium.mipremium1.value;
+			if(m1premium!=null && m1premium!="")
+				m1premium=m1premium.replace(new RegExp(',', 'g'),'');
+			else
+				m1premium=0;
+			var m2premium=document.premium.mipremium2.value;
+			if(m2premium!=null && m2premium!="")
+				m2premium=m2premium.replace(new RegExp(',', 'g'),'');
+			else
+				m2premium=0;
+			var m3premium=document.premium.mipremium3.value;
+			if(m3premium!=null && m3premium!="")
+				m3premium=m3premium.replace(new RegExp(',', 'g'),'');
+			else
+				m3premium=0;
+			
+			var A=parseFloat(m1premium)+parseFloat(m2premium)+parseFloat(m3premium);
+			document.premium.mipremium.value=Comma(A.toFixed(2));
+			
+		}
+		function misumit(){
+			var mipremium=document.getElementById('mipremium').value;
+			mipremium=mipremium.replace(new RegExp(',', 'g'),'');
+			alert(mipremium);
+			mipremium=parseFloat(mipremium);
+			document.premium.premiumQuotaShare.value=Comma(mipremium.toFixed(2));
+			getVATInfo(mipremium,'vattaxid');
+			Calculation(mipremium);proposalNetDue();getpremiumDeposit('N');
+			
 		}
 		function proposalNetDue()
 		{
@@ -2209,17 +2182,23 @@ function premuimReserved(value){
 				else
 				 	taxDedectSource=0;
 				 	
-				var serviceTax=document.premium.serviceTax.value;
-				if(serviceTax!=null && serviceTax!="")
-					serviceTax=serviceTax.replace(new RegExp(',', 'g'),'');
+				var vatPremium=document.premium.vatPremium.value;
+				if(vatPremium!=null && vatPremium!="")
+					vatPremium=vatPremium.replace(new RegExp(',', 'g'),'');
 				else
-				 	serviceTax=0;
+				 	vatPremium=0;
 				 	
 				 var lossParticipation=document.premium.lossParticipation.value;
 				if(lossParticipation!=null && lossParticipation!="")
 					lossParticipation=lossParticipation.replace(new RegExp(',', 'g'),'');
 				else
 				 	lossParticipation=0;
+				
+				var brokerageVat=document.premium.brokerageVat.value;
+				if(brokerageVat!=null && brokerageVat!="")
+					brokerageVat=brokerageVat.replace(new RegExp(',', 'g'),'');
+				else
+					brokerageVat=0;
 				 	
 				 	
 				var per = document.premium.account_Period.value;
@@ -2234,8 +2213,8 @@ function premuimReserved(value){
 					}
 
                 //}
-				var A=parseFloat(PremiumQshare)+parseFloat(PremiumSurplus)+parseFloat(PremiumportifolioIn)+parseFloat(CliamPortfolioin)+parseFloat(Premium_Reserve_Released)+parseFloat(LossReserveReleased)+parseFloat(Interest)+parseFloat(CashLoss_Credit)+ parseFloat(taxDedectSource)+ parseFloat(serviceTax) + parseFloat(lossParticipation);
-				var B=parseFloat(CommissionQshare)+parseFloat(CommissionSurplus)+parseFloat(Brokerage)+parseFloat(Tax)+parseFloat(overrider)+parseFloat(OtherCost)+parseFloat(Xl_Cost)+parseFloat(Premiumportifolioout)+parseFloat(Cliam_portfolio_out)+parseFloat(PremiumReserve_QuotaShare)+parseFloat(Loss_ReserveRetained)+parseFloat(Profit_Commission)+parseFloat(Cash_LossPaid)+parseFloat(Claims_paid) + parseFloat(wHTax)+ parseFloat(slide);
+				var A=parseFloat(PremiumQshare)+parseFloat(PremiumSurplus)+parseFloat(PremiumportifolioIn)+parseFloat(CliamPortfolioin)+parseFloat(Premium_Reserve_Released)+parseFloat(LossReserveReleased)+parseFloat(Interest)+parseFloat(CashLoss_Credit)+ parseFloat(taxDedectSource)+ parseFloat(vatPremium) + parseFloat(lossParticipation);
+				var B=parseFloat(CommissionQshare)+parseFloat(CommissionSurplus)+parseFloat(Brokerage)+parseFloat(Tax)+parseFloat(overrider)+parseFloat(OtherCost)+parseFloat(Xl_Cost)+parseFloat(Premiumportifolioout)+parseFloat(Cliam_portfolio_out)+parseFloat(PremiumReserve_QuotaShare)+parseFloat(Loss_ReserveRetained)+parseFloat(Profit_Commission)+parseFloat(Cash_LossPaid)+parseFloat(Claims_paid) + parseFloat(wHTax)+ parseFloat(slide)+parseFloat(brokerageVat);
 				document.premium.totalCredit.value=Comma(A.toFixed(2));
 				document.premium.totalDebit.value=Comma(B.toFixed(2));
 				var NetDue = A-B;
@@ -2878,6 +2857,86 @@ function showCashPopUp(){
 		strOpen.focus();
 		return false;
 }
+function getVATInfo(val,id){
+	var proposal_No = document.getElementById("proposal_No").value;
+  	$.ajax( {
+		url : '${pageContext.request.contextPath}/getVatInfoXolPremium.action?proposal_No='+proposal_No+'&premiumAmount='+val+'&dropDown='+id,
+		error : function() {
+			$('#' + id).html('<p>An error has occurred in jquery Ajax</p>');
+		},
+		success : function(data) {
+			document.getElementById(id).innerHTML=data;
+		},
+		beforeSend : function() {
+			//$('#loading').show();
+			//$('.ajaxLoader').show();
+		},
+		complete : function() {
+			proposalNetDue();
+		},
+		type : 'POST'
+	});
+}
+getTrasView('<s:property value="documentType"/>');
+function getTrasView(val){
+	if(val=="R"){
+		document.getElementById("transactionView").style.display='inline';
+		getTransactionDropDown('<s:property value="chooseTransaction"/>','trans');
+	}else {
+		document.getElementById("transDropDownVal").value="";
+		document.getElementById("chooseTransactionYes").value="";
+		document.getElementById("chooseTransactionNo").value="";
+		document.getElementById("transactionView").style.display='none';
+		
+	}
+}
+<s:if test='"<s:property value="mode"/>" !="edit"'>	
+getTransactionDropDown('<s:property value="chooseTransaction"/>','trans');
+</s:if>
+function getTransactionData(){
+	var val=document.getElementById("transDropDownVal").value;
+	var documentType = document.premium.documentType.value;
+	var transactionNo = document.getElementById("transactionNo").value;
+	if(val!=''){
+	document.premium.mode.value="transEdit";
+	}else{
+		if(transactionNo==""){
+			document.premium.mode.value="add";
+		}else{
+			document.premium.mode.value="edit";
+		}
+	}
+
+	if(documentType==("R") ){
+	document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do";
+	document.premium.submit();
+	}
+	}
+function getTransactionDropDown(val,id){
+	var productId = '<s:property value="productId"/>';
+	var transDropDownVal= document.getElementById("transDropDownVal").value;
+	var transactionNo = document.getElementById("transactionNo").value;
+	var val = document.premium.chooseTransaction.value;
+		if(val==''){
+		  val = document.premium.chooseTransaction.value;
+		 }
+		 if(val=="Yes"){
+		 document.premium.mode.value="transEdit";
+		 }else{
+		 	if(transactionNo==""){
+				document.premium.mode.value="add";
+				}else{
+				document.premium.mode.value="edit";
+				}
+		 }
+			var proposal_No = document.getElementById("proposal_No").value;
+			var transaction =  document.getElementById("transaction").value;
+			var mode = document.premium.mode.value;
+			if(val!=''){
+			var URL='${pageContext.request.contextPath}/transactionListFaculPremium.action?proposal_No='+proposal_No+'&transaction='+transaction+'&dropDown='+id+'&transDropDownVal='+transDropDownVal+'&productId='+productId+'&chooseTransaction='+val+'&mode='+mode;
+		  	postRequest(URL,id);
+		  	}
+	}
 </script>		
 </body>
 </html>

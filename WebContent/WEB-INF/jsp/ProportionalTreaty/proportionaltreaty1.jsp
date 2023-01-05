@@ -389,7 +389,7 @@ gap:20px;
 													</div>
 												<div class="panel-body">
 													<div class="boxcontent">
-													<s:if test="contNo != '' && contNo != null && proposal_no != null && proposal_no != ''  && amend_Id_Mode != '' && amend_Id_Mode != null">
+													<%-- <s:if test="contNo != '' && contNo != null && proposal_no != null && proposal_no != ''  && amend_Id_Mode != '' && amend_Id_Mode != null">
 														<div class="textfield">
 																<div class="text">
 																	<s:text name="label.endorsementNo" />
@@ -423,7 +423,7 @@ gap:20px;
 																<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="functionDate()" disabled="%{prclFlag==true?true:false}"  />
 															</div>
 														</div>
-														</s:if>
+														</s:if> --%>
 														<div class="textfield">
 															<div class="text" >
 																<s:text name="label.proposalNo" />
@@ -579,7 +579,12 @@ gap:20px;
 																			<s:property value="#list.RSK_TREATYID"/>
 																		</td>
 																		<td align="center">
-																			<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','');" tabindex="1"> Edit </button>
+																			<s:if test="contNo != null && contNo != ''">
+																				<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditContMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
+																			</s:if>
+																			<s:else>
+																				<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','');" tabindex="1"> Edit </button>
+																			</s:else>
 																		</td>
 																		<td align="center">
 																		<s:if test='#displ'>
@@ -3320,6 +3325,18 @@ function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContrac
 	document.getElementById("flag").value='layer';
     document.proportional.action="EditSectionRiskDetails.action?departmentId="+deptId;
     
+    document.proportional.submit();
+}
+function funEditContMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId){
+	document.getElementById("laydet").style.display = "none";
+    document.getElementById("proposalNo1").value=proposalno;
+    //document.getElementById("CustomerId").value=ceddingcompanyid;
+    document.getElementById("baseLayer").value=baseLayer;
+    document.getElementById("layerMode").value='layer';
+	document.getElementById("flag").value='layer';
+	document.getElementById("contractMode").value='Y';
+	document.proportional.layerProposalNo.value=proposalno;
+    document.proportional.action="EditSectionRiskDetails.action?endtMode=endorsment&mode=endorsment&departmentId="+deptId;
     document.proportional.submit();
 }
 function funNewMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId,secMode) {

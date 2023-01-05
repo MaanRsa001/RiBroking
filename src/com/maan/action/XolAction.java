@@ -704,7 +704,9 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			}
 			else if("endorsment".equalsIgnoreCase(bean.getEndtMode())) {
 				dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
-				
+				if(StringUtils.isBlank(bean.getBaseLayer()) && !hasActionErrors()){
+					dropDownController.updateSubClass(bean.getProposal_no(),"Endt");
+				}
 				if(StringUtils.isNotBlank(bean.getContractno())) {
 					bean.setContNo(bean.getContractno());
 				}
@@ -4480,6 +4482,21 @@ public String EditLayer(){
 				bean.setContNo(bean.getContractno());
 			}
 			
+			final int CheckEditMode = service.getEditMode(bean.getProposal_no());
+			if (CheckEditMode == 2) {
+				bean.setAmend_Id_Mode("true");
+			}
+		}else if("endorsment".equalsIgnoreCase(bean.getEndtMode())) {
+			dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
+			if(StringUtils.isBlank(bean.getBaseLayer()) && !hasActionErrors()){
+				dropDownController.updateSubClass(bean.getProposal_no(),"Endt");
+			}
+			if(StringUtils.isNotBlank(bean.getContractno())) {
+				bean.setContNo(bean.getContractno());
+			}
+			/*if(session.get("EditContractNo")!=null) {
+				bean.setContNo(session.get("EditContractNo").toString());
+			}*/
 			final int CheckEditMode = service.getEditMode(bean.getProposal_no());
 			if (CheckEditMode == 2) {
 				bean.setAmend_Id_Mode("true");

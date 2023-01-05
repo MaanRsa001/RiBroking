@@ -1,7 +1,5 @@
 package com.maan.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.RowMapper;
-
 import com.maan.bean.FaculPremiumBean;
 import com.maan.common.db.DBConstants;
 import com.maan.common.db.MyJdbcTemplate;
@@ -19,2239 +14,690 @@ import com.maan.common.util.DropDownControllor;
 import com.maan.common.util.LogUtil;
 import com.maan.dao.CommonDAO;
 import com.maan.dao.ProportionalPremiumDAO;
-import com.opensymphony.xwork2.ActionContext;
+import com.maan.dao.ApiCaller.ApiForProportionalPremium;
 
 public class ProportionalPremiumDaoImpl extends MyJdbcTemplate implements ProportionalPremiumDAO {
 	DropDownControllor dropDownController=new DropDownControllor();
+	ApiForProportionalPremium premiumapi = new ApiForProportionalPremium();
 	private static final Logger LOGGER = LogUtil.getLogger(ProportionalPremiumDaoImpl.class);
 	public boolean premiumInsertMethod(final FaculPremiumBean beanObj, String countryId){
-		LOGGER.info("PremiumDAOImpl premiumInsertMethod || Enter");
 		boolean saveFlag = false;
 		try {
-				String query="";
-				int result;
-				String[] args = insertArguments(beanObj);
-			 	String netDueOc="0";
-			 	String transNo="";
-			 	query=getQuery("PREMIUM_INSERT_TREATYPREMIUM_TEMP");
-		 		netDueOc=args[33];
-		 		transNo=args[1];
-			 	LOGGER.info("Insert Query==>"+query);
-			 	result=this.mytemplate.update(query, args);
-			 	LOGGER.info("Insert Result==>"+result);
-			 	if("submit".equalsIgnoreCase(beanObj.getButtonStatus())){
-			 		beanObj.setTransactionNo(new DropDownControllor().getSequence("Premium",beanObj.getProductId(),beanObj.getDepartmentId(), beanObj.getBranchCode(),"",beanObj.getTransaction()));
-					query = getQuery("FAC_TEMP_STATUS_UPDATE");
-					args = new String[5];
-			 		args[0] = "A";
-			 		args[1] = beanObj.getLoginId();
-			 		args[2] =beanObj.getTransactionNo()==null?"":beanObj.getTransactionNo();
-			 		args[3]= beanObj.getRequestNo() ;
-			 		args[4]= beanObj.getBranchCode() ;
-			 		this.mytemplate.update(query,args);
-			 		getTempToMainMove(beanObj,netDueOc);
-			 		saveFlag = true;
-			 	}
-				InsertPremiumReserved(beanObj,transNo,countryId);
-				InsertLossReserved(beanObj,transNo,countryId);
+			premiumapi.premiumInsertMethod(beanObj,countryId);
+			saveFlag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch (Exception exe) {
-			LOGGER.debug(""+exe);
-			exe.printStackTrace();
-		}
-		LOGGER.info("PremiumDAOImpl premiumInsertMethod || Exit");
-		return saveFlag;
-	}
-
-
-private void getTempToMainMove(FaculPremiumBean beanObj, String netDueOc) {
-	try{
-		String query="";
-		String[] args = null;
-		if(!"Main".equalsIgnoreCase(beanObj.getTableType())){
-			
-			query =getQuery("FAC_PREMIUM_TEMP_TO_MAIN");
-	 		args = new String[2];
-	 		args[0] = beanObj.getRequestNo();
-	 		args[1] = beanObj.getBranchCode();
-	 		this.mytemplate.update(query,args);
-				query=getQuery(DBConstants.PREMIUM_SP_RETROSPLIT);
-				LOGGER.info("SP Name==>"+query);
-				args = new String[16];
-				args[0]=beanObj.getContNo();
-				args[1]=StringUtils.isEmpty(beanObj.getLayerno())?"0":beanObj.getLayerno();
-				args[2]=beanObj.getProductId();
-				args[3]=beanObj.getTransactionNo();
-				args[4]=beanObj.getTransaction();
-				args[5]=beanObj.getCurrencyId();
-				args[6]=beanObj.getExchRate();
-				args[7]=beanObj.getBranchCode();
-				args[8]="P";
-				args[9]=beanObj.getAmendmentDate()==null?"":beanObj.getAmendmentDate();
-				args[10]="";
-				args[11]="";
-				args[12]="";
-				args[13]="";
-				args[14]="";
-				args[15]=beanObj.getRi_cession();
-				for(int i=0;i<args.length;i++)
-				LOGGER.info("Args["+i+"]==>"+args[i]);
-				int spresult=this.mytemplate.update(query,args);
-				LOGGER.info("SP Result==>"+spresult);
-		}
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-	
 		
-	}
-
-
-@SuppressWarnings("unchecked")
-public boolean contractDetails(final FaculPremiumBean bean,final String countryId){
-	LOGGER.info("PremiumDAOImpl contractDetails || Enter");
-	 String query="";
-	 String[] args=null;
-	 boolean saveFlag=false;
-	 try {
-		 query+=getQuery(DBConstants.PREMIUM_SELECT_TREATYCONTDET1);
-		 query+=" AND RK.RSK_DEPTID=?";
-		 query+=getQuery(DBConstants.PREMIUM_SELECT_TREATYCONTDET2);
-		 query+=" and RSK_DEPTID=RK.RSK_DEPTID";
-		 query+=getQuery(DBConstants.PREMIUM_SELECT_TREATYCONTDET3);
-		 	args =new String[10];
-		 	args[0] = bean.getProductId();
-			args[1] = bean.getContNo();
-			args[2] = bean.getDepartmentId();
-			args[3] = bean.getBranchCode();
-			args[4] = bean.getBranchCode();
-			//if("add".equalsIgnoreCase(bean.getMode())){
-			//args[3] = bean.getProductId();
-			//}
-			//else{
-			args[5] = bean.getProductId();
-			//}
-			args[6] = bean.getBranchCode();
-			args[7] = bean.getBranchCode();
-			args[8] = bean.getContNo();
-			args[9] = bean.getBranchCode();
-			LOGGER.info("Select Query=>"+query);
-			for(int i=0;i<args.length;i++)
-			LOGGER.info("Args["+i+"]=>"+args[i]);
-			List list = this.mytemplate.query(query, args,new RowMapper() {
-					public Object mapRow(ResultSet contDet, int rowNum) throws SQLException {
-					bean.setContNo(contDet.getString("RSK_CONTRACT_NO"));
-					bean.setAmendId(contDet.getString("RSK_ENDORSEMENT_NO"));
-					bean.setProfit_Center(contDet.getString("TMAS_PFC_NAME"));
-					bean.setSubProfit_center(contDet.getString("RSK_SPFCID"));
-					if(!"ALL".equalsIgnoreCase(bean.getSubProfit_center())){
-						bean.setSubProfit_center(contDet.getString("TMAS_SPFC_NAME")==null?"ALL":contDet.getString("TMAS_SPFC_NAME"));
-						}
-					//bean.setSubProfit_center(contDet.getString("TMAS_SPFC_NAME"));
-					bean.setCedingCo(contDet.getString("COMPANY"));
-					bean.setBroker(contDet.getString("BROKER"));
-					bean.setTreatyName_type(contDet.getString("RSK_TREATYID"));
-					bean.setProposal_No(contDet.getString("RSK_PROPOSAL_NUMBER"));
-					bean.setUwYear(contDet.getString("RSK_UWYEAR"));
-					bean.setLayerno(contDet.getString("RSK_LAYER_NO"));
-					bean.setInsDate(contDet.getString("INS_DATE"));
-					bean.setExpDate(contDet.getString("EXP_DATE"));
-					bean.setMonth(contDet.getString("MONTH"));
-					bean.setBaseCurrencyId(contDet.getString("RSK_ORIGINAL_CURR"));
-					bean.setBaseCurrencyName(contDet.getString("CURRENCY_NAME"));
-					bean.setPolicyBranch(contDet.getString("TMAS_POL_BRANCH_NAME"));
-					bean.setAddress(contDet.getString("Address"));
-					bean.setDepartmentId(contDet.getString("RSK_DEPTID"));
-					String count="";
-					if("2".equals(bean.getProductId())){
-						count=new DropDownControllor().getCombinedClass(bean.getBranchCode(),bean.getProductId(),bean.getDepartmentId());
-					}
-					if(StringUtils.isBlank(count)){
-					bean.setPredepartment(contDet.getString("RSK_DEPTID"));
-					bean.setConsubProfitId(contDet.getString("RSK_SPFCID"));
-					}
-					bean.setTreatyType(contDet.getString("TREATYTYPE"));
-					bean.setBusinessType(contDet.getString("INWARD_BUS_TYPE")==null?"":contDet.getString("INWARD_BUS_TYPE"));
-					bean.setAcceptenceDate(contDet.getString("RSK_ACCOUNT_DATE"));
-					return bean;
-				}
-			});
-			if(list!=null && list.size()>0)
-				saveFlag = true;
-				args=new String[2];
-				args[0] = bean.getProposal_No();
-				args[1] = bean.getProposal_No();
-				query=getQuery(DBConstants.PREMIUM_SELECT_COMMISSIONDETAILS);
-				LOGGER.info("Select Query=>"+query);
-				this.mytemplate.query(query, args,new RowMapper() {
-					public Object mapRow(ResultSet commission, int rowNum) throws SQLException {
-						bean.setCommission_view(DropDownControllor.formatter(commission.getString("RSK_COMM_QUOTASHARE")));
-						bean.setPremium_Reserve_view(DropDownControllor.formatter(commission.getString("RSK_PREMIUM_RESERVE")));
-						bean.setLoss_reserve_view(DropDownControllor.formatter(commission.getString("RSK_LOSS_RESERVE")));
-						bean.setProfitCommYN(DropDownControllor.formatter(commission.getString("RSK_PROFIT_COMM")));
-						bean.setCommissionSurb_view(DropDownControllor.formatter(commission.getString("RSK_COMM_SURPLUS")));
-						bean.setOverRider_view(DropDownControllor.formatter(commission.getString("RSK_OVERRIDER_PERC")));
-						bean.setBrokerage_view(DropDownControllor.formatter(commission.getString("RSK_BROKERAGE")));
-						bean.setBrokerage_view((commission.getString("RSK_BROKERAGE")));
-						bean.setTax_view(DropDownControllor.formatter(commission.getString("RSK_TAX")));
-						bean.setOtherCostView(DropDownControllor.formatter(commission.getString("RSK_OTHER_COST")));
-						bean.setOurAssessmentOfOrginal(commission.getString("RSK_OUR_ASS_ACQ_COST")==null?"0.00":DropDownControllor.formatter(commission.getString("RSK_OUR_ASS_ACQ_COST")));
-						bean.setPremiumReserve(commission.getString("RSK_PREMIUM_RESERVE"));
-						
-						return null;
-					}
-				});
-				args[0] = bean.getProposal_No();
-				args[1] = bean.getProposal_No();
-				query=getQuery(DBConstants.PREMIUM_SELECT_TREATYPROPOSALDETAILS);
-				this.mytemplate.query(query, args,new RowMapper() {
-					public Object mapRow(ResultSet proposalDetails, int rowNum) throws SQLException {
-						bean.setShareSigned(proposalDetails.getString("RSK_SHARE_SIGNED"));
-						bean.setPremiumQuota_view(DropDownControllor.formatter(proposalDetails.getString("RSK_PREMIUM_QUOTA_SHARE")));
-						bean.setPremiumsurp_view(DropDownControllor.formatter(proposalDetails.getString("RSK_PREMIUM_SURPULS")));
-						bean.setXl_cost_view(DropDownControllor.formatter(proposalDetails.getString("RSK_XLCOST_OS_OC")));
-						String eps = (proposalDetails.getString("RSK_EPI_OSOE_OC"));
-						bean.setRdsExchageRate(proposalDetails.getString("RSK_EXCHANGE_RATE"));
-						double val= Double.parseDouble(eps)/Double.parseDouble(bean.getRdsExchageRate());
-						bean.setEpioc(DropDownControllor.formatter(Double.toString(val)));
-						return null;
-					}
-				});
-				query=getQuery(DBConstants.PREMIUM_SELECT_GETOSCLAIMLOSSUPDATE);
-				Object[] obj=new Object[0];
-				LOGGER.info("Trans No=>"+bean.getTransactionNo());
-				if(StringUtils.isEmpty(bean.getTransactionNo()))
-				{
-					obj=new Object[3];
-					obj[0]= bean.getBranchCode();
-					obj[1] = bean.getContNo();
-					obj[2] = bean.getContNo();
-				}
-				else
-				{
-					query+=" "+getQuery(DBConstants.PREMIUM_SELECT_GETOSCLAIMLOSSUPDATEEDIT);
-					obj=new Object[4];
-					obj[0] = bean.getBranchCode();
-					obj[1] = bean.getContNo();
-					obj[2] = bean.getContNo();
-					obj[3] = bean.getTransactionNo();
-				}
-				query+=getQuery(DBConstants.PREMIUM_SELECT_GETOSCLAIMLOSSUPDATENEW);
-				LOGGER.info("Select Query==>"+query);
-				int i=0;
-				for(Object o:obj){
-					LOGGER.info("Obj["+i+"]==>"+o);
-					i++;
-				}
-				ArrayList li=null;
-				li=(ArrayList)this.mytemplate.queryForList(query,obj);
-				final Map<String,Double> osClaimLossMap = new HashMap();
-				if(li!=null && li.size()>0){
-					for (int j = 0; j < li.size(); j++) {
-						final Map tempMap = (Map) li.get(j);
-						osClaimLossMap.put("Previous Outstanding Loss position For "+tempMap.get("CURRENCY_NAME").toString(), Double.parseDouble((tempMap.get("OSCLAIM_LOSSUPDATE_OC")==null?"0":tempMap.get("OSCLAIM_LOSSUPDATE_OC").toString())));
-					}
-					LOGGER.info("List Size==>"+li.size());
-					LOGGER.info("Map Size==>"+osClaimLossMap.size());
-				}
-				bean.setOsClaimLoss(osClaimLossMap);
-
-				//For Cash Loss Credit update added by sathish =>Start
-				if(StringUtils.isNotBlank(bean.getTransactionNo())){
-					query=getQuery(DBConstants.PREMIUM_SELECT_CASHLOSSCREDITUPDATE);
-					LOGGER.info("Select Query=>"+query);
-					obj=new Object[2];
-					obj[0]=bean.getContNo();
-					obj[1]=bean.getTransactionNo();
-					LOGGER.info("Obj[0]==>"+bean.getContNo()+"Obj[1]==>"+bean.getTransactionNo());
-					List claimlist = this.mytemplate.queryForList(query,obj);
-					if(claimlist!=null){
-						List<String> claimno=new ArrayList<String>();
-						List<String> currencyid=new ArrayList<String>();
-						List<String> cashoc=new ArrayList<String>();
-						List<String> cashdc=new ArrayList<String>();
-						for(int k=0;k<claimlist.size();k++){
-							Map temp=(Map)claimlist.get(k);
-							claimno.add(temp.get("CLAIM_NO")==null?"":temp.get("CLAIM_NO").toString());
-							currencyid.add(temp.get("CURRENCY_ID")==null?"":temp.get("CURRENCY_ID").toString());
-							cashoc.add(temp.get("CASH_LOSS_CREDIT_OC")==null?"":temp.get("CASH_LOSS_CREDIT_OC").toString());
-							cashdc.add(temp.get("CASH_LOSS_CREDIT_DC")==null?"":temp.get("CASH_LOSS_CREDIT_DC").toString());
-							//bean.getRequest().setAttribute("claimNo"+j, map.get("CLAIM_NO").toString());
-							//bean.getRequest().setAttribute("currencyId"+j, map.get("CURRENCY_ID").toString());
-							//bean.getRequest().setAttribute("cashLossCreditOC"+j, map.get("CASH_LOSS_CREDIT_OC").toString());
-							//bean.getRequest().setAttribute("cashLossCreditDC"+j, map.get("CASH_LOSS_CREDIT_DC").toString());
-						}
-						bean.setClaimNo(claimno);
-						bean.setCurrencyIds(currencyid);
-						bean.setCashLossCreditOC(cashoc);
-						bean.setCashLossCreditDC(cashdc);
-					}
-				}
-				query=getQuery(DBConstants.PREMIUM_SELECT_CURRENCY_NAME);
-			   	bean.setCurrencyName((String)this.mytemplate.queryForObject(query,new Object[]{bean.getBranchCode()},String.class));
-			   	query=getQuery(DBConstants.PREMIUM_SELECT_SUMOFPAIDPREMIUM);
-				LOGGER.info("Select Query==>"+query);
-				LOGGER.info("Arg[0]====>"+bean.getContNo());
-				bean.setSum_of_paid_premium((String)this.mytemplate.queryForObject(query,new Object[]{bean.getContNo()},String.class));
-				query=getQuery("GETSETTLEMET_STATUS");
-				List<Map<String,Object>> premlist = new ArrayList<Map<String,Object>>();
-				premlist = this.mytemplate.queryForList(query,new Object[]{bean.getContNo()});
-				if(premlist.size()>0){
-					for(int j=0;j<premlist.size();j++){
-						Map<String,Object> map = premlist.get(j);
-							String allocate = map.get("ALLOCATED_TILL_DATE")==null?"0":map.get("ALLOCATED_TILL_DATE").toString();
-							String net = map.get("NETDUE_OC").toString();
-							if("0".equalsIgnoreCase(allocate)){
-								bean.setSettlement_status("Pending");
-							}else if(Double.parseDouble(allocate) == Double.parseDouble(net)){
-								bean.setSettlement_status("Allocated");
-							}else{
-								bean.setSettlement_status("Partially Allocated");
-							}
-					}
-				}
-	} catch (Exception exe) {
-		LOGGER.debug("contractDetails"+exe);
-	}
-	LOGGER.info("PremiumDAOImpl contractDetails || Exit");
-	return saveFlag;
-}
-
-
-@SuppressWarnings("unchecked")
-public boolean getPremiumDetails(final FaculPremiumBean bean,final String TransactionNo,final String countryId)  {
-	LOGGER.info("PremiumDAOImpl getPremiumDetails || Enter");
-	String query="";
-	try{
-
-		String[] args=new String[3];
-   	  	args[0]=bean.getProductId();
-	   	args[1]=bean.getContNo();
-	   	if("Temp".equalsIgnoreCase(bean.getTableType())){
-	   		args[2]=bean.getRequestNo();
-	   		query=getQuery("PREMIUM_SELECT_TREATYPREMIUMVIEW_TEMP");
-	   	}else{
-	   		args[2]=TransactionNo;
-	   		query=getQuery(DBConstants.PREMIUM_SELECT_TREATYPREMIUMVIEW);
-	   	}
-   		LOGGER.info("Query=>"+query);
-	   	this.mytemplate.query(query, args,new RowMapper() {
-			public Object mapRow(ResultSet treatyView, int rowNum) throws SQLException {
-				bean.setContNo(treatyView.getString("CONTRACT_NO"));
-				bean.setTransactionNo(treatyView.getString("TRANSACTION_NO"));
-				//bean.setRequestNo(treatyView.getString("REQUEST_NO"));
-				bean.setTransaction(treatyView.getString("TRANS_DATE"));
-				bean.setBrokerage(DropDownControllor.formatter(treatyView.getString("BROKERAGE_AMT_OC")));
-				bean.setTax(DropDownControllor.formatter(treatyView.getString("TAX_AMT_OC")));
-				bean.setPremiumQuotaShare(DropDownControllor.formatter(treatyView.getString("PREMIUM_QUOTASHARE_OC")));
-				bean.setCommissionQuotaShare(DropDownControllor.formatter(treatyView.getString("COMMISSION_QUOTASHARE_OC")));
-				bean.setPremiumSurplus(DropDownControllor.formatter(treatyView.getString("PREMIUM_SURPLUS_OC")));
-				bean.setCommissionSurplus(DropDownControllor.formatter(treatyView.getString("COMMISSION_SURPLUS_OC")));
-				bean.setPremiumportifolioIn(DropDownControllor.formatter(treatyView.getString("PREMIUM_PORTFOLIOIN_OC")));
-				bean.setCliamPortfolioin(DropDownControllor.formatter(treatyView.getString("CLAIM_PORTFOLIOIN_OC")));
-				bean.setPremiumportifolioout(DropDownControllor.formatter(treatyView.getString("PREMIUM_PORTFOLIOOUT_OC")));
-				bean.setLossReserveReleased(DropDownControllor.formatter(treatyView.getString("LOSS_RESERVE_RELEASED_OC")));
-				bean.setPremiumReserve_QuotaShare(DropDownControllor.formatter(treatyView.getString("PREMIUMRESERVE_QUOTASHARE_OC")));
-				bean.setCashLoss_Credit(DropDownControllor.formatter(treatyView.getString("CASH_LOSS_CREDIT_OC")));
-				bean.setLoss_ReserveRetained(DropDownControllor.formatter(treatyView.getString("LOSS_RESERVERETAINED_OC")));
-				bean.setProfit_Commission(DropDownControllor.formatter(treatyView.getString("PROFIT_COMMISSION_OC")));
-				bean.setCash_LossPaid(DropDownControllor.formatter(treatyView.getString("CASH_LOSSPAID_OC")));
-				bean.setNetDue(DropDownControllor.formatter(treatyView.getString("NETDUE_OC")));
-				bean.setReceipt_no(treatyView.getString("RECEIPT_NO"));
-				//bean.setSettlement_status(treatyView.getString("SETTLEMENT_STATUS"));
-				bean.setClaims_paid(DropDownControllor.formatter(treatyView.getString("CLAIMS_PAID_OC")));
-				bean.setInception_Date(treatyView.getString("ENTRY_DATE"));
-				bean.setXl_Cost(DropDownControllor.formatter(treatyView.getString("XL_COST_OC")));
-				bean.setCliam_portfolio_out(DropDownControllor.formatter(treatyView.getString("CLAIM_PORTFOLIO_OUT_OC")));
-				bean.setPremium_Reserve_Released(DropDownControllor.formatter(treatyView.getString("PREMIUM_RESERVE_REALSED_OC")));
-				bean.setAccount_Period(treatyView.getString("ACCOUNT_PERIOD_QTR"));
-				bean.setAccount_Period_year(treatyView.getString("ACCOUNT_PERIOD_YEAR"));
-				bean.setCurrencyId(treatyView.getString("CURRENCY_ID"));
-				bean.setOtherCost(DropDownControllor.formatter(treatyView.getString("OTHER_COST_OC")));
-				bean.setBrokerage_usd(DropDownControllor.formatter(treatyView.getString("BROKERAGE_AMT_DC")));
-				bean.setTax_usd(DropDownControllor.formatter(treatyView.getString("TAX_AMT_DC")));
-				bean.setPremiumQuotaShare_usd(DropDownControllor.formatter(treatyView.getString("PREMIUM_QUOTASHARE_DC")));
-				bean.setCommsissionQuotaShare_usd(DropDownControllor.formatter(treatyView.getString("COMMISSION_QUOTASHARE_DC")));
-				bean.setPremium_surplus_usd(DropDownControllor.formatter(treatyView.getString("PREMIUM_SURPLUS_DC")));
-				bean.setComission_surplus_usd(DropDownControllor.formatter(treatyView.getString("COMMISSION_SURPLUS_DC")));
-				bean.setPremium_portfolio_in_usd(DropDownControllor.formatter(treatyView.getString("PREMIUM_PORTFOLIOIN_DC")));
-				bean.setCliam_portfolio_usd(DropDownControllor.formatter(treatyView.getString("CLAIM_PORTFOLIOIN_DC")));
-				bean.setPremium_PortfolioOut_usd(DropDownControllor.formatter(treatyView.getString("PREMIUM_PORTFOLIOOUT_DC")));
-				bean.setLoss_Reserve_released_usd(DropDownControllor.formatter(treatyView.getString("LOSS_RESERVE_RELEASED_DC")));
-				bean.setPremium_reserve_quota_share_usd(DropDownControllor.formatter(treatyView.getString("PREMIUMRESERVE_QUOTASHARE_DC")));
-				bean.setCash_loss_credit_usd(DropDownControllor.formatter(treatyView.getString("CASH_LOSS_CREDIT_DC")));
-				bean.setLoss_reserve_retained_usd(DropDownControllor.formatter(treatyView.getString("LOSS_RESERVERETAINED_DC")));
-				bean.setProfit_commission_usd(DropDownControllor.formatter(treatyView.getString("PROFIT_COMMISSION_DC")));
-				bean.setCash_loss_paid_usd(DropDownControllor.formatter(treatyView.getString("CASH_LOSSPAID_DC")));
-				bean.setClams_paid_usd(DropDownControllor.formatter(treatyView.getString("CLAIMS_PAID_DC")));
-				bean.setXl_cost_usd(DropDownControllor.formatter(treatyView.getString("XL_COST_DC")));
-				bean.setCliam_portfolio_out_usd(DropDownControllor.formatter(treatyView.getString("CLAIM_PORTFOLIO_OUT_DC")));
-				bean.setPremium_Reserve_Released_usd(DropDownControllor.formatter(treatyView.getString("PREMIUM_RESERVE_REALSED_DC")));
-				bean.setNet_due_usd(DropDownControllor.formatter(treatyView.getString("NETDUE_DC")));
-				bean.setOtherCostUSD(DropDownControllor.formatter(treatyView.getString("OTHER_COST_DC")));
-				bean.setCedentRef(treatyView.getString("CEDANT_REFERENCE"));
-				bean.setRemarks(treatyView.getString("REMARKS"));
-				bean.setTotalCredit(DropDownControllor.formatter(treatyView.getString("TOTAL_CR_OC")));
-				bean.setTotalCreditDC(DropDownControllor.formatter(treatyView.getString("TOTAL_CR_DC")));
-				bean.setTotalDebit(DropDownControllor.formatter(treatyView.getString("TOTAL_DR_OC")));
-				bean.setTotalDebitDC(DropDownControllor.formatter(treatyView.getString("TOTAL_DR_DC")));
-				bean.setInterest(DropDownControllor.formatter(treatyView.getString("INTEREST_OC")));
-				bean.setInterestDC(DropDownControllor.formatter(treatyView.getString("INTEREST_DC")));
-				bean.setOsClaimsLossUpdateOC(DropDownControllor.formatter(treatyView.getString("OSCLAIM_LOSSUPDATE_OC")));
-				bean.setOsClaimsLossUpdateDC(DropDownControllor.formatter(treatyView.getString("OSCLAIM_LOSSUPDATE_DC")));
-				bean.setOverrider(DropDownControllor.formatter(treatyView.getString("OVERRIDER_AMT_OC")));
-				bean.setOverriderUSD(DropDownControllor.formatter(treatyView.getString("OVERRIDER_AMT_DC")));
-				bean.setAmendmentDate(treatyView.getString("AMENDMENT_DATE"));
-                bean.setWithHoldingTaxOC(DropDownControllor.formatter(treatyView.getString("WITH_HOLDING_TAX_OC")));
-                bean.setWithHoldingTaxDC(DropDownControllor.formatter(treatyView.getString("WITH_HOLDING_TAX_DC")));
-                bean.setDueDate(treatyView.getString("due_date"));
-                bean.setCreditsign(treatyView.getString("NETDUE_OC"));
-                bean.setRi_cession(treatyView.getString("RI_CESSION"));
-                bean.setTaxDedectSource(DropDownControllor.formatter(treatyView.getString("TDS_OC")));
-				bean.setTaxDedectSourceDc(DropDownControllor.formatter(treatyView.getString("TDS_DC")));
-				bean.setServiceTax(DropDownControllor.formatter(treatyView.getString("ST_OC")));
-				bean.setServiceTaxDc(DropDownControllor.formatter(treatyView.getString("ST_DC")));
-				bean.setLossParticipation(DropDownControllor.formatter(treatyView.getString("LPC_OC")));
-				bean.setLossParticipationDC(DropDownControllor.formatter(treatyView.getString("LPC_DC")));
-				bean.setSlideScaleCom(DropDownControllor.formatter(treatyView.getString("SC_COMM_OC")));
-				bean.setSlideScaleComDC(DropDownControllor.formatter(treatyView.getString("SC_COMM_DC")));
-				bean.setSubProfitId(treatyView.getString("SUB"));
-				if(!"ALL".equalsIgnoreCase(bean.getSubProfitId())){
-				bean.setSubProfitId(treatyView.getString("PREMIUM_SUBCLASS"));
-				}
-				bean.setExchRate(DropDownControllor.exchRateFormat(treatyView.getString("EXCHANGE_RATE")));
-				bean.setStatementDate(treatyView.getString("STATEMENT_DATE"));
-				 bean.setPremiumClass(treatyView.getString("TMAS_DEPARTMENT_NAME"));
-	                bean.setPremiumSubClass(treatyView.getString("SUB"));
-	                if(!"ALL".equalsIgnoreCase(bean.getPremiumSubClass())){
-	                	bean.setPremiumSubClass(treatyView.getString("PREMIUM_SUBCLASS"));
-	                }
-	                bean.setOsbYN(treatyView.getString("OSBYN"));
-	                bean.setSectionName(treatyView.getString("SECTION_NAME"));
-	                bean.setAccDate(treatyView.getString("ACCOUNTING_PERIOD_DATE").toString()) ;
-			return null;
-			}
-		});
-
-		 	query=getQuery(DBConstants.PREMIUM_SELECT_SUMOFPAIDPREMIUM);
-			LOGGER.info("Select Query==>"+query);
-			LOGGER.info("Arg[0]====>"+bean.getContNo());
-			bean.setSum_of_paid_premium((String)this.mytemplate.queryForObject(query,new Object[]{bean.getContNo()},String.class));
-			LOGGER.info("Result===>"+bean.getSum_of_paid_premium());
-
-	   	if(StringUtils.isNotBlank(bean.getCurrencyId())){
-			query=getQuery(DBConstants.PREMIUM_SELECT_CURRENCY);
-			LOGGER.info("Select Query==>"+query);
-			LOGGER.info("Arg[0]====>"+bean.getCurrencyId());
-			LOGGER.info("Arg[1]====>"+bean.getBranchCode());
-			bean.setCurrency((String)this.mytemplate.queryForObject(query,new Object[]{bean.getCurrencyId(),bean.getBranchCode()},String.class));
-			LOGGER.info("Result==>"+bean.getCurrency());
-	   	}
-	   	query=getQuery(DBConstants.PREMIUM_SELECT_CURRENCY_NAME);
-	   	bean.setCurrencyName((String)this.mytemplate.queryForObject(query,new Object[]{bean.getBranchCode()},String.class));
-
-		LOGGER.info("PremiumDAOImpl getPremiumDetails || Exit");
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);e.printStackTrace();
-	}
-	return false;
-}
-
-public List<FaculPremiumBean> getPremiumedList(final FaculPremiumBean beanObj, String type)
-{
-	List<FaculPremiumBean> finalList = new ArrayList<FaculPremiumBean>();
-	LOGGER.info("PremiumDAOImpl getPremiumedList || Enter");
-	String query="";
-    Object[] args=null;
-      	args=new String[4];
-    	args[0]=beanObj.getContNo();
-    	args[1]=beanObj.getBranchCode();
-    	args[2]=beanObj.getContNo();
-    	args[3]=beanObj.getDepartmentId();
-    	if("Main".equalsIgnoreCase(type)){
-    		query=getQuery(DBConstants.PREMIUM_SELECT_PREMIUMEDLIST1);
-    		query+=" AND RSK_DEPTID =  TRA.SUB_CLASS ";
-    		query+=getQuery(DBConstants.PREMIUM_SELECT_PREMIUMEDLIST2);
-
-    		query+=" AND RSK_DEPTID=? AND TRA.SUB_CLASS=RSK_DEPTID ";
-
-    		query+=getQuery(DBConstants.PREMIUM_SELECT_PREMIUMEDLIST3);
-    	}else{
-    		query = getQuery("PTTY_PREMIUM_LIST_TEMP");
-    	}
-	
-	LOGGER.info("Query=>"+query);
-	LOGGER.info("Args=>"+StringUtils.join(args));
-	List<Map<String,Object>> list=this.mytemplate.queryForList(query, args);
-	for(int i=0 ; i<list.size() ; i++) {
-		Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
-		FaculPremiumBean tempBean = new FaculPremiumBean();
-		tempBean.setRequestNo(tempMap.get("REQUEST_NO")==null?"":tempMap.get("REQUEST_NO").toString());
-		tempBean.setProposal_No(tempMap.get("RSK_PROPOSAL_NUMBER")==null?"":tempMap.get("RSK_PROPOSAL_NUMBER").toString());
-		tempBean.setContNo(tempMap.get("RSK_CONTRACT_NO")==null?"":tempMap.get("RSK_CONTRACT_NO").toString());
-		tempBean.setCeding_Company_Name(tempMap.get("COMPANY_NAME")==null?"":tempMap.get("COMPANY_NAME").toString());
-		tempBean.setBroker(tempMap.get("BROKER_NAME")==null?"":tempMap.get("BROKER_NAME").toString());
-		tempBean.setLayerno(tempMap.get("RSK_LAYER_NO")==null?"":tempMap.get("RSK_LAYER_NO").toString());
-		tempBean.setTransactionNo(tempMap.get("TRANSACTION_NO")==null?"":tempMap.get("TRANSACTION_NO").toString());
-		tempBean.setAccount_Period(tempMap.get("ACC_PER")==null?"":tempMap.get("ACC_PER").toString());
-		tempBean.setAccountPeriodDate(tempMap.get("ACCOUNTING_PERIOD_DATE")==null?"":tempMap.get("ACCOUNTING_PERIOD_DATE").toString());
-		tempBean.setTransDropDownVal(tempMap.get("REVERSE_TRANSACTION_NO")==null?"":tempMap.get("REVERSE_TRANSACTION_NO").toString());
-		if(Double.parseDouble(tempMap.get("ALLOC_AMT").toString())!=0)
-			tempBean.setEndtYN("Yes");
-		else
-			tempBean.setEndtYN("No");
-		tempBean.setProductId("2");
-		tempBean.setInception_Date(tempMap.get("INS_DATE")==null?"":tempMap.get("INS_DATE").toString());
-		tempBean.setStatementDate(tempMap.get("STATEMENT_DATE")==null?"":tempMap.get("STATEMENT_DATE").toString());
-		tempBean.setMovementYN(tempMap.get("MOVEMENT_YN")==null?"":tempMap.get("MOVEMENT_YN").toString());
-		//tempBean.setSettlement_Status(tempMap.get("SETTLEMENT_STATUS")==null?"":tempMap.get("SETTLEMENT_STATUS").toString());
-		tempBean.setTransDate(tempMap.get("TRANSACTION_DATE")==null?"":tempMap.get("TRANSACTION_DATE").toString());
-		if((StringUtils.isNotBlank(beanObj.getOpstartDate()))&& (StringUtils.isNotBlank(beanObj.getOpendDate()))){
-			if(new DropDownControllor().Validatethree(beanObj.getBranchCode(), tempBean.getTransDate())==0){
-				tempBean.setTransOpenperiodStatus("N");
-			}else
-			{
-				tempBean.setTransOpenperiodStatus("Y");
-			}
-			}
-		tempBean.setAllocatedYN((String)this.mytemplate.queryForObject("select Decode (count(*),0,'Y','N') allocatedYN from TTRN_ALLOCATED_TRANSACTION where CONTRACT_NO =? and TRANSACTION_NO=? and LAYER_NO=? and TYPE='P' and STATUS='Y'",new Object[]{tempBean.getContNo(),tempBean.getTransactionNo(),tempBean.getLayerno()},String.class));
-			int count=new DropDownControllor().Validatethree(beanObj.getBranchCode(), tempBean.getTransDate());
-			Object args2[]=new String[1];
-			args2[0]=tempBean.getTransactionNo();
-			query=getQuery(DBConstants.ALLOCATION_STATUS_COMPARITION);
-			int allocationstatus=this.mytemplate.queryForInt(query,args2);
-			query=getQuery(DBConstants.RETRO_PRCL_STATUS_COMPARITION);
-			int retroPrclStatus=this.mytemplate.queryForInt(query,args2);
-			int retroPrclStatus1=0;
-			if(retroPrclStatus!=0){
-			query=getQuery(DBConstants.RETRO_PRCL_STATUS_COMPARITION1);
-			retroPrclStatus1=this.mytemplate.queryForInt(query,args2);
-			}
-			if(count!=0 && allocationstatus ==0 &&  retroPrclStatus1 ==0 ){
-				tempBean.setDeleteStatus("Y");
-			}
-		finalList.add(tempBean);
-	}
-	LOGGER.info("PremiumDAOImpl getPremiumedList || Exit List Size==>"+list.size());
-	return finalList;
-}
-
-@SuppressWarnings("unchecked")
-public boolean premiumEdit(final FaculPremiumBean bean,final String countryId) {
-	 LOGGER.info("PremiumDAOImpl premiumEdit || Enter");
-	 String query="";
-	 boolean saveFlag=false;
-		 	String[] args = new String[2];
-			args[0] = bean.getContNo();
-	 if("Temp".equalsIgnoreCase(bean.getTableType())){
-		 query=getQuery("PTTY_PREMIUM_EDIT_TEMP");
-			args[1] = bean.getRequestNo();
-		}else{
-			query=getQuery(DBConstants.PREMIUM_SELECT_TREETYXOLPREMIUMEDIT);
-			args[1] = bean.getTransactionNo();
-		}
-			
-			LOGGER.info("Query=>"+query.toString());
-			List list=this.mytemplate.query(query, args,new RowMapper() {
-				public Object mapRow(ResultSet editPremium, int rowNum) throws SQLException {
-					bean.setTransaction(editPremium.getString("TRANS_DATE"));
-					bean.setAccount_Period(editPremium.getString("ACCOUNT_PERIOD_QTR"));
-					bean.setAccount_Period_year(editPremium.getString("ACCOUNT_PERIOD_YEAR"));
-					bean.setCurrencyId(editPremium.getString("CURRENCY_ID"));
-					bean.setCurrency(editPremium.getString("CURRENCY_ID"));
-					if(null==editPremium.getString("EXCHANGE_RATE")){
-						bean.setExchRate(new DropDownControllor().GetExchangeRate(bean.getCurrencyId(),bean.getTransaction(),countryId,bean.getBranchCode()));
-					}
-					else{
-					bean.setExchRate(DropDownControllor.exchRateFormat(editPremium.getString("EXCHANGE_RATE")));
-					}
-					bean.setBrokerage(editPremium.getString("BROKERAGE_AMT_OC"));
-					bean.setTax(editPremium.getString("TAX_AMT_OC"));
-					bean.setPremiumQuotaShare(editPremium.getString("PREMIUM_QUOTASHARE_OC"));
-					bean.setCommissionQuotaShare(editPremium.getString("COMMISSION_QUOTASHARE_OC"));
-					bean.setPremiumSurplus(editPremium.getString("PREMIUM_SURPLUS_OC"));
-					bean.setCommissionSurplus(editPremium.getString("COMMISSION_SURPLUS_OC"));
-					bean.setPremiumportifolioIn(editPremium.getString("PREMIUM_PORTFOLIOIN_OC"));
-					bean.setCliamPortfolioin(editPremium.getString("CLAIM_PORTFOLIOIN_OC"));
-					bean.setPremiumportifolioout(editPremium.getString("PREMIUM_PORTFOLIOOUT_OC"));
-					bean.setLossReserveReleased(editPremium.getString("LOSS_RESERVE_RELEASED_OC"));
-					bean.setPremiumReserve_QuotaShare(editPremium.getString("PREMIUMRESERVE_QUOTASHARE_OC"));
-					bean.setCashLoss_Credit(editPremium.getString("CASH_LOSS_CREDIT_OC"));
-					bean.setLoss_ReserveRetained(editPremium.getString("LOSS_RESERVERETAINED_OC"));
-					bean.setProfit_Commission(editPremium.getString("PROFIT_COMMISSION_OC"));
-					bean.setCash_LossPaid(editPremium.getString("CASH_LOSSPAID_OC"));
-					bean.setStatus(editPremium.getString("STATUS"));
-					bean.setNetDue(editPremium.getString("NETDUE_OC"));
-					bean.setEnteringMode(editPremium.getString("ENTERING_MODE").trim());
-					bean.setReceipt_no(editPremium.getString("RECEIPT_NO"));
-					bean.setClaims_paid(editPremium.getString("CLAIMS_PAID_OC"));
-					//bean.setSettlement_status(editPremium.getString("SETTLEMENT_STATUS"));
-				    bean.setMd_premium(editPremium.getString("M_DPREMIUM_OC"));
-				    bean.setAdjustment_premium(editPremium.getString("ADJUSTMENT_PREMIUM_OC"));
-				    bean.setRecuirement_premium(editPremium.getString("REC_PREMIUM_OC"));
-				    bean.setCommission(editPremium.getString("COMMISSION"));
-				    bean.setInstlmentNo(editPremium.getString("INSTALMENT_NUMBER"));
-				    bean.setInception_Date(editPremium.getString("INS_DATE"));
-				    bean.setXl_Cost(editPremium.getString("XL_COST_OC"));
-				    bean.setCliam_portfolio_out(editPremium.getString("CLAIM_PORTFOLIO_OUT_OC"));
-				    bean.setPremium_Reserve_Released(editPremium.getString("PREMIUM_RESERVE_REALSED_OC"));
-				    bean.setOtherCost(editPremium.getString("OTHER_COST_OC"));
-				    bean.setCedentRef(editPremium.getString("CEDANT_REFERENCE"));
-					bean.setRemarks(editPremium.getString("REMARKS"));
-					bean.setNetDue(editPremium.getString("NETDUE_OC"));
-					bean.setInterest(DropDownControllor.formatter(editPremium.getString("INTEREST_OC")));
-					bean.setOsClaimsLossUpdateOC(DropDownControllor.formatter(editPremium.getString("OSCLAIM_LOSSUPDATE_OC")));
-					bean.setOverrider(editPremium.getString("OVERRIDER_AMT_OC"));
-					bean.setOverriderUSD(editPremium.getString("OVERRIDER_AMT_DC"));
-					bean.setAmendmentDate(editPremium.getString("AMENDMENT_DATE"));
-                    bean.setWithHoldingTaxOC(DropDownControllor.formatter(editPremium.getString("WITH_HOLDING_TAX_OC")));
-                    bean.setWithHoldingTaxDC(DropDownControllor.formatter(editPremium.getString("WITH_HOLDING_TAX_DC")));
-                    bean.setRi_cession(editPremium.getString("RI_CESSION"));
-                    bean.setTaxDedectSource(DropDownControllor.formatter(editPremium.getString("TDS_OC")));
-    				bean.setTaxDedectSourceDc(DropDownControllor.formatter(editPremium.getString("TDS_DC")));
-    				bean.setServiceTax(DropDownControllor.formatter(editPremium.getString("ST_OC")));
-    				bean.setServiceTaxDc(DropDownControllor.formatter(editPremium.getString("ST_DC")));
-    				bean.setLossParticipation(DropDownControllor.formatter(editPremium.getString("LPC_OC")));
-    				bean.setLossParticipationDC(DropDownControllor.formatter(editPremium.getString("LPC_DC")));
-					bean.setSlideScaleCom(DropDownControllor.formatter(editPremium.getString("SC_COMM_OC")));
-					bean.setSlideScaleComDC(DropDownControllor.formatter(editPremium.getString("SC_COMM_DC")));
-					bean.setSubProfitId(editPremium.getString("PREMIUM_SUBCLASS"));
-					bean.setPrAllocatedAmount(editPremium.getString("PRD_ALLOCATED_TILL_DATE"));
-					bean.setLrAllocatedAmount(editPremium.getString("LRD_ALLOCATED_TILL_DATE"));
-					bean.setStatementDate(editPremium.getString("STATEMENT_DATE"));
-					bean.setOsbYN(editPremium.getString("OSBYN"));
-					bean.setSectionName(editPremium.getString("SECTION_NAME"));
-					bean.setSectionType("2");
-					bean.setAccountPeriodDate(editPremium.getString("ACCOUNTING_PERIOD_DATE")) ;
-					bean.setPredepartment(editPremium.getString("PREMIUM_CLASS")) ;
-					return bean;
-				}
-			});
-			if(list!=null && list.size()>0)
-				saveFlag = true;
-			LOGGER.info("PremiumDAOImpl premiumEdit || Exit");
 		return saveFlag;
+	}
+	public boolean contractDetails(final FaculPremiumBean bean,final String countryId){
+	 boolean saveFlag=false;
+	 	Map<String, Object> relist = premiumapi.contractDetails(bean);
+		if(relist!=null) {
+			bean.setContNo(relist.get("ContNo") == null ? "" : relist.get("ContNo").toString());
+			bean.setUwYear(relist.get("UwYear") == null ? "" : relist.get("UwYear").toString());
+			bean.setCedingCo(relist.get("CedingCo") == null ? "" : relist.get("CedingCo").toString());
+			bean.setBroker(relist.get("Broker") == null ? "" : relist.get("Broker").toString());
+			bean.setTreatyName_type(relist.get("TreatyNameType") == null ? "" : relist.get("TreatyNameType").toString());
+			bean.setInsDate(relist.get("InsDate") == null ? "" : relist.get("InsDate").toString());
+			bean.setExpDate(relist.get("ExpDate") == null ? "" : relist.get("ExpDate").toString());
+			bean.setEpioc(relist.get("Epioc") == null ? "" : relist.get("Epioc").toString());
+			bean.setOverRider_view(relist.get("OverRiderView") == null ? "" : relist.get("OverRiderView").toString());
+			bean.setBrokerage_view(relist.get("BrokerageView") == null ? "" : relist.get("BrokerageView").toString());
+			bean.setCommission_view(relist.get("CommissionView") == null ? "" : relist.get("CommissionView").toString());
+			bean.setTax_view(relist.get("TaxView") == null ? "" : relist.get("TaxView").toString());
+			bean.setShareSigned(relist.get("ShareSigned") == null ? "" : relist.get("ShareSigned").toString());
+			bean.setOtherCostView(relist.get("OtherCostView") == null ? "" : relist.get("OtherCostView").toString());
+			bean.setTreatyType(relist.get("TreatyType") == null ? "" : relist.get("TreatyType").toString());
+			bean.setBusinessType(relist.get("BusinessType") == null ? "" : relist.get("BusinessType").toString());
+			bean.setBaseCurrencyId(relist.get("BaseCurrencyId") == null ? "" : relist.get("BaseCurrencyId").toString());
+			bean.setPremium_Reserve_view(relist.get("PremiumReserveView") == null ? "" : relist.get("PremiumReserveView").toString());
+			bean.setLoss_reserve_view(relist.get("LossReserveView") == null ? "" : relist.get("LossReserveView").toString());
+			bean.setRdsExchageRate(relist.get("RdsExchageRate") == null ? "" : relist.get("RdsExchageRate").toString());
+			bean.setPremiumReserve(relist.get("PremiumReserve") == null ? "" : relist.get("PremiumReserve").toString());
+	//		bean.setBranchCode(relist.get("BranchCode") == null ? "" : relist.get("BranchCode").toString());
+			bean.setAmendId(relist.get("AmendId") == null ? "" : relist.get("AmendId").toString());
+	//		bean.setProductId(relist.get("ProductId") == null ? "" : relist.get("ProductId").toString());
+			bean.setProfit_Center(relist.get("ProfitCenter") == null ? "" : relist.get("ProfitCenter").toString());
+			bean.setSubProfit_center(relist.get("SubProfitCenter") == null ? "" : relist.get("SubProfitCenter").toString());
+			bean.setProposal_No(relist.get("ProposalNo") == null ? "" : relist.get("ProposalNo").toString());
+			bean.setLayerNo(relist.get("LayerNo") == null ? "" : relist.get("LayerNo").toString());
+			bean.setMonth(relist.get("Month") == null ? "" : relist.get("Month").toString());
+			bean.setBaseCurrencyName(relist.get("BaseCurrencyName") == null ? "" : relist.get("BaseCurrencyName").toString());
+			bean.setPolicyBranch(relist.get("PolicyBranch") == null ? "" : relist.get("PolicyBranch").toString());
+			bean.setAddress(relist.get("Address") == null ? "" : relist.get("Address").toString());
+			bean.setDepartmentId(relist.get("DepartmentId") == null ? "" : relist.get("DepartmentId").toString());
+			bean.setPredepartment(relist.get("PreDepartment") == null ? "" : relist.get("PreDepartment").toString());
+			bean.setConsubProfitId(relist.get("ConsubProfitId") == null ? "" : relist.get("ConsubProfitId").toString());
+			bean.setAcceptenceDate(relist.get("AcceptenceDate") == null ? "" : relist.get("AcceptenceDate").toString());
+			bean.setProfitCommYN(relist.get("ProfitCommYN") == null ? "" : relist.get("ProfitCommYN").toString());
+			bean.setCommissionSurb_view(relist.get("CommissionSurbView") == null ? "" : relist.get("CommissionSurbView").toString());
+			bean.setOurAssessmentOfOrginal(relist.get("OurAssessmentOfOrginal") == null ? "" : relist.get("OurAssessmentOfOrginal").toString());
+			bean.setPremiumQuota_view(relist.get("PremiumQuotaView") == null ? "" : relist.get("PremiumQuotaView").toString());
+			bean.setPremiumsurp_view(relist.get("PremiumsurpView") == null ? "" : relist.get("PremiumsurpView").toString());
+			bean.setXl_cost_view(relist.get("XlCostView") == null ? "" : relist.get("XlCostView").toString());
+			bean.setCurrencyName(relist.get("CurrencyName") == null ? "" : relist.get("CurrencyName").toString());
+			bean.setSettlement_status(relist.get("SettlementStatus") == null ? "" : relist.get("SettlementStatus").toString());
+			bean.setSum_of_paid_premium(relist.get("SumofPaidPremium") == null ? "" : relist.get("SumofPaidPremium").toString());
+			
+			if(relist!=null && relist.size()>0) {
+				saveFlag = true;
 		}
-
-@SuppressWarnings("unchecked")
-public boolean getPreList(final FaculPremiumBean bean) {
-	LOGGER.info("PremiumDAOImpl getPreList || Enter");
-	String query="";
-	boolean saveFlag=false;
-	String[] args = null;
-	args = new String[2];
-	args[0] = bean.getContNo();
-	args[1] = bean.getDepartmentId();
-	query=getQuery(DBConstants.PREMIUM_SELECT_FACTREATYPRELIST);
-	LOGGER.info("Select Query=>"+query);
-	List list=this.mytemplate.query(query, args,new RowMapper() {
-		public Object mapRow(ResultSet preList, int rowNum) throws SQLException {
-			bean.setContNo(preList.getString("CONTRACT_NO"));
-			bean.setDepartment_Name(preList.getString("TMAS_DEPARTMENT_NAME"));
-			bean.setUwYear(preList.getString("UW_YEAR"));
-			bean.setCeding_Company_Name(preList.getString("COMPANY_NAME"));
-			bean.setBrokername(preList.getString("Broker_name"));
-			bean.setLayerno(preList.getString("LAYER_NO"));
-			bean.setProposal_No(preList.getString("PROPOSAL_NO"));
-			bean.setProductId(preList.getString("PRODUCT_ID"));
-			return bean;
-		}
-	});
-	if(list!=null && list.size()>0)
+	}
+	return saveFlag;
+}
+public boolean getPremiumDetails(final FaculPremiumBean bean,final String TransactionNo,final String countryId)  {
+	 boolean saveFlag=false;
+	 
+	 List<Map<String,Object>> relist= premiumapi.getPremiumDetails(bean,TransactionNo,countryId);
+	if(relist!=null) {
+		for(int i=0;i<relist.size();i++) {
+		Map<String, Object> list = (Map<String,Object>)relist.get(i);
+		bean.setContNo(list.get("ContNo") == null ? "" : list.get("ContNo").toString());
+		bean.setTransactionNo(list.get("TransactionNo") == null ? "" : list.get("TransactionNo").toString());
+		bean.setTransaction(list.get("Transaction") == null ? "" : list.get("Transaction").toString());
+		bean.setBrokerage(list.get("Brokerage") == null ? "" : list.get("Brokerage").toString());
+		bean.setTax(list.get("Tax") == null ? "" : list.get("Tax").toString());
+		bean.setPremiumQuotaShare(list.get("PremiumQuotaShare") == null ? "" : list.get("PremiumQuotaShare").toString());
+		bean.setCommissionQuotaShare(list.get("CommissionQuotaShare") == null ? "" : list.get("CommissionQuotaShare").toString());
+		bean.setPremiumSurplus(list.get("PremiumSurplus") == null ? "" : list.get("PremiumSurplus").toString());
+		bean.setCommissionSurplus(list.get("CommissionSurplus") == null ? "" : list.get("CommissionSurplus").toString());
+		bean.setPremiumportifolioIn(list.get("PremiumportifolioIn") == null ? "" : list.get("PremiumportifolioIn").toString());
+		bean.setCliamPortfolioin(list.get("CliamPortfolioin") == null ? "" : list.get("CliamPortfolioin").toString());
+		bean.setPremiumportifolioout(list.get("Premiumportifolioout") == null ? "" : list.get("Premiumportifolioout").toString());
+		bean.setLossReserveReleased(list.get("LossReserveReleased") == null ? "" : list.get("LossReserveReleased").toString());
+		bean.setPremiumReserve_QuotaShare(list.get("PremiumReserveQuotaShare") == null ? "" : list.get("PremiumReserveQuotaShare").toString());
+		bean.setCashLoss_Credit(list.get("CashLossCredit") == null ? "" : list.get("CashLossCredit").toString());
+		bean.setLoss_ReserveRetained(list.get("LossReserveRetained") == null ? "" : list.get("LossReserveRetained").toString());
+		bean.setProfit_Commission(list.get("ProfitCommission") == null ? "" : list.get("ProfitCommission").toString());
+		bean.setCash_LossPaid(list.get("CashLossPaid") == null ? "" : list.get("CashLossPaid").toString());
+		bean.setNetDue(list.get("NetDue") == null ? "" : list.get("NetDue").toString());
+		bean.setReceipt_no(list.get("Receiptno") == null ? "" : list.get("Receiptno").toString());
+		bean.setClaims_paid(list.get("ClaimsPaid") == null ? "" : list.get("ClaimsPaid").toString());
+		bean.setInception_Date(list.get("InceptionDate") == null ? "" : list.get("InceptionDate").toString());
+		bean.setXl_Cost(list.get("XlCost") == null ? "" : list.get("XlCost").toString());
+		bean.setCliam_portfolio_out(list.get("CliamPortfolioOut") == null ? "" : list.get("CliamPortfolioOut").toString());
+		bean.setPremium_Reserve_Released(list.get("PremiumReserveReleased") == null ? "" : list.get("PremiumReserveReleased").toString());
+		bean.setAccount_Period(list.get("AccountPeriod") == null ? "" : list.get("AccountPeriod").toString());
+		bean.setAccount_Period_year(list.get("AccountPeriodYear") == null ? "" : list.get("AccountPeriodYear").toString());
+		bean.setCurrencyId(list.get("CurrencyId") == null ? "" : list.get("CurrencyId").toString());
+		bean.setCurrency(list.get("Currency") == null ? "" : list.get("Currency").toString());
+		bean.setBrokerage_usd(list.get("BrokerageUsd") == null ? "" : list.get("BrokerageUsd").toString());
+		bean.setOtherCost(list.get("OtherCost") == null ? "" : list.get("OtherCost").toString());
+		bean.setTax_usd(list.get("TaxUsd") == null ? "" : list.get("TaxUsd").toString());
+		bean.setPremium_reserve_quota_share_usd(list.get("PremiumQuotaShareUsd") == null ? "" : list.get("PremiumQuotaShareUsd").toString());
+		bean.setCommsissionQuotaShare_usd(list.get("CommsissionQuotaShareUsd") == null ? "" : list.get("CommsissionQuotaShareUsd").toString());
+		bean.setPremium_surplus_usd(list.get("PremiumSurplusUsd") == null ? "" : list.get("PremiumSurplusUsd").toString());
+		bean.setComission_surplus_usd(list.get("ComissionSurplusUsd") == null ? "" : list.get("ComissionSurplusUsd").toString());
+		bean.setPremium_portfolio_in_usd(list.get("PremiumPortfolioInUsd") == null ? "" : list.get("PremiumPortfolioInUsd").toString());
+		bean.setCliam_portfolio_usd(list.get("CliamPortfolioUsd") == null ? "" : list.get("CliamPortfolioUsd").toString());
+		bean.setPremium_PortfolioOut_usd(list.get("PremiumPortfolioOutUsd") == null ? "" : list.get("PremiumPortfolioOutUsd").toString());
+		bean.setLoss_Reserve_released_usd(list.get("LossReserveReleasedUsd") == null ? "" : list.get("LossReserveReleasedUsd").toString());
+		bean.setPremium_reserve_quota_share_usd(list.get("PremiumReserveQuotaShareUsd") == null ? "" : list.get("PremiumReserveQuotaShareUsd").toString());
+		bean.setCash_loss_credit_usd(list.get("CashLossCreditUsd") == null ? "" : list.get("CashLossCreditUsd").toString());
+		bean.setLoss_reserve_retained_usd(list.get("LossReserveRetainedUsd") == null ? "" : list.get("LossReserveRetainedUsd").toString());
+		bean.setProfit_commission_usd(list.get("ProfitCommissionUsd") == null ? "" : list.get("ProfitCommissionUsd").toString());
+		bean.setCash_loss_paid_usd(list.get("CashLossPaidUsd") == null ? "" : list.get("CashLossPaidUsd").toString());
+		bean.setClams_paid_usd(list.get("ClamsPaidUsd") == null ? "" : list.get("ClamsPaidUsd").toString());
+		bean.setXl_cost_usd(list.get("XlCostUsd") == null ? "" : list.get("XlCostUsd").toString());
+		bean.setCliam_portfolio_out_usd(list.get("CliamPortfolioOutUsd") == null ? "" : list.get("CliamPortfolioOutUsd").toString());
+		bean.setPremium_Reserve_Released_usd(list.get("PremiumReserveReleasedUsd") == null ? "" : list.get("PremiumReserveReleasedUsd").toString());
+		bean.setNet_due_usd(list.get("NetDueUsd") == null ? "" : list.get("NetDueUsd").toString());
+		bean.setOtherCostUSD(list.get("OtherCostUSD") == null ? "" : list.get("OtherCostUSD").toString());
+		bean.setCedentRef(list.get("CedentRef") == null ? "" : list.get("CedentRef").toString());
+		bean.setRemarks(list.get("Remarks") == null ? "" : list.get("Remarks").toString());
+		bean.setTotalCredit(list.get("TotalCredit") == null ? "" : list.get("TotalCredit").toString());
+		bean.setTotalCreditDC(list.get("TotalCreditDC") == null ? "" : list.get("TotalCreditDC").toString());
+		bean.setTotalDebit(list.get("TotalDebit") == null ? "" : list.get("TotalDebit").toString());
+		bean.setTotalDebitDC(list.get("TotalDebitDC") == null ? "" : list.get("TotalDebitDC").toString());
+		bean.setInterest(list.get("Interest") == null ? "" : list.get("Interest").toString());
+		bean.setInterestDC(list.get("InterestDC") == null ? "" : list.get("InterestDC").toString());
+		bean.setOsClaimsLossUpdateOC(list.get("OsClaimsLossUpdateOC") == null ? "" : list.get("OsClaimsLossUpdateOC").toString());
+		bean.setOsClaimsLossUpdateDC(list.get("OsClaimsLossUpdateDC") == null ? "" : list.get("OsClaimsLossUpdateDC").toString());
+		bean.setOverrider(list.get("Overrider") == null ? "" : list.get("Overrider").toString());
+		bean.setOverriderUSD(list.get("OverriderUSD") == null ? "" : list.get("OverriderUSD").toString());
+		bean.setAmendmentDate(list.get("AmendmentDate") == null ? "" : list.get("AmendmentDate").toString());
+		bean.setWithHoldingTaxOC(list.get("WithHoldingTaxOC") == null ? "" : list.get("WithHoldingTaxOC").toString());
+		bean.setWithHoldingTaxDC(list.get("WithHoldingTaxDC") == null ? "" : list.get("WithHoldingTaxDC").toString());
+		bean.setDueDate(list.get("DueDate") == null ? "" : list.get("DueDate").toString());
+		bean.setCreditsign(list.get("Creditsign") == null ? "" : list.get("Creditsign").toString());
+		bean.setRi_cession(list.get("RiCession") == null ? "" : list.get("RiCession").toString());
+		bean.setTaxDedectSource(list.get("TaxDedectSource") == null ? "" : list.get("TaxDedectSource").toString());
+		bean.setTaxDedectSourceDc(list.get("TaxDedectSourceDc") == null ? "" : list.get("TaxDedectSourceDc").toString());
+		bean.setVatPremium(list.get("VatPremium")==null?"":list.get("VatPremium").toString());
+	    bean.setVatPremiumDc(list.get("VatPremiumDc")==null?"":list.get("VatPremiumDc").toString());
+	    bean.setBrokerageVat(list.get("BrokerageVat")==null?"":list.get("BrokerageVat").toString());
+	    bean.setBrokerageVatDc(list.get("BrokerageVatDc")==null?"":list.get("BrokerageVatDc").toString());
+	    bean.setDocumentType(list.get("DocumentType")==null?"":list.get("DocumentType").toString());
+		bean.setLossParticipation(list.get("LossParticipation") == null ? "" : list.get("LossParticipation").toString());
+		bean.setLossParticipationDC(list.get("LossParticipationDC") == null ? "" : list.get("LossParticipationDC").toString());
+		bean.setSlideScaleCom(list.get("SlideScaleCom") == null ? "" : list.get("SlideScaleCom").toString());
+		bean.setSlideScaleComDC(list.get("SlideScaleComDC") == null ? "" : list.get("SlideScaleComDC").toString());
+		bean.setSubProfitId(list.get("SubProfitId") == null ? "" : list.get("SubProfitId").toString());
+		bean.setExchRate(list.get("ExchRate") == null ? "" : list.get("ExchRate").toString());
+		bean.setStatementDate(list.get("StatementDate") == null ? "" : list.get("StatementDate").toString());
+		bean.setPremiumClass(list.get("PremiumClass") == null ? "" : list.get("PremiumClass").toString());
+		bean.setPremiumSubClass(list.get("PremiumSubClass") == null ? "" : list.get("PremiumSubClass").toString());
+		bean.setOsbYN(list.get("OsbYN") == null ? "" : list.get("OsbYN").toString());
+		bean.setSectionName(list.get("SectionName") == null ? "" : list.get("SectionName").toString());
+		bean.setAccDate(list.get("AccDate") == null ? "" : list.get("AccDate").toString());
+		bean.setSum_of_paid_premium(list.get("SumOfPaidPremium") == null ? "" : list.get("SumOfPaidPremium").toString());
+		bean.setCurrencyName(list.get("CurrencyName") == null ? "" : list.get("CurrencyName").toString());
+	}
+	}
+	if(relist!=null && relist.size()>0) {
 		saveFlag = true;
-	LOGGER.info("PremiumDAOImpl getPreList || Exit");
-	if(StringUtils.isNotBlank(bean.getProposal_No()) ){
-			bean.setCeaseStatus((String)this.mytemplate.queryForObject("select CEASE_STATUS from position_master pm where PROPOSAL_NO=? and  pm.amend_id=(Select Max(Amend_id) From Position_master p where p.PROPOSAL_NO=pm.PROPOSAL_NO )", new Object[]{bean.getProposal_No()}, String.class));
 	}
 	return saveFlag;
 }
-
-public boolean premiumUpdateMethod(final FaculPremiumBean beanObj){
-	LOGGER.info("PremiumDAOImpl premiumUpdateMethod || Enter");
-	String query="";
-	boolean saveFlag = false;
-	try {
-		String[] args = updateAruguments(beanObj);
-		String netDueOc="0";
-		netDueOc=args[30];
-		if("Temp".equalsIgnoreCase(beanObj.getTableType())){
-			query=getQuery("PREMIUM_UPDATE_TREATYUPDATEPRE_TEMP");
-		}else{
-			query=getQuery(DBConstants.PREMIUM_UPDATE_TREATYUPDATEPRE);
+public List<FaculPremiumBean> getPremiumedList(final FaculPremiumBean beanObj, String type){
+	List<FaculPremiumBean> premiumlist = new ArrayList<FaculPremiumBean>();
+	List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	list = premiumapi.getPremiumedList(beanObj, type);
+		for (int i = 0; i < list.size(); i++) {
+			Map<String, Object> PremiumedList = (Map<String, Object>) list.get(i);
+			FaculPremiumBean tempBean = new FaculPremiumBean();
+			tempBean.setTransactionNo(PremiumedList.get("TransactionNo") == null ? "": PremiumedList.get("TransactionNo").toString());
+			tempBean.setAccount_Period(PremiumedList.get("AccountPeriod") == null ? "": PremiumedList.get("AccountPeriod").toString());
+			tempBean.setAccountPeriodDate(PremiumedList.get("AccountPeriodDate") == null ? "": PremiumedList.get("AccountPeriodDate").toString());
+			tempBean.setStatementDate(PremiumedList.get("StatementDate") == null ? "": PremiumedList.get("StatementDate").toString());
+			tempBean.setTransDate(PremiumedList.get("TransDate") == null ? "": PremiumedList.get("TransDate").toString());
+			tempBean.setInception_Date(PremiumedList.get("InceptionDate") == null ? "": PremiumedList.get("InceptionDate").toString());
+			tempBean.setContNo(PremiumedList.get("ContNo") == null ? "": PremiumedList.get("ContNo").toString());
+			tempBean.setCeding_Company_Name(PremiumedList.get("CedingCompanyName") == null ? "": PremiumedList.get("CedingCompanyName").toString());
+			tempBean.setBroker(PremiumedList.get("Broker") == null ? "": PremiumedList.get("Broker").toString());
+			tempBean.setRequestNo(PremiumedList.get("RequestNo") == null ? "": PremiumedList.get("RequestNo").toString());
+			tempBean.setProposal_No(PremiumedList.get("ProposalNo") == null ? "": PremiumedList.get("ProposalNo").toString());
+			tempBean.setLayerno(PremiumedList.get("Layerno") == null ? "": PremiumedList.get("Layerno").toString());
+			tempBean.setTransDropDownVal(PremiumedList.get("TransDropDownVal") == null ? "": PremiumedList.get("TransDropDownVal").toString());
+			tempBean.setEndtYN(PremiumedList.get("EndtYN") == null ? "": PremiumedList.get("EndtYN").toString());
+			tempBean.setProductId(PremiumedList.get("ProductId") == null ? "": PremiumedList.get("ProductId").toString());
+			tempBean.setMovementYN(PremiumedList.get("MovementYN") == null ? "": PremiumedList.get("MovementYN").toString());
+			tempBean.setTransOpenperiodStatus(PremiumedList.get("TransOpenperiodStatus") == null ? "": PremiumedList.get("TransOpenperiodStatus").toString());
+			tempBean.setAllocatedYN(PremiumedList.get("AllocatedYN") == null ? "": PremiumedList.get("AllocatedYN").toString());
+			tempBean.setDeleteStatus(PremiumedList.get("DeleteStatus") == null ? "": PremiumedList.get("DeleteStatus").toString());
+			tempBean.setSectionNo(PremiumedList.get("SectionNo") == null ? "": PremiumedList.get("SectionNo").toString());
+			premiumlist.add(tempBean);
 		}
-		this.mytemplate.update(query,args);
-		if("Submit".equalsIgnoreCase(beanObj.getButtonStatus()) && "Temp".equalsIgnoreCase(beanObj.getTableType())){
-			beanObj.setTransactionNo(new DropDownControllor().getSequence("Premium",beanObj.getProductId(),beanObj.getDepartmentId(), beanObj.getBranchCode(),"",beanObj.getTransaction()));
-			query = getQuery("FAC_TEMP_STATUS_UPDATE");
-			args = new String[5];
-	 		args[0] = "A";
-	 		args[1] = beanObj.getLoginId();
-	 		args[2] =beanObj.getTransactionNo()==null?"":beanObj.getTransactionNo();
-	 		args[3]= beanObj.getRequestNo() ;
-	 		args[4]= beanObj.getBranchCode() ;
-	 		this.mytemplate.update(query,args);
-	 		
-	 		getTempToMainMove(beanObj,netDueOc);
-
-	 		String sql = getQuery("UPDATE_TRANSACTION_NO_STATUS");
-		 	LOGGER.info("Update Query==>"+sql);
-		 	this.mytemplate.update(sql, new Object[]{beanObj.getTransactionNo(),"A",beanObj.getContNo(),beanObj.getRequestNo()});
-	 	
-		 	
-			sql=getQuery("UPDATE_PREMIUM_RESERVE");
-		 	LOGGER.info("Update Query==>"+sql);
-		 	this.mytemplate.update(sql, new Object[]{beanObj.getContNo(),beanObj.getRequestNo(),"A",beanObj.getContNo(),beanObj.getTransactionNo()});
-		 	
-
-		 	sql=getQuery("UPDATE_LOSS_RESERVE");
-		 	LOGGER.info("Update Query==>"+sql);
-		 	this.mytemplate.update(sql, new Object[]{beanObj.getContNo(),beanObj.getRequestNo(),"A",beanObj.getContNo(),beanObj.getTransactionNo()});
-	 	
-		 	sql = getQuery("UPDATE_CASHLOSS_STATUS");
-		 	LOGGER.info("Update Query==>"+sql);
-		 	this.mytemplate.update(sql, new Object[]{beanObj.getTransactionNo(),"A",beanObj.getContNo(),beanObj.getRequestNo()});
-		 	
-		 	 List<FaculPremiumBean>cashLossList=getCassLossCredit(beanObj,"");
-		 	 for(int i=0;i<cashLossList.size();i++){
-		 		FaculPremiumBean form= cashLossList.get(0);
-		 		 sql=getQuery(DBConstants.UPDATE_CLAIM_PAYMENT);
-	             LOGGER.info("Update Query==>"+sql);
-	             this.mytemplate.update(sql, new Object[]{form.getContNo(),beanObj.getBranchCode(),beanObj.getRequestNo(),"A",form.getClaimNumber(),form.getClaimPaymentNo(),form.getContNo(),form.getClaimNumber(),form.getClaimPaymentNo()});
-		 	 }
-		LOGGER.info("SP Name=>"+getQuery(DBConstants.PREMIUM_DETAIL_ARCHIVE));
-		LOGGER.info("Args[]==>"+beanObj.getContNo()+","+(StringUtils.isBlank(beanObj.getLayerno())?"0":beanObj.getLayerno())+","+beanObj.getTransactionNo()+","+beanObj.getCurrencyId()+","+beanObj.getExchRate()+","+netDueOc+","+beanObj.getDepartmentId()+","+beanObj.getProductId());
-		int spresult=this.mytemplate.update(getQuery(DBConstants.PREMIUM_DETAIL_ARCHIVE),new String[]{beanObj.getContNo(),(StringUtils.isBlank(beanObj.getLayerno())?"0":beanObj.getLayerno()),beanObj.getTransactionNo(),beanObj.getCurrencyId(),beanObj.getExchRate(),netDueOc,beanObj.getDepartmentId(),beanObj.getProductId()});
-		LOGGER.info("SP Result==>"+spresult);
-		LOGGER.info("Update Query=>"+query);
-		int update=this.mytemplate.update(query,args);
-		LOGGER.info("Update Result=>"+update);
-		saveFlag=true;
-		}
-	} catch (Exception exe) {
-		saveFlag=false;
-		LOGGER.debug("Exception "+exe);
-	}
-	LOGGER.info("PremiumDAOImpl premiumUpdateMethod || Exit");
-	return saveFlag;
+		return premiumlist;
 }
-
-public List<Map<String,Object>> mdInstallmentDates(final String contNo,final String layerNo) {
-	LOGGER.info("PremiumDAOImpl mdInstallmentDates || Enter");
-	String query="";
-	 List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-    try{
-	    Object[] args=new Object[6];
-	    args[0]=contNo;
-	    args[1]=layerNo;
-	    args[2]=contNo;
-	    args[3]=layerNo;
-	    args[4]=contNo;
-	    args[5]=layerNo;
-	    query=getQuery(DBConstants.PREMIUM_SELECT_MDINSTALMENTLIST);
-	    LOGGER.info("Select mdInstallmentDates Query=>"+query);
-	    list=this.mytemplate.queryForList(query, args);
-	    Map<String,Object> tempMap1 = new HashMap<String, Object>();
-	    tempMap1.put("KEY1","EP");
-	    tempMap1.put("VALUE","Endorsement Premium");
-	    list.add(tempMap1);
-		}catch (Exception exe) {
-			LOGGER.debug("Exception "+exe);
-	}
-    LOGGER.info("PremiumDAOImpl mdInstallmentDates || Exit");
-	   return list;
-}
-
-private String[] insertArguments(final FaculPremiumBean beanObj)
-{
-	LOGGER.info("PremiumDAOImpl insertArguments || Enter");
-	String[] args=null;
-		args=new String[94];
-		double premiumsurpInsert=0.0;
-		double premiumInsert=0.0;
-	    args[0]=beanObj.getContNo();
-	    args[1] = getRequestNo(beanObj);
-		//args[1]=maxTransationNo(beanObj.getProductId(),beanObj.getBranchCode());
-	   // if("06".equalsIgnoreCase(beanObj.getBranchCode())){
-			//args[1]=new DropDownControllor().getSequence("Premium",beanObj.getProductId(),beanObj.getDepartmentId(), beanObj.getBranchCode(),"",beanObj.getTransaction());
-		/*}else
-	    args[1]=new DropDownControllor().getPolicyNo("3","0",beanObj.getBranchCode());*/
-		//args[2]=beanObj.getTransaction()+"-"+beanObj.getTransaction_year();
-		args[2]=beanObj.getTransaction();
-		args[3]=beanObj.getAccount_Period();
-		args[4]=beanObj.getAccount_Period_year();
-		args[5]=beanObj.getCurrencyId();
-		args[6]=beanObj.getExchRate();
-		args[7]=beanObj.getBrokerage_view();
-		args[8]=getModeOfTransaction(beanObj.getBrokerage(),beanObj);
-		args[35]=DropDownControllor.GetDesginationCountry(args[8], beanObj.getExchRate());
-		args[9]=beanObj.getTax_view();
-		args[10]=getModeOfTransaction(beanObj.getTax(),beanObj);
-		args[36]=DropDownControllor.GetDesginationCountry(args[10], beanObj.getExchRate());
-		args[67]=getModeOfTransaction(beanObj.getOverrider(),beanObj);
-		args[68]=DropDownControllor.GetDesginationCountry(args[67],beanObj.getExchRate());
-		args[69]=beanObj.getOverRider_view();
-        args[70]=getModeOfTransaction(beanObj.getWithHoldingTaxOC(),beanObj);
-        args[71]=DropDownControllor.GetDesginationCountry(args[70], beanObj.getExchRate());
-		args[11]=StringUtils.isEmpty(beanObj.getInception_Date()) ?"" :beanObj.getInception_Date();
-		args[12]=getModeOfTransaction(beanObj.getPremiumQuotaShare(),beanObj);
-		args[37]=DropDownControllor.GetDesginationCountry(args[12], beanObj.getExchRate());
-		args[13]=getModeOfTransaction(beanObj.getCommissionQuotaShare(),beanObj);
-		args[38]=DropDownControllor.GetDesginationCountry(args[13], beanObj.getExchRate());
-		args[14]=getModeOfTransaction(beanObj.getPremiumSurplus(),beanObj);
-		args[39]=DropDownControllor.GetDesginationCountry(args[14], beanObj.getExchRate());
-		args[15]=getModeOfTransaction(beanObj.getCommissionSurplus(),beanObj);
-		args[40]=DropDownControllor.GetDesginationCountry(args[15], beanObj.getExchRate());
-		args[16]=getModeOfTransaction(beanObj.getPremiumportifolioIn(),beanObj);
-		args[41]=DropDownControllor.GetDesginationCountry(args[16], beanObj.getExchRate());
-		args[72]=beanObj.getRi_cession();
-		//args[73]=userId;
-		args[73]= beanObj.getLoginId();
-		args[74]=beanObj.getBranchCode();
-		args[75]=beanObj.getDepartmentId();
-		args[76] = getModeOfTransaction(beanObj.getTaxDedectSource(),beanObj);
-		args[77] = DropDownControllor.GetDesginationCountry(args[76], beanObj.getExchRate());
-		args[78] = getModeOfTransaction(beanObj.getServiceTax(),beanObj);
-		args[79] = DropDownControllor.GetDesginationCountry(args[78], beanObj.getExchRate());
-		args[80] = getModeOfTransaction(beanObj.getSlideScaleCom(),beanObj);
-		args[81] = DropDownControllor.GetDesginationCountry(args[80], beanObj.getExchRate());
-		args[82] = beanObj.getPredepartment();
-		args[83] = beanObj.getSubProfitId().replace(" ", "");
-		args[84] = beanObj.getAccountPeriodDate();
-		args[85] = beanObj.getStatementDate();
-		args[86] = beanObj.getOsbYN();
-		args[87] = getModeOfTransaction(beanObj.getLossParticipation(),beanObj);
-		args[88] = DropDownControllor.GetDesginationCountry(args[87], beanObj.getExchRate());
-		args[89] = beanObj.getSectionName();
-		args[90] = beanObj.getProposal_No();
-		args[91] = beanObj.getProductId();
-		if("submit".equalsIgnoreCase(beanObj.getButtonStatus())){
-			args[92] = "A";
-		}else{
-			args[92] = "P";
+public boolean premiumEdit(final FaculPremiumBean bean,final String countryId) {
+	boolean savFlg = false;
+			Map<String,Object> resMap = premiumapi.premiumEdit(bean,countryId);
+			if(resMap!=null) {
+			
+			
+			bean.setBrokerage(resMap.get("Brokerage")==null?"":resMap.get("Brokerage").toString());
+			bean.setTax(resMap.get("Tax")==null?"":resMap.get("Tax").toString());
+			bean.setPremiumQuotaShare(resMap.get("PremiumQuotaShare")==null?"":resMap.get("PremiumQuotaShare").toString());
+			bean.setCommissionQuotaShare(resMap.get("CommissionQuotaShare")==null?"":resMap.get("CommissionQuotaShare").toString());
+			bean.setPremiumSurplus(resMap.get("PremiumSurplus")==null?"":resMap.get("PremiumSurplus").toString());
+			bean.setCommissionSurplus(resMap.get("CommissionSurplus")==null?"":resMap.get("CommissionSurplus").toString());
+			bean.setPremiumportifolioIn(resMap.get("PremiumportifolioIn")==null?"":resMap.get("PremiumportifolioIn").toString());
+			bean.setCliamPortfolioin(resMap.get("CliamPortfolioin")==null?"":resMap.get("CliamPortfolioin").toString());
+			bean.setPremiumportifolioout(resMap.get("Premiumportifolioout")==null?"":resMap.get("Premiumportifolioout").toString());
+			bean.setLossReserveReleased(resMap.get("LossReserveReleased")==null?"":resMap.get("LossReserveReleased").toString());
+			bean.setPremiumReserve_QuotaShare(resMap.get("PremiumReserveQuotaShare")==null?"":resMap.get("PremiumReserveQuotaShare").toString());
+			bean.setCashLoss_Credit(resMap.get("CashLossCredit")==null?"":resMap.get("CashLossCredit").toString());
+			bean.setLoss_ReserveRetained(resMap.get("LossReserveRetained")==null?"":resMap.get("LossReserveRetained").toString());
+			bean.setProfit_Commission(resMap.get("ProfitCommission")==null?"":resMap.get("ProfitCommission").toString());
+			bean.setCash_LossPaid(resMap.get("CashLossPaid")==null?"":resMap.get("CashLossPaid").toString());
+			
+			bean.setNetDue(resMap.get("NetDue")==null?"":resMap.get("NetDue").toString());
+			
+			bean.setClaims_paid(resMap.get("Claimspaid")==null?"":resMap.get("Claimspaid").toString());
+			//bean.setSettlement_status(resMap.getString("SETTLEMENT_STATUS"));
+		    bean.setMd_premium(resMap.get("Mdpremium")==null?"":resMap.get("Mdpremium").toString());
+		    bean.setAdjustment_premium(resMap.get("Adjustmentpremium")==null?"":resMap.get("Adjustmentpremium").toString());
+		    bean.setRecuirement_premium(resMap.get("Recuirementpremium")==null?"":resMap.get("Recuirementpremium").toString());
+		    bean.setCommission(resMap.get("Commission")==null?"":resMap.get("Commission").toString());
+		   
+		    bean.setXl_Cost(resMap.get("XlCost")==null?"":resMap.get("XlCost").toString());
+		    bean.setCliam_portfolio_out(resMap.get("Cliamportfolioout")==null?"":resMap.get("Cliamportfolioout").toString());
+		    bean.setPremium_Reserve_Released(resMap.get("PremiumReserveReleased")==null?"":resMap.get("PremiumReserveReleased").toString());
+		    bean.setOtherCost(resMap.get("OtherCost")==null?"":resMap.get("OtherCost").toString());
+		    bean.setCedentRef(resMap.get("CedentRef")==null?"":resMap.get("CedentRef").toString());
+			
+			bean.setInterest(resMap.get("Interest")==null?"":resMap.get("Interest").toString());
+			bean.setOsClaimsLossUpdateOC(resMap.get("OsClaimsLossUpdateOC")==null?"":resMap.get("OsClaimsLossUpdateOC").toString());
+			bean.setOverrider(resMap.get("Overrider")==null?"":resMap.get("Overrider").toString());
+			bean.setOverriderUSD(resMap.get("OverriderUSD")==null?"":resMap.get("OverriderUSD").toString());
+			
+            bean.setWithHoldingTaxOC(resMap.get("WithHoldingTaxOC")==null?"":resMap.get("WithHoldingTaxOC").toString());
+            bean.setWithHoldingTaxDC(resMap.get("WithHoldingTaxDC")==null?"":resMap.get("WithHoldingTaxDC").toString());
+            
+            bean.setTaxDedectSource(resMap.get("TaxDedectSource")==null?"":resMap.get("TaxDedectSource").toString());
+			bean.setTaxDedectSourceDc(resMap.get("TaxDedectSourceDc")==null?"":resMap.get("TaxDedectSourceDc").toString());
+			bean.setVatPremium(resMap.get("VatPremium")==null?"":resMap.get("VatPremium").toString());
+            bean.setVatPremiumDc(resMap.get("VatPremiumDc")==null?"":resMap.get("VatPremiumDc").toString());
+            bean.setBrokerageVat(resMap.get("BrokerageVat")==null?"":resMap.get("BrokerageVat").toString());
+            bean.setBrokerageVatDc(resMap.get("BrokerageVatDc")==null?"":resMap.get("BrokerageVatDc").toString());
+            
+			bean.setLossParticipation(resMap.get("LossParticipation")==null?"":resMap.get("LossParticipation").toString());
+			bean.setLossParticipationDC(resMap.get("LossParticipationDC")==null?"":resMap.get("LossParticipationDC").toString());
+			bean.setSlideScaleCom(resMap.get("SlideScaleCom")==null?"":resMap.get("SlideScaleCom").toString());
+			bean.setSlideScaleComDC(resMap.get("SlideScaleComDC")==null?"":resMap.get("SlideScaleComDC").toString());
+			bean.setSubProfitId(resMap.get("SubProfitId")==null?"":resMap.get("SubProfitId").toString());
+			bean.setPrAllocatedAmount(resMap.get("PrAllocatedAmount")==null?"":resMap.get("PrAllocatedAmount").toString());
+			bean.setLrAllocatedAmount(resMap.get("LrAllocatedAmount")==null?"":resMap.get("LrAllocatedAmount").toString());
+			
+			
+			 if(!"transEdit".equalsIgnoreCase(bean.getMode())) {
+				bean.setTransaction(resMap.get("Transaction")==null?"":resMap.get("Transaction").toString());
+				bean.setAccount_Period(resMap.get("AccountPeriod")==null?"":resMap.get("AccountPeriod").toString());
+				bean.setAccount_Period_year(resMap.get("AccountPeriodyear")==null?"":resMap.get("AccountPeriodyear").toString());
+				bean.setCurrencyId(resMap.get("CurrencyId")==null?"":resMap.get("CurrencyId").toString());
+				bean.setCurrency(resMap.get("Currency")==null?"":resMap.get("Currency").toString());
+				bean.setExchRate(resMap.get("ExchRate")==null?"":resMap.get("ExchRate").toString());
+				bean.setStatus(resMap.get("Status")==null?"":resMap.get("Status").toString());
+				bean.setEnteringMode(resMap.get("EnteringMode")==null?"":resMap.get("EnteringMode").toString());
+				bean.setReceipt_no(resMap.get("Receiptno")==null?"":resMap.get("Receiptno").toString());
+				bean.setInstlmentNo(resMap.get("InstlmentNo")==null?"":resMap.get("InstlmentNo").toString());
+				bean.setInception_Date(resMap.get("InceptionDate")==null?"":resMap.get("InceptionDate").toString());
+				bean.setRemarks(resMap.get("Remarks")==null?"":resMap.get("Remarks").toString());
+				bean.setAmendmentDate(resMap.get("AmendmentDate")==null?"":resMap.get("AmendmentDate").toString());
+				bean.setRi_cession(resMap.get("Ricession")==null?"":resMap.get("Ricession").toString());
+				bean.setDocumentType(resMap.get("DocumentType")==null?"":resMap.get("DocumentType").toString());
+				bean.setOsbYN(resMap.get("OsbYN")==null?"":resMap.get("OsbYN").toString());
+				bean.setSectionName(resMap.get("SectionName")==null?"":resMap.get("SectionName").toString());;
+//				bean.setSectionType("2");
+				bean.setAccountPeriodDate(resMap.get("AccountPeriodDate")==null?"":resMap.get("AccountPeriodDate").toString());
+				bean.setPredepartment(resMap.get("Predepartment")==null?"":resMap.get("Predepartment").toString());
+				bean.setStatementDate(resMap.get("StatementDate")==null?"":resMap.get("StatementDate").toString());
+				bean.setMipremium1(resMap.get("M1OC")==null?"":resMap.get("M1OC").toString());
+				bean.setMipremium2(resMap.get("M2OC")==null?"":resMap.get("M2OC").toString());
+				bean.setMipremium3(resMap.get("M3OC")==null?"":resMap.get("M3OC").toString());
+			 }
+			
 		}
-		args[93] = beanObj.getMode();
-		//Added by sathish for java script failure cases-Start
-		LOGGER.info("Before");
-		LOGGER.info("Premium==>"+beanObj.getPremiumQuotaShare());
-		LOGGER.info("Commission==>"+beanObj.getCommissionQuotaShare());
-		LOGGER.info("Brokerate==>"+beanObj.getBrokerage());
-		LOGGER.info("Tax===>"+beanObj.getTax());
-		LOGGER.info("Overrider===>"+beanObj.getOverrider());
-		LOGGER.info("PremiumSurplus===>"+beanObj.getPremiumSurplus());
-		LOGGER.info("comsurp===>"+beanObj.getCommissionSurplus());
+		if(resMap!=null && resMap.size()>0)
+			savFlg = true;
+		return savFlg;
+	}
 
-		if(!StringUtils.isEmpty(beanObj.getPremiumQuotaShare())||!StringUtils.isEmpty(beanObj.getPremiumSurplus()))
-		{
-			LOGGER.info("After");
-
-			if(!StringUtils.isEmpty(beanObj.getPremiumQuotaShare()))
-			{
-				premiumInsert=Double.parseDouble(beanObj.getPremiumQuotaShare());
+	public boolean getPreList(final FaculPremiumBean bean) {
+		boolean saveFlag=false;
+		Map<String, Object> list = (Map<String, Object>) premiumapi.getPreList(bean);
+		if (list.size() > 0) {
+			for (int i = 0; i < list.size(); i++) {
+				bean.setUwYear(list.get("UwYear") == null ? "" : list.get("UwYear").toString());
+				bean.setContNo(list.get("ContNo") == null ? "" : list.get("ContNo").toString());
+				bean.setCeding_Company_Name(list.get("CedingCompanyName") == null ? "" : list.get("CedingCompanyName").toString());
+				bean.setBrokername(list.get("BrokerName") == null ? "" : list.get("BrokerName").toString());
+				bean.setDepartment_Name(list.get("DepartmentName") == null ? "" : list.get("DepartmentName").toString());
+				bean.setLayerno(list.get("Layerno") == null ? "" : list.get("Layerno").toString());
+				bean.setProductId(list.get("ProductId") == null ? "" : list.get("ProductId").toString());
+				bean.setProposal_No(list.get("ProposalNo") == null ? "" : list.get("ProposalNo").toString());
+				bean.setCeaseStatus(list.get("CeaseStatus") == null ? "" : list.get("CeaseStatus").toString());
+			
+				if(list!=null && list.size()>0)
+					saveFlag = true;
+				}
 			}
-			if(StringUtils.isEmpty(beanObj.getCommissionQuotaShare()))
-			{
-				final double commission=premiumInsert*(Double.parseDouble(beanObj.getCommission_view())/100);
-				LOGGER.info("Commission===>"+commission);
-				args[13]=getModeOfTransaction(commission+" ",beanObj);
-				args[38]=DropDownControllor.GetDesginationCountry(args[13], beanObj.getExchRate());
-			}
-			if(!StringUtils.isEmpty(beanObj.getPremiumSurplus()))
-			{
-				premiumsurpInsert=(Double.parseDouble(beanObj.getPremiumSurplus()));
-			}
-			if(StringUtils.isEmpty(beanObj.getCommissionSurplus()))
-			{
-				LOGGER.info("comsurp==>"+beanObj.getCommssion_Surp());
-				final double comsurp=premiumsurpInsert*(Double.parseDouble(beanObj.getCommssion_Surp())/100);
-				LOGGER.info("comsurp===>"+comsurp);
-				args[15]=getModeOfTransaction(comsurp+" ",beanObj);
-				args[40]=DropDownControllor.GetDesginationCountry(args[15], beanObj.getExchRate());
-			}
-			if(StringUtils.isEmpty(beanObj.getBrokerage()))
-			{
-				final double brokerage=(premiumInsert+premiumsurpInsert)*(Double.parseDouble(beanObj.getBrokerage_view())/100);
-				args[8]=getModeOfTransaction(brokerage+" ",beanObj);
-				args[35]=DropDownControllor.GetDesginationCountry(args[8], beanObj.getExchRate());
-				LOGGER.info("Brokerate===>"+brokerage);
-			}
-			if(StringUtils.isEmpty(beanObj.getTax()))
-			{
-				final double tax=(premiumInsert+premiumsurpInsert)*(Double.parseDouble(beanObj.getTax_view())/100);
-				args[10]=getModeOfTransaction(tax+" ",beanObj);
-				args[36]=DropDownControllor.GetDesginationCountry(args[10], beanObj.getExchRate());
-				LOGGER.info("Tax===>"+tax);
-			}
-			if(StringUtils.isEmpty(beanObj.getOverrider()))
-			{
-				double overrider=(premiumInsert+premiumsurpInsert)*(Double.parseDouble(beanObj.getOverRider_view())/100);
-				args[67]=getModeOfTransaction(overrider+" ",beanObj);
-				args[68]=DropDownControllor.GetDesginationCountry(args[67], beanObj.getExchRate());
-				LOGGER.info("Overrider===>"+overrider);
-			}
+		return saveFlag;
+	}
+	public boolean premiumUpdateMethod(final FaculPremiumBean beanObj){
+		boolean saveFlag = false;
+		try {
+			premiumapi.premiumUpdateMethod(beanObj);
+			saveFlag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return saveFlag;
+	}
 
+	public List<Map<String,Object>> mdInstallmentDates(final String contNo,final String layerNo) {
+		LOGGER.info("PremiumDAOImpl mdInstallmentDates || Enter");
+		String query="";
+		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
+	    try{
+		    Object[] args=new Object[6];
+		    args[0]=contNo;
+		    args[1]=layerNo;
+		    args[2]=contNo;
+		    args[3]=layerNo;
+		    args[4]=contNo;
+		    args[5]=layerNo;
+		    query=getQuery(DBConstants.PREMIUM_SELECT_MDINSTALMENTLIST);
+		    LOGGER.info("Select mdInstallmentDates Query=>"+query);
+		    list=this.mytemplate.queryForList(query, args);
+		    Map<String,Object> tempMap1 = new HashMap<String, Object>();
+		    tempMap1.put("KEY1","EP");
+		    tempMap1.put("VALUE","Endorsement Premium");
+		    list.add(tempMap1);
+			}catch (Exception exe) {
+				LOGGER.debug("Exception "+exe);
 		}
-		//Added by sathish for java script failure cases-End
-		args[17]=getModeOfTransaction(beanObj.getCliamPortfolioin(),beanObj);
-		args[42]=DropDownControllor.GetDesginationCountry(args[17], beanObj.getExchRate());
-		args[18]=getModeOfTransaction(beanObj.getPremiumportifolioout(),beanObj);
-		args[43]=DropDownControllor.GetDesginationCountry(args[18], beanObj.getExchRate());
-		args[19]=getModeOfTransaction(beanObj.getLossReserveReleased(),beanObj);
-		args[44]=DropDownControllor.GetDesginationCountry(args[19], beanObj.getExchRate());
-		args[20]=getModeOfTransaction(beanObj.getPremiumReserve_QuotaShare(),beanObj);
-		args[45]=DropDownControllor.GetDesginationCountry(args[20], beanObj.getExchRate());
-		args[21]=getModeOfTransaction(beanObj.getCashLoss_Credit(),beanObj);
-		args[46]=DropDownControllor.GetDesginationCountry(args[21], beanObj.getExchRate());
-		args[22]=getModeOfTransaction(beanObj.getLoss_ReserveRetained(),beanObj);
-		args[47]=DropDownControllor.GetDesginationCountry(args[22], beanObj.getExchRate());
-		args[23]=getModeOfTransaction(StringUtils.isBlank(beanObj.getProfit_Commission()) ? "0" : beanObj.getProfit_Commission(),beanObj);
-		args[48]=DropDownControllor.GetDesginationCountry(args[23], beanObj.getExchRate());
-		args[24]=getModeOfTransaction(beanObj.getCash_LossPaid(),beanObj);
-		args[49]=DropDownControllor.GetDesginationCountry(args[24], beanObj.getExchRate());
-		args[25]="Y";
-		args[26]="2";
-		args[27]=beanObj.getReceipt_no();
-		args[28]=getModeOfTransaction(beanObj.getClaims_paid(),beanObj);
-		args[50]=DropDownControllor.GetDesginationCountry(args[28], beanObj.getExchRate());
-		args[29]=beanObj.getSettlement_status();
-		args[30]=getModeOfTransaction(beanObj.getXl_Cost(),beanObj);
-		args[51]=DropDownControllor.GetDesginationCountry(args[30], beanObj.getExchRate());
-		args[31]=getModeOfTransaction(beanObj.getCliam_portfolio_out(),beanObj);
-		args[52]=DropDownControllor.GetDesginationCountry(args[31], beanObj.getExchRate());
-		args[32]=getModeOfTransaction(beanObj.getPremium_Reserve_Released(),beanObj);
-		args[53]=DropDownControllor.GetDesginationCountry(args[32], beanObj.getExchRate());
-		args[34]=getModeOfTransaction(beanObj.getOtherCost(),beanObj);
-		args[55]=DropDownControllor.GetDesginationCountry(args[34], beanObj.getExchRate());
-		/*args[33]=getNetDueAmount(args,getModeOfTransaction(beanObj.getClaims_paid(),beanObj));
-		args[54]=DropDownControllor.GetDesginationCountry(args[33], beanObj.getExchRate());*/
-		args[56]=beanObj.getCommission_view();
-		args[57]=beanObj.getCedentRef();
-		args[58]=beanObj.getRemarks();
-		args[59]=getModeOfTransaction(beanObj.getTotalCredit(),beanObj);
-		args[60]=DropDownControllor.GetDesginationCountry(args[59],beanObj.getExchRate());
-		args[61]=getModeOfTransaction(beanObj.getTotalDebit(),beanObj);
-		args[62]=DropDownControllor.GetDesginationCountry(args[61],beanObj.getExchRate());
-		args[63]=getModeOfTransaction(beanObj.getInterest(),beanObj);
-		args[64]=DropDownControllor.GetDesginationCountry(args[63],beanObj.getExchRate());
-		args[33]=getNetDueAmount(args,getModeOfTransaction(beanObj.getClaims_paid(),beanObj));
-		args[54]=DropDownControllor.GetDesginationCountry(args[33], beanObj.getExchRate());
-		args[65]=StringUtils.isEmpty(beanObj.getOsClaimsLossUpdateOC())?"0":getModeOfTransaction(beanObj.getOsClaimsLossUpdateOC(),beanObj);
-		args[66]=DropDownControllor.GetDesginationCountry(args[65], beanObj.getExchRate());
+	    LOGGER.info("PremiumDAOImpl mdInstallmentDates || Exit");
+		   return list;
+	}
+	public List getMandDInstallments(String contNo, String layerNo)
+			{
+		LOGGER.info("PremiumDAOImpl getMandDInstallments || Enter");
+		List list=null;
+		try{
+			String query=this.getQuery(DBConstants.PREMIUM_SELECT_MDINSTALLMENTS);
+			 LOGGER.info("Select mdInstallmentDates Query=>"+query);
+			 LOGGER.info("Contract No=>"+contNo);
+			 LOGGER.info("Layer No=>"+layerNo);
+			 list=this.mytemplate.queryForList(query, new Object[]{contNo,layerNo});
+		}catch(Exception e)
+		{
+			LOGGER.debug("Exception "+e);
+		}
+		LOGGER.info("PremiumDAOImpl getMandDInstallments || Exit List Size"+list.size());
+		return list;
+	}
 
-		//beanObj.setTransactionNo(args[1]);
-		beanObj.setRequestNo(args[1]);
-	for(int i=0;i>args.length;i++)
-	{
-		LOGGER.info("Args=>"+args[i]);
+	public String GetInstalmentAmount(String contractNo, String getAmount)
+			{
+		LOGGER.info("PremiumDAOImpl GetInstalmentAmount || Enter");
+		String  string=null;
+		try{
+			String query=this.getQuery(DBConstants.PREMIUM_SELECT_MNDPREMIUMOC);
+			 final String[] Instalmentno=getAmount.split("_");
+			 LOGGER.info("Select mdInstallmentDates Query=>"+query);
+			 LOGGER.info("Contract No=>"+contractNo);
+			 LOGGER.info("Inst No=>"+Instalmentno[0]);
+			 string=(String)this.mytemplate.queryForObject(query, new Object[]{contractNo,Instalmentno[0]},String.class);
+		}catch(Exception e)
+		{
+			LOGGER.debug("Exception "+e);
+		}
+		LOGGER.info("PremiumDAOImpl GetInstalmentAmount || Exit Ins Amt=>"+string);
+		return string;
 	}
-	final String[] copiedArray = new String[args.length];
-	System.arraycopy(args, 0, copiedArray, 0, args.length);
-	LOGGER.info("PremiumDAOImpl maxTransationNo || Exit");
-	return copiedArray;
-}
-private String getRequestNo(FaculPremiumBean beanObj) {
-	String reqNo = "";
-	try{
-		String query=getQuery("GET_SEQ_NAME");
-		String name=this.mytemplate.queryForObject(query, new String[]{beanObj.getBranchCode()},String.class);
-		query="SELECT LPAD("+name+".nextval,6,0) FROM DUAL";
-		reqNo = this.mytemplate.queryForObject(query,String.class);
-		reqNo ="92"+reqNo;
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-	return reqNo;
-}
 
+	public String getRPPremiumOC(String contractNo, String layerNo)
+			{
+		LOGGER.info("PremiumDAOImpl getRPPremiumOC || Enter");
+		String  string=null;
+		try{
+			String query=this.getQuery(DBConstants.PREMIUM_SELECT_RPPREMIUMOC);
+			 LOGGER.info("Select RP Premium Query=>"+query);
+			 LOGGER.info("Contract No=>"+contractNo);
+			 LOGGER.info("Layer No=>"+layerNo);
+			 string=(String)this.mytemplate.queryForObject(query, new Object[]{contractNo,layerNo},String.class);
+		}catch(Exception e)
+		{
+			LOGGER.debug("Exception "+e);
+		}
+		LOGGER.info("PremiumDAOImpl getRPPremiumOC || Exit RP Amt=>"+string);
+		return string;
+	}
 
-/*private  String maxTransationNo(final String productId,final String branchCode) {
-	LOGGER.info("PremiumDAOImpl maxTransationNo || Enter");
-	String query="";
-	LOGGER.info("BranchCode=>"+branchCode);
-	query = getQuery(DBConstants.PREMIUM_SELECT_MAXTRANSATION);
-	final String TransactionId=(String)this.mytemplate.queryForObject(query,new Object[]{"11",branchCode},String.class);
-	LOGGER.info("Transaction Id=>"+TransactionId);
-	LOGGER.info("PremiumDAOImpl maxTransationNo || Exit");
-	return TransactionId;
-}*/
-private static String getModeOfTransaction(final String Value,final FaculPremiumBean beanObj) {
-LOGGER.info("PremiumDAOImpl getModeOfTransaction || Enter");
-LOGGER.info("Value=>"+Value);
-LOGGER.info("Entering Mode=>"+beanObj.getEnteringMode());
-LOGGER.info("ShareSigned=>"+beanObj.getShareSigned());
-String result="0";
-double shareSigned=0.0;
-DecimalFormat twoDForm = new DecimalFormat("#.##");
-if(beanObj.getEnteringMode()!=null)
-{
-	if("1".equalsIgnoreCase(beanObj.getEnteringMode()))
-	{
-		shareSigned=Double.parseDouble(beanObj.getShareSigned());
+	public List<Map<String, Object>> getSPRetroList(String contNo,String productId, String layerNo){
+		return premiumapi.getSPRetroList(contNo);
 	}
-	else if("2".equalsIgnoreCase(beanObj.getEnteringMode()))
-	{
-		shareSigned=100;
+	public List<Map<String, Object>> getRetroContracts(FaculPremiumBean beanObj) {
+		return premiumapi.getRetroContracts(beanObj);
 	}
-	//shareSigned=100;
-	LOGGER.info("Value==>"+Value);
-	if(!"".equalsIgnoreCase(Value))
-	{
-			double finalValue=Double.parseDouble(Value) *shareSigned/100;
-			LOGGER.info("Final Value==>"+finalValue);
-			result=String.valueOf(Double.valueOf(twoDForm.format(finalValue)));
-	}
-}
-LOGGER.info("PremiumDAOImpl getModeOfTransaction || Exit");
-return result;
-}
-private static String getNetDueFac(final String[] args,final int flag) {
-	LOGGER.info("PremiumDAOImpl getNetDueFac || Enter");
-	Double Net = 0.0;
-	if (flag == 1) {
-		if (StringUtils.isNotEmpty(args[8]))
+	public String getSumOfShareSign(FaculPremiumBean beanObj)
+			{
+		LOGGER.info("PremiumDAOImpl getSumOfShareSign || Enter");
+		String query="";
+		String  string="0";
+		String noOfRetroCess="";
+		Object args[]=null;
+		try{
+				query=this.getQuery(DBConstants.PREMIUM_SELECT_GETNORETROCESS);
+				LOGGER.info("Query=>"+query);
+				args=new Object[1];
+				args[0]=beanObj.getRetroContractNo();
+				LOGGER.info("Args[0]==>"+args[0]);
+				noOfRetroCess=(String)this.mytemplate.queryForObject(query, args,String.class);
+				LOGGER.info("Result=>"+noOfRetroCess);
+				query=this.getQuery(DBConstants.PREMIUM_SELECT_GETSUMOFSHARESIGN);
+				LOGGER.info("Query=>"+query);
+				args=new Object[2];
+				args[0]=beanObj.getRetroContractNo();
+				args[1]=Integer.parseInt(noOfRetroCess)-1;
+				LOGGER.info("Args[0]==>"+args[0]+"\nArgs[1]==>"+args[1]);
+				string=(String)this.mytemplate.queryForObject(query, args,String.class);
+				LOGGER.info("Result=>"+string);
+		}catch(Exception e)
 		{
-			Net += Double.parseDouble(args[8]);
+			LOGGER.debug("Exception "+e);
 		}
-		if (StringUtils.isNotEmpty(args[10]))
-		{
-			Net -= Double.parseDouble(args[10]);
-		}
-		if (StringUtils.isNotEmpty(args[12]))
-		{
-			Net -= Double.parseDouble(args[12]);
-		}
-		if (StringUtils.isNotEmpty(args[14]))
-		{
-			Net -= Double.parseDouble(args[14]);
-		}
-		if (StringUtils.isNotEmpty(args[20]))
-		{
-			Net -= Double.parseDouble(args[20]);
-		}
-	} else if (flag == 2) {
-		if (StringUtils.isNotEmpty(args[5]))
-		{
-			Net += Double.parseDouble(args[5]);
-		}
-		if (StringUtils.isNotEmpty(args[7]))
-		{
-			Net -= Double.parseDouble(args[7]);
-		}
-		if (StringUtils.isNotEmpty(args[9]))
-		{
-			Net -= Double.parseDouble(args[9]);
-		}
-		if (StringUtils.isNotEmpty(args[11]))
-		{
-			Net -= Double.parseDouble(args[11]);
-		}
-		if (StringUtils.isNotEmpty(args[17]))
-		{
-			Net -= Double.parseDouble(args[17]);
-		}
+		LOGGER.info("PremiumDAOImpl getSumOfShareSign || Exit Sum of Retro SS Amt=>"+string);
+		return string;
 	}
-	LOGGER.info("PremiumDAOImpl getNetDueFac || Exit");
-	return String.valueOf(Net);
-}
-private static String getNetDueAmount(final String[] args,final String CliamPaid) {
-	LOGGER.info("PremiumDAOImpl getNetDueAmount || Enter");
-	double Abt=0;
-	double Bbt=0;
-	if(StringUtils.isNotEmpty(args[12]))
-	{
-	Abt+=Double.parseDouble(args[12]);
-	}
-	if(StringUtils.isNotEmpty(args[14]))
-	{
-	Abt+=Double.parseDouble(args[14]);
-	}
-	if(StringUtils.isNotEmpty(args[16]))
-	{
-	Abt+=Double.parseDouble(args[16]);
-	}
-	if(StringUtils.isNotEmpty(args[17]))
-	{
-	Abt+=Double.parseDouble(args[17]);
-	}
-	if(StringUtils.isNotEmpty(args[19]))
-	{
-	Abt+=Double.parseDouble(args[19]);
-	}
-	if(StringUtils.isNotEmpty(args[21]))
-	{
-	Abt+=Double.parseDouble(args[21]);
-	}
-	if(StringUtils.isNotEmpty(args[32]))
-	{
-		Abt+=Double.parseDouble(args[32]);
-	}
-	if(StringUtils.isNotEmpty(args[63]))
-	{
-		Abt+=Double.parseDouble(args[63]);
-	}
-	if(StringUtils.isNotEmpty(args[76]))
-	{
-	Abt+=Double.parseDouble(args[76]);
-	}
-	if(StringUtils.isNotEmpty(args[78]))
-	{
-	Abt+=Double.parseDouble(args[78]);
+
+	public List<Map<String, Object>> getClaimNosDropDown(String contNo){ 
+	    return premiumapi.getClaimNosDropDown(contNo);
 	}
 	
-	if(StringUtils.isNotEmpty(args[87]))
-	{
-	Abt+=Double.parseDouble(args[87]);
-	}
-	if(StringUtils.isNotEmpty(args[13]))
-	{
-		Bbt+=Double.parseDouble(args[13]);
-	}
-	if(StringUtils.isNotEmpty(args[15]))
-	{
-		Bbt+=Double.parseDouble(args[15]);
-	}
-	if(StringUtils.isNotEmpty(args[8]))
-	{
-		Bbt+=Double.parseDouble(args[8]);
-	}
-	if(StringUtils.isNotEmpty(args[10]))
-	{
-		Bbt+=Double.parseDouble(args[10]);
-	}
-	if(StringUtils.isNotEmpty(args[18]))
-	{
-		Bbt+=Double.parseDouble(args[18]);
-	}
-	if(StringUtils.isNotEmpty(args[20]))
-	{
-		Bbt+=Double.parseDouble(args[20]);
-	}
-	if(StringUtils.isNotEmpty(args[22]))
-	{
-		Bbt+=Double.parseDouble(args[22]);
-	}
-	if(StringUtils.isNotEmpty(args[23]))
-	{
-		Bbt+=Double.parseDouble(args[23]);
-	}
-	if(StringUtils.isNotEmpty(args[24]))
-	{
-		Bbt+=Double.parseDouble(args[24]);
-	}
-	if(StringUtils.isNotEmpty(CliamPaid))
-	{
-		Bbt+=Double.parseDouble(CliamPaid);
-	}
-	if(StringUtils.isNotEmpty(args[31]))
-	{
-		Bbt+=Double.parseDouble(args[31]);
-	}
-	if(StringUtils.isNotEmpty(args[30]))
-	{
-		Bbt+=Double.parseDouble(args[30]);
-	}
-	if(StringUtils.isNotEmpty(args[34]))
-	{
-		Bbt+=Double.parseDouble(args[34]);
-	}
-	if(StringUtils.isNotEmpty(args[67]))
-	{
-		Bbt+=Double.parseDouble(args[67]);
-	}
-	if(StringUtils.isNotEmpty(args[70]))
-	{
-		Bbt+=Double.parseDouble(args[70]);
-	}
-	if(StringUtils.isNotEmpty(args[80]))
-	{
-		Bbt+=Double.parseDouble(args[80]);
-	}
-	LOGGER.info("A==>"+Abt);
-	LOGGER.info("B==>"+Bbt);
-    final double cbt=Abt-Bbt;
-    LOGGER.info("Net Due==>"+cbt);
-    LOGGER.info("PremiumDAOImpl getNetDueAmount || Exit");
-	return String.valueOf(cbt);
-}
-private static String getNetDueXol(final String[] args) {
-	LOGGER.info("PremiumDAOImpl getNetDueXol || Enter");
-	final double Ant=StringUtils.isEmpty(args[13]) ? 0 :Double.parseDouble(args[13]) ;
-	final double Bnt=StringUtils.isEmpty(args[14]) ? 0 :Double.parseDouble(args[14]) ;
-	final double Cnt=StringUtils.isEmpty(args[15]) ? 0 :Double.parseDouble(args[15]) ;
-	final double Dnt=StringUtils.isEmpty(args[8]) ? 0 :Double.parseDouble(args[8]) ;
-	final double Ent=StringUtils.isEmpty(args[10]) ? 0 :Double.parseDouble(args[10]) ;
-	final double Fnt=StringUtils.isEmpty(args[12]) ? 0 :Double.parseDouble(args[12]) ;
-	final double Hnt=StringUtils.isEmpty(args[23]) ? 0 :Double.parseDouble(args[23]) ;
-	LOGGER.info("A==>"+Ant);
-	LOGGER.info("B==>"+Bnt);
-    final double cnt=(Ant+Bnt+Cnt)-(Dnt+Ent+Fnt+Hnt);
-    LOGGER.info("Net Due==>"+cnt);
-    LOGGER.info("PremiumDAOImpl getNetDueXol || Exit");
-	return String.valueOf(cnt);
-}
-public static String[] updateAruguments(final FaculPremiumBean beanObj) {
-	LOGGER.info("PremiumDAOImpl updateAruguments || Enter");
-	String[] args=null;
-		args=new String[87];
-		double premiumsurp=0.0;
-		double premium=0.0;
-		//args[0]=beanObj.getTransaction()+"-"+beanObj.getTransaction_year();
-		args[0]=beanObj.getTransaction();
-		args[1]=beanObj.getAccount_Period();
-		args[2]=beanObj.getAccount_Period_year();
-		args[3]=beanObj.getCurrencyId();
-		args[4]=beanObj.getExchRate();
-		args[5]=beanObj.getBrokerage_view();
-		args[6]=getModeOfTransaction(beanObj.getBrokerage(),beanObj);
-		args[32]=DropDownControllor.GetDesginationCountry(args[6], beanObj.getExchRate());
-		args[7]=beanObj.getTax_view();
-		args[8]=getModeOfTransaction(beanObj.getTax(),beanObj);
-		args[33]=DropDownControllor.GetDesginationCountry(args[8], beanObj.getExchRate());
-		args[63]=getModeOfTransaction(beanObj.getOverrider(),beanObj);
-		args[64]=DropDownControllor.GetDesginationCountry(args[63],beanObj.getExchRate());
-		args[65]=beanObj.getOverRider_view();
-		args[9]=StringUtils.isEmpty(beanObj.getInception_Date()) ?"" :beanObj.getInception_Date();
-		args[10]=getModeOfTransaction(beanObj.getPremiumQuotaShare(),beanObj);
-		args[34]=DropDownControllor.GetDesginationCountry(args[10], beanObj.getExchRate());
-		args[11]=getModeOfTransaction(beanObj.getCommissionQuotaShare(),beanObj);
-		args[35]=DropDownControllor.GetDesginationCountry(args[11], beanObj.getExchRate());
-		args[12]=getModeOfTransaction(beanObj.getPremiumSurplus(),beanObj);
-		args[36]=DropDownControllor.GetDesginationCountry(args[12], beanObj.getExchRate());
-		args[13]=getModeOfTransaction(beanObj.getCommissionSurplus(),beanObj);
-		args[37]=DropDownControllor.GetDesginationCountry(args[13], beanObj.getExchRate());
-		//Added by sathish for java script failure cases-Start
-		LOGGER.info("Before");
-		LOGGER.info("Premium==>"+beanObj.getPremiumQuotaShare());
-		LOGGER.info("Commission==>"+beanObj.getCommissionQuotaShare());
-		LOGGER.info("Brokerate==>"+beanObj.getBrokerage());
-		LOGGER.info("Tax===>"+beanObj.getTax());
-		LOGGER.info("Overrider===>"+beanObj.getOverrider());
-		LOGGER.info("PremiumSurplus===>"+beanObj.getPremiumSurplus());
-		LOGGER.info("comsurp===>"+beanObj.getCommissionSurplus());
-
-		if(!StringUtils.isEmpty(beanObj.getPremiumQuotaShare())||!StringUtils.isEmpty(beanObj.getPremiumSurplus()))
-		{
-			LOGGER.info("After");
-
-			if(!StringUtils.isEmpty(beanObj.getPremiumQuotaShare()))
-			{
-				premium=Double.parseDouble(beanObj.getPremiumQuotaShare());
-			}
-			if(StringUtils.isEmpty(beanObj.getCommissionQuotaShare()))
-			{
-				final double commission=premium*(Double.parseDouble(beanObj.getCommission_view())/100);
-				LOGGER.info("Commission===>"+commission);
-				args[11]=getModeOfTransaction(commission+" ",beanObj);
-				args[35]=DropDownControllor.GetDesginationCountry(args[11], beanObj.getExchRate());
-			}
-			if(!StringUtils.isEmpty(beanObj.getPremiumSurplus()))
-			{
-				premiumsurp=(Double.parseDouble(beanObj.getPremiumSurplus()));
-			}
-			if(StringUtils.isEmpty(beanObj.getCommissionSurplus()))
-			{
-				LOGGER.info("comsurp==>"+beanObj.getCommssion_Surp());
-				double comsurp=premiumsurp*(Double.parseDouble(beanObj.getCommssion_Surp())/100);
-				LOGGER.info("comsurp===>"+comsurp);
-				args[13]=getModeOfTransaction(comsurp+" ",beanObj);
-				args[37]=DropDownControllor.GetDesginationCountry(args[13], beanObj.getExchRate());
-
-			}
-			if(StringUtils.isEmpty(beanObj.getBrokerage()))
-			{
-				double brokerage=(premium+premiumsurp)*(Double.parseDouble(beanObj.getBrokerage_view())/100);
-				args[6]=getModeOfTransaction(brokerage+" ",beanObj);
-				args[32]=DropDownControllor.GetDesginationCountry(args[6], beanObj.getExchRate());
-				LOGGER.info("Brokerate===>"+brokerage);
-			}
-			if(StringUtils.isEmpty(beanObj.getTax()))
-			{
-				double tax=(premium+premiumsurp)*(Double.parseDouble(beanObj.getTax_view())/100);
-				args[8]=getModeOfTransaction(tax+" ",beanObj);
-				args[33]=DropDownControllor.GetDesginationCountry(args[8], beanObj.getExchRate());
-				LOGGER.info("Tax===>"+tax);
-			}
-			if(StringUtils.isEmpty(beanObj.getOverrider()))
-			{
-				double overrider=(premium+premiumsurp)*(Double.parseDouble(beanObj.getOverRider_view())/100);
-				args[63]=getModeOfTransaction(overrider+" ",beanObj);
-				args[64]=DropDownControllor.GetDesginationCountry(args[8], beanObj.getExchRate());
-				LOGGER.info("Overrider===>"+overrider);
-			}
-		}
-		//Added by sathish for java script failure cases-End
-		args[14]=getModeOfTransaction(beanObj.getPremiumportifolioIn(),beanObj);
-		args[38]=DropDownControllor.GetDesginationCountry(args[14], beanObj.getExchRate());
-		args[15]=getModeOfTransaction(beanObj.getCliamPortfolioin(),beanObj);
-		args[39]=DropDownControllor.GetDesginationCountry(args[15], beanObj.getExchRate());
-		args[16]=getModeOfTransaction(beanObj.getPremiumportifolioout(),beanObj);
-		args[40]=DropDownControllor.GetDesginationCountry(args[16], beanObj.getExchRate());
-		args[17]=getModeOfTransaction(beanObj.getLossReserveReleased(),beanObj);
-		args[41]=DropDownControllor.GetDesginationCountry(args[17], beanObj.getExchRate());
-		args[18]=getModeOfTransaction(beanObj.getPremiumReserve_QuotaShare(),beanObj);
-		args[42]=DropDownControllor.GetDesginationCountry(args[18], beanObj.getExchRate());
-		args[19]=getModeOfTransaction(beanObj.getCashLoss_Credit(),beanObj);
-		args[43]=DropDownControllor.GetDesginationCountry(args[19], beanObj.getExchRate());
-		args[20]=getModeOfTransaction(beanObj.getLoss_ReserveRetained(),beanObj);
-		args[44]=DropDownControllor.GetDesginationCountry(args[20], beanObj.getExchRate());
-		args[21]=getModeOfTransaction((StringUtils.isEmpty(beanObj.getProfit_Commission()) ? "0" : beanObj.getProfit_Commission()),beanObj);
-		args[45]=DropDownControllor.GetDesginationCountry(args[21], beanObj.getExchRate());
-		args[22]=getModeOfTransaction(beanObj.getCash_LossPaid(),beanObj);
-		args[46]=DropDownControllor.GetDesginationCountry(args[22], beanObj.getExchRate());
-		//args[23]=beanObj.getEnteringMode();
-		args[23]="2";
-		args[24]=beanObj.getReceipt_no();
-		args[25]=getModeOfTransaction(beanObj.getClaims_paid(),beanObj);
-		args[47]=DropDownControllor.GetDesginationCountry(args[25], beanObj.getExchRate());
-		args[26]=beanObj.getSettlement_status();
-		args[27]=getModeOfTransaction(beanObj.getXl_Cost(),beanObj);
-		args[48]=DropDownControllor.GetDesginationCountry(args[27], beanObj.getExchRate());
-		args[28]=getModeOfTransaction(beanObj.getCliam_portfolio_out(),beanObj);
-		args[49]=DropDownControllor.GetDesginationCountry(args[28], beanObj.getExchRate());
-		args[29]=getModeOfTransaction(beanObj.getPremium_Reserve_Released(),beanObj);
-		args[50]=DropDownControllor.GetDesginationCountry(args[29], beanObj.getExchRate());
-		args[31]=getModeOfTransaction(beanObj.getOtherCost(),beanObj);
-		args[52]=DropDownControllor.GetDesginationCountry(args[31], beanObj.getExchRate());
-		/*args[30]=updateNetDue(args,getModeOfTransaction(beanObj.getClaims_paid(),beanObj));
-		args[51]=DropDownControllor.GetDesginationCountry(args[30], beanObj.getExchRate());*/
-		args[53]=beanObj.getCedentRef();
-		args[54]=beanObj.getRemarks();
-		args[55]=getModeOfTransaction(beanObj.getTotalCredit(),beanObj);
-		args[56]=DropDownControllor.GetDesginationCountry(args[55],beanObj.getExchRate());
-		args[57]=getModeOfTransaction(beanObj.getTotalDebit(),beanObj);
-		args[58]=DropDownControllor.GetDesginationCountry(args[57],beanObj.getExchRate());
-		args[59]=getModeOfTransaction(beanObj.getInterest(),beanObj);
-		args[60]=DropDownControllor.GetDesginationCountry(args[59],beanObj.getExchRate());
-		args[67] = StringUtils.isEmpty(beanObj.getWithHoldingTaxOC()) ? "0" : beanObj.getWithHoldingTaxOC();
-		args[61]=StringUtils.isEmpty(beanObj.getOsClaimsLossUpdateOC())?"0":getModeOfTransaction(beanObj.getOsClaimsLossUpdateOC(),beanObj);
-		args[62]=DropDownControllor.GetDesginationCountry(args[61],beanObj.getExchRate());
-		args[66]=beanObj.getAmendmentDate();
-		args[68] = DropDownControllor.GetDesginationCountry(args[67], beanObj.getExchRate());
-		args[69] = beanObj.getRi_cession();
-		args[70] = beanObj.getDepartmentId();
-		args[71] = getModeOfTransaction(beanObj.getTaxDedectSource(),beanObj);
-		args[72] = DropDownControllor.GetDesginationCountry(args[71], beanObj.getExchRate());
-		args[73] = getModeOfTransaction(beanObj.getServiceTax(),beanObj);
-		args[74] = DropDownControllor.GetDesginationCountry(args[73], beanObj.getExchRate());
-		args[75] = getModeOfTransaction(beanObj.getSlideScaleCom(),beanObj);
-		args[76] = DropDownControllor.GetDesginationCountry(args[75], beanObj.getExchRate());
-		args[77] = beanObj.getPredepartment();
-		args[78] = beanObj.getSubProfitId().replace(" ", "");
-		args[79] = beanObj.getAccountPeriodDate();
-		args[80] = beanObj.getStatementDate();
-		args[81] = beanObj.getOsbYN();
-		args[82] = getModeOfTransaction(beanObj.getLossParticipation(),beanObj);
-		args[83] = DropDownControllor.GetDesginationCountry(args[82], beanObj.getExchRate());
-		args[84] = beanObj.getSectionName();
-		args[85] = beanObj.getContNo();
-		 if(StringUtils.isBlank(beanObj.getTransactionNo())){
-		    	args[86]=beanObj.getRequestNo();
-		    }else{
-		    	args[86]=beanObj.getTransactionNo();
-		    
-		    }
-
-		args[30]=updateNetDue(args,getModeOfTransaction(beanObj.getClaims_paid(),beanObj));
-		args[51]=DropDownControllor.GetDesginationCountry(args[30], beanObj.getExchRate());
-		for(int i=0;i<args.length;i++)
-		{
-			LOGGER.info("Args["+i+"]=>"+args[i]);
-		}
-	final String[] copiedArray = new String[args.length];
-	System.arraycopy(args, 0, copiedArray, 0, args.length);
-	LOGGER.info("PremiumDAOImpl updateAruguments || Exit");
-	return copiedArray;
-}
-private static String updateNetDue(final String[] args,final String claimpaid) {
-	LOGGER.info("PremiumDAOImpl updateNetDue || Enter");
-	double Aut=0;
-	double But=0;
-	if(StringUtils.isNotEmpty(args[10]))
-	{
-	Aut+=Double.parseDouble(args[10]);
-	}
-	if(StringUtils.isNotEmpty(args[12]))
-	{
-	Aut+=Double.parseDouble(args[12]);
-	}
-	if(StringUtils.isNotEmpty(args[14]))
-	{
-	Aut+=Double.parseDouble(args[14]);
-	}
-	if(StringUtils.isNotEmpty(args[15]))
-	{
-	Aut+=Double.parseDouble(args[15]);
-	}
-	if(StringUtils.isNotEmpty(args[17]))
-	{
-	Aut+=Double.parseDouble(args[17]);
-	}
-	if(StringUtils.isNotEmpty(args[19]))
-	{
-	Aut+=Double.parseDouble(args[19]);
-	}
-	if(StringUtils.isNotEmpty(args[29]))
-	{
-		Aut+=Double.parseDouble(args[29]);
-	}
-	if(StringUtils.isNotEmpty(args[59]))
-	{
-		Aut+=Double.parseDouble(args[59]);
-	}
-	if(StringUtils.isNotEmpty(args[71]))
-	{
-		Aut+=Double.parseDouble(args[71]);
-	}
-	if(StringUtils.isNotEmpty(args[73]))
-	{
-		Aut+=Double.parseDouble(args[73]);
-	}
-	if(StringUtils.isNotEmpty(args[82]))
-	{
-		Aut+=Double.parseDouble(args[82]);
-	}
-	if(StringUtils.isNotEmpty(args[11]))
-	{
-		But+=Double.parseDouble(args[11]);
-	}
-	if(StringUtils.isNotEmpty(args[13]))
-	{
-		But+=Double.parseDouble(args[13]);
-	}
-	if(StringUtils.isNotEmpty(args[6]))
-	{
-		But+=Double.parseDouble(args[6]);
-	}
-	if(StringUtils.isNotEmpty(args[8]))
-	{
-		But+=Double.parseDouble(args[8]);
-	}
-	if(StringUtils.isNotEmpty(args[16]))
-	{
-		But+=Double.parseDouble(args[16]);
-	}
-	if(StringUtils.isNotEmpty(args[18]))
-	{
-		But+=Double.parseDouble(args[18]);
-	}
-	if(StringUtils.isNotEmpty(args[20]))
-	{
-		But+=Double.parseDouble(args[20]);
-	}
-	if(StringUtils.isNotEmpty(args[21]))
-	{
-		But+=Double.parseDouble(args[21]);
-	}
-	if(StringUtils.isNotEmpty(args[22]))
-	{
-		But+=Double.parseDouble(args[22]);
-	}
-	if(StringUtils.isNotEmpty(claimpaid))
-	{
-		But+=Double.parseDouble(claimpaid);
-	}
-	if(StringUtils.isNotEmpty(args[31]))
-	{
-		But+=Double.parseDouble(args[31]);
-	}
-	if(StringUtils.isNotEmpty(args[27]))
-	{
-		But+=Double.parseDouble(args[27]);
-	}
-	if(StringUtils.isNotEmpty(args[28]))
-	{
-		But+=Double.parseDouble(args[28]);
-	}
-	if(StringUtils.isNotEmpty(args[63]))
-	{
-		But+=Double.parseDouble(args[63]);
-	}
-	if(StringUtils.isNotEmpty(args[67]))
-	{
-		But+=Double.parseDouble(args[67]);
-	}
-	if(StringUtils.isNotEmpty(args[75]))
-	{
-		But+=Double.parseDouble(args[75]);
-	}
-	LOGGER.info("A==>"+Aut);
-	LOGGER.info("B==>"+But);
-    double cut=Aut-But;
-    LOGGER.info("Net Due==>"+cut);
-    LOGGER.info("PremiumDAOImpl updateNetDue || Exit");
-	return String.valueOf(cut);
-}
-private static String getNetDueXolUpdate(final String[] args) {
-	LOGGER.info("PremiumDAOImpl getNetDueXolUpdate || Enter");
-	double Ant=StringUtils.isEmpty(args[9]) ? 0 :Double.parseDouble(args[9]) ;
-	double Bnt=StringUtils.isEmpty(args[10]) ? 0 :Double.parseDouble(args[10]) ;
-	double Cnt=StringUtils.isEmpty(args[11]) ? 0 :Double.parseDouble(args[11]) ;
-	double Dnt=StringUtils.isEmpty(args[4]) ? 0 :Double.parseDouble(args[4]) ;
-	double Ent=StringUtils.isEmpty(args[6]) ? 0 :Double.parseDouble(args[6]) ;
-	double Fnt=StringUtils.isEmpty(args[15]) ? 0 :Double.parseDouble(args[15]) ;
-	LOGGER.info("A==>"+Ant);
-	LOGGER.info("B==>"+Bnt);
-	double c=(Ant+Bnt+Cnt)-(Dnt+Ent+Fnt);
-    LOGGER.info("Net Due==>"+c);
-    LOGGER.info("PremiumDAOImpl getNetDueXolUpdate || Exit");
-	return String.valueOf(c);
-}
-
-public List getMandDInstallments(String contNo, String layerNo)
-		{
-	LOGGER.info("PremiumDAOImpl getMandDInstallments || Enter");
-	List list=null;
-	try{
-		String query=this.getQuery(DBConstants.PREMIUM_SELECT_MDINSTALLMENTS);
-		 LOGGER.info("Select mdInstallmentDates Query=>"+query);
-		 LOGGER.info("Contract No=>"+contNo);
-		 LOGGER.info("Layer No=>"+layerNo);
-		 list=this.mytemplate.queryForList(query, new Object[]{contNo,layerNo});
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getMandDInstallments || Exit List Size"+list.size());
-	return list;
-}
-
-public String GetInstalmentAmount(String contractNo, String getAmount)
-		{
-	LOGGER.info("PremiumDAOImpl GetInstalmentAmount || Enter");
-	String  string=null;
-	try{
-		String query=this.getQuery(DBConstants.PREMIUM_SELECT_MNDPREMIUMOC);
-		 final String[] Instalmentno=getAmount.split("_");
-		 LOGGER.info("Select mdInstallmentDates Query=>"+query);
-		 LOGGER.info("Contract No=>"+contractNo);
-		 LOGGER.info("Inst No=>"+Instalmentno[0]);
-		 string=(String)this.mytemplate.queryForObject(query, new Object[]{contractNo,Instalmentno[0]},String.class);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl GetInstalmentAmount || Exit Ins Amt=>"+string);
-	return string;
-}
-
-public String getRPPremiumOC(String contractNo, String layerNo)
-		{
-	LOGGER.info("PremiumDAOImpl getRPPremiumOC || Enter");
-	String  string=null;
-	try{
-		String query=this.getQuery(DBConstants.PREMIUM_SELECT_RPPREMIUMOC);
-		 LOGGER.info("Select RP Premium Query=>"+query);
-		 LOGGER.info("Contract No=>"+contractNo);
-		 LOGGER.info("Layer No=>"+layerNo);
-		 string=(String)this.mytemplate.queryForObject(query, new Object[]{contractNo,layerNo},String.class);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getRPPremiumOC || Exit RP Amt=>"+string);
-	return string;
-}
-
-public List getSPRetroList(String contNo,String productId, String layerNo)
-		{
-	LOGGER.info("PremiumDAOImpl getSPRetroList || Enter");
-	List list=null;
-	try{
-		String query="";
-		Object args[]=null;
-		args=new Object[1];
-		args[0]=contNo;
-		query=this.getQuery(DBConstants.PREMIUM_SELECT_GETTREATYSPRETRO);
-		 LOGGER.info("Select SpRetro Query=>"+query);
-		 LOGGER.info("Product Code No=>"+productId);
-		 LOGGER.info("Contract No=>"+contNo);
-		 LOGGER.info("Layer No=>"+layerNo);
-		 list=this.mytemplate.queryForList(query, args);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getSPRetroList || Exit List Size"+list.size());
-	return list;
-}
-
-public List getRetroContracts(FaculPremiumBean beanObj) {
-	// TODO Auto-generated method stub
-	LOGGER.info("PremiumDAOImpl getRetroContracts() || Enter");
-	List list=null;
-	try{
-		String query="";
-		Object args[]=null;
-		args=new Object[2];
-		args[0]=beanObj.getProposal_No();
-		args[1]=beanObj.getNoOfRetro();
-		query=this.getQuery(DBConstants.PREMIUM_SELECT_INSDETAILS);
-		LOGGER.info("Select SpRetro Query=>"+query);
-		LOGGER.info("Proposal No=>"+beanObj.getProposal_No());
-		LOGGER.info("No of Retro=>"+beanObj.getNoOfRetro());
-		list=this.mytemplate.queryForList(query, args);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getRetroContracts() || Exit List Size"+list.size());
-	return list;
-}
-
-public String getSumOfShareSign(FaculPremiumBean beanObj)
-		{
-	LOGGER.info("PremiumDAOImpl getSumOfShareSign || Enter");
-	String query="";
-	String  string="0";
-	String noOfRetroCess="";
-	Object args[]=null;
-	try{
-			query=this.getQuery(DBConstants.PREMIUM_SELECT_GETNORETROCESS);
-			LOGGER.info("Query=>"+query);
-			args=new Object[1];
-			args[0]=beanObj.getRetroContractNo();
-			LOGGER.info("Args[0]==>"+args[0]);
-			noOfRetroCess=(String)this.mytemplate.queryForObject(query, args,String.class);
-			LOGGER.info("Result=>"+noOfRetroCess);
-			query=this.getQuery(DBConstants.PREMIUM_SELECT_GETSUMOFSHARESIGN);
-			LOGGER.info("Query=>"+query);
-			args=new Object[2];
-			args[0]=beanObj.getRetroContractNo();
-			args[1]=Integer.parseInt(noOfRetroCess)-1;
-			LOGGER.info("Args[0]==>"+args[0]+"\nArgs[1]==>"+args[1]);
-			string=(String)this.mytemplate.queryForObject(query, args,String.class);
-			LOGGER.info("Result=>"+string);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getSumOfShareSign || Exit Sum of Retro SS Amt=>"+string);
-	return string;
-}
-
-public List<Map<String, Object>> getClaimNosDropDown(String contNo)
-		{
-		LOGGER.info("PremiumDAOImpl getClaimNosDropDown() || Enter Contract No=>"+contNo);
-	 	List<Map<String, Object>> claimNos=new ArrayList<Map<String,Object>>();
+	public boolean getCashLossUpdateValidation(String contractNo,String transactionNo, String claimNo,String cashLOossUpdateOc,String excRate) {
+		LOGGER.info("PremiumDAOImpl getCashLossUpdateValidation() || Enter Contract No=>"+contractNo+"transactionNo=>"+transactionNo+"claimNo=>"+claimNo+"cashLOossUpdateOc=>"+cashLOossUpdateOc+"excRate=>"+excRate);
+		boolean cashlossFlag=false;
+		transactionNo=StringUtils.isBlank(transactionNo)?"9999999999":transactionNo;
+	 	List<Map<String,String>> claimNos=new ArrayList<Map<String,String>>();
 		try{
-		 	String query=getQuery(DBConstants.PREMIUM_SELECT_GETCLAIMNODROPDOWN);
+		 	String query=getQuery(DBConstants.PREMIUM_SELECT_SUMOFPAIDCLAIM);
 		    LOGGER.info("Select Query=>"+query);
-		    LOGGER.info("Args[0]=>"+contNo);
-		    claimNos=this.mytemplate.queryForList(query,new Object[]{contNo});
+		    LOGGER.info("Args[0]=>"+contractNo+"Args[1]=>"+claimNo);
+		    double sumClaimsPaid=(Double)this.mytemplate.queryForObject(query, new String[]{contractNo,claimNo},Double.class);
+		    LOGGER.info("Select Result=>"+sumClaimsPaid);
+		    query=getQuery(DBConstants.PREMIUM_SELECT_SUMOFCASHLOSSUPDATE);
+		    LOGGER.info("Select Query=>"+query);
+		    LOGGER.info("Args[0]=>"+contractNo+"Args[1]=>"+transactionNo+"Args[2]=>"+claimNo+"Args[3]=>"+transactionNo);
+		    double sumLossUpdatesPaid=(Double)this.mytemplate.queryForObject(query, new String[]{contractNo,transactionNo,claimNo,transactionNo},Double.class);
+		    double totalLossUpdates=sumLossUpdatesPaid+(Double.parseDouble(cashLOossUpdateOc)/Double.parseDouble(excRate));
+		    LOGGER.info("Select Result=>"+totalLossUpdates);
+		    if(totalLossUpdates>sumClaimsPaid)
+		    	cashlossFlag=true;
 		}catch(Exception e){
 			LOGGER.debug("Exception "+e);
 		}
-	    LOGGER.info("PremiumDAOImpl getClaimNosDropDown() || Exit List size=>"+claimNos.size());
-	    return claimNos;
-}
-
-public boolean getCashLossUpdateValidation(String contractNo,
-		String transactionNo, String claimNo,String cashLOossUpdateOc,String excRate) {
-	LOGGER.info("PremiumDAOImpl getCashLossUpdateValidation() || Enter Contract No=>"+contractNo+"transactionNo=>"+transactionNo+"claimNo=>"+claimNo+"cashLOossUpdateOc=>"+cashLOossUpdateOc+"excRate=>"+excRate);
-	boolean cashlossFlag=false;
-	transactionNo=StringUtils.isBlank(transactionNo)?"9999999999":transactionNo;
- 	List<Map<String,String>> claimNos=new ArrayList<Map<String,String>>();
-	try{
-	 	String query=getQuery(DBConstants.PREMIUM_SELECT_SUMOFPAIDCLAIM);
-	    LOGGER.info("Select Query=>"+query);
-	    LOGGER.info("Args[0]=>"+contractNo+"Args[1]=>"+claimNo);
-	    double sumClaimsPaid=(Double)this.mytemplate.queryForObject(query, new String[]{contractNo,claimNo},Double.class);
-	    LOGGER.info("Select Result=>"+sumClaimsPaid);
-	    query=getQuery(DBConstants.PREMIUM_SELECT_SUMOFCASHLOSSUPDATE);
-	    LOGGER.info("Select Query=>"+query);
-	    LOGGER.info("Args[0]=>"+contractNo+"Args[1]=>"+transactionNo+"Args[2]=>"+claimNo+"Args[3]=>"+transactionNo);
-	    double sumLossUpdatesPaid=(Double)this.mytemplate.queryForObject(query, new String[]{contractNo,transactionNo,claimNo,transactionNo},Double.class);
-	    double totalLossUpdates=sumLossUpdatesPaid+(Double.parseDouble(cashLOossUpdateOc)/Double.parseDouble(excRate));
-	    LOGGER.info("Select Result=>"+totalLossUpdates);
-	    if(totalLossUpdates>sumClaimsPaid)
-	    	cashlossFlag=true;
-	}catch(Exception e){
-		LOGGER.debug("Exception "+e);
+	    LOGGER.info("PremiumDAOImpl getCashLossUpdateValidation() || Exit cashlossFlag=>"+cashlossFlag);
+	    return cashlossFlag;
 	}
-    LOGGER.info("PremiumDAOImpl getCashLossUpdateValidation() || Exit cashlossFlag=>"+cashlossFlag);
-    return cashlossFlag;
-}
 
-public String getMovementReportMaxDate(String branchCode) {
-	LOGGER.info("PremiumDAOImpl getCashLossUpdateValidation() || Enter");
-	String maxDate = "";
-	LOGGER.info("PremiumDAOImpl getMovementReportMaxDate || Enter");
-	String query = this.getQuery(DBConstants.PREMIUM_MOV_REP_MAX_DATE);
-	LOGGER.info("Select Query=>"+query);
-	LOGGER.info("Obj[]=>"+branchCode);
-	try {
-		maxDate = (String) this.mytemplate.queryForObject(query,new Object[]{branchCode},
-				String.class);
-	} catch (Exception e) {
-		LOGGER.debug("Exception "+e);
+	public String getMovementReportMaxDate(String branchCode) {
+		LOGGER.info("PremiumDAOImpl getCashLossUpdateValidation() || Enter");
+		String maxDate = "";
+		LOGGER.info("PremiumDAOImpl getMovementReportMaxDate || Enter");
+		String query = this.getQuery(DBConstants.PREMIUM_MOV_REP_MAX_DATE);
+		LOGGER.info("Select Query=>"+query);
+		LOGGER.info("Obj[]=>"+branchCode);
+		try {
+			maxDate = (String) this.mytemplate.queryForObject(query,new Object[]{branchCode},
+					String.class);
+		} catch (Exception e) {
+			LOGGER.debug("Exception "+e);
+		}
+		LOGGER.info("PremiumDAOImpl getMovementReportMaxDate() || Exit maxDate"+maxDate);
+		return maxDate;
 	}
-	LOGGER.info("PremiumDAOImpl getMovementReportMaxDate() || Exit maxDate"+maxDate);
-	return maxDate;
-}
-public List<FaculPremiumBean> getAllocatedList(final FaculPremiumBean beanObj)
-{
-
-	LOGGER.info("FaculPremiumDAOImpl allocateView() || Enter");
-	List<FaculPremiumBean> allocateList = new ArrayList<FaculPremiumBean>();
-	Double a=0.0;
-	try{
-		String[] args = new String[4];
-		args[0] = beanObj.getContNo();
-		args[1] = beanObj.getTransactionNo();
-		args[2] = beanObj.getContNo();
-		args[3] = beanObj.getTransactionNo();
-		String selectQry = getQuery(DBConstants.PAYMENT_SELECT_GETALLOTRANSACTION);
-		selectQry = selectQry + " ORDER BY SNO DESC";
-		LOGGER.info("Query=>"+selectQry);
-		List<Map<String,Object>> list = this.mytemplate.queryForList(selectQry,args);
-		LOGGER.info("Result Size=>"+list.size());
+	public List<FaculPremiumBean> getAllocatedList(final FaculPremiumBean beanObj){
+		List<FaculPremiumBean> allocateList = new ArrayList<FaculPremiumBean>();
+		List<Map<String,Object>> list =premiumapi.getAllocatedList(beanObj);
 		if (list.size()>0) {
 			for (int i = 0; i < list.size(); i++) {
 				Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
 				FaculPremiumBean tempBean = new FaculPremiumBean();
-				tempBean.setSerial_no(tempMap.get("SNO")==null?"":tempMap.get("SNO").toString());
-				tempBean.setAllocateddate(tempMap.get("INCEPTION_DATE")==null?"":tempMap.get("INCEPTION_DATE").toString());
-				tempBean.setProductname(tempMap.get("PRODUCT_NAME")==null?"":tempMap.get("PRODUCT_NAME").toString());
-				tempBean.setType(tempMap.get("TYPE")==null?"":tempMap.get("TYPE").toString());
-				tempBean.setPayamount(tempMap.get("PAID_AMOUNT")==null?"":tempMap.get("PAID_AMOUNT").toString());
-				tempBean.setCurrencyValue(tempMap.get("CURRENCY_ID")==null?"":tempMap.get("CURRENCY_ID").toString());
-				tempBean.setAlloccurrencyid(tempMap.get("CURRENCY_ID")==null?"":tempMap.get("CURRENCY_ID").toString());
-				tempBean.setAllocateType(tempMap.get("ADJUSTMENT_TYPE")==null?"":tempMap.get("ADJUSTMENT_TYPE").toString());
-				tempBean.setStatus((tempMap.get("STATUS")==null?"":tempMap.get("STATUS").toString()));
-				tempBean.setPay_rec_no(tempMap.get("RECEIPT_NO")==null?"":tempMap.get("RECEIPT_NO").toString());
-				tempBean.setSettlementType(tempMap.get("TRANS_TYPE")==null?"":tempMap.get("TRANS_TYPE").toString());
-				if(tempBean.getPay_rec_no()!=""){
-				beanObj.setAllocateType(tempMap.get("ALLOCATE_TYPE")==null?"":tempMap.get("ALLOCATE_TYPE").toString());
-				//beanObj.setAllocateType((String)this.mytemplate.queryForObject("SELECT TRANS_TYPE FROM TTRN_PAYMENT_RECEIPT tpr WHERE PAYMENT_RECEIPT_NO=? and tpr.amend_id=(select max(amend_id) from Ttrn_Payment_Receipt where  PAYMENT_RECEIPT_NO=tpr.PAYMENT_RECEIPT_NO and branch_code=tpr.branch_code)",new Object[]{tempBean.getPay_rec_no()},String.class));
-				}
-				a=a+Double.parseDouble(tempMap.get("PAID_AMOUNT")==null?"":tempMap.get("PAID_AMOUNT").toString());
+				tempBean.setSerial_no(tempMap.get("SerialNo")==null?"":tempMap.get("SerialNo").toString());
+				tempBean.setAllocateddate(tempMap.get("AllocatedDate")==null?"":tempMap.get("AllocatedDate").toString());
+				tempBean.setProductname(tempMap.get("ProductName")==null?"":tempMap.get("ProductName").toString());
+				tempBean.setType(tempMap.get("Type")==null?"":tempMap.get("Type").toString());
+				tempBean.setPayamount(tempMap.get("PayAmount")==null?"":tempMap.get("PayAmount").toString());
+				tempBean.setCurrencyValue(tempMap.get("CurrencyValue")==null?"":tempMap.get("CurrencyValue").toString());
+				tempBean.setAlloccurrencyid(tempMap.get("AlloccurrencyId")==null?"":tempMap.get("AlloccurrencyId").toString());
+				tempBean.setAllocateType(tempMap.get("AllocateType")==null?"":tempMap.get("AllocateType").toString());
+				tempBean.setStatus(tempMap.get("Status")==null?"":tempMap.get("Status").toString());
+				tempBean.setSettlementType(tempMap.get("SettlementType")==null?"":tempMap.get("SettlementType").toString());
+				tempBean.setPay_rec_no(tempMap.get("PayRecNo")==null?"":tempMap.get("PayRecNo").toString());
 				allocateList.add(tempBean);
 			}
 		}
-		if(a>0){
-		beanObj.setTotalAmount(DropDownControllor.formatter(Double.toString(a)));
-		}
-		else{
-			beanObj.setTotalAmount("");
-		}
+		return allocateList;
 	}
-  	catch(Exception exe)
-	{
-	LOGGER.debug("Exception"+exe);
+	public List<Map<String,Object>> getBrokerAndCedingName(FaculPremiumBean beanObj) {
+		return premiumapi.getBrokerAndCedingName(beanObj);
 	}
-  	LOGGER.info("FaculPremiumDAOImpl allocateView() || Exit Map");
-	return allocateList;
-}
-public List getBrokerAndCedingName(FaculPremiumBean beanObj) {
-	// TODO Auto-generated method stub
-	LOGGER.info("PremiumDAOImpl getRetroContracts() || Enter");
-	List list=null;
-	try{
-		String query="";
-		Object args[]=null;
-		args=new Object[4];
-		args[0]=beanObj.getContNo();
-		args[1]=beanObj.getBranchCode();
-		args[2]=beanObj.getContNo();
-		args[3]=beanObj.getBranchCode();
-		query=this.getQuery(DBConstants.BROKER_AND_CEDING_NAME);
-		LOGGER.info("Select BrokerAndCedingName Query=>"+query);
-		LOGGER.info("Contract No=>"+beanObj.getProposal_No());
-		list=this.mytemplate.queryForList(query, args);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getRetroContracts() || Exit List Size"+list.size());
-	return list;
-}
-
-public List<Map<String,Object>> getaccountList(FaculPremiumBean bean) {
-	LOGGER.info("PremiumDAOImpl getaccountList() || Enter");
-	List<Map<String,Object>> list=null;
-	try{
-		String query="";
-		Object args[]=null;
-		args=new Object[2];
-		args[0]=bean.getCurrencyId();
-		args[1]=bean.getBranchCode();
-		query=this.getQuery(DBConstants.ACCOUNT_LIST);
-		list=this.mytemplate.queryForList(query, args);
-		if (list.size()>0) {
-			for (int i = 0; i < list.size(); i++) {
-				Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
-				bean.setCurrencyName(tempMap.get("SHORT_NAME")==null?"":tempMap.get("SHORT_NAME").toString());
-			}
-		}
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl getaccountList() || Exit List Size"+list.size());
-	return list;
-}
-
-public List<Map<String, Object>> currencyList(FaculPremiumBean bean) {
-	LOGGER.info("PremiumDAOImpl currencyList() || Enter");
-	List<Map<String,Object>> list=null;
-	try{
-		String query="";
-		Object args[]=null;
-		args=new Object[2];
-		args[0]=bean.getBranchCode();
-		args[1]=bean.getBranchCode();
-		query=this.getQuery(DBConstants.CURRENCY_LIST);
-		list=this.mytemplate.queryForList(query, args);
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl currencyList() || Exit List Size"+list.size());
-	return list;
-}
-
-public void bankAddress(FaculPremiumBean bean) {
-	LOGGER.info("PremiumDAOImpl bankAddress() || Enter");
-	List<Map<String,Object>> list=null;
-	try{
-		String query="";
-		Object args[]=null;
-		args=new Object[2];
-		args[0]=bean.getBranchCode();
-		args[1]=bean.getBancAccountNo();
-		query=this.getQuery(DBConstants.BANK_ADDRESS_LIST);
-		list=this.mytemplate.queryForList(query, args);
-		if (list.size()>0) {
-			for (int i = 0; i < list.size(); i++) {
-				Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
-				bean.setBankAddress(tempMap.get("BANK_ADDRESS")==null?"":tempMap.get("BANK_ADDRESS").toString());
-				bean.setBancAccountNo(tempMap.get("BANK_AC_NO")==null?"":tempMap.get("BANK_AC_NO").toString());
-			}
-		}
-	}catch(Exception e)
-	{
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("PremiumDAOImpl bankAddress() || Exit List Size"+list.size());
-	//return list;
-}
-public String GetPreviousPremium(FaculPremiumBean bean) {
-	String premium="";
-	LOGGER.info("Enter Into GetPreviousPremium()");
-	try{
-		String query=getQuery("PREMIUM_QUOTA_SHARE");
-		LOGGER.info("Query==>"+query);
-		LOGGER.info("obj==>"+bean.getContNo());
-		premium=(String)this.mytemplate.queryForObject(query, new Object[]{bean.getContNo()},String.class);
-	}catch(Exception e){
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("Exit from GetPreviousPremium()"+premium);
-	return premium;
-}
-
-public String GetContractPremium(FaculPremiumBean bean) {
-	String premium="";
-	LOGGER.info("Enter Into GetContractPremium()");
-	try{
-		String query=getQuery("GET_CONT_PREM");
-		LOGGER.info("Query==>"+query);
-		LOGGER.info("obj==>"+bean.getContNo()+","+bean.getDepartmentId()+","+bean.getBranchCode());
-		premium=(String) this.mytemplate.queryForObject(query, new Object[]{bean.getContNo(),bean.getDepartmentId(),bean.getBranchCode()},String.class);
-	}catch(Exception e){
-		LOGGER.debug("Exception "+e);
-	}
-	LOGGER.info("Exit from GetContractPremium()"+premium);
-	return premium;
-}
-
-public List<FaculPremiumBean> getCassLossCredit(FaculPremiumBean bean, String claimPayNo) {
-
-	LOGGER.info("getCassLossCredit() || Enter");
-	List<FaculPremiumBean> cashLossList = new ArrayList<FaculPremiumBean>();
-	Double a=0.0;
-	Double b=0.0;
-	Object[] args=null;
-	String selectQry="";
-	try{
-		if(StringUtils.isBlank(bean.getContractsearch())) {
-		 args = new Object[3];
-		args[0] = bean.getContNo();
-		args[1] = bean.getContNo();
-		args[2] = bean.getDepartmentId();
-		selectQry = getQuery("GET_CASH_LOSS_CREADIT");
-		if(StringUtils.isNotBlank(claimPayNo)){
-			selectQry+=" AND CLAIM_PAYMENT_NO='"+claimPayNo+"'";
-		}
-		}else  {
-			selectQry = getQuery("GET_CASH_LOSS_CREADIT1");
-			selectQry += " AND TCP.CONTRACT_NO IN (select * from table(SPLIT_TEXT_FN('"+bean.getContractsearch()+"')))";
-		}
-		String excessRatePercent=this.mytemplate.queryForObject(getQuery("GET_EXCESS_RATE_PERCENT"),String.class);
-		LOGGER.info("Query=>"+selectQry);
-		List<Map<String,Object>> list = this.mytemplate.queryForList(selectQry,args);
-		String query=getQuery("GET_CURRENCY_NAME");
-		LOGGER.info("Result Size=>"+list.size());
-		if (list.size()>0) {
-			for (int i = 0; i < list.size(); i++) {
-				Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
-				FaculPremiumBean tempBean = new FaculPremiumBean();
-				tempBean.setSerial_no(tempMap.get("SNO")==null?"":tempMap.get("SNO").toString());
-				tempBean.setContNo(tempMap.get("CONTRACT_NO")==null?"":tempMap.get("CONTRACT_NO").toString());
-				tempBean.setPaidDate(tempMap.get("INCEPTION_DATE")==null?"":tempMap.get("INCEPTION_DATE").toString());
-				tempBean.setClaimNumber(tempMap.get("CLAIM_NO")==null?"":tempMap.get("CLAIM_NO").toString());
-				tempBean.setClaimPaymentNo(tempMap.get("CLAIM_PAYMENT_NO")==null?"":tempMap.get("CLAIM_PAYMENT_NO").toString());
-				tempBean.setPayamount(DropDownControllor.formatter(tempMap.get("PAID_AMOUNT_OC")==null?"":tempMap.get("PAID_AMOUNT_OC").toString()));
-				tempBean.setCurrencyValue(tempMap.get("CURRENCY_ID")==null?"":tempMap.get("CURRENCY_ID").toString());
-				tempBean.setExcessRatePercent(excessRatePercent);
-				tempBean.setCurrencyId(bean.getCurrencyId());
-				tempBean.setCurrencyValueName((String)this.mytemplate.queryForObject(query, new Object[]{bean.getBranchCode(),tempMap.get("CURRENCY_ID")==null?"":tempMap.get("CURRENCY_ID").toString()},String.class));
-				tempBean.setCurrencyIdName((String)this.mytemplate.queryForObject(query, new Object[]{bean.getBranchCode(),bean.getCurrencyId()},String.class));
-				if(StringUtils.isNotBlank(bean.getMainclaimPaymentNos()) && bean.getMainclaimPaymentNos().contains(tempMap.get("CLAIM_PAYMENT_NO")==null?"":tempMap.get("CLAIM_PAYMENT_NO").toString())){
-					if(tempBean.getCurrencyValue().equalsIgnoreCase(tempBean.getCurrencyId())){
-						tempBean.setStatus("true");
-					}
-					String [] value=bean.getMaincreditAmountCLClist().split(",");
-					String [] value1=bean.getMaincreditAmountCLDlist().split(",");
-					String [] value2=bean.getMainCLCsettlementRatelist().split(",");
-					String [] value3=bean.getMainclaimPaymentNos().split(",");
-					tempBean.setCreditAmountCLC(DropDownControllor.formatter(value[i]));
-					tempBean.setCreditAmountCLD(DropDownControllor.formatter(value1[i]));
-					tempBean.setCLCsettlementRate(value2[i]);
-					tempBean.setCheck("true");
-				}
-				else if(StringUtils.isNotBlank(bean.getMode()) && "error".equals(bean.getMode()) ){
-					if(tempBean.getCurrencyValue().equalsIgnoreCase(tempBean.getCurrencyId())){
-						tempBean.setStatus("true");
-					}
-					if(bean.getCreditAmountCLClist()!=null && bean.getCreditAmountCLClist().size()>0 && StringUtils.isNotBlank(bean.getCreditAmountCLClist().get(i))){
-					tempBean.setCreditAmountCLC((bean.getCreditAmountCLClist().get(i)));
-					}else{
-						tempBean.setCreditAmountCLC("");
-					}
-					if(bean.getCreditAmountCLDlist()!=null && bean.getCreditAmountCLDlist().size()>0 &&  StringUtils.isNotBlank(bean.getCreditAmountCLDlist().get(i))){
-					tempBean.setCreditAmountCLD((bean.getCreditAmountCLDlist().get(i)));
-					}else{
-						tempBean.setCreditAmountCLD("");
-					}
-					if(bean.getCLCsettlementRatelist()!=null && bean.getCLCsettlementRatelist().size()>0 &&  StringUtils.isNotBlank(bean.getCLCsettlementRatelist().get(i))){
-					tempBean.setCLCsettlementRate(bean.getCLCsettlementRatelist().get(i));
-					}else{
-						tempBean.setCLCsettlementRate("");
-					}
-				}
-				else {
-					if(tempBean.getCurrencyValue().equalsIgnoreCase(tempBean.getCurrencyId())){
-					tempBean.setStatus("true");
-					tempBean.setCreditAmountCLCTemp(DropDownControllor.formatter(tempMap.get("PAID_AMOUNT_OC")==null?"":tempMap.get("PAID_AMOUNT_OC").toString()));
-					tempBean.setCreditAmountCLDTemp(tempBean.getCreditAmountCLCTemp());
-					a=Double.parseDouble(tempMap.get("PAID_AMOUNT_OC")==null?"0":tempMap.get("PAID_AMOUNT_OC").toString());
-					b=Double.parseDouble(tempBean.getCreditAmountCLDTemp().replace(",", ""));
-					String c=Double.toString(a/b);
-					tempBean.setCLCsettlementRateTemp(c);
-						tempBean.setCreditAmountCLC("");
-						tempBean.setCreditAmountCLD("");
-						tempBean.setCLCsettlementRate("");
-					}else{
-						tempBean.setCreditAmountCLC("");
-						tempBean.setCreditAmountCLD("");
-						tempBean.setCLCsettlementRate("");
-					}
-					} 
-				if((bean.getChkbox()!=null)&& bean.getChkbox().get(i).equalsIgnoreCase("true")){
-					tempBean.setCheck("true");
-				}
-				cashLossList.add(tempBean);
-			}
-		}
-
-	}
-  	catch(Exception exe)
-	{
-	LOGGER.debug("Exception"+exe);
-	}
-  	LOGGER.info("getCassLossCredit() || Exit Map");
-	return cashLossList;
-}
-
-public void InsertCashLossCredit(FaculPremiumBean bean) {
-	try{
-	
-		LOGGER.info("InsertCashLossCredit || Enter");
-		if(StringUtils.isNotBlank(bean.getClaimPaymentNo())){
-		String[] ClaimPayNo=bean.getClaimPaymentNo().split(",");
-		String[] creditAmountCLC=bean.getCreditAmountCLC().split(",");
-		String[] creditAmountCLD=bean.getCreditAmountCLD().split(",");
-		String[] CLCsettlementRate=bean.getCLCsettlementRate().split(",");
-		String[] cldAmount=bean.getCLDAmount().split(",");
-		for(int i=0;i<ClaimPayNo.length;i++) {
-			if(StringUtils.isNotBlank(ClaimPayNo[i])){
-		List<FaculPremiumBean>cashLossList=getCassLossCredit(bean,ClaimPayNo[i]);
-		FaculPremiumBean form= cashLossList.get(0);
-		if(ClaimPayNo[i].contains(form.getClaimPaymentNo())) {
-		Object[] obj=new Object[17];
-		obj[0]=bean.getBranchCode();
-		obj[1]=form.getContNo();
-		obj[2]=form.getClaimNumber();
-		obj[3]=form.getClaimPaymentNo();
-		obj[4]=form.getCurrencyId();
-		obj[5]=creditAmountCLC[i];
-		obj[6]=form.getCurrencyValue();
-		obj[7]=CLCsettlementRate[i];
-		obj[8]=creditAmountCLD[i];
-		obj[9]=bean.getTransactionNo();
-		obj[10]=bean.getTransaction();
-		obj[11]=bean.getBranchCode();
-		obj[12] = bean.getRequestNo();
-		if("submit".equalsIgnoreCase(bean.getButtonStatus())){
-			obj[13] = "A";
-		}else{
-			obj[13] = "P";
-		}
-		obj[14] = bean.getProposal_No();
-		obj[15] = cldAmount[i];
-		obj[16] = bean.getCashlossType();
-		String query=getQuery(DBConstants.INSERT_CASS_LOSSCREDIT);
-		LOGGER.info("Insert Query==>"+query);
-		LOGGER.info("Obj==>"+StringUtils.join(obj,","));
-	 	this.mytemplate.update(query, obj);
-	 	if("submit".equalsIgnoreCase(bean.getButtonStatus())){
-		 	String sql=getQuery(DBConstants.UPDATE_CLAIM_PAYMENT);
-		 	Object[] arg=new Object[]{form.getContNo(),bean.getBranchCode(),bean.getRequestNo(),"A",form.getClaimNumber(),form.getClaimPaymentNo(),form.getContNo(),form.getClaimNumber(),form.getClaimPaymentNo()};
-		 	LOGGER.info("Update Query==>"+sql);
-		 	LOGGER.info("Obj==>"+StringUtils.join(arg,","));
-		 	this.mytemplate.update(sql,arg );
-	 		}
-		}
-		}
-		}
-		}
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-	LOGGER.info("InsertCashLossCredit || Enter");
-}
-
-public String getDepartmentNo(FaculPremiumBean bean) {
-	String deptNo="";
-	try{
-		String query = getQuery("GET_DEPARTMENT_NO");
-		Object args[]=new Object[1];
-		args[0] = bean.getContNo();
-		deptNo = this.mytemplate.queryForObject(query,args,String.class);
-
-	}
-	catch(Exception e){
-
-	}
-	return deptNo;
-}
-
-	public List<Map<String,Object>> getConstantPeriodDropDown(String categoryId, String contNo,FaculPremiumBean bean) {
-		LOGGER.info("getConstantPeriodDropDown() || Enter");
-		List<Map<String,Object>> constantList=new ArrayList<Map<String,Object>>();
-		List<Map<String,Object>> res=new ArrayList<Map<String,Object>>();
-		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
-		boolean val = false;
-		boolean preval=false;
-		boolean lossval=false;
-		
-		String slide  = "";
-		String combine ="";
-		String premium ="";
-		String preCombine="";
-		String loss ="";
-		String lossCombine="";
-		String DeptNo ="";
-		String proposalNo = "";
-		String base="";
-		
-		
+	public List<Map<String,Object>> getaccountList(FaculPremiumBean bean) {
+		LOGGER.info("PremiumDAOImpl getaccountList() || Enter");
+		List<Map<String,Object>> list=null;
 		try{
 			String query="";
-			LOGGER.info("Select Query==> " + query);
-			LOGGER.info("Args[0]==> " + categoryId);
-			LOGGER.info("Args[1]==> " + "Y");
-			query =getQuery("GET_ACC_PERIOD");
-			Object args[] = null;
-			args=new Object[1];
-			args[0] = bean.getProposal_No();
-			String accPeriod = this.mytemplate.queryForObject(query,args,String.class);
-			query = getQuery("COMMON_SELECT_GETCONSTDET_PTTY");
+			Object args[]=null;
 			args=new Object[2];
-			args[0] = categoryId;
-			args[1]= "Y";
-			if("1".equalsIgnoreCase(accPeriod)){
-				query +="AND REMARKS IN ('P','Q') ORDER BY   DETAIL_NAME";
-			}else if("2".equalsIgnoreCase(accPeriod)){
-				query +="AND REMARKS IN ('P','H') ORDER BY   DETAIL_NAME";
-			}else if("3".equalsIgnoreCase(accPeriod)){
-				query +="AND REMARKS IN ('P','Y') ORDER BY   DETAIL_NAME";
-			}
-			
-			constantList=this.mytemplate.queryForList(query,args);
-			query = getQuery("GET_BASE_LAYER");
-			args=new Object[2];
-			args[0] = contNo;
-			args[1] = bean.getDepartmentId();
-			LOGGER.info("Query=>"+query);
-			LOGGER.info("Args=>"+StringUtils.join(args, ","));
-			
-            result = this.mytemplate.queryForList(query,args);
-            for(int i=0;i<result.size();i++) {
-                Map<String, Object> map = result.get(i);
-                proposalNo = map.get("PROPOSAL_NO").toString();
-                base = map.get("BASE_LAYER").toString();
-            }
-			if(base.equalsIgnoreCase("0")){
-                args=new Object[2];
-                args[0] = proposalNo;
-                args[1] = bean.getDepartmentId();
-                LOGGER.info("Query=>"+query);
-    			LOGGER.info("Args=>"+StringUtils.join(args, ","));
-				query = getQuery("GET_SLIDE_COMM_VALUE");
-				result = this.mytemplate.queryForList(query,args);
-				for(int i=0;i<result.size();i++){
-					Map<String,Object> map = result.get(i);
-					 slide  = map.get("RSK_SLADSCALE_COMM").toString();
-					 combine  = map.get("RSK_SLIDE_COMBIN_SUB_CLASS").toString();
-					 premium = map.get("RSK_PROFIT_COMM").toString();
-					 preCombine =map.get("RSK_COMBIN_SUB_CLASS").toString();
-					 loss = map.get("RSK_LOSS_PART_CARRIDOR").toString();
-					 lossCombine =map.get("RSK_LOSS_COMBIN_SUB_CLASS").toString();
-					if(slide.equalsIgnoreCase("Y")){
-						val = true ;
-                        if(combine.equalsIgnoreCase("1")){
-                           bean.setSlideScenario("one");
-                        }
-                        else if(combine.equalsIgnoreCase("2")){
-                            bean.setSlideScenario("two");
-                        }
-					}
-					if(premium.equalsIgnoreCase("1")){
-						preval=true;
-						if(preCombine.equalsIgnoreCase("1")){
-							bean.setSlideScenario("one");
-						}
-						else if(preCombine.equalsIgnoreCase("2")){
-                            bean.setSlideScenario("two");
-                        }
-					}
-					if(loss.equalsIgnoreCase("Y")){
-						lossval=true;
-						if(lossCombine.equalsIgnoreCase("1")){
-							bean.setSlideScenario("one");
-						}
-						else if(lossCombine.equalsIgnoreCase("2")){
-                            bean.setSlideScenario("two");
-                        }
-					}
+			args[0]=bean.getCurrencyId();
+			args[1]=bean.getBranchCode();
+			query=this.getQuery(DBConstants.ACCOUNT_LIST);
+			list=this.mytemplate.queryForList(query, args);
+			if (list.size()>0) {
+				for (int i = 0; i < list.size(); i++) {
+					Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
+					bean.setCurrencyName(tempMap.get("SHORT_NAME")==null?"":tempMap.get("SHORT_NAME").toString());
 				}
 			}
-			else{
-				args = new Object[1];
-				args[0] = base;
-				query = getQuery("GET_DEPT_ID");
-				LOGGER.info("Query=>"+query);
-				LOGGER.info("Args=>"+StringUtils.join(args, ","));
-                result = this.mytemplate.queryForList(query,args);
-                for(int i=0;i<result.size();i++){
-                    Map<String,Object> map = result.get(i);
-                    DeptNo  = map.get("DEPT_ID").toString();
-                }
-                args=new Object[2];
-                args[0] = base;
-                args[1] = DeptNo;
-				query = getQuery("GET_SLIDE_COMM_VALUE1");
-				LOGGER.info("Query=>"+query);
-				LOGGER.info("Args=>"+StringUtils.join(args, ","));
-				result = this.mytemplate.queryForList(query,args);
-				for(int i=0;i<result.size();i++){
-                    Map<String,Object> map = result.get(i);
-					 slide  = map.get("RSK_SLADSCALE_COMM").toString();
-					 combine  = map.get("RSK_SLIDE_COMBIN_SUB_CLASS").toString();
-					 premium = map.get("RSK_PROFIT_COMM").toString();
-					 preCombine =map.get("RSK_COMBIN_SUB_CLASS").toString();
-					 loss = map.get("RSK_LOSS_PART_CARRIDOR").toString();
-					 lossCombine =map.get("RSK_LOSS_COMBIN_SUB_CLASS").toString();
-				}
-				if(combine.equalsIgnoreCase("2") || preCombine.equalsIgnoreCase("2")|| lossCombine.equalsIgnoreCase("2")) {
-                    args=new Object[2];
-                    args[0] = proposalNo;
-                    args[1] = bean.getDepartmentId();
-					query = getQuery("GET_SLIDE_COMM_VALUE2");
-					LOGGER.info("Query=>"+query);
-					LOGGER.info("Args=>"+StringUtils.join(args, ","));
-					result = this.mytemplate.queryForList(query, args);
-					for (int i = 0; i < result.size(); i++) {
-                        Map<String,Object> map =result.get(i);
-						 slide  = map.get("RSK_SLADSCALE_COMM").toString();
-						 premium = map.get("RSK_PROFIT_COMM").toString();
-						 loss = map.get("RSK_LOSS_PART_CARRIDOR").toString();
-						if(slide.equalsIgnoreCase("Y") ){
-							val = true ;
-                            bean.setSlideScenario("three");
-						}
-						if(premium.equalsIgnoreCase("1")){
-							preval= true;
-							bean.setSlideScenario("three");
-						}
-						if(loss.equalsIgnoreCase("Y") ){
-							lossval = true ;
-                            bean.setSlideScenario("three");
-						}
-					}
-				}
-			}
-			if(!val) {
-                for (int i = 0; i < constantList.size(); i++) {
-                    Map<String, Object> val1 = constantList.get(i);
-                    String type = val1.get("TYPE").toString();
-                    if (type.equalsIgnoreCase("8")) {
-                        val1.remove(i);
-                    } else {
-                        res.add(val1);
-                    }
-                }
-                constantList = res;
-            }
-			if(!preval){
-				res=new ArrayList<Map<String,Object>>();
-				 for (int i = 0; i < constantList.size(); i++) {
-	                    Map<String, Object> val1 = constantList.get(i);
-	                    String type = val1.get("TYPE").toString();
-	                    if (type.equalsIgnoreCase("7")) {
-	                        val1.remove(i);
-	                    } else {
-	                        res.add(val1);
-	                    }
-	                }
-				 constantList = res;
-			}
-			if(!lossval){
-				res=new ArrayList<Map<String,Object>>();
-				 for (int i = 0; i < constantList.size(); i++) {
-	                    Map<String, Object> val1 = constantList.get(i);
-	                    String type = val1.get("TYPE").toString();
-	                    if (type.equalsIgnoreCase("9")) {
-	                        val1.remove(i);
-	                    } else {
-	                        res.add(val1);
-	                    }
-	                }
-				 constantList = res;
-			}
-
-
-		}catch(Exception e){
-			LOGGER.debug("Exception @ {" + e + "}");
+		}catch(Exception e)
+		{
+			LOGGER.debug("Exception "+e);
 		}
-		LOGGER.info("getConstantPeriodDropDown() || Exit");
-		return constantList;
+		LOGGER.info("PremiumDAOImpl getaccountList() || Exit List Size"+list.size());
+		return list;
 	}
 
+	public List<Map<String, Object>> currencyList(FaculPremiumBean bean) {
+		return premiumapi.currencyList(bean);
+	}
+	public void bankAddress(FaculPremiumBean bean) {
+	LOGGER.info("PremiumDAOImpl bankAddress() || Enter");
+	List<Map<String,Object>> list=null;
+		try{
+			String query="";
+			Object args[]=null;
+			args=new Object[2];
+			args[0]=bean.getBranchCode();
+			args[1]=bean.getBancAccountNo();
+			query=this.getQuery(DBConstants.BANK_ADDRESS_LIST);
+			list=this.mytemplate.queryForList(query, args);
+			if (list.size()>0) {
+				for (int i = 0; i < list.size(); i++) {
+					Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
+					bean.setBankAddress(tempMap.get("BANK_ADDRESS")==null?"":tempMap.get("BANK_ADDRESS").toString());
+					bean.setBancAccountNo(tempMap.get("BANK_AC_NO")==null?"":tempMap.get("BANK_AC_NO").toString());
+				}
+			}
+		}catch(Exception e)
+		{
+			LOGGER.debug("Exception "+e);
+		}
+		LOGGER.info("PremiumDAOImpl bankAddress() || Exit List Size"+list.size());
+	}
+	public String GetPreviousPremium(FaculPremiumBean bean) {
+		String premium="";
+		premium=premiumapi.GetPreviousPremium(bean.getContNo());
+		return premium;
+	}
+
+	public String GetContractPremium(FaculPremiumBean bean) {
+		String premium="";
+		premium = premiumapi.GetContractPremium(bean.getContNo(),bean.getDepartmentId(),bean.getBranchCode());
+		return premium;
+	}
+	public List<FaculPremiumBean> getCassLossCredit(FaculPremiumBean bean, String claimPayNo) {
+		List<FaculPremiumBean> cashLossList = new ArrayList<FaculPremiumBean>();
+		List<Map<String,Object>> list = premiumapi.getCassLossCredit(bean, claimPayNo);
+		if (list.size()>0) {
+			for (int i = 0; i < list.size(); i++) {
+		    Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
+		    FaculPremiumBean tempBean = new FaculPremiumBean();
+			tempBean.setContNo(tempMap.get("ContNo")==null?"":tempMap.get("ContNo").toString());
+			tempBean.setSerial_no(tempMap.get("SerialNo")==null?"":tempMap.get("SerialNo").toString());
+			tempBean.setPaidDate(tempMap.get("PaidDate")==null?"":tempMap.get("PaidDate").toString());
+			tempBean.setClaimNumber(tempMap.get("ClaimNumber")==null?"":tempMap.get("ClaimNumber").toString());
+			tempBean.setClaimPaymentNo(tempMap.get("ClaimPaymentNo")==null?"":tempMap.get("ClaimPaymentNo").toString());
+			tempBean.setPayamount(tempMap.get("PayAmount")==null?"":tempMap.get("PayAmount").toString());
+			tempBean.setExcessRatePercent(tempMap.get("ExcessRatePercent")==null?"":tempMap.get("ExcessRatePercent").toString());
+			tempBean.setCurrencyValue(tempMap.get("CurrencyValue")==null?"":tempMap.get("CurrencyValue").toString());
+			tempBean.setCurrencyId(tempMap.get("CurrencyId")==null?"":tempMap.get("CurrencyId").toString());
+			tempBean.setCurrencyValueName(tempMap.get("CurrencyValueName")==null?"":tempMap.get("CurrencyValueName").toString());
+			tempBean.setCurrencyIdName(tempMap.get("CurrencyIdName")==null?"":tempMap.get("CurrencyIdName").toString());
+			tempBean.setStatus(tempMap.get("Status")==null?"":tempMap.get("Status").toString());
+			tempBean.setCreditAmountCLC(tempMap.get("CreditAmountCLC")==null?"":tempMap.get("CreditAmountCLC").toString());
+			tempBean.setCreditAmountCLD(tempMap.get("CreditAmountCLD")==null?"":tempMap.get("CreditAmountCLD").toString());
+			tempBean.setCLCsettlementRate(tempMap.get("CLCsettlementRate")==null?"":tempMap.get("CLCsettlementRate").toString());
+			tempBean.setCheck(tempMap.get("Check")==null?"":tempMap.get("Check").toString());
+			tempBean.setCreditAmountCLCTemp(tempMap.get("CreditAmountCLCTemp")==null?"":tempMap.get("CreditAmountCLCTemp").toString());
+			tempBean.setCreditAmountCLDTemp(tempMap.get("CreditAmountCLDTemp")==null?"":tempMap.get("CreditAmountCLDTemp").toString());
+			tempBean.setCLCsettlementRateTemp(tempMap.get("CLCsettlementRateTemp")==null?"":tempMap.get("CLCsettlementRateTemp").toString());
+			cashLossList.add(tempBean);
+			}
+		}
+		return cashLossList;
+	}
+	public void InsertCashLossCredit(FaculPremiumBean bean) {
+		try{
+		
+			LOGGER.info("InsertCashLossCredit || Enter");
+			if(StringUtils.isNotBlank(bean.getClaimPaymentNo())){
+			String[] ClaimPayNo=bean.getClaimPaymentNo().split(",");
+			String[] creditAmountCLC=bean.getCreditAmountCLC().split(",");
+			String[] creditAmountCLD=bean.getCreditAmountCLD().split(",");
+			String[] CLCsettlementRate=bean.getCLCsettlementRate().split(",");
+			String[] cldAmount=bean.getCLDAmount().split(",");
+			for(int i=0;i<ClaimPayNo.length;i++) {
+				if(StringUtils.isNotBlank(ClaimPayNo[i])){
+			List<FaculPremiumBean>cashLossList=getCassLossCredit(bean,ClaimPayNo[i]);
+			FaculPremiumBean form= cashLossList.get(0);
+			if(ClaimPayNo[i].contains(form.getClaimPaymentNo())) {
+			Object[] obj=new Object[17];
+			obj[0]=bean.getBranchCode();
+			obj[1]=form.getContNo();
+			obj[2]=form.getClaimNumber();
+			obj[3]=form.getClaimPaymentNo();
+			obj[4]=form.getCurrencyId();
+			obj[5]=creditAmountCLC[i];
+			obj[6]=form.getCurrencyValue();
+			obj[7]=CLCsettlementRate[i];
+			obj[8]=creditAmountCLD[i];
+			obj[9]=bean.getTransactionNo();
+			obj[10]=bean.getTransaction();
+			obj[11]=bean.getBranchCode();
+			obj[12] = bean.getRequestNo();
+			if("submit".equalsIgnoreCase(bean.getButtonStatus())){
+				obj[13] = "A";
+			}else{
+				obj[13] = "P";
+			}
+			obj[14] = bean.getProposal_No();
+			obj[15] = cldAmount[i];
+			obj[16] = bean.getCashlossType();
+			String query=getQuery(DBConstants.INSERT_CASS_LOSSCREDIT);
+			LOGGER.info("Insert Query==>"+query);
+			LOGGER.info("Obj==>"+StringUtils.join(obj,","));
+		 	this.mytemplate.update(query, obj);
+		 	if("submit".equalsIgnoreCase(bean.getButtonStatus())){
+			 	String sql=getQuery(DBConstants.UPDATE_CLAIM_PAYMENT);
+			 	Object[] arg=new Object[]{form.getContNo(),bean.getBranchCode(),bean.getRequestNo(),"A",form.getClaimNumber(),form.getClaimPaymentNo(),form.getContNo(),form.getClaimNumber(),form.getClaimPaymentNo()};
+			 	LOGGER.info("Update Query==>"+sql);
+			 	LOGGER.info("Obj==>"+StringUtils.join(arg,","));
+			 	this.mytemplate.update(sql,arg );
+		 		}
+			}
+			}
+			}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		LOGGER.info("InsertCashLossCredit || Enter");
+	}
+	public String getDepartmentNo(FaculPremiumBean bean) {
+		String deptNo="";
+		deptNo = premiumapi.getDepartmentNo(bean);
+		return deptNo;
+	}
+	public List<Map<String,Object>> getConstantPeriodDropDown(String CategoryId, String ContractNo,FaculPremiumBean bean) {
+		return premiumapi.getConstantPeriodDropDown(CategoryId, ContractNo,bean.getSectionNo(),bean.getProposal_No());
+	}
     public List<Map<String, Object>> SlideCommission(FaculPremiumBean bean,String countryId) {
-    	LOGGER.info("SlideCommission() || Enter");
+    LOGGER.info("SlideCommission() || Enter");
     List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
     String cur = "";
     List<String> exhRate = new ArrayList<String>();
@@ -2333,7 +779,7 @@ public String getDepartmentNo(FaculPremiumBean bean) {
 
 	public String getCurrencyShortName(FaculPremiumBean bean) {
 		LOGGER.info("getCurrencyShortName() || Enter");
-	String res = "";
+		String res = "";
 		try{
 				String query = getQuery("GET_SHRT_NAME");
 				Object args[] = new Object[2];
@@ -3208,284 +1654,40 @@ public void addFieldValue(FaculPremiumBean bean){
 	}
 
 	public List<FaculPremiumBean> getPremiumReserved(FaculPremiumBean bean, String prTransNo,String countryId) {
-		LOGGER.info("getPremiumReserved() || Enter");
 		List<FaculPremiumBean> cashLossList = new ArrayList<FaculPremiumBean>();
-		Double a=0.0;
-		Double b=0.0;
-		try{
-			String selectQry="";
-			Object[] args = new Object[3];
-			args[0] = bean.getContNo();
-			args[1] = bean.getDepartmentId();
-			args[2] = bean.getTransaction();
-			if("PRR".equals(bean.getType())){
-			selectQry = getQuery("GET_PREMIUM_RESERVED_DETAILS");
+		
+		List<Map<String,Object>> list = premiumapi.getPremiumReserved(bean,prTransNo,countryId);
+		if (list.size()>0) {
+			for (int i = 0; i < list.size(); i++) {
+			Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
+			FaculPremiumBean tempBean = new FaculPremiumBean();
+			tempBean.setTransactionNo(tempMap.get("TransactionNo")==null?"":tempMap.get("TransactionNo").toString());
+			tempBean.setContNo(tempMap.get("ContNo")==null?"":tempMap.get("ContNo").toString());
+			tempBean.setPaidDate(tempMap.get("PaidDate")==null?"":tempMap.get("PaidDate").toString());
+			tempBean.setCurrencyValue(tempMap.get("CurrencyValue")==null?"":tempMap.get("CurrencyValue").toString());
+			tempBean.setRequestNo(tempMap.get("RequestNo")==null?"":tempMap.get("RequestNo").toString());
+			tempBean.setSerial_no(tempMap.get("Serialno")==null?"":tempMap.get("Serialno").toString());
+			tempBean.setPayamount(tempMap.get("Payamount")==null?"":tempMap.get("Payamount").toString());
+			tempBean.setCurrencyId(tempMap.get("CurrencyId")==null?"":tempMap.get("CurrencyId").toString());
+			tempBean.setPrallocatedTillDate(tempMap.get("PrallocatedTillDate")==null?"":tempMap.get("PrallocatedTillDate").toString());
+			tempBean.setCurrencyValueName(tempMap.get("CurrencyValueName")==null?"":tempMap.get("CurrencyValueName").toString());
+			tempBean.setCurrencyIdName(tempMap.get("currencyIdName")==null?"":tempMap.get("currencyIdName").toString());
+			tempBean.setStatus(tempMap.get("Status")==null?"":tempMap.get("Status").toString());
+			tempBean.setCreditAmountCLC(tempMap.get("CreditAmountCLC")==null?"":tempMap.get("CreditAmountCLC").toString());
+			tempBean.setCreditAmountCLD(tempMap.get("CreditAmountCLD")==null?"":tempMap.get("CreditAmountCLD").toString());
+			tempBean.setCLCsettlementRate(tempMap.get("CLCsettlementRate")==null?"":tempMap.get("CLCsettlementRate").toString());
+			tempBean.setCheck(tempMap.get("Check")==null?"":tempMap.get("Check").toString());
+			cashLossList.add(tempBean);
 			}
-			else if("LRR".equals(bean.getType())){
-				selectQry = getQuery("GET_LOSS_RESERVED_DETAILS");
-			}
-			if(StringUtils.isNotBlank(prTransNo)){
-				selectQry+=" AND TRANSACTION_NO='"+prTransNo+"'";
-			}
-			LOGGER.info("Query=>"+selectQry);
-			LOGGER.info("Agrs=>"+StringUtils.join(args,","));
-			List<Map<String,Object>> list = this.mytemplate.queryForList(selectQry,args);
-			String query=getQuery("GET_CURRENCY_NAME");
-			LOGGER.info("Result Size=>"+list.size());
-			if (list.size()>0) {
-				for (int i = 0; i < list.size(); i++) {
-					Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
-					FaculPremiumBean tempBean = new FaculPremiumBean();
-					tempBean.setSerial_no(tempMap.get("SNO")==null?"":tempMap.get("SNO").toString());
-					tempBean.setContNo(tempMap.get("CONTRACT_NO")==null?"":tempMap.get("CONTRACT_NO").toString());
-					tempBean.setTransactionNo(tempMap.get("TRANSACTION_NO")==null?"":tempMap.get("TRANSACTION_NO").toString());
-					tempBean.setPaidDate(tempMap.get("TRANSACTION_MONTH_YEAR")==null?"":tempMap.get("TRANSACTION_MONTH_YEAR").toString());
-					tempBean.setPayamount(DropDownControllor.formatter(tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC")==null?"":tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC").toString()));
-					tempBean.setCurrencyValue(tempMap.get("CURRENCY_ID")==null?"":tempMap.get("CURRENCY_ID").toString());
-					tempBean.setCurrencyId(bean.getCurrencyId());
-					tempBean.setPrallocatedTillDate(tempMap.get("ALLOCATE_TILLDATE")==null?"":tempMap.get("ALLOCATE_TILLDATE").toString());
-					tempBean.setCurrencyValueName((String)this.mytemplate.queryForObject(query, new Object[]{bean.getBranchCode(),tempMap.get("CURRENCY_ID")==null?"":tempMap.get("CURRENCY_ID").toString()},String.class));
-					tempBean.setCurrencyIdName((String)this.mytemplate.queryForObject(query, new Object[]{bean.getBranchCode(),bean.getCurrencyId()},String.class));
-					if(StringUtils.isNotBlank(bean.getMainclaimPaymentNos()) && bean.getMainclaimPaymentNos().contains(tempMap.get("TRANSACTION_NO")==null?"":tempMap.get("TRANSACTION_NO").toString())){
-						if(tempBean.getCurrencyValue().equalsIgnoreCase(tempBean.getCurrencyId())){
-							tempBean.setStatus("true");
-						}
-						String [] value=bean.getMaincreditAmountCLClist().split(",");
-						String [] value1=bean.getMaincreditAmountCLDlist().split(",");
-						String [] value2=bean.getMainCLCsettlementRatelist().split(",");
-						String [] value3=bean.getMainclaimPaymentNos().split(",");
-						tempBean.setCreditAmountCLC(DropDownControllor.formatter(value[i]));
-						tempBean.setCreditAmountCLD(DropDownControllor.formatter(value1[i]));
-						tempBean.setCLCsettlementRate(value2[i]);
-						tempBean.setCheck("true");
-					}
-					else if(StringUtils.isNotBlank(bean.getMode()) && "error".equals(bean.getMode()) ){
-						if(tempBean.getCurrencyValue().equalsIgnoreCase(tempBean.getCurrencyId())){
-							tempBean.setStatus("true");
-						}
-						if(bean.getCreditAmountCLClist()!=null && bean.getCreditAmountCLClist().size()>0 && StringUtils.isNotBlank(bean.getCreditAmountCLClist().get(i))){
-						tempBean.setCreditAmountCLC(DropDownControllor.formatter(bean.getCreditAmountCLClist().get(i).replaceAll(",", "")));
-						}else{
-							tempBean.setCreditAmountCLC("");
-						}
-						if(bean.getCreditAmountCLDlist()!=null && bean.getCreditAmountCLDlist().size()>0 &&  StringUtils.isNotBlank(bean.getCreditAmountCLDlist().get(i))){
-						tempBean.setCreditAmountCLD(DropDownControllor.formatter(bean.getCreditAmountCLDlist().get(i).replaceAll(",", "")));
-						}else{
-							tempBean.setCreditAmountCLD("");
-						}
-						if(bean.getCLCsettlementRatelist()!=null && bean.getCLCsettlementRatelist().size()>0 &&  StringUtils.isNotBlank(bean.getCLCsettlementRatelist().get(i))){
-						tempBean.setCLCsettlementRate(bean.getCLCsettlementRatelist().get(i).replaceAll(",", ""));
-						}else{
-							tempBean.setCLCsettlementRate("");
-						}
-					}
-					else {
-						if(tempBean.getCurrencyValue().equalsIgnoreCase(tempBean.getCurrencyId())){
-							tempBean.setStatus("true");
-							tempBean.setCreditAmountCLC(DropDownControllor.formatter(tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC")==null?"":tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC").toString()));
-							tempBean.setCreditAmountCLD(tempBean.getCreditAmountCLC());
-							a=Double.parseDouble(tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC")==null?"0":tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC").toString());
-							b=Double.parseDouble(tempBean.getCreditAmountCLD().replaceAll(",", ""));
-							String c=Double.toString(a/b);
-							tempBean.setCLCsettlementRate(DropDownControllor.formattereight(c));
-						}else{
-							tempBean.setCreditAmountCLC(DropDownControllor.formatter(tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC")==null?"":tempMap.get("PREMIUMRESERVE_QUOTASHARE_OC").toString()));
-							String RTExchange=new DropDownControllor().GetExchangeRate(tempBean.getCurrencyValue(),bean.getTransaction(),countryId,bean.getBranchCode());
-							String RLExchange=new DropDownControllor().GetExchangeRate(tempBean.getCurrencyId(),bean.getTransaction(),countryId,bean.getBranchCode());
-							String c=Double.toString(Double.parseDouble(RTExchange)/Double.parseDouble(RLExchange));
-							tempBean.setCLCsettlementRate(DropDownControllor.formattereight(c));
-							tempBean.setCreditAmountCLD(DropDownControllor.formatter(Double.toString(Double.parseDouble(tempBean.getCreditAmountCLC().replaceAll(",", ""))/Double.parseDouble(c))));
-							//tempBean.setStatus("false");
-						}
-						} 
-					if((bean.getChkbox()!=null)&& bean.getChkbox().get(i).equalsIgnoreCase("true")){
-						tempBean.setCheck("true");
-					}
-					cashLossList.add(tempBean);
-				}
-			}
-
 		}
-	  	catch(Exception exe)
-		{
-		LOGGER.debug("Exception"+exe);
-		}
-	  	LOGGER.info("getPremiumReserved() || Exit Map");
 		return cashLossList;
 	}
-	
-	private void InsertPremiumReserved(FaculPremiumBean bean, String transNo,String countryId) {
-		try{
-			
-			LOGGER.info("InsertPremiumReserved || Enter");
-			if(StringUtils.isNotBlank(bean.getPRTransNo())){
-			String[] prTransNo=bean.getPRTransNo().split(",");
-			String[] prAmount=bean.getPRAmount().split(",");
-			String[] preAmount=bean.getPREAmount().split(",");
-			String[] preRate=bean.getPRERate().split(",");
-			bean.setType("PRR");
-			
-			String sql1="(SELECT nvl(MAX(RL_NO),5001)+1 FROM TTRN_DEPOSIT_RELEASE WHERE BRANCH_CODE=?)";
-			String rLNo=this.mytemplate.queryForObject(sql1, new Object[]{bean.getBranchCode()},String.class);
-			for(int i=0;i<prTransNo.length;i++) {
-			if(StringUtils.isNotBlank(prTransNo[i])){
-				List<FaculPremiumBean>cashLossList=getPremiumReserved(bean,prTransNo[i],countryId);
-				FaculPremiumBean form= cashLossList.get(0);
-				if(prTransNo[i].equals(form.getTransactionNo())) {
-				Object[] obj=new Object[18];
-				obj[0]="";
-				obj[1]=form.getContNo();
-				obj[2]=bean.getDepartmentId();
-				obj[3]="PRR";
-				obj[4]=rLNo;
-				obj[5]=form.getTransactionNo();
-				obj[6]=bean.getTransaction();
-				obj[7]=prTransNo[i];
-				obj[8]=form.getPaidDate();
-				obj[9]=form.getCurrencyValue();
-				obj[10]=bean.getCurrency();
-				obj[11]=prAmount[i];
-				obj[12]=preAmount[i];
-				obj[13]=preRate[i];
-				obj[14]=bean.getLoginId();
-				obj[15]=bean.getBranchCode();
-				if("submit".equalsIgnoreCase(bean.getButtonStatus())){
-					obj[16] = "A";
-				}else{
-					obj[16] = "P";
-				}
-				obj[17] = bean.getRequestNo();
-			String query=getQuery("INSERT_PREMIUM_RESERVE");
-			LOGGER.info("Insert Query==>"+query);
-			LOGGER.info("Obj==>"+StringUtils.join(obj,","));
-		 	this.mytemplate.update(query, obj);
-		 	if("submit".equalsIgnoreCase(bean.getButtonStatus())){
-			 	String sql=getQuery("UPDATE_PREMIUM_RESERVE");
-			 	LOGGER.info("Update Query==>"+sql);
-			 	this.mytemplate.update(sql, new Object[]{form.getContNo(),form.getRequestNo(),"A",form.getContNo(),form.getTransactionNo()});
-			 	}
-			}
-				}
-			}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		LOGGER.info("InsertPremiumReserved || Exit");
-			
-		}
-	private void InsertLossReserved(FaculPremiumBean bean, String transNo,String countryId) {
-		try{
-			
-			LOGGER.info("InsertLossReserved || Enter");
-			if(StringUtils.isNotBlank(bean.getLRTransNo())){
-			String[] prTransNo=bean.getLRTransNo().split(",");
-			String[] prAmount=bean.getLRAmount().split(",");
-			String[] preAmount=bean.getLREAmount().split(",");
-			String[] preRate=bean.getLRERate().split(",");
-			bean.setType("LRR");
-			
-			String sql1="(SELECT nvl(MAX(RL_NO),5001)+1 FROM TTRN_DEPOSIT_RELEASE WHERE BRANCH_CODE=?)";
-			String rLNo=this.mytemplate.queryForObject(sql1, new Object[]{bean.getBranchCode()},String.class);
-			for(int i=0;i<prTransNo.length;i++) {
-				if(StringUtils.isNotBlank(prTransNo[i])){
-			List<FaculPremiumBean>cashLossList=getPremiumReserved(bean,prTransNo[i],countryId);
-			FaculPremiumBean form= cashLossList.get(0);
-			if(prTransNo[i].equals(form.getTransactionNo())) {
-			Object[] obj=new Object[18];
-			obj[0]="";
-			obj[1]=form.getContNo();
-			obj[2]=bean.getDepartmentId();
-			obj[3]="LRR";
-			obj[4]=rLNo;
-			obj[5]=transNo;
-			obj[6]=bean.getTransaction();
-			obj[7]=prTransNo[i];
-			obj[8]=form.getPaidDate();
-			obj[9]=form.getCurrencyValue();
-			obj[10]=bean.getCurrency();
-			obj[11]=prAmount[i];
-			obj[12]=preAmount[i];
-			obj[13]=preRate[i];
-			obj[14]=bean.getLoginId();
-			obj[15]=bean.getBranchCode();
-			if("submit".equalsIgnoreCase(bean.getButtonStatus())){
-				obj[16] = "A";
-			}else{
-				obj[16] = "P";
-			}
-			obj[17] = bean.getRequestNo();
-			String query=getQuery("INSERT_PREMIUM_RESERVE");
-			LOGGER.info("Insert Query==>"+query);
-			LOGGER.info("Obj==>"+StringUtils.join(obj,","));
-		 	this.mytemplate.update(query, obj);
-		 	if("submit".equalsIgnoreCase(bean.getButtonStatus())){
-			 	String sql=getQuery("UPDATE_LOSS_RESERVE");
-			 	LOGGER.info("Update Query==>"+sql);
-			 	this.mytemplate.update(sql, new Object[]{form.getContNo(),form.getRequestNo(),"A",form.getContNo(),form.getTransactionNo()});
-		 	}
-		 	
-			}
-			}
-			}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		LOGGER.info("InsertLossReserved || Exit");
-			
-		}
-
-
 	public List<Map<String, Object>> getOSBList(FaculPremiumBean bean) {
-		LOGGER.info("Enter in to getOSBList method");
-		List<Map<String,Object>>list=null;
-		double sum=0.00;
-		try {
-			String query=getQuery("GET_OBS_LIST");
-			Object [] obj=new String[3];
-			obj[0]=bean.getTransaction();
-			obj[1]=bean.getContNo();
-			obj[2]=bean.getBranchCode();
-			
-			LOGGER.info("Insert Query==>"+query);
-			LOGGER.info("Obj==>"+StringUtils.join(obj,","));
-			list=this.mytemplate.queryForList(query,obj);
-			if(list!=null && list.size()>0){
-				for(int i=0;i<list.size();i++){
-					Map<String,Object>tempMap=list.get(i);
-					sum+=Double.parseDouble(tempMap.get("OSCLAIM_LOSSUPDATE_OC")==null?"0":tempMap.get("OSCLAIM_LOSSUPDATE_OC").toString());
-				}
-			}
-			bean.setTotalOSB(Double.toString(sum));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		LOGGER.info("Exit in to getOSBList method");
-		return list;
+		return premiumapi.getOSBList(bean);
 	}
-
-
 	public int getCountCleanCUT(FaculPremiumBean bean) {
-		LOGGER.info("Enter in to getCountCleanCUT method");
-		int count=0;
-		int count1=1;
-		try {
-			String query=getQuery("GET_CLEAN_CUT_CONT_COUNT");
-			count=this.mytemplate.queryForInt(query,new Object[]{bean.getContNo()});
-			if(count>0){
-			query=getQuery("GET_CLEAN_CUT_COUNT");
-			count1=this.mytemplate.queryForInt(query,new Object[]{bean.getContNo()});
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		LOGGER.info("Exit in to getCountCleanCUT method");
-		return count1;
-		
+		return premiumapi.getCountCleanCUT(bean);
 	}
-
-
 	public int getCountAccountPeriod(FaculPremiumBean bean) {
 		LOGGER.info("Enter in to getCountAccountPeriod method");
 		int count=0;
@@ -3503,8 +1705,6 @@ public void addFieldValue(FaculPremiumBean bean){
 		LOGGER.info("Exit in to getCountAccountPeriod method");
 		return count1;
 	}
-
-
 	public void PremiumGetFieldValues(FaculPremiumBean bean) {
 		LOGGER.info("Enter in to PremiumGetFieldValues method");
 		Object args[]=null;
@@ -4310,8 +2510,6 @@ public void addFieldValue(FaculPremiumBean bean){
 			e.printStackTrace();
 		}
 	}
-
-
 	public int getSectionCount(FaculPremiumBean bean) {
 		int count=0;
 		try {
@@ -4330,8 +2528,6 @@ public void addFieldValue(FaculPremiumBean bean){
 		return count;
 		
 	}
-
-
 	public int getDepositReleaseCount(FaculPremiumBean bean) {
 		int res =0;
 		try{
@@ -4356,69 +2552,35 @@ public void addFieldValue(FaculPremiumBean bean){
 		}
 		return res;
 	}
-
-
 	@Override
 	public List<Object> getAllocatedCassLossCredit(FaculPremiumBean bean) {
-		
-		 LOGGER.info("PremiumContractDetails() || Enter");
-	     String query="";
-	     List<Object>result=new ArrayList<>();
-	     List<Map<String,Object>>list=new ArrayList<>();
-	     try {
-			query=getQuery("GET_ALLOCATED_CASH_LOSS");
-			 list=this.mytemplate.queryForList(query,new Object[] {bean.getProposal_No()});
-			 if(list!=null && list.size()>0) {
-				 for(int i=0;i<list.size();i++) {
-				 Map<String,Object>res=new HashMap<>();
-				 Map<String,Object>map=list.get(i);
-				 res.put("CREDITTRXNNO", map.get("CREDITTRXNNO")==null?"":map.get("CREDITTRXNNO"));
-				 res.put("CONTRACT_NO", map.get("CONTRACT_NO")==null?"":map.get("CONTRACT_NO"));
-				 res.put("CLAIM_NO", map.get("CLAIM_NO")==null?"":map.get("CLAIM_NO"));
-				 res.put("CLAIMPAYMENT_NO", map.get("CLAIMPAYMENT_NO")==null?"":map.get("CLAIMPAYMENT_NO"));
-				 res.put("CREDITDATE", map.get("CREDITDATE")==null?"":map.get("CREDITDATE"));
-				 res.put("CLD_AMOUNT", map.get("CLD_AMOUNT")==null?"":map.get("CLD_AMOUNT"));
-				 res.put("CLDCURRENCY_ID", (String)this.mytemplate.queryForObject(getQuery("GET_CURRENCY_NAME"), new Object[]{bean.getBranchCode(),map.get("CLDCURRENCY_ID")==null?"":map.get("CLDCURRENCY_ID").toString()},String.class));
-				 res.put("CLCCURRENCY_ID", (String)this.mytemplate.queryForObject(getQuery("GET_CURRENCY_NAME"), new Object[]{bean.getBranchCode(),map.get("CLCCURRENCY_ID")==null?"":map.get("CLCCURRENCY_ID").toString()},String.class));
-				 res.put("CREDITAMOUNTCLC", map.get("CREDITAMOUNTCLC")==null?"":map.get("CREDITAMOUNTCLC"));
-				 res.put("CREDITAMOUNTCLD", map.get("CREDITAMOUNTCLD")==null?"":map.get("CREDITAMOUNTCLD"));
-				 res.put("EXCHANGE_RATE", map.get("EXCHANGE_RATE")==null?"":map.get("EXCHANGE_RATE"));
-				 result.add(res);
-				}
-			 }
-		} catch (Exception e) {
-			e.printStackTrace();
+		List<Object>result=new ArrayList<>();
+		List<Map<String,Object>>list=new ArrayList<>();
+		list = premiumapi.getAllocatedCassLossCredit(bean);
+		if(list!=null && list.size()>0) {
+		for(int i=0;i<list.size();i++) {
+		Map<String,Object> tempMap = (Map<String,Object>) list.get(i);
+		FaculPremiumBean tempBean = new FaculPremiumBean();
+		//tempBean.setCreditTrxnNo(tempMap.get("CreditTrxnNo")==null?"":tempMap.get("CreditTrxnNo").toString());
+		tempBean.setContractNo(tempMap.get("ContractNo")==null?"":tempMap.get("ContractNo").toString());
+		//tempBean.setClaimNo(tempMap.get("ClaimNo")==null?"":tempMap.get("ClaimNo").toString());
+		tempBean.setClaimPaymentNo(tempMap.get("ClaimPaymentNo")==null?"":tempMap.get("ClaimPaymentNo").toString());
+		//tempBean.setCreditDate(tempMap.get("CreditDate")==null?"":tempMap.get("CreditDate").toString());
+		tempBean.setcLDAmount(tempMap.get("CldAmount")==null?"":tempMap.get("CldAmount").toString());
+		//tempBean.setCldCurrencyId(tempMap.get("CldCurrencyId")==null?"":tempMap.get("CldCurrencyId").toString());
+		//tempBean.setClcCurrencyId(tempMap.get("ClcCurrencyId")==null?"":tempMap.get("ClcCurrencyId").toString());
+		tempBean.setCreditAmountCLD(tempMap.get("CreditAmountCld")==null?"":tempMap.get("CreditAmountCld").toString());
+		tempBean.setCreditAmountCLC(tempMap.get("CreditAmountClc")==null?"":tempMap.get("CreditAmountClc").toString());
+		tempBean.setExchangerate(tempMap.get("ExchangeRate")==null?"":tempMap.get("ExchangeRate").toString());
+		result.add(tempBean);
 		}
-		return result;
+		}
+			return result;
 	}
-
-
 	@Override
 	public List<Object> getAllocatedTransList(FaculPremiumBean bean) {
-		LOGGER.info("PremiumContractDetails() || Enter");
-	     String query="";
-	     List<Object>result=new ArrayList<>();
-	     List<Map<String,Object>>list=new ArrayList<>();
-	     try {
-			query=getQuery("GET_ALLOCATED_TRANS_LIST");
-			 list=this.mytemplate.queryForList(query,new Object[] {bean.getProposal_No()});
-			 if(list!=null && list.size()>0) {
-				 for(int i=0;i<list.size();i++) {
-				 Map<String,Object>res=new HashMap<>();
-				 Map<String,Object>map=list.get(i);
-				 res.put("CREDITTRXNNO", map.get("CREDITTRXNNO")==null?"":map.get("CREDITTRXNNO"));
-				 res.put("CONTRACT_NO", map.get("CONTRACT_NO")==null?"":map.get("CONTRACT_NO"));
-				
-				 result.add(res);
-				}
-			 }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
+		return premiumapi.getAllocatedTransList(bean);
 	}
-
-
 	@Override
 	public double getReverseCassLossCredit(FaculPremiumBean bean) {
 		LOGGER.info("getReverseCassLossCredit() || Enter");
@@ -4438,8 +2600,6 @@ public void addFieldValue(FaculPremiumBean bean){
 		}
 		return value1;
 	}
-
-
 	@Override
 	public void InsertReverseCashLossCredit(FaculPremiumBean bean) {
 		try{
@@ -4482,8 +2642,6 @@ public void addFieldValue(FaculPremiumBean bean){
 		}
 		LOGGER.info("InsertCashLossCredit || Enter");
 	}
-
-
 	@Override
 	public void cashLossmailTrigger(FaculPremiumBean bean) {
 		String result="";
@@ -4518,10 +2676,15 @@ public void addFieldValue(FaculPremiumBean bean){
 		}
 		
 	}
-
-
-	
-	
+	@Override
+	public List<Map<String, Object>> getRipremiumList(FaculPremiumBean bean) {
+		return premiumapi.getRipremiumList(bean);
+	}
+	@Override
+	public void updateRiStatus(FaculPremiumBean bean) {
+		premiumapi.updateRiStatus(bean);
+		
+	}
 }
 
 

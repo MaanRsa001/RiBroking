@@ -4869,11 +4869,20 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 	@Override
 	public List<Map<String, Object>> getLayerInfo(RiskDetailsBean bean) {
 		List<Map<String, Object>>result=new ArrayList<Map<String, Object>>();
+		String query="";
+		Object[] obj=null;
 		try {
-			String query=getQuery("GET_LAYER_INFO");
-			Object[] obj= new Object[2];
-			obj[0]=bean.getProposal_no();
-			obj[1]=bean.getProposal_no();
+			if(StringUtils.isBlank(bean.getContNo())) {
+				query=getQuery("GET_LAYER_INFO");
+				obj= new Object[2];
+				obj[0]=bean.getProposal_no();
+				obj[1]=bean.getProposal_no();
+			}else {
+				query=getQuery("GET_LAYER_CONTRACT_INFO");
+				obj= new Object[2];
+				obj[0]=bean.getProposal_no();
+				obj[1]=bean.getProposal_no();
+			}
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			

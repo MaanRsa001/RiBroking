@@ -5495,6 +5495,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 				InsertPlacement(beanObj);
 				insertRiDetails(beanObj);
 				updateRiContractStatus(beanObj);
+				
 				//insertRetroContracts(beanObj,productId);
 				//insertCrestaMaintable(beanObj);
 				beanObj.setProduct_id(productId);
@@ -5503,6 +5504,7 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 				//insertProfitCommissionMain(beanObj,"main");
 				//InsertRemarkDetails(beanObj);
 				updateRetentionContractNo(beanObj);
+				updateShareSign(beanObj);
 				DropDownControllor dropDownController = new DropDownControllor();
 				dropDownController.updatepositionMasterEndtStatus(beanObj.getProposal_no(),productId,beanObj.getEndorsementDate(),beanObj.getCeaseStatus());
 				if(StringUtils.isNotBlank(beanObj.getContNo())){
@@ -5514,6 +5516,18 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void updateShareSign(RiskDetailsBean bean) {
+		String query="";
+		try {
+			query=getQuery("UPDATE_SHARE_SHIGN");
+			logger.info("Query=>"+query);   
+			this.mytemplate.update(query,new Object[] {bean.getProposal_no()});			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
 		}
 	}
 
@@ -5559,8 +5573,8 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 					signedLineRemarks.add("");
 					proposedSL.add(beanObj.getProposedSL().get(i));
 					brokerage.add(beanObj.getBrokerages().get(i));
-					statusNos.add(statusNo);
 				}
+				statusNos.add(statusNo);
 			}
 			bean.setSnos(snos);
 			bean.setBaseproposalNos(baseproposalNos);

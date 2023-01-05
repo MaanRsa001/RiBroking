@@ -22,7 +22,7 @@ jQuery(function ($) {
 		try {
 		var table = $('#gridTableMake').dataTable( {
 			"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-			"order": [[ 0, "asc" ]],
+			"order": [[ 0, "desc" ]],
 			"columnDefs": [ {
 	          "targets": 'no-sort',
 	          "orderable": false
@@ -30,7 +30,20 @@ jQuery(function ($) {
 			responsive: true
 		});	
 		} catch(err){}
-	} );	
+	} );
+jQuery(function ($) {
+	try {
+	var table = $('#gridTableMake1').dataTable( {
+		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+		"order": [[ 0, "desc" ]],
+		"columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false
+	    } ],
+		responsive: true
+	});	
+	} catch(err){}
+} );
 </script>
 	<style>
 	/* Style the tab */
@@ -79,7 +92,7 @@ jQuery(function ($) {
 	</style>	
 	<script type="text/javascript">
        
-		function EditMode(contractno,transactionno,layerno,dept,tableType) {  
+		function EditMode(contractno,transactionno,layerno,dept,sectionNo,tableType) {  
 			var pro = document.getElementById("prod").value;
 			if(pro==''){
 			pro = document.getElementById("productId").value;
@@ -95,9 +108,9 @@ jQuery(function ($) {
 			else if(pro==2)
 			{
 			if("Temp"==tableType){
-			document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do?mode=edit&contNo="+contractno+"&requestNo="+transactionno+"&size=list&departmentId="+dept+"&tableType="+tableType;
+			document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do?mode=edit&contNo="+contractno+"&requestNo="+transactionno+"&size=list&departmentId="+dept+"&sectionNo="+sectionNo+"&tableType="+tableType;
 			}else{
-			document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do?mode=edit&contNo="+contractno+"&transactionNo="+transactionno+"&size=list&departmentId="+dept+"&tableType="+tableType;
+			document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do?mode=edit&contNo="+contractno+"&transactionNo="+transactionno+"&size=list&departmentId="+dept+"&sectionNo="+sectionNo+"&tableType="+tableType;
 			}
 			}
 			else if(pro==3 || pro==5)
@@ -112,7 +125,7 @@ jQuery(function ($) {
 			document.premium.submit();       
 		
 }
-		function newPremium(contNo,dept) {  
+		function newPremium(contNo,dept,sectionNo) {  
 			//var contNo=document.getElementById("contNo").value; 
 			var pro = document.getElementById("prod").value;
 			if(pro==''){
@@ -124,7 +137,7 @@ jQuery(function ($) {
 			}
 			else if(pro==2)
 			{
-			document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do?mode=add&contNo="+contNo+"&size=list&departmentId="+dept+"&tableType=Temp";			
+			document.premium.action="${pageContext.request.contextPath}/editPremiumProportionPremium.do?mode=add&contNo="+contNo+"&size=list&departmentId="+dept+"&sectionNo="+sectionNo+"&tableType=Temp";			
 			}
 			else if(pro==3 || pro==5)
 			{
@@ -133,7 +146,7 @@ jQuery(function ($) {
 			document.premium.submit();
 		} 
 		
-		function ViewMode(contractno,transactionno,layerNo,dept,tableType) { 
+		function ViewMode(contractno,transactionno,layerNo,dept,sectionNo,tableType) { 
 		    var pro = document.getElementById("prod").value;
 		    if(pro==''){
 			pro = document.getElementById("productId").value;
@@ -149,9 +162,9 @@ jQuery(function ($) {
 			else if(pro==2)
 			{
 			if("Temp"==tableType){
-			document.premium.action="${pageContext.request.contextPath}/premiumViewProportionPremium.do?contNo="+contractno+"&requestNo="+transactionno+"&departmentId="+dept+"&tableType="+tableType;
+			document.premium.action="${pageContext.request.contextPath}/premiumViewProportionPremium.do?contNo="+contractno+"&requestNo="+transactionno+"&departmentId="+dept+"&sectionNo="+sectionNo+"&tableType="+tableType;
 			}else{
-			document.premium.action="${pageContext.request.contextPath}/premiumViewProportionPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&departmentId="+dept+"&tableType="+tableType;
+			document.premium.action="${pageContext.request.contextPath}/premiumViewProportionPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&departmentId="+dept+"&sectionNo="+sectionNo+"&tableType="+tableType;
 	     	}
 	     	}
 	     	else if(pro==3 || pro==5)
@@ -164,22 +177,22 @@ jQuery(function ($) {
 	     	}
 			document.premium.submit();       
 		}     
-		function DN(contractno,transactionno,layerNo,dept) {  
+		function DN(contractno,transactionno,layerNo,dept,sectionNo) {  
 		    var pro = document.getElementById("prod").value;
 		    if(pro==''){
 			pro = document.getElementById("productId").value;
 			}
 			if(pro==1)
         	{
-			document.premium.action="${pageContext.request.contextPath}/premiumViewFaculPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&type=DN";
+			document.premium.action="${pageContext.request.contextPath}/premiumViewFaculPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&type=DN&tableType=Main";
 			}
 			else if(pro==2)
 			{
-			document.premium.action="${pageContext.request.contextPath}/premiumViewProportionPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&type=DN&departmentId="+dept;
+			document.premium.action="${pageContext.request.contextPath}/premiumViewProportionPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&type=DN&tableType=Main&departmentId="+dept+"&sectionNo="+sectionNo;
 	     	}
 	     	else if(pro==3 || pro==5)
 			{
-			document.premium.action="${pageContext.request.contextPath}/premiumViewXolPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&layerno=<s:property value='layerno'/>&type=DN";
+			document.premium.action="${pageContext.request.contextPath}/premiumViewXolPremium.do?contNo="+contractno+"&transactionNo="+transactionno+"&layerno=<s:property value='layerno'/>&type=DN&tableType=Main";
 	     	}
 			document.premium.submit();       
 		}
@@ -233,7 +246,7 @@ jQuery(function ($) {
 										<s:text name="Heading.PREMIUMDETAILS" />				
 										<s:if test='#session.MenuRights.indexOf("PN")!=-1 && !"Y".equals(ceaseStatus)'>			
 											<span class="pullRight">
-											<input type="button"  value="New Premium"   class="btn btn-sm btn-warning" onClick="newPremium('<s:property value="contNo"/>','<s:property value="departmentId"/>')" />
+											<input type="button"  value="New Premium"   class="btn btn-sm btn-warning" onClick="newPremium('<s:property value="contNo"/>','<s:property value="departmentId"/>','<s:property value="sectionNo"/>')" />
 											</span>
 										</s:if>
 									</div>
@@ -308,17 +321,14 @@ jQuery(function ($) {
 						</div>
 					<s:if test="preList.size()>0 && preTempList.size()>0">	
 						<div class="panel panel-primary">
-						
-								<ul class="nav nav-tabs" style="color:blue">
+							<ul class="nav nav-tabs" style="color:blue">
 								<s:if test="preList.size()>0">
-								<li  class="active"><a data-toggle="tab" href="#menu1">Approved Transaction</a></li>
+									<li  class="active"><a data-toggle="tab" href="#menu1">Approved Transaction</a></li>
 								</s:if>
-								 <s:if test="preTempList.size()>0">
+								<s:if test="preTempList.size()>0">
 								  	<li><a data-toggle="tab" href="#home">UnApproved Transaction</a></li>
-								  </s:if>
-								  
-								 
-								</ul>
+								 </s:if>
+							</ul>
 						</s:if>
 						<s:if test=" preTempList.size()>0 &&  preList.size()>0">
 						<div class="panel-body">
@@ -339,39 +349,72 @@ jQuery(function ($) {
 								<div class="panel-body">
 								<div class="tablerow">
 								<div class="boxcontent">
-										<display:table name="preTempList" pagesize="10" requestURI=""  class="table table-bordered" uid="row" id="record">
-												<display:setProperty name="paging.banner.one_item_found" value="" />
-												<display:setProperty name="paging.banner.one_items_found" value="" />
-												<display:setProperty name="paging.banner.all_items_found" value="" />
-												<display:setProperty name="paging.banner.some_items_found"  value="" />
-												<display:setProperty name="paging.banner.placement" value="bottom" />
-												<display:setProperty name="paging.banner.onepage" value="" />
-												<s:set name="myrow" value="#attr.record"/>
-												<display:column sortable="true" style="text-align:center;"	title="Request No"  property="requestNo"/>
-												<display:column sortable="true" style="text-align:center;"	title="Transaction Date"  property="transDate"/>
-												<s:if test='!"5".equals(productId)'>
-												<display:column sortable="true" style="text-align:center;"	title="Statement Date"  property="statementDate"/>
-												</s:if>
-												<s:if test='"2".equals(#myrow.productId)'>
-												<display:column sortable="true" style="text-align:center;"	title="Account Period"  property="account_Period"/>
-												<display:column sortable="true" style="text-align:center;"	title="Account Period Date"  property="accountPeriodDate"/>
-												</s:if>
-												<s:else>
-												<display:column sortable="true" style="text-align:center;"	title="Installment Date"  property="account_Period"/>
-												</s:else>
-												
-												<s:if test='#session.MenuRights.indexOf("PE")!=-1  '>		
-												<display:column sortable="true" style="text-align:center;"  title="Edit" >
-												<a title="Edit" style="cursor: pointer;" onClick="EditMode('${record.contNo}','${record.requestNo }','${record.layerno}','<s:property value="departmentId"/>','Temp')">Edit </a>
-												</display:column>
-												</s:if>	
-												<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
-										        <display:column sortable="true" title="View">
-													<center ><a title="View" style="cursor: pointer;" onClick="ViewMode('${record.contNo}','${record.requestNo }','${record.layerno}','<s:property value="departmentId"/>','Temp')">View</a></center>
-										        </display:column> 	
-										        </s:if>
-										              
-											</display:table>
+									<div class="row">
+										<div class="col-xs-12">
+											<table class="display responsive no-wrap" id="gridTableMake1" width="100%" cellspacing="0">
+												<thead>
+													<tr>
+														<th style="text-align: center; vertical-align: middle;"><s:text name="Request No" /></th>
+														<th style="text-align: center; vertical-align: middle;"><s:text name="Transaction Date" /></th>
+														<s:if test='!"5".equals(#session.mfrid)'>
+														<th style="text-align: center; vertical-align: middle;"><s:text name="Statement Date" /></th>
+														</s:if>
+														<s:if test='"2".equals(#session.mfrid)'>
+															<th style="text-align: center; vertical-align: middle;" > <s:text name="Account Period" /> </th>
+															<th style="text-align: center; vertical-align: middle;" > <s:text name="Account Period Date" /> </th>
+														</s:if>
+														<s:else>
+															<th style="text-align: center; vertical-align: middle;"><s:text name="Installment Date" /></th>	
+														</s:else>
+														<s:if test='#session.MenuRights.indexOf("PE")!=-1  '>		
+														<th style="text-align: center; vertical-align: middle;" > <s:text name="Edit" /> </th>
+														</s:if>	
+														<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
+												       <th style="text-align: center; vertical-align: middle;" > <s:text name="View" /> </th>
+												        </s:if>
+														
+												</thead>
+												<tbody>
+													<s:iterator value="preTempList" var="list" status="stat">
+														<tr>
+															
+															<td><s:property value="requestNo"/></td>
+															<td><s:property value="transDate"/></td>
+															<s:if test='!"5".equals(#session.mfrid)'>
+															<td>
+																<s:property value="statementDate"/>
+															</td>
+															</s:if>	
+															<s:if test='"2".equals(#session.mfrid)'>
+															<td>
+																<s:property value="account_Period" />
+															</td>
+															<td>
+																<s:property value="accountPeriodDate" />
+															</td>
+															</s:if>
+															<s:else>
+															<td>
+																<s:property value="account_Period" />
+															</td>
+															</s:else>
+															<s:if test='#session.MenuRights.indexOf("PE")!=-1  '>		
+															<td align="center">
+																<input type="button"  value="Edit"   class="btn btn-xs btn-info"  style="cursor: pointer;" onclick="EditMode('<s:property value="contNo" />','<s:property value="requestNo" />','<s:property value="layerno" />','<s:property value="departmentId" />','<s:property value="sectionNo" />','Temp')" />
+															</td>
+															</s:if>	
+															<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
+														       <td align="center">
+														       	<input type="button"  value="View"   class="btn btn-xs btn-info"  style="cursor: pointer;" onclick="ViewMode('<s:property value="contNo" />','<s:property value="requestNo" />','<s:property value="layerno" />','<s:property value="departmentId" />','<s:property value="sectionNo" />','Temp')" />
+														        </td>
+													        </s:if>
+														
+														</tr>
+													</s:iterator>
+												</tbody>
+											</table>
+										</div>
+									</div>
 								</div>
 							</div>
 								</div>
@@ -387,58 +430,99 @@ jQuery(function ($) {
 									<div class="panel-body">
 							<div class="tablerow">
 								<div class="boxcontent">
-									
-											<display:table name="preList" pagesize="10" requestURI=""  class="table table-bordered" uid="row" id="record">
-												<display:setProperty name="paging.banner.one_item_found" value="" />
-												<display:setProperty name="paging.banner.one_items_found" value="" />
-												<display:setProperty name="paging.banner.all_items_found" value="" />
-												<display:setProperty name="paging.banner.some_items_found"  value="" />
-												<display:setProperty name="paging.banner.placement" value="bottom" />
-												<display:setProperty name="paging.banner.onepage" value="" />
-												<s:set name="myrow" value="#attr.record"/>
-												<display:column sortable="true" style="text-align:center;"	title="Transaction No"  property="transactionNo"/>
-												<display:column sortable="true" style="text-align:center;"	title="Transaction Date"  property="transDate"/>
-												<s:if test='!"5".equals(productId)'>
-												<display:column sortable="true" style="text-align:center;"	title="Statement Date"  property="statementDate"/>
-												</s:if>
-												<s:if test='"2".equals(#myrow.productId)'>
-												<display:column sortable="true" style="text-align:center;"	title="Account Period"  property="account_Period"/>
-												<display:column sortable="true" style="text-align:center;"	title="Account Period Date"  property="accountPeriodDate"/>
-												</s:if>
-												<s:else>
-												<display:column sortable="true" style="text-align:center;"	title="Installment Date"  property="account_Period"/>
-												</s:else>
-												<s:if test='"RI01".equals(#session.SOURCE_CODE)'>
-												<s:if test='#session.MenuRights.indexOf("PE")!=-1'>		
-												<display:column sortable="true" style="text-align:center;"  title="Edit" >
-												<s:if test='!"N".equalsIgnoreCase(#myrow.allocatedYN) && "Y".equalsIgnoreCase(#myrow.transOpenperiodStatus) &&  !"Y".equals(ceaseStatus) && ("".equalsIgnoreCase(#myrow.transDropDownVal))'>
-													<a title="Edit" style="cursor: pointer;" onClick="EditMode('${record.contNo}','${record.transactionNo }','${record.layerno}','<s:property value="departmentId"/>','Main')">Edit </a>
-													</s:if>																				
-												</display:column>
-												</s:if>	
-												</s:if>
-												<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
-										        <display:column sortable="true" title="View">
-													<center ><a title="View" style="cursor: pointer;" onClick="ViewMode('${record.contNo}','${record.transactionNo }','${record.layerno}','<s:property value="departmentId"/>','Main')">View</a></center>
-										        </display:column> 	
-										        </s:if>
-										       <s:if test='!"5".equals(productId)'>
-										        <display:column sortable="true" title="DN/CN">
-												 	<center > <a title="DN/CN" style="cursor: pointer;" onClick="DN('${record.contNo}','${record.transactionNo }','${record.layerno}','<s:property value="departmentId"/>')">DN/CN</a></center>
-										        </display:column>
-										         </s:if>
-										       
-										        <%-- <display:column sortable="true" title="Delete">
-										         <s:if test='"Y".equalsIgnoreCase(#myrow.deleteStatus)' >
-												 	<center ><a title="Delete" style="cursor: pointer;" onClick="deletedata('${record.contNo}','${record.transactionNo }','${record.layerno}','${record.productId}')">Delete</a></center>
-										       	 </s:if>
-										        </display:column>--%> 
-										        <display:column sortable="false" style="text-align:center;" title="Document">
-													 <a href="#" class="" title="Document" onclick="getDocList('${record.proposal_No}','${record.contNo}','${record.layerno}','${record.transactionNo}','${record.ceding_Company_Name}','${record.broker}','premium');"> 
-															 <img border='0' src="${pageContext.request.contextPath}/images/icon_view_schedule.gif" alt="Document Details" width="12" height="17">
-													 </a>
-												</display:column>        
-											</display:table>
+									<div class="row">
+										<div class="col-xs-12">
+											<table class="display responsive no-wrap" id="gridTableMake" width="100%" cellspacing="0">
+												<thead>
+													<tr>
+														<th style="text-align: center; vertical-align: middle;"><s:text name="Transaction No" /></th>
+														<th style="text-align: center; vertical-align: middle;"><s:text name="Transaction Date" /></th>
+														<s:if test='!"5".equals(#session.mfrid)'>
+														<th style="text-align: center; vertical-align: middle;"><s:text name="Statement Date" /></th>
+														</s:if>
+														<s:if test='"2".equals(#session.mfrid)'>
+															<th style="text-align: center; vertical-align: middle;" > <s:text name="Account Period" /> </th>
+															<th style="text-align: center; vertical-align: middle;" > <s:text name="Account Period Date" /> </th>
+														</s:if>
+														<s:else>
+															<th style="text-align: center; vertical-align: middle;"><s:text name="Installment Date" /></th>	
+														</s:else>
+														<s:if test='#session.MenuRights.indexOf("PE")!=-1  '>		
+															<th style="text-align: center; vertical-align: middle;" > <s:text name="Edit" /> </th>
+														</s:if>	
+														<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
+												       		<th style="text-align: center; vertical-align: middle;" > <s:text name="View" /> </th>
+												        </s:if>
+												         <s:if test='!"5".equals(productId)'>
+												         <th style="text-align: center; vertical-align: middle;" > <s:text name="DN/CN" /> </th>
+												         </s:if>
+												         <th style="text-align: center; vertical-align: middle;" > <s:text name="Document" /> </th>
+														
+												</thead>
+												<tbody>
+													<s:iterator value="preList" var="list" status="stat">
+														<tr>
+															
+															<td><s:property value="transactionNo"/></td>
+															<td><s:property value="transDate"/></td>
+															<s:if test='!"5".equals(#session.mfrid)'>
+															<td>
+																<s:property value="statementDate"/>
+															</td>
+															</s:if>	
+															<s:if test='"2".equals(#session.mfrid)'>
+															<td>
+																<s:property value="account_Period" />
+															</td>
+															<td>
+																<s:property value="accountPeriodDate" />
+															</td>
+															</s:if>
+															<s:else>
+															<td>
+																<s:property value="account_Period" />
+															</td>
+															</s:else>
+															<s:if test='#session.MenuRights.indexOf("PE")!=-1'>		
+																<td align="center">
+																<s:if test='!"N".equalsIgnoreCase(allocatedYN) && "Y".equalsIgnoreCase(transOpenperiodStatus) &&  !"Y".equals(ceaseStatus) && ("".equalsIgnoreCase(transDropDownVal))'>
+																	<a title="Edit" style="cursor: pointer;" onClick="EditMode('<s:property value="contNo" />','<s:property value="transactionNo" />','<s:property value="layerno" />','<s:property value="departmentId"/>','<s:property value="sectionNo"/>','Main')">Edit </a>
+																	</s:if>																				
+																</td>
+															</s:if>	
+															<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
+														        <td align="center">
+																	<a title="View" style="cursor: pointer;" onClick="ViewMode('<s:property value="contNo" />','<s:property value="transactionNo" />','<s:property value="layerno" />','<s:property value="departmentId"/>','<s:property value="sectionNo"/>','Main')">View</a>
+														       </td>
+													        </s:if>
+													       <s:if test='!"5".equals(productId)'>
+														        <td align="center">
+																 	<a title="DN/CN" style="cursor: pointer;" onClick="DN('<s:property value="contNo" />','<s:property value="transactionNo" />','<s:property value="layerno" />','<s:property value="departmentId"/>','<s:property value="sectionNo"/>')">DN/CN</a>
+														       </td>
+													         </s:if>
+													       <td align="center">
+																 <a href="#" class="" title="Document" onclick="getDocList('<s:property value="proposal_No" />','<s:property value="contNo" />','<s:property value="transactionNo" />','<s:property value="layerno" />','<s:property value="ceding_Company_Name" />','<s:property value="broker" />','premium');"> 
+																		 <img border='0' src="${pageContext.request.contextPath}/images/icon_view_schedule.gif" alt="Document Details" width="12" height="17">
+																 </a>
+															</td>
+															<%-- <s:if test='#session.MenuRights.indexOf("PE")!=-1  '>		
+															<td align="center">
+																<input type="button"  value="Edit"   class="btn btn-xs btn-info"  style="cursor: pointer;" onclick="EditMode('<s:property value="contNo" />','<s:property value="requestNo" />','<s:property value="layerno" />','<s:property value="departmentId" />')" />
+															</td>
+															</s:if>	
+															<s:if test='#session.MenuRights.indexOf("PV")!=-1'>		       
+														       <td align="center">
+														       	<input type="button"  value="View"   class="btn btn-xs btn-info"  style="cursor: pointer;" onclick="ViewMode('<s:property value="contNo" />','<s:property value="requestNo" />','<s:property value="layerno" />','<s:property value="departmentId" />')" />
+														        </td>
+													        </s:if> --%>
+														
+														</tr>
+													</s:iterator>
+												</tbody>
+											</table>
+										</div>
+									</div>
+										
 										</div>
 									</div>
 								</div>

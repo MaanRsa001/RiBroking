@@ -1,5 +1,6 @@
 package com.maan.action;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -101,59 +102,61 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 					 editMode = dropDownController.EditModeStatus(bean.getProposal_No(),"0");
 					}
 					if(!"N".equalsIgnoreCase(editMode) && (null==bean.getMultiuserError() || StringUtils.isBlank(bean.getMultiuserError()) )){
-								bean.setMultiuserError("error");
-								if("premiumDisplay".equalsIgnoreCase(bean.getPremiumDisplay())){
-									bean.setType("premium");
-									forward = "masterList";
-								}else{
-								bean.setFlag("C");
-								forward= "portfoliList";
-								}
-							}else{
-					preList=SERVICE.getPremiumedList(bean,"Main"); 
-					if("3".equalsIgnoreCase(bean.getProductId())){
-						bean.setPreTempList(SERVICE.getPremiumedList(bean,"Temp"));
-					}
-			        String userRights=session.get("MenuRights")==null?"":session.get("MenuRights").toString();
-			        if(bean.getMode() !=null && bean.getMode().equalsIgnoreCase("premiumMaster")){
-			        	bean.setPremiumMasterMode(bean.getPremiumDisplay());
-			        }
-			        if(preList.isEmpty() && bean.getPreTempList().isEmpty()  && userRights.indexOf("PN")!=-1)
-			        {	
-			        	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));	
-			        	bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
-			        	bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
-			 	        bean.setContractPremium(SERVICE.GetContractPremium(bean));
-			        	SERVICE.ContractDetails(bean,countryId);
-			        	bean.setMdList(SERVICE.MDinstallmentDates(bean.getContNo(),bean.getLayerno(),sourceId,bean.getProductId()));	
-			        	bean.setCurrency(bean.getBaseCurrencyId());
-			        	bean.setEnteringMode("2");
-			        	bean.setMenuStatus("N");
-				        bean.setMode("add");
-				        bean.setPredepartment(bean.getDepartmentId());
-				        forward="editPremium";
-			        }
-			       /* else if(preList.isEmpty() && bean.getMode().equalsIgnoreCase("premiumMaster")){
-			        	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));
-			        	bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
-			        	bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
-			 	        bean.setContractPremium(SERVICE.GetContractPremium(bean));
-			        	SERVICE.ContractDetails(bean,countryId);
-			        	bean.setMdList(SERVICE.MDinstallmentDates(bean.getContNo(),bean.getLayerno()));	
-			        	bean.setCurrency(bean.getBaseCurrencyId());
-			        	bean.setEnteringMode("2");
-			        	bean.setMenuStatus("N");
-				        bean.setMode("add");
-				        bean.setPredepartment(bean.getDepartmentId());
-			        	return "editPremium";	
-			        }*/
-
-			        else
-			        {
-				        SERVICE.GetPreList(bean);
-				        bean.setSize("list");			        
-				       
-			        }		
+						bean.setMultiuserError("error");
+						if("premiumDisplay".equalsIgnoreCase(bean.getPremiumDisplay())){
+							bean.setType("premium");
+							forward = "masterList";
+						}else{
+						bean.setFlag("C");
+						forward= "portfoliList";
+						}
+					}else{
+						preList=SERVICE.getPremiumedList(bean,"Main"); 
+						if("3".equalsIgnoreCase(bean.getProductId())){
+							bean.setPreTempList(SERVICE.getPremiumedList(bean,"Temp"));
+						}
+				        String userRights=session.get("MenuRights")==null?"":session.get("MenuRights").toString();
+				        if(bean.getMode() !=null && bean.getMode().equalsIgnoreCase("premiumMaster")){
+				        	bean.setPremiumMasterMode(bean.getPremiumDisplay());
+				        }
+				        if(preList.isEmpty() && bean.getPreTempList().isEmpty()  && userRights.indexOf("PN")!=-1)
+				        {	
+				        	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));	
+				        	bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
+				        	bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
+				        	
+				        	bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
+				 	        bean.setContractPremium(SERVICE.GetContractPremium(bean));
+				        	SERVICE.ContractDetails(bean,countryId);
+				        	bean.setMdList(SERVICE.MDinstallmentDates(bean.getContNo(),bean.getLayerno(),sourceId,bean.getProductId()));	
+				        	bean.setCurrency(bean.getBaseCurrencyId());
+				        	bean.setEnteringMode("2");
+				        	bean.setMenuStatus("N");
+					        bean.setMode("add");
+					        bean.setPredepartment(bean.getDepartmentId());
+					        forward="editPremium";
+				        }
+				       /* else if(preList.isEmpty() && bean.getMode().equalsIgnoreCase("premiumMaster")){
+				        	bean.setOrginalCurrency(new DropDownControllor().getCurrencyMasterDropDown(branchCode, countryId));
+				        	bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
+				        	bean.setPreviousPremium(SERVICE.GetPreviousPremium(bean));
+				 	        bean.setContractPremium(SERVICE.GetContractPremium(bean));
+				        	SERVICE.ContractDetails(bean,countryId);
+				        	bean.setMdList(SERVICE.MDinstallmentDates(bean.getContNo(),bean.getLayerno()));	
+				        	bean.setCurrency(bean.getBaseCurrencyId());
+				        	bean.setEnteringMode("2");
+				        	bean.setMenuStatus("N");
+					        bean.setMode("add");
+					        bean.setPredepartment(bean.getDepartmentId());
+				        	return "editPremium";	
+				        }*/
+	
+				        else
+				        {
+					        SERVICE.GetPreList(bean);
+					        bean.setSize("list");			        
+					       
+				        }		
 					}
 				 	return forward;
 				} 
@@ -187,8 +190,8 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 							bean.setType("premium");
 							forward = "masterList";
 						}else{
-						premiumList();
-						forward = "premiumList";
+							premiumList();
+							forward = "premiumList";
 						}
 					}else{
 					setSessionValuNull();
@@ -196,6 +199,7 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 			    	bean.setDepartmentId((String) session.get("DepartmentId")==null?"0":(String) session.get("DepartmentId"));
 			    	bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
 		        	bean.setPremiumaccperiod(new DropDownControllor().getConstantDropDown("7"));
+		        	bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 		        	/*if(StringUtils.isBlank(bean.getProductId())||bean.getProductId().equalsIgnoreCase("")){
 						bean.setProductId(productId);	
 					}
@@ -256,36 +260,35 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 					 editMode = dropDownController.EditModeStatus(bean.getProposal_No(),"0");
 					}
 					bean.setPreamendmentDate(new DropDownControllor().getpremiumPreamendDate(bean));
-					//if(StringUtils.isNotBlank( bean.getPreamendmentDate())){
+					if(StringUtils.isNotBlank( bean.getPreamendmentDate())){
 					bean.setMaxDate(Validation.getMaxDateValidate(bean.getTransaction(), bean.getPreamendmentDate()));
-					//}
-					new DropDownControllor().getOpenPeriod(bean1);
-					if("N".equalsIgnoreCase(editMode)){
-			        validateXolPremium();
 					}
+					new DropDownControllor().getOpenPeriod(bean1);
+					if("add".equalsIgnoreCase(bean.getMode()) || "transEdit".equalsIgnoreCase(bean.getMode())) {
+					     SERVICE.InsertPremium(bean);
+		    		 }
+		    		 else if("edit".equalsIgnoreCase(bean.getMode()))
+		    		 {
+			    		 SERVICE.UpdatePremium(bean);
+		    		 }
+						validation();
+					
 		    		 if (!hasActionErrors() && "N".equalsIgnoreCase(editMode)) 
 					 {
 		    			 GetBonusDeatail();
-		    			 if("RP".equalsIgnoreCase(bean.getAccount_Period()) || "AP".equalsIgnoreCase(bean.getAccount_Period()) || "RTP".equalsIgnoreCase(bean.getAccount_Period()) || "RVP".equalsIgnoreCase(bean.getAccount_Period()))
-	    		        	{
-	    		        		bean.setInstlmentNo(bean.getAccount_Period());	        		
-	    		        	}else if(!bean.getAccount_Period().equalsIgnoreCase(""))// && StringUtils.isBlank(bean.getTransactionNo()))
-	    		        	{
-		    		        	final String[] InstalmentNo=bean.getAccount_Period().split("_");
-		    		        	bean.setInstlmentNo(InstalmentNo[0]);
-		    		        	bean.setInstalmentdate(InstalmentNo[1]);
-	    		        	}	
-		    			 if("add".equalsIgnoreCase(bean.getMode()) || "transEdit".equalsIgnoreCase(bean.getMode())) {
-							     SERVICE.InsertPremium(bean);
-				    		 }
-				    		 else if("edit".equalsIgnoreCase(bean.getMode()))
-				    		 {
-					    		 SERVICE.UpdatePremium(bean);
-				    		 }
+		    			 	
+		    			 
 				    		 SERVICE.ContractDetails(bean,countryId);
-							 SERVICE.GetPremiumDetails(bean,bean.getTransactionNo(),countryId);
 							 setSessionValuNull();
-							return "PremiumSucuss";
+							 String forward="";
+							 if("submit".equalsIgnoreCase(bean.getButtonStatus())){
+								 bean.setRipremiumList(SERVICE.getRipremiumList(bean));
+							 	forward= "PremiumRiSucuss";
+							 }else{
+								 SERVICE.GetPremiumDetails(bean,bean.getTransactionNo(),countryId);
+								forward= "PremiumSucuss";
+							 }
+							return forward;
 					 }
 					 else
 					 {	
@@ -297,6 +300,7 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 						logger.info("##########Validation Message End###########");
 						 bean.setPredepartmentList(new DropDownControllor().getPreDepartmentDropDown(branchCode,productId,"Y",bean));
 	    		         bean.setPremiumaccperiod(new DropDownControllor().getConstantDropDown("7"));
+	    		         bean.setDocumentTypeList(new DropDownControllor().getConstantDropDown("56"));
 						 SERVICE.ContractDetails(bean,countryId);
 						 bean.setMdList(SERVICE.MDinstallmentDates(bean.getContNo(),bean.getLayerno(),sourceId,bean.getProductId()));
 						 bean.setStatus(bean.getStatus());				
@@ -309,8 +313,8 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 			public String instalmentPremium()
 			{
 				bean.setLoginId(userId);
-			bean.setMd_premium(SERVICE.GetInstalmentAmount(bean.getContNo(),bean.getLayerno(),bean.getInstalmentdate()));
-			return "dropdownajax";				
+				bean.setMd_premium(SERVICE.GetInstalmentAmount(bean.getContNo(),bean.getLayerno(),bean.getInstalmentdate()));
+				return "dropdownajax";				
 			}
 			public String premiumView()
 			{
@@ -326,6 +330,7 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 					allocatedList=SERVICE.getAllocatedList(bean);
 					}
 					bean.setCurrencyList(SERVICE.currencyList(bean));
+					//bean.setRipremiumList(SERVICE.getRipremiumList(bean));
 				return "PremiumSucuss";
 			}
 			
@@ -770,6 +775,31 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 						 e.printStackTrace();
 					 }
 			}
+			
+			public void validation() {
+				if(bean.getErrors()!=null && bean.getErrors().size()>0) {
+					for (int i =0;i<bean.getErrors().size();i++) {
+						HashMap<String, Object> map=bean.getErrors().get(i);
+						addActionError(map.get("ErrorDescription").toString());
+					}
+				}
+			}	
+			
+	public String getVatInfo() {
+		bean.setBranchCode(branchCode);
+		SERVICE.getVatInfo(bean);
+		return "dropdownajax";
+	}
+	public String updateRiStatus() {
+		String forward="PremiumRiSucuss";
+		bean.setBranchCode(branchCode);
+		SERVICE.updateRiStatus(bean);
+		if(!hasActionErrors()) {
+			premiumList();
+			forward="premiumList";
+		}
+		return forward;
+	}
 }
 
 

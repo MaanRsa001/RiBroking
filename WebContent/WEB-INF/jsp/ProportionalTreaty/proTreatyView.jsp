@@ -454,6 +454,8 @@ gap:20px;
 								 <s:hidden name="editMode" id="editMode"></s:hidden>
 								 <s:hidden name="referenceNo" id="referenceNo"></s:hidden>
 								 <s:hidden name="sectionMode" id="sectionMode"></s:hidden>
+								 <s:hidden name="sectionNo" id="sectionNo"/>
+								 <s:hidden name="proposal_No" id="proposal_No"/>
 								 
 							</s:form>
 						</div>

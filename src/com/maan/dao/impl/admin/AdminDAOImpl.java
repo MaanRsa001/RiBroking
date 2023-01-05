@@ -4826,7 +4826,7 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			String maxId = this.mytemplate.queryForObject(qry,String.class);
 			bean.setCustomerId(maxId);
 			query =getQuery("INSERT_CLIENT_DETAILS");
-			args= new Object[38];
+			args= new Object[42];
 			args[0]=bean.getClientType();
 			args[1]=bean.getFirstName();
 			args[2]=bean.getInceptionDate();
@@ -4865,6 +4865,16 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[35]=StringUtils.isBlank(bean.getRatingAgency())?"":bean.getRatingAgency();
 			args[36]=StringUtils.isBlank(bean.getLastRating())?"":bean.getLastRating();
 			args[37]=bean.getFirstName();
+			args[38]="764".equals(bean.getCountry())?"T":"O";
+			if("764".equals(bean.getCountry()) && "Y".equals(bean.getVatRegYN())) {
+				args[39]="TV";
+			}else if("764".equals(bean.getCountry()) && "N".equals(bean.getVatRegYN())) {
+				args[39]="TVN";
+			}if(!"764".equals(bean.getCountry())) {
+				args[39]="O";
+			}
+			args[40]=StringUtils.isBlank(bean.getVatRegYN())?"N":bean.getVatRegYN();
+			args[41]=bean.getVatRegNo();
 			LOGGER.info("query =>" + query);
 			LOGGER.info("Arg[]=>"+StringUtils.join(args,","));
 			this.mytemplate.update(query,args);
@@ -4977,6 +4987,8 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 				bean.setRating(map.get("RATING")==null?"":map.get("RATING").toString());
 				bean.setRatingAgency(map.get("RATING_AGENCY")==null?"":map.get("RATING_AGENCY").toString());
 				bean.setLastRating(map.get("LAST_RATING")==null?"":map.get("LAST_RATING").toString());
+				bean.setVatRegYN(map.get("VAT_REG_YN")==null?"":map.get("VAT_REG_YN").toString());
+				bean.setVatRegNo(map.get("VAT_REG_NO")==null?"":map.get("VAT_REG_NO").toString());
 				
 			}
 			GetContactInfo(bean,branchCode);
@@ -5086,7 +5098,7 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[0]=bean.getCustomerId();
 			String maxId = this.mytemplate.queryForObject(query,args,String.class);
 			query =getQuery("INSERT_CLIENT_DETAILS");
-			args= new Object[38];
+			args= new Object[42];
 			args[0]=bean.getClientType();
 			args[1]=bean.getFirstName();
 			args[2]=bean.getInceptionDate();
@@ -5125,6 +5137,16 @@ public class AdminDAOImpl extends MyJdbcTemplate implements AdminDAO{
 			args[35]=StringUtils.isBlank(bean.getRatingAgency())?"":bean.getRatingAgency();
 			args[36]=StringUtils.isBlank(bean.getLastRating())?"":bean.getLastRating();
 			args[37]=bean.getFirstName();
+			args[38]="764".equals(bean.getCountry())?"T":"O";
+			if("764".equals(bean.getCountry()) && "Y".equals(bean.getVatRegYN())) {
+				args[39]="TV";
+			}else if("764".equals(bean.getCountry()) && "N".equals(bean.getVatRegYN())) {
+				args[39]="TVN";
+			}if(!"764".equals(bean.getCountry())) {
+				args[39]="O";
+			}
+			args[40]=StringUtils.isBlank(bean.getVatRegYN())?"N":bean.getVatRegYN();
+			args[41]=bean.getVatRegNo();
 			LOGGER.info("query =>" + query);
 			LOGGER.info("Arg[]=>"+StringUtils.join(args,","));
 			this.mytemplate.update(query,args);

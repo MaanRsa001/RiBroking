@@ -227,7 +227,14 @@
 		<put-attribute name="title" value="Re-Insurance - Non Proportional Treaty" />
 		<put-attribute name="body" value="/WEB-INF/jsp/Xol/XolPremiumView.jsp" />
 	</definition>
-	
+	<definition name="PremiumRiSucuss" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Non Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/Xol/XolPremiumRiView.jsp" />
+	</definition>
+	<definition name="propremiumRiSucuss" extends="PrintTemplate">
+		<put-attribute name="title" value="Re-Insurance - Non Proportional Treaty" />
+		<put-attribute name="body" value="/WEB-INF/jsp/ProportionalTreaty/proPremiumRiView.jsp" />
+	</definition>
 	<definition name="allocation" extends="CommonTemplate">
 		<put-attribute name="title" value="Re-Insurance - Teasury" />
 		<put-attribute name="body" value="/WEB-INF/jsp/Payment/allocation.jsp" />

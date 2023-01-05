@@ -27,7 +27,16 @@ public final class ResourceLocator {
 	  }
 	  return dbBundle;
   }
-	
+  public static  ResourceBundle getWebservice() {
+		
+	  ResourceBundle dbBundle=null;
+	  try{
+		  dbBundle=ResourceBundle.getBundle("webservice");
+	  }catch(MissingResourceException e){
+		  
+	  }
+	  return dbBundle;
+  }	
 	
 
 }

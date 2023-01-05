@@ -1067,6 +1067,34 @@
 																		</td>
 																	</tr>
 																	<tr>
+																		 <td>
+						                                                    <s:text name="label.vat" />
+						                                                </td>
+						                                                <td align="right">
+						                                                    <s:if test="!vatPremium.equals('0.00')">
+						                                                        <s:property value="vatPremium"/>
+						                                                    </s:if>
+						                                                </td>
+						                                                <td align="right">
+						                                                    <s:if test="!vatPremiumDc.equals('0.00')">
+						                                                        <s:property value="vatPremiumDc"/>
+						                                                    </s:if>
+						                                                </td>
+						                                                <td>
+																			<s:text name="label.brokerageVat" />
+																		</td>
+																		<td align="right">
+																			<s:if test="!brokerageVat.equals('0.00')">
+																				<s:property value="brokerageVat"/>
+																			</s:if>
+																		</td>
+																		<td align="right">
+																			<s:if test="!brokerageVatDc.equals('0.00')">
+																			<s:property value="brokerageVatDc"/>
+																			</s:if>
+																		</td>	
+																	</tr>
+																	<tr>
 																		<td>
 																			<s:text name="premium.total" />
 																		</td>
@@ -1311,6 +1339,8 @@
 													<s:hidden name="contNo" id="contNo" />
 													<s:hidden name="premiumMasterMode" id="premiumMasterMode"/>
 													<s:hidden name="departmentId" id="departmentId"/>
+													<s:hidden name="sectionNo" id="sectionNo"/>
+								 					<s:hidden name="proposal_No" id="proposal_No"/>
 												</div>
 
 											</div>
@@ -1950,7 +1980,7 @@
 													headerValue="---Select---" headerKey=""
 													onchange='currencycheck(this.value,"AccountCodeDiv");' cssClass="no-print" />-->
 												<s:select list="currencyList" headerValue="---Select---"
-													headerKey="" listKey="CURRENCY_ID" listValue="SHORT_NAME"
+													headerKey="" listKey="Code" listValue="CodeDescription"
 													onchange='currencycheck(this.value,"AccountCodeDiv");'
 													cssClass="no-print" />
 												<!--<span id="currValUGX" style="display: none;"> UGX </span>
@@ -2134,7 +2164,9 @@
 											<s:hidden name="shareSigned" />
 											<s:hidden name="layerNo" />
 											<s:hidden name="contNo" id="contNo" />
-											
+											<s:hidden name="proposal_No" id="proposal_No"/>
+											<s:hidden name="departmentId" id="departmentId"/>
+											<s:hidden name="sectionNo" id="sectionNo"/>
 										</div>
 									</div>
 								</s:form>
