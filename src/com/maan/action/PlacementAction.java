@@ -207,6 +207,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 				bean.setReinsurerType("N");
 				init();
 			}else {
+				service.proposalInfo(bean);
 				bean.setReinsurerInfoList(service.getPlacingInfo(bean));
 				bean.setMode("mail");
 			}

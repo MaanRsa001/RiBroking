@@ -2264,6 +2264,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				this.insertClassLimit(beanObj);
 				InsertRemarkDetails(beanObj);
 				GetRemarksDetails(beanObj);
+				updateOfferNo(beanObj, pid);
 				this.updateRiskProposal(beanObj, pid);
 				//this.showSecondpageEditItems(beanObj, pid, proposalno);
 				savFlg = true;
@@ -2273,6 +2274,20 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			e.printStackTrace();
 		}
 		return savFlg;
+	}
+	private void updateOfferNo(RiskDetailsBean beanObj,String pid) {
+		try {
+			String offerNo="";
+			
+			if(StringUtils.isBlank(beanObj.getOfferNo())) {
+				offerNo=new DropDownControllor().getSequence("Offer",pid,"0", beanObj.getBranchCode(),"","");
+				beanObj.setOfferNo(offerNo);
+				String query="UPDATE POSITION_MASTER SET OFFER_NO=? WHERE PROPOSAL_NO=?";
+				this.mytemplate.update(query,new Object[] {beanObj.getOfferNo(),beanObj.getProposal_no()});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	private boolean updateRiskProposal(final RiskDetailsBean beanObj,final String pid) {
 		boolean saveFlag = false;

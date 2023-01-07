@@ -134,7 +134,7 @@ public class HomeAction extends ActionSupport implements ModelDriven<HomeBean>{
 		//if("endorsment".equalsIgnoreCase(bean.getMenumode())){
 		if(StringUtils.isNotBlank(bean.getProposalNo())){
 			if("endorsment".equalsIgnoreCase(bean.getMenumode())){
-			new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N");
+			new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N","");
 			}
 			new DropDownControllor().updateEditMode(bean.getProposalNo(),"N","");
 			String proposal = new DropDownControllor().getBaseProposal(bean.getProposalNo());

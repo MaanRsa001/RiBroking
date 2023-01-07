@@ -96,7 +96,7 @@ public class CedingMasterAction extends ActionSupport implements ModelDriven<Ced
 		
 		if(!hasActionErrors()){
 			if(StringUtils.isNotBlank(bean.getContractNo()) &&("BE".equalsIgnoreCase(bean.getEditMode()) ||"BEF".equalsIgnoreCase(bean.getEditMode()) ||"SE".equalsIgnoreCase(bean.getEditMode()) ||"SEF".equalsIgnoreCase(bean.getEditMode()))){
-				new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N");	
+				new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N","");	
 			}
 			if("BR".equalsIgnoreCase(bean.getEditMode()) ||"BRF".equalsIgnoreCase(bean.getEditMode()) ||"CL".equalsIgnoreCase(bean.getEditMode()) ||"CLF".equalsIgnoreCase(bean.getEditMode())){
 				service.CancelProposal(bean,bean.getProposalNo());

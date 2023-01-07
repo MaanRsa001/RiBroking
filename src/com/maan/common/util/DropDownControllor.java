@@ -977,7 +977,7 @@ public class DropDownControllor extends MyJdbcTemplate {
 		}
 		return status;
 		}
-	public void riskDetailsEndorsement(String proposalNo, String endtStatus) {
+	public void riskDetailsEndorsement(String proposalNo, String endtStatus, String branchCOde) {
 		try {
 			//String query1 = getQuery(DBConstants.CONTRACT_STATUS_COUNT);
 			//String query1 ="Select Count(CONTRACT_STATUS) from position_master pm where proposal_no="+proposalNo+" and CONTRACT_STATUS='P' and pm.amend_id=(Select Max(Amend_id) From Position_master p where p.proposal_no=pm.proposal_no)";
@@ -989,7 +989,7 @@ public class DropDownControllor extends MyJdbcTemplate {
 			logger.info("Args[0]==>" +proposalNo );
 			logger.info("Args[1]==>"+endtStatus);
 			
-			int result = this.mytemplate.update(query,new Object[]{"Endt",endtStatus==null?"":endtStatus,"","",proposalNo});
+			int result = this.mytemplate.update(query,new Object[]{"Endt",endtStatus==null?"":endtStatus,"",branchCOde,proposalNo});
 			System.out.println(result);
 			//}
 		}
@@ -1579,14 +1579,15 @@ public class DropDownControllor extends MyJdbcTemplate {
 			String count="";
 			if("2".equals(productId)){
 				count=getCombinedClass(branchCode,productId,bean.getDepartmentId());
-			}if(StringUtils.isNotBlank(count) && "2".equals(productId)){
+			}
+			if (/* StringUtils.isNotBlank(count) && */ "2".equals(productId)){
 
-				String query=getQuery("common.department.combined.premiumclaim");
+				String query=getQuery("common.select.getDepartmentList");
 				logger.info("Select Query==> " + query);
 				logger.info("Args[0]==> " + branchCode);
 				logger.info("Args[1]==> " + productId);
 				logger.info("Args[2]==> " + count);
-				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productId,count});	
+				department=this.mytemplate.queryForList(query,new Object[]{branchCode,productId,status});	
 			}else{
 			
 				String query=getQuery(DBConstants.COMMON_SELECT_DEPARTMENTLIST_PRECLAIM);

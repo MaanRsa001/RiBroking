@@ -97,7 +97,7 @@ public class PortfolioAction extends ActionSupport implements
 			if (StringUtils.isNotBlank(bean.getEndtMode())
 					&& "endorsment".equalsIgnoreCase(bean.getEndtMode())) {
 				dropDownController.riskDetailsEndorsement(bean.getProposalNo(),	
-						StringUtils.isBlank(bean.getEndorsementStatus())?"N":bean.getEndorsementStatus());
+						StringUtils.isBlank(bean.getEndorsementStatus())?"N":bean.getEndorsementStatus(),"");
 			}
 			
 			PortfolioList = BussinessCB.getContractsList(bean,session.get("MenuRights"));

@@ -938,20 +938,20 @@ $('#input'+id).keyup(function() {
       function funRenewalMode(proposalNo,ContractNo)
       {
        document.getElementById("proposal_no").value=proposalNo;
-       document.getElementById("proposalNo").value=proposalno;
+       document.getElementById("proposalNo").value=proposalNo;
        document.getElementById("renewal_contract_no").value=ContractNo;
        document.getElementById("expiry_Date").value=expiry_Date;
        //document.getElementById("mode").value=
      	if(document.portfolioview.pro.value==2)
       	{
-	    document.portfolioview.action=" ${pageContext.request.contextPath}/EditModeRiskDetails";
+	    document.portfolioview.action=" ${pageContext.request.contextPath}/InitRenewRiskDetails.action";
 	    document.getElementById("mode").value="Renewal";
 	    document.getElementById("reMode").value="Renewal";
 	    document.getElementById("renewalEditMode").value="Renewal";
 	    
 	    }
 	    else if(document.portfolioview.pro.value==3 ||document.portfolioview.pro.value==5){
-	    document.portfolioview.action=" ${pageContext.request.contextPath}/EditModeXol";
+	    document.portfolioview.action=" ${pageContext.request.contextPath}/InitRenewXol.action";
 	    document.getElementById("mode").value="Renewal";
 	    document.getElementById("reMode").value="Renewal";
 	    document.getElementById("renewalEditMode").value="Renewal";

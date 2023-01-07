@@ -238,7 +238,7 @@ public class MenuAction extends ActionSupport implements ModelDriven<MenuBean> {
 	public String dockNavigation() {
 		try {
 			if("endorsment".equalsIgnoreCase(bean.getMenumodeStatus()) && StringUtils.isBlank(bean.getMenuId()) && "welcomeHome.action".equalsIgnoreCase(bean.getMenuUrl())){
-				new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N");
+				new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N","");
 				new DropDownControllor().updateEditMode(bean.getProposalNo(),"N","");
 					String proposal = new DropDownControllor().getBaseProposal(bean.getProposalNo());
 					new DropDownControllor().updateEditMode(proposal,"N","");

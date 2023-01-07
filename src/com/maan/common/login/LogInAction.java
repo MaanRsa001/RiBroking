@@ -324,7 +324,7 @@ public class LogInAction extends ActionSupport  implements SessionAware, Servlet
 
 	public String out(){
 		if("endorsment".equalsIgnoreCase(bean.getMenumodeStatus())){
-			new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N");
+			new DropDownControllor().riskDetailsEndorsement(bean.getProposalNo(),"N","");
 		}
 		logger.info("Enter==> Logout()");
 		bean.setLoginId((String) session.get("UserId"));

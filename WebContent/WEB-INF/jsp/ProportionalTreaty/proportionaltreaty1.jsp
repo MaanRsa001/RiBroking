@@ -147,6 +147,32 @@ gap:20px;
 																	<s:property value="amendId" />
 																</div>
 															</div>
+															<div class="textfield">
+																<div class="text">
+																	<s:text name="label.contractno" />
+																</div>
+																<div class="tbox">
+																	<s:textfield name="contNo" cssClass="inputBox" disabled="true" />
+																</div>
+															</div>
+															<s:hidden name="endorsementStatus" id="endorsementStatus"/>											
+															<div class="textfield" >
+																	<div class="text">
+																	<s:text name="label.endorsementDate" />
+																		<%-- <s:if test='"Endorsement".equals(endorsmenttype)'>
+																				
+																			</s:if>
+																			<s:if test='"GNPI".equals(endorsmenttype)'>
+																				<s:text name="label.gnpiDate" />
+																			</s:if>
+																			<s:if test='"Rectification".equals(endorsmenttype)'>
+																				<s:text name="label.rectificationDate" />
+																			</s:if> --%>
+																	</div>
+																	<div class="tbox">
+																		<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="functionDate()" disabled="%{prclFlag==true?true:false}"  />
+																	</div>
+																</div>
 															<br class="clear" />
 														</div>
 													</div>
@@ -155,6 +181,7 @@ gap:20px;
 										</div>
 									</s:if>
 									<s:if test='"Y".equals(contractMode)'>
+									<s:if test="#enewContractInfo!=null && #enewContractInfo.size()>0">
 										<div class="boxcontent" >
 											<div class="panel panel-primary">											
 												<div class="panel-heading">
@@ -232,6 +259,7 @@ gap:20px;
 												</div>
 											</div>
 											</div>
+											</s:if>
 									</s:if>
 									<div class="tablerow">
 										<div class="boxcontent">
@@ -282,7 +310,13 @@ gap:20px;
 														<div align="center">
 															<div id="bouquetpds">
 																<div class="boxcontent" align="center">
-																<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
+																<s:if test='"Renewal".equals(renewalEditMode)'>
+																		<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="Renewprocceed()" />	
+																		<s:hidden name="expiry_Date" id="expiry_Date"></s:hidden>								
+																	</s:if>
+																	<s:else>
+																		<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
+																	</s:else>
 																</div>
 															</div>
 														</div>
@@ -469,7 +503,7 @@ gap:20px;
 														<div class="tbox">
 															<div class="input-group"> 
 																<s:if test="RenewalMode != null">
-																	<s:select list="CeddingCompanylist"	 listKey="CUSTOMER_ID" listValue="NAME" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
+																	<s:select list="CeddingCompanylist"	 listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
 																	<span class="input-group-addon">
 																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
 													 			     	<span class="glyphicon glyphicon-list"></span>
@@ -1573,7 +1607,7 @@ gap:20px;
 														
 														</s:if>
 														<div class="boxcontent" align="center">
-														<s:if test='"layer".equals(layerMode) && "layer".equals(flag)'>
+														<s:if test='"layer".equals(layerMode) && "layer".equals(flag) || "RenewalMode".equals(renewalMode)'>
 														<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 														<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionUpdateOption()">Update Section</button>
 														</s:if>
@@ -1778,7 +1812,12 @@ gap:20px;
 													</s:elseif>
 													<s:else>
 														<s:if test='"Y".equals(contractMode)'>
-															<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCCancel()" />
+															<s:if test="amend_Id_Mode!=null">
+																<input type="button" value="Cancel" class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
+															</s:if>
+															<s:else>
+																<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCCancel()" />
+															</s:else>
 														</s:if>
 														<s:else>
 															<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
@@ -1850,7 +1889,7 @@ gap:20px;
 			</div>
 		</div>
 <script type="text/javascript">
-<s:if test='("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no))'>
+<s:if test='("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no)) || ("RenewalMode".equals(renewalMode) ||"Renewal".equals(renewalEditMode))'>
 document.getElementById("sectionid").style.display = "inline";
 </s:if>
 <s:else>
@@ -3114,15 +3153,7 @@ function DocScript(id){
     }
 }
 
-getPaypartner('paypartid');
-function getPaypartner(id){
-	var cedingid=document.getElementById("CeddingId").value;
-	var val=document.getElementById("BrokerId").value;
-	if(cedingid!=null && cedingid!='' && val!=null && val!=''){
-		var URL='${pageContext.request.contextPath}/paymentPartnerAjaxXol.action?dropDown='+id+'&cedingId='+cedingid+'&brokerId='+val;
-	 	postRequest(URL,id);
-	}
-}
+
 function getUnderwriterShare(val){
 	var proStatus = document.getElementById("proStatus").value
 	if("64"==val && proStatus=="A"){
@@ -3335,8 +3366,9 @@ function funEditContMode(proposalno,ceddingcompanyid,productId,baseLayer,baseCon
     document.getElementById("layerMode").value='layer';
 	document.getElementById("flag").value='layer';
 	document.getElementById("contractMode").value='Y';
+	document.proportional.mode.value='endorsment';
 	document.proportional.layerProposalNo.value=proposalno;
-    document.proportional.action="EditSectionRiskDetails.action?endtMode=endorsment&mode=endorsment&departmentId="+deptId;
+    document.proportional.action="EditSectionRiskDetails.action?endtMode=endorsment&departmentId="+deptId;
     document.proportional.submit();
 }
 function funNewMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId,secMode) {
@@ -3515,6 +3547,13 @@ function procceed(){
 	document.proportional.submit();
 	
 }
+function Renewprocceed(){
+    document.proportional.action=" ${pageContext.request.contextPath}/EditSectionRiskDetails.action";
+    //document.getElementById("mode").value="Renewal";
+    document.getElementById("reMode").value="Renewal";
+    document.getElementById("renewalEditMode").value="Renewal";
+    document.proportional.submit();
+}
 <s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN)'>	
 document.getElementById('bouquestid').style.display = 'block';
 document.getElementById('bouquetModeYNY').disabled=true;
@@ -3543,6 +3582,15 @@ function getMethod(val){
          document.getElementById('scalecal').style.display = 'none';
      }
     
+}
+getPaypartner('paypartid');
+function getPaypartner(id){
+	var cedingid=document.getElementById("CeddingId").value;
+	var val=document.getElementById("BrokerId").value;
+	if(cedingid!=null && cedingid!='' && val!=null && val!=''){
+		var URL='${pageContext.request.contextPath}/paymentPartnerAjaxXol.action?dropDown='+id+'&cedingId='+cedingid+'&brokerId='+val;
+	 	postRequest(URL,id);
+	}
 }
 <s:if test='subSeqCalculation!=null && !"".equals(subSeqCalculation)'>
 getSubseqCal('<s:property value="subSeqCalculation"/>')

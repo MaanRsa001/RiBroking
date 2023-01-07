@@ -38,16 +38,14 @@
 		<meta http-equiv="expires" content="0">
 		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 		<meta http-equiv="description" content="This is my page">
-		<%--  <style>
-	  #tooltip{
-    position:absolute;
-    border:1px solid #333;
-    background:#f7f5d1;
-    padding:2px 5px;
-    color:#333;
-    display:none;
-    }  
-	 </style>--%>
+	<style type="text/css">
+	  
+	  .panel-primary .panel-heading {
+		    color: #fff;
+		    background-color: #a8182b;
+		    border-color: #a8182b;
+		} 
+	 </style>
 	</head>
 	<body>
 		<div class="table0" style="width: 100%; margin: 0 auto;">
@@ -218,7 +216,7 @@
 									<div class="panel panel-primary">
 										<div class="panel-heading">
 											<div class="tablerow">
-												<s:text name="Heading.CONTRACTSLIST" />
+												<s:text name="Heading.CONFIRMCONTRACTSLIST" />
 											</div>
 										</div>
 										<s:if test='"2".equals(#session.mfrid) || "1".equals(#session.mfrid) || "4".equals(#session.mfrid)'>

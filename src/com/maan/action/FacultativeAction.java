@@ -1582,7 +1582,7 @@ public class FacultativeAction extends ActionSupport implements ModelDriven<Facu
 				bean.setProposalNo(new DropDownControllor().getRenewalCopyQuote("Renewal",bean.getProductId(), bean.getBranchCode(), bean.getProposal_no()));
 			}
 			else if(StringUtils.isNotBlank(bean.getEndtMode()) &&  "endorsment".equalsIgnoreCase(bean.getEndtMode())){
-				dropDownController.riskDetailsEndorsement(bean.getProposalNo(),bean.getEndorsementStatus());
+				dropDownController.riskDetailsEndorsement(bean.getProposalNo(),bean.getEndorsementStatus(),bean.getBranchCode());
 			}
 			bean.setDepartmentName(new DropDownControllor().getDepartmentName(branchCode, (String)session.get("mfrid"), (String)session.get("DepartmentId")));
 			service.ShowFirstPageDatas(bean);
@@ -3162,7 +3162,7 @@ public class FacultativeAction extends ActionSupport implements ModelDriven<Facu
 			else {
 				forward = SavePageSecond();
 				if(!hasActionErrors()){
-				dropDownController.riskDetailsEndorsement(bean.getProposalNo(),bean.getEndorsementStatus());
+				dropDownController.riskDetailsEndorsement(bean.getProposalNo(),bean.getEndorsementStatus(),bean.getBranchCode());
 				}else{
 					logger.info("##########Validation Message Start###########");
 					Iterator<String> error = getActionErrors().iterator();

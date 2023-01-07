@@ -793,7 +793,7 @@ public class RetroAction extends ActionSupport implements ModelDriven<RiskDetail
 				}
 			}
 			else if("endorsment".equalsIgnoreCase(bean.getEndtMode())) {
-				dropDownControllor.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
+				dropDownControllor.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus(),bean.getBranchCode());
 				
 				if(StringUtils.isNotBlank(bean.getContractno())) {
 					bean.setContNo(bean.getContractno());
@@ -850,7 +850,7 @@ public class RetroAction extends ActionSupport implements ModelDriven<RiskDetail
 			else {
 				forward = SecondPageSave();
 				logger.info("Enter");
-				dropDownControllor.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
+				dropDownControllor.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus(),bean.getBranchCode());
 				logger.info("Exit");
 			}
 		}

@@ -894,6 +894,7 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 				InsertRemarkDetails(beanObj);
 				insertCedentRetention(beanObj,pid);
 				UpadateUWShare(beanObj);
+				updateOfferNo(beanObj, pid);
 				//this.showSecondpageEditItems(beanObj, pid, proposalno);
 				GetRemarksDetails(beanObj);
 				//new DropDownControllor().getSOATableInsert(beanObj.getProposal_no(), beanObj.getContractno(),beanObj.getBranchCode());
@@ -905,7 +906,20 @@ public class RiskDetailsDAOImpl extends MyJdbcTemplate implements RiskDetailsDAO
 		}
 		return savFlg;
 	}
-
+	private void updateOfferNo(RiskDetailsBean beanObj,String pid) {
+		try {
+			String offerNo="";
+			
+			if(StringUtils.isBlank(beanObj.getOfferNo())) {
+				offerNo=new DropDownControllor().getSequence("Offer",pid,"0", beanObj.getBranchCode(),"","");
+				beanObj.setOfferNo(offerNo);
+				String query="UPDATE POSITION_MASTER SET OFFER_NO=? WHERE PROPOSAL_NO=?";
+				this.mytemplate.update(query,new Object[] {beanObj.getOfferNo(),beanObj.getProposal_no()});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	private void UpadateUWShare(RiskDetailsBean beanObj) {
 		String query="";
 		try {
@@ -5357,8 +5371,9 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 	public void convertPolicy(RiskDetailsBean beanObj,String productId) {
 		try {
 			try {
-				String updateQry ="", selectQry="";
+				String updateQry = "",insertQry = "",selectQry="",endom="";
 				Object[] args=null;
+				Object[] obj=null,obj1=null;
 				int out=0;
 				int chkSecPageMode = checkSecondPageMode(beanObj, productId); //commission table count 0 mode=1 else 2
 				int ContractEditMode = contractEditMode(beanObj, productId); // get contract no from risk details if empty mode=1 else 2
@@ -5462,6 +5477,11 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 								}else{
 									beanObj.setContractGendration("Your Proposal is Renewaled with Proposal No : "+beanObj.getProposal_no() +", Old Contract No:"+maxContarctNo+" and New Contract No : "+maxContarctNo+".");
 								}
+								updateQry =getQuery(DBConstants.RISK_UPDATE_MNDINSTALLMENTS);
+								logger.info("updateQry " + updateQry);
+								logger.info("Args[0]=>" + maxContarctNo);
+								logger.info("Args[1]=>" + beanObj.getProposal_no());
+								out=this.mytemplate.update(updateQry,new Object[]{maxContarctNo,beanObj.getProposal_no()});	
 							} else {
 								args = new String[4];
 								args[0] = beanObj.getContNo();
@@ -5491,6 +5511,34 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 							}
 						}
 					}
+				}else if (ContractEditMode == 2) {
+
+					endom=getQuery(DBConstants.RISK_SELECT_ENDO);
+					logger.info("Query=>"+endom);
+					logger.info("Args[0]=>"+beanObj.getProposal_no());
+					String endtNo=(String)this.mytemplate.queryForObject(endom, new Object[]{beanObj.getProposal_no()}, String.class);
+					logger.info("Result=>"+endtNo);
+
+					obj = updateContractRiskDetailsSecondForm(beanObj, productId,endtNo);
+					logger.info("Update Select Query========>"+endom);
+					updateQry = getQuery(DBConstants.RISK_UPDATE_PRO24CONTSECPAGE);
+					logger.info("updateQry " + updateQry);
+					out=this.mytemplate.update(updateQry, obj);
+					logger.info("Result=>" +out);
+						beanObj.setContractGendration("Your Contract is updated with Proposal No : "+beanObj.getProposal_no()+", Contract No : "+beanObj.getContNo()+".");
+					/*insertQry = getQuery(DBConstants.RISK_INSERT_PRO2SECCOMM);
+					logger.info("InsertQry=>" + insertQry);
+					obj1 = secondContarctPageCommissionAruguments(beanObj,productId);
+					out=this.mytemplate.update(insertQry, obj1);*/
+
+					obj1 = updateRiskDetailsSecondFormSecondTable(beanObj, productId, getMaxAmednId(beanObj.getProposal_no()));
+					updateQry = getQuery(DBConstants.RISK_UPDATE_PRO2SECCOMM);
+					logger.info("updateQry " + updateQry);
+					out=this.mytemplate.update(updateQry, obj1);
+					logger.info("Result=>" +  out);
+
+					logger.info("Result=>" +out);
+					beanObj.setProStatus("A");
 				}
 				InsertPlacement(beanObj);
 				insertRiDetails(beanObj);
@@ -5518,7 +5566,6 @@ public void updateRetentionContractNo(RiskDetailsBean bean){
 			e.printStackTrace();
 		}
 	}
-
 	private void updateShareSign(RiskDetailsBean bean) {
 		String query="";
 		try {

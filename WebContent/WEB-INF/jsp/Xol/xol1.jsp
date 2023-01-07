@@ -69,6 +69,7 @@ gap:20px;
 <s:set var="dislayer" value="%{baseLayer!=null && !''.equals(baseLayer)}"/>
 <s:set var="baselayer" value='%{!(("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no)))}'/>
 <s:set var="displ" value='%{!"Y".equals(pltDisableStatus)}'/>
+<s:set var="enewContractInfo" value='%{newContractInfo}'/>
 <div class="table0" style="width: 100%; margin: 0 auto;">
 	<div class="tablerow">
 		<div class="table1" style="width: 100%; margin: 0 auto; background-color: #E5E5E5; ">
@@ -110,7 +111,33 @@ gap:20px;
 												<div class="tbox txtB">
 													<s:property value="amendId"/>
 												</div>
-											</div>													 
+											</div>
+											<div class="textfield">
+												<div class="text">
+													<s:text name="label.contractno" />
+												</div>
+												<div class="tbox">
+													<s:textfield name="contNo" cssClass="inputBox" disabled="true" />
+												</div>
+											</div>
+											<s:hidden name="endorsementStatus" id="endorsementStatus"/>											
+											<div class="textfield" >
+													<div class="text">
+													<s:text name="label.endorsementDate" />
+														<%-- <s:if test='"Endorsement".equals(endorsmenttype)'>
+																
+															</s:if>
+															<s:if test='"GNPI".equals(endorsmenttype)'>
+																<s:text name="label.gnpiDate" />
+															</s:if>
+															<s:if test='"Rectification".equals(endorsmenttype)'>
+																<s:text name="label.rectificationDate" />
+															</s:if> --%>
+													</div>
+													<div class="tbox">
+														<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="functionDate()" disabled="%{prclFlag==true?true:false}"  />
+													</div>
+												</div>													 
 											<br class="clear"></br>
 										</div>
 									</div>
@@ -123,6 +150,7 @@ gap:20px;
 						</s:else>
 						</div>
 						<s:if test='"Y".equals(contractMode)'>
+						<s:if test="#enewContractInfo!=null && #enewContractInfo.size()>0">
 							<div class="boxcontent" >
 								<div class="panel panel-primary">											
 									<div class="panel-heading">
@@ -150,7 +178,7 @@ gap:20px;
 														</tr>
 														</thead>
 														<tbody>	
-														<s:iterator value="newContractInfo" var="list"  status="stat">									
+														<s:iterator value="#enewContractInfo" var="list"  status="stat">									
 															<tr>
 																<td>
 																<s:property value="#list.SNO"/>
@@ -200,6 +228,7 @@ gap:20px;
 									</div>
 								</div>
 							</div>
+							</s:if>
 						</s:if>
 						<div class="tablerow">
 							<div class="boxcontent">
@@ -230,7 +259,14 @@ gap:20px;
 												<div class="textfield33" >
 													<div id="bouquetpds">
 														<div class="boxcontent" align="center">
-														<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
+														<s:if test='"Renewal".equals(renewalEditMode)'>
+															<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="Renewprocceed()" />	
+															<s:hidden name="expiry_Date" id="expiry_Date"></s:hidden>								
+														</s:if>
+														<s:else>
+															<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
+														</s:else>
+														
 														</div>
 													</div>
 												</div>
@@ -1301,7 +1337,7 @@ gap:20px;
 										<jsp:include page="/WEB-INF/jsp/placement/placementReinsInfo.jsp" />
 										</s:if>
 										<div class="boxcontent" align="center">
-										<s:if test='"layer".equals(layerMode) && "layer".equals(flag)'>
+										<s:if test='("layer".equals(layerMode) && "layer".equals(flag)) || "RenewalMode".equals(renewalMode)'>
 										<input type="button" value="Cancel" class="btn btn-sm btn-danger" onClick="disableForm(this.form,false,'');destroyPopUps();FunctionEdit()" />
 										<button class="btn btn-sm btn-warning" onclick="disableForm(this.form,false,'');FunctionUpdateOption()">Update Layer</button>
 										</s:if>
@@ -1432,7 +1468,12 @@ gap:20px;
 										</s:elseif>
 										<s:else>
 											<s:if test='"Y".equals(contractMode)'>
+												<s:if test="amend_Id_Mode!=null">
+													<input type="button" value="Cancel" class="btn btn-sm btn-danger" id="mybutton" onClick="AmendIdBack()" />
+												</s:if>
+												<s:else>
 												<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCCancel()" />
+												</s:else>
 											</s:if>
 											<s:else>
 											<input type="button"  value="Back"  class="btn btn-sm btn-danger" id="mybutton"   onClick="FunctionEditCancel()" />
@@ -1509,7 +1550,7 @@ gap:20px;
 	</div>
 </div>
 <script type="text/javascript">
-<s:if test='("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no))'>
+<s:if test='("layer".equals(layerMode) && (#elayerInfo!=null && #elayerInfo.size()>0)) || (proposal_no==null ||"".equals(proposal_no)) || ("RenewalMode".equals(renewalMode) ||"Renewal".equals(renewalEditMode)) '>
 document.getElementById("sectionid").style.display = "inline";
 </s:if>
 <s:else>
@@ -3961,8 +4002,9 @@ function funEditContMode(proposalno,ceddingcompanyid,productId,baseLayer,baseCon
     document.getElementById("layerMode").value='layer';
 	document.getElementById("flag").value='layer';
 	document.getElementById("contractMode").value='Y';
+	document.xol1.mode.value='endorsment';
 	document.xol1.layerProposalNo.value=proposalno;
-	document.xol1.action="EditLayerXol.action?endtMode=endorsment&mode=endorsment";
+	document.xol1.action="EditLayerXol.action?endtMode=endorsment";
     document.xol1.submit();
 }
 function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId) {
@@ -4054,6 +4096,13 @@ function procceed(){
 	document.xol1.action="InitXol.action";
 	document.xol1.submit();
 	
+}
+function Renewprocceed(){
+    document.xol1.action=" ${pageContext.request.contextPath}/EditLayerXol.action";
+    document.getElementById("mode").value="Renewal";
+    document.getElementById("reMode").value="Renewal";
+    document.getElementById("renewalEditMode").value="Renewal";
+    document.xol1.submit();
 }
 <s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN)'>	
 document.getElementById('bouquestid').style.display = 'block';

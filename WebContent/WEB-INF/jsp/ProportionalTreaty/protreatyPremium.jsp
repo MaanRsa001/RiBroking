@@ -376,7 +376,7 @@
 											<div class="textfield">
 											</div>
 											</s:if>
-											<s:if test="'RI02'.equals(#session.SOURCE_CODE)">
+											
 											<div class="textfield">
 												<div class="text">
 													<s:text name="Section" />
@@ -395,12 +395,12 @@
 													<span class="cr" onclick="GetSection();" style="cursor: pointer" title="Click here"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 												</div>
 											</div>
-											
+											<%-- <s:if test="'RI02'.equals(#session.SOURCE_CODE)">
 											</s:if>
 											<s:else>
 											<s:hidden name="sectionType" id="sectionType" value="2"/>
 											<s:hidden name="sectionName" id="sectionName"/>
-											</s:else>
+											</s:else> --%>
 											<div class="textfield">
 												<div class="text">
 													<s:text name="label.Class" />
@@ -1296,6 +1296,8 @@ for (mtbWinCound = 0; mtbWinCound < mtbChildWin.length; mtbWinCound++) {
 		 }	
 		 
 		 function premiumInsert(status){
+			document.getElementById("ri_cessionNo").disabled=false;
+			document.getElementById("ri_cessionYes").disabled=false;
 		 	enableForm(document.forms['premium'],false,'transaction,statementDate,currency,sectionType,enteringMode');
 		 	document.premium.action='${pageContext.request.contextPath}/insertPremiumProportionPremium.do?productId=<s:property value="productId"/>';
 			document.premium.submit();

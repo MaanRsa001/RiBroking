@@ -130,9 +130,9 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
             	beanObj.setOfferNoSearch("");
             }
             if ("RP".equalsIgnoreCase(beanObj.getFlag())) {
-                query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_RENEWALPENDING);
+                //query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_RENEWALPENDING);
             } else {
-                query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_PENDING);
+                //query += " " + getQuery(DBConstants.PORTFOLIO_SELECT_PENDING);
             }
             if(StringUtils.isNotBlank(beanObj.getAttachedUW()) && !"ALL".equalsIgnoreCase(beanObj.getAttachedUW())) {
         		obj = new DropDownControllor().getIncObjectArray(obj, new Object[]{(beanObj.getAttachedUW())});
@@ -629,6 +629,12 @@ public class PortfolioDAOImpl extends MyJdbcTemplate implements PortfolioDAO {
 			if( menuRights.toString().contains("C") &&!"Y".equalsIgnoreCase(tempBean.getDisableStatus())&& !"Y".equalsIgnoreCase(tempBean.getClaimStatus())){
 				map.put("TYPE","C");
 				map.put("DETAIL_NAME","Claim");
+				list.add(map);
+				map=new HashMap<String,Object>();
+			}
+			if( menuRights.toString().contains("R")&&"N".equalsIgnoreCase(tempBean.getDisableStatus()) &&"N".equalsIgnoreCase(tempBean.getRenewaldisable())&&"1".equalsIgnoreCase(tempBean.getRenewal_Status())&&"1".equalsIgnoreCase(tempBean.getRenewalPeriod())){
+				map.put("TYPE","R");
+				map.put("DETAIL_NAME","Renewal");
 				list.add(map);
 				map=new HashMap<String,Object>();
 			}

@@ -237,7 +237,22 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		}
 		return "protreaty1";
 	}
-
+	public  String InitRenew() { 
+		ShowDropDown();
+		bean.setBranchCode(branchCode);
+		bean.setShortname(service.getShortname(bean));
+		String forward = "protreaty1";
+		bean.setMenuStatus("N");
+		try {
+			 if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
+				dropDownController.getBouquetCedentBrokerInfo(bean);
+			}
+		} catch (Exception e) {
+			logger.debug("Exception @ {" + e + "}");
+			e.printStackTrace();
+		}
+		return forward;
+	}
 	@JSON(serialize=false)
 	private List<Map<String,Object>> getYearList(){
 		
@@ -317,6 +332,9 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 					
 					if("Renewal".equalsIgnoreCase(bean.getRenewalEditMode())){
 						dropDownController.updateRenewalEditMode(bean.getProposal_no(),"N","");
+						bean.setRenewalMode("");
+						bean.setRenewalEditMode("");
+						bean.setProposalReference("");
 					}
 					dropDownController.updateEditMode(bean.getProposal_no(),"N","");
 					if( (StringUtils.isNotBlank(bean.getBaseLayer()))){
@@ -1449,7 +1467,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				}
 			}
 			else if("endorsment".equalsIgnoreCase(bean.getEndtMode())) {
-				dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
+				dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus(),bean.getBranchCode());
 
 				if(StringUtils.isNotBlank(bean.getContractno())) {
 					bean.setContNo(bean.getContractno());
@@ -1598,7 +1616,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 			}
 			else {
 				forward = SecondPageSave();
-				dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
+				dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus(),bean.getBranchCode());
 			}
 		}
 		catch(Exception exception) {
@@ -4461,7 +4479,7 @@ public String EditSection(){
 			}
 		}
 		else if("endorsment".equalsIgnoreCase(bean.getEndtMode())) {
-			dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus());
+			dropDownController.riskDetailsEndorsement(bean.getProposal_no(),bean.getEndorsementStatus(),bean.getBranchCode());
 
 			if(StringUtils.isNotBlank(bean.getContractno())) {
 				bean.setContNo(bean.getContractno());
@@ -4473,14 +4491,14 @@ public String EditSection(){
 			if (CheckEditMode == 2) {
 				bean.setAmend_Id_Mode("true");
 			}
-		}
-		else if("Renewal".equalsIgnoreCase(bean.getReMode())){
-			bean.setRenewalProposalNo(bean.getProposal_no());
-			bean.setProposal_no(new DropDownControllor().getRenewalCopyQuote("Renewal",pid, branchCode,bean.getProposal_no() ));
+		}else if("Renewal".equalsIgnoreCase(bean.getReMode())) {
+			bean.setRenewalProposalNo(bean.getProposalNo());
+			bean.setProposal_no(new DropDownControllor().getRenewalCopyQuote("Renewal",pid, branchCode,bean.getProposalNo() ));
 			bean.setRenewalMode("RenewalMode");
-			bean.setAmend_Id_Mode("");
 			bean.setMode("");
+			bean.setLayerProposalNo(bean.getProposal_no());
 			bean.setProposalReference("Renewal");
+			//bean.setContractMode("Y");
 		}
 		bean.setProduct_id(pid);
 		service.riskEditMode(bean, false);
