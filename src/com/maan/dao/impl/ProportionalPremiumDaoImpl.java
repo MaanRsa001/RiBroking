@@ -126,7 +126,7 @@ public boolean getPremiumDetails(final FaculPremiumBean bean,final String Transa
 		bean.setBrokerage_usd(list.get("BrokerageUsd") == null ? "" : list.get("BrokerageUsd").toString());
 		bean.setOtherCost(list.get("OtherCost") == null ? "" : list.get("OtherCost").toString());
 		bean.setTax_usd(list.get("TaxUsd") == null ? "" : list.get("TaxUsd").toString());
-		bean.setPremium_reserve_quota_share_usd(list.get("PremiumQuotaShareUsd") == null ? "" : list.get("PremiumQuotaShareUsd").toString());
+		bean.setPremiumQuotaShare_usd(list.get("PremiumQuotaShareUsd") == null ? "" : list.get("PremiumQuotaShareUsd").toString());
 		bean.setCommsissionQuotaShare_usd(list.get("CommsissionQuotaShareUsd") == null ? "" : list.get("CommsissionQuotaShareUsd").toString());
 		bean.setPremium_surplus_usd(list.get("PremiumSurplusUsd") == null ? "" : list.get("PremiumSurplusUsd").toString());
 		bean.setComission_surplus_usd(list.get("ComissionSurplusUsd") == null ? "" : list.get("ComissionSurplusUsd").toString());

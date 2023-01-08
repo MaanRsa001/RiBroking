@@ -268,21 +268,21 @@
 															<td colspan="7" align="center"></td>
 															<td align="center">Risk Total</td>
 															<td colspan="2" align="center"></td>
-															<td align="center"><span id="risktotal"></span></td>
+															<td align="right"><span id="risktotal"></span></td>
 															<td align="center"></td>
-															<td align="center"><span id="risksign"></span></td>
+															<td align="right"><span id="risksign"></span></td>
 															<td align="center"></td>
-															<td align="center"><span id="riskbrokerage"></span></td>
+															<td align="right"><span id="riskbrokerage"></span></td>
 															</tr>
 															<tr>
 															<td colspan="7" align="center"></td>
 															<td align="center">Confirm Total</td>
 															<td colspan="2" align="center"></td>
-															<td align="center"><span id="confirmtotal"></span></td>
+															<td align="right"><span id="confirmtotal"></span></td>
 															<td align="center"></td>
-															<td align="center"><span id="confirmsign"></span></td>
+															<td align="right"><span id="confirmsign"></span></td>
 															<td align="center"></td>
-															<td align="center"><span id="confirmbrokerage"></span></td>
+															<td align="right"><span id="confirmbrokerage"></span></td>
 															</tr>
 														</tfoot>
 													</table>											
@@ -418,7 +418,7 @@ getAnnualAggNo();
 function getAnnualAggNo(){
 	var ctotal=0;var rtotal=0;var csign=0;var rsign=0;var cbro=0;var rbro=0;
 	<s:iterator value="plSummaryInfo" var="list"  status="stat">
-	 var status = '<s:property value="#list.PLACING_STATUS"/>';
+	 var status = '<s:property value="#list.NEW_STATUS"/>';
 	 var val='<s:property value="#list.EPI_100_DC"/>';
 	 var sign='<s:property value="#list.SHARE_SIGNED"/>';
 	 var bro='<s:property value="#list.BROKERAGE_AMT"/>';
@@ -433,11 +433,11 @@ function getAnnualAggNo(){
 	 }
 	 </s:iterator>
 	document.getElementById("risktotal").innerHTML=rtotal;
-	document.getElementById("confirmtotal").innerHTML=ctotal
-	document.getElementById("risksign").innerHTML=rsign;
-	document.getElementById("confirmsign").innerHTML=csign
-	document.getElementById("riskbrokerage").innerHTML=rbro;
-	document.getElementById("confirmbrokerage").innerHTML=cbro
+	document.getElementById("confirmtotal").innerHTML=ctotal;
+	document.getElementById("risksign").innerHTML=rsign.toFixed(4);
+	document.getElementById("confirmsign").innerHTML=csign.toFixed(4);
+	document.getElementById("riskbrokerage").innerHTML=rbro.toFixed(2);
+	document.getElementById("confirmbrokerage").innerHTML=cbro.toFixed(2);
 	}
 </script>		
 </body>

@@ -93,7 +93,7 @@ public class PlacementBean {
 	private String notplacedProposal;
 	private String placedProposal;
 	private String productId;
-	
+	private String status;
 	
 	private List<File> upload;
 	private List<String> uploadFileName;
@@ -791,6 +791,12 @@ public class PlacementBean {
 	}
 	public void setExpDateSearch(String expDateSearch) {
 		this.expDateSearch = expDateSearch;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

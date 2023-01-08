@@ -212,8 +212,11 @@
 																		</td>
 																		<s:if test='!"S".equals(searchType)'>
 																		<td>
+																			<s:if test='!"Offer".equals(#list.STATUS)'>
 																			<input type="button" value="Update" class="btn btn-sm btn-warning"   onclick="FnUpdate('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
+																			</s:if>
 																		</td>
+																		
 																		<td>
 																			<input type="button" value="View" class="btn btn-sm btn-primary"   onclick="FnView('<s:property value="#list.PROPOSAL_NO"/>','<s:property value="#list.REINSURER_ID"/>','<s:property value="#list.BROKER_ID"/>')" />
 																		</td>

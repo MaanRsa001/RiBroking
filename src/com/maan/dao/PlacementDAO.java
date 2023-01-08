@@ -899,12 +899,13 @@ public void getPlacementNo(PlacementBean bean) {
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
 		
+		if("Success".equals(status)) {
 		obj[0]=bean.getMailType();
 		query=getQuery("UPDATE_PLACEMENT_STATUS");
 		logger.info("Query=>"+query);
 		logger.info("Args=>"+StringUtils.join(obj, ","));	
 		this.mytemplate.update(query,obj);
-		
+		}
 		obj=new Object[5];
 		obj[0]=bean.getStatusNo();
 		obj[1]=bean.getProposalNos().get(i);;

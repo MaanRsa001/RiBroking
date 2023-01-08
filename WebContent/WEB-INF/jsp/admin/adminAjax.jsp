@@ -2770,7 +2770,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 			<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}' theme="simple"/>
 		</td>
 		<td>
-			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"N".equals(deleteStatus[#stat.count-1])}' theme="simple"/>
+			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{!"edit".equals(status)}' theme="simple"/>
 		</td>
 		<td>
 			<s:property value="mailStatus[#stat.count-1]"/>
@@ -2779,8 +2779,10 @@ alert("This action is not allowed because a previous transaction is pending for 
 		<td align="center">
 			<s:hidden name="deleteStatus[%{#stat.count-1}]"/>
 			<s:hidden name="changeStatus[%{#stat.count-1}]"/>
-			<s:if test='!"N".equals(changeStatus[#stat.count-1]))'>
+			<s:if test='"".equals(changeStatus[#stat.count-1])|| !"N".equals(changeStatus[#stat.count-1])'>
+			<s:if test='0!=(#stat.count-1)'>
 			<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="deleteRow('<s:property value="%{#stat.count}"/>')" />
+			</s:if>
 			</s:if>
 		</td>
 	</tr>												

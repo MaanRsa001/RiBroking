@@ -87,6 +87,12 @@ gap:20px;
 		dateFormat : "dd/mm/yy"
 		//yearRange: "-100:+0"
 	});
+	$( "#endorsementDate" ).datepicker({
+		changeMonth : true,
+		changeYear : true,
+		dateFormat : "dd/mm/yy"
+		//yearRange: "-100:+0"
+	});
 	
   });
   </script>
@@ -170,7 +176,7 @@ gap:20px;
 																			</s:if> --%>
 																	</div>
 																	<div class="tbox">
-																		<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="functionDate()" disabled="%{prclFlag==true?true:false}"  />
+																		<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);"  disabled="%{prclFlag==true?true:false}"  />
 																	</div>
 																</div>
 															<br class="clear" />
@@ -505,7 +511,7 @@ gap:20px;
 																<s:if test="RenewalMode != null">
 																	<s:select list="CeddingCompanylist"	 listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
 																	<span class="input-group-addon">
-																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(1)">
 													 			     	<span class="glyphicon glyphicon-list"></span>
 													 			    </button>
 													 			    </span>
@@ -518,7 +524,7 @@ gap:20px;
 																		<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"   disabled='%{(#dislayer) || (#baselayer) || ("Y".equals(disableStatus1))?true:false}' onchange="getRetention();getPaypartner('paypartid');"/>
 																	</s:else>
 																	<span class="input-group-addon">
-																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+																	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(1)">
 													 			     	<span class="glyphicon glyphicon-list"></span>
 													 			    </button>
 													 			    </span>
@@ -586,9 +592,10 @@ gap:20px;
 																		<th width="15%"><s:text name="label.treatyType" /></th>
 																		<th width="15%"><s:text name="label.sectreatyNameType" /></th>
 																		<th width="10%"><s:text name="label.edit" /></th>
+																		<s:if test='!"Y".equals(contractMode)'>
 																		<th width="10%"><s:text name="label.seccopy" /></th>
 																		<th width="10%" > <s:text name="Delete" /> </th>
-																		
+																		</s:if>
 																	</tr>
 																	</thead>
 																	<tbody>	
@@ -612,6 +619,7 @@ gap:20px;
 																		<td>
 																			<s:property value="#list.RSK_TREATYID"/>
 																		</td>
+																		
 																		<td align="center">
 																			<s:if test="contNo != null && contNo != ''">
 																				<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditContMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Edit </button>
@@ -620,6 +628,8 @@ gap:20px;
 																				<button type="button"  class="btn btn-sm btn-primary"  onclick="funEditMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>','');" tabindex="1"> Edit </button>
 																			</s:else>
 																		</td>
+																		
+																		<s:if test='!"Y".equals(contractMode)'>
 																		<td align="center">
 																		<s:if test='#displ'>
 																			<button type="button"  class="btn btn-sm btn-warning"  onclick="funCopyMode('<s:property value='#list.PROPOSAL_NO'/>','<s:property value='#list.CEDING_COMPANY_ID'/>','<s:property value='#list.PRODUCT_ID'/>','<s:property value='#list.BASE_LAYER'/>','<s:property value='#list.CONTRACT_NO'/>','<s:property value='#list.DEPT_ID'/>');" tabindex="1"> Copy </button>
@@ -631,9 +641,8 @@ gap:20px;
 																			<input type="button" value="Delete" class="btn btn-sm btn-danger" onclick="disableForm(this.form,false,'');funDeleteLayer('<s:property value='#list.PROPOSAL_NO'/>')" theme="simple"/>
 																			</s:if>
 																		</s:if>
-																		
-																		
 																		</td>
+																		</s:if>
 																	</tr>												
 																	</s:iterator>
 																	</tbody>
@@ -875,7 +884,7 @@ gap:20px;
 																						<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"Y".equals(disableStatus1)?true:false}' onchange="getPaypartner('paypartid');"/>
 																					</s:else>
 																					<span class="input-group-addon">
-																						<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
+																						<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(2)">
 																		 			     	<span class="glyphicon glyphicon-list"></span>
 																		 			    </button>
 												     								</span>
@@ -2351,10 +2360,11 @@ function GetExchangeRate() {
 	}
 }*/
 
-function functionview(id){
+function functionBrokerview(id){
 	var cedding="";
 	if(id==1) {
 		cedding=document.getElementById("CeddingId").value;
+		alert("1s"+id);
 	}
 	else {
 		cedding=document.getElementById("BrokerId").value;
@@ -3761,6 +3771,7 @@ function SlidingScaleEnable(){
 $(function() {
 $('.select1').select2({ });
 });
+
 </script>
 	</body>
 </html>

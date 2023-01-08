@@ -285,7 +285,9 @@
 									<div class="boxcontent" >
 									<div class="panel panel-primary">											
 										<div class="panel-heading" style="display: flex;justify-content: space-between;">
-											<div><s:text name="label.Reinsureinfo" /></div><div><button type="button"  class="btn btn-sm btn-success"  onclick="funEdit();" tabindex="1"> Edit </button></div>
+											<div><s:text name="label.Reinsureinfo" /></div>
+											<s:if test='!"New".equals(status)'>
+											<div><button type="button"  class="btn btn-sm btn-success"  onclick="funEdit();" tabindex="1"> Edit </button></div></s:if>
 										</div>
 										<div class="panel-body">
 											<div class="boxcontent">
@@ -353,7 +355,7 @@
 																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
 																	</td>
 																	<td>
-																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"N".equals(deleteStatus[#stat.count-1])}'/>
+																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"List".equals(status)}'/>
 																	</td>
 																	<td>
 																	<s:property value="mailStatus[#stat.count-1]"/>
@@ -363,8 +365,10 @@
 																	<td align="center">
 																		<s:hidden name="deleteStatus[%{#stat.count-1}]"/>
 																		<s:hidden name="changeStatus[%{#stat.count-1}]"/>
-																		<s:if test='!"N".equals(changeStatus[#stat.count-1])'>
+																		<s:if test='"".equals(changeStatus[#stat.count-1])|| !"N".equals(changeStatus[#stat.count-1])'>
+																		<s:if test='0!=(#stat.count-1)'>
 																		<input type="button" value="Delete" class="btn btn-sm btn-danger"   onclick="disableForm(this.form,false,'');deleteRow('<s:property value="%{#stat.count}"/>')" />
+																		</s:if>
 																		</s:if>
 																	</td>
 																</tr>												
@@ -572,7 +576,7 @@
 						<s:hidden name="docId" id="docId"></s:hidden>
 						<s:hidden name="fileName" id="fileName"></s:hidden>
 						<s:hidden name="reinsurerType" id="reinsurerType"></s:hidden>
-						
+						<s:hidden name="status" id="status"></s:hidden>
 					</div>	
 					<div id="premiumSubmit">
 					</div>									
@@ -620,18 +624,14 @@ var table = document.getElementById(tableID);
 			cell4.appendChild(element2);
 			
 			var cell5 = row.insertCell(4);
-			var element7 = document.createElement("input");
-			element7.type = "hidden";
-			element7.name = "deleteStatus["+(rowCount-1)+"]";
-      		element7.id = "deleteStatus"+(rowCount-1);
-      		element7.value='';
+			
       		var element8 = document.createElement("input");
 			element8.type = "hidden";
 			element8.name = "changeStatus["+(rowCount-1)+"]";
       		element8.id = "changeStatus"+(rowCount-1);
       		element8.value='';
       		
-      		cell5.appendChild(element7);
+      		cell5.appendChild(element8);
 			var cell6 = row.insertCell(5);
 			cell6.setAttribute("align","center");
 			var element6 = document.createElement("input");
@@ -760,6 +760,7 @@ function cancelEmail(){
 }
 function funEdit(){
 	document.getElementById('reinsurerType').value='Y';
+	document.getElementById('status').value='edit';
 	document.placement.action='${pageContext.request.contextPath}/initPlacement.action';
 	document.placement.submit();
 }

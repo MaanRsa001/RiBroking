@@ -111,6 +111,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			list.add(string);
 			reinsSNo.add("1");
 			}
+			bean.setStatus("New");
 			bean.setReinsurerInfoList(list);
 			bean.setReinsSNo(reinsSNo);
 			bean.setMode("placing");
@@ -118,6 +119,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			bean.setReinsurerType("Y");
 		}else {
 			bean.setMode("placing");
+			bean.setStatus("List");
 			if(StringUtils.isBlank(bean.getReinsurerType()))
 			bean.setReinsurerType("N");
 		}
