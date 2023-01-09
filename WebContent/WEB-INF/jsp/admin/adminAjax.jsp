@@ -2770,7 +2770,7 @@ alert("This action is not allowed because a previous transaction is pending for 
 			<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}' theme="simple"/>
 		</td>
 		<td>
-			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{!"edit".equals(status)}' theme="simple"/>
+			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"List".equals(status)}' theme="simple"/>
 		</td>
 		<td>
 			<s:property value="mailStatus[#stat.count-1]"/>

@@ -1243,13 +1243,11 @@ function AuthendicationBack(){
 													</td>
 												</tr>
 												<tr>
-													<td style="font-weight: bold">
-														<s:text name="label.taxdedect" />
+													<td>
+														<s:text name="" />
 													</td>
 													<td align="right">
-														<s:if test="!taxDedectSource.equals('0.00')">
-															<s:property value="taxDedectSource"/>
-														</s:if>
+														<s:property value="" />
 													</td>
 													<td style="font-weight: bold">
 														<s:text name="Premium.OtherCost" />
@@ -1261,18 +1259,24 @@ function AuthendicationBack(){
 													</td>
 												</tr>
 												<tr>
-												<td style="font-weight: bold">
-	                                                    <s:text name="label.sertax" />
+													 <td style="font-weight: bold">
+	                                                    <s:text name="label.vat" />
 	                                                </td>
 	                                                <td align="right">
-	                                                    <s:if test="!serviceTax.equals('0.00')">
-	                                                        <s:property value="serviceTax"/>
+	                                                    <s:if test="!vatPremium.equals('0.00')">
+	                                                        <s:property value="vatPremium"/>
 	                                                    </s:if>
 	                                                </td>
-												<td></td>
-												<td></td>
-												
-												
+	                                                
+	                                                <td style="font-weight: bold">
+														<s:text name="label.brokerageVat" />
+													</td>
+													<td align="right">
+														<s:if test="!brokerageVat.equals('0.00')">
+															<s:property value="brokerageVat"/>
+														</s:if>
+													</td>
+														
 												</tr>
 												<tr>
 													<td style="font-weight: bold">

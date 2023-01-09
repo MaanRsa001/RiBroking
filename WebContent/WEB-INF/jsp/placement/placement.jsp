@@ -731,6 +731,7 @@ function FnSave(val){
 	$('input:radio[name=placementMode]').attr('disabled',false);
 	//document.getElementById('placementModeS').disabled=false;
 	//document.getElementById('placementModeC').disabled=false;
+	document.getElementById('status').value='List';
 	document.placement.action='${pageContext.request.contextPath}/savePlacingPlacement.action?mode='+val
 	document.placement.submit();
 }

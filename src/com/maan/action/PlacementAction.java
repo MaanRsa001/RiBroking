@@ -119,7 +119,9 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			bean.setReinsurerType("Y");
 		}else {
 			bean.setMode("placing");
-			bean.setStatus("List");
+			if(StringUtils.isBlank(bean.getStatus())) {
+				bean.setStatus("List");
+			}
 			if(StringUtils.isBlank(bean.getReinsurerType()))
 			bean.setReinsurerType("N");
 		}
@@ -129,7 +131,11 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 	}
 	public String summary() {
 		String forward="placementList";
+		summaryvalidation();
 		service.proposalInfo(bean);
+		if(hasActionErrors()) {
+			bean.setSearchType("");
+		}
 		bean.setPlacementInfoList(service.getPlacementInfoList(bean));
 		if(StringUtils.isBlank(bean.getSearchType())) {
 			bean.setSearchReinsurerId("");
@@ -139,6 +145,17 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		return forward;
 	}
 	
+	private void summaryvalidation() {
+		if("S".equals(bean.getSearchType())) {
+			if(StringUtils.isBlank(bean.getSearchReinsurerId())) {
+				addActionError("Please  Select Reinsurer Name");
+			}if(StringUtils.isBlank(bean.getSearchBrokerId())) {
+				addActionError("Please  Select Placing Broker");
+			}if(StringUtils.isBlank(bean.getSearchStatus())) {
+				addActionError("Please  Select Current Status");
+			}
+		}
+	}
 	public String removeRow(){
 		String forward = "dropdownajax";
 		List<String> reinsSNo=new ArrayList<String>();

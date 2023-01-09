@@ -1884,6 +1884,26 @@
 													</td>
 												</tr>
 												<tr>
+													 <td style="font-weight: bold">
+	                                                    <s:text name="label.vat" />
+	                                                </td>
+	                                                <td align="right">
+	                                                    <s:if test="!vatPremium.equals('0.00')">
+	                                                        <s:property value="vatPremium"/>
+	                                                    </s:if>
+	                                                </td>
+	                                                
+	                                                <td style="font-weight: bold">
+														<s:text name="label.brokerageVat" />
+													</td>
+													<td align="right">
+														<s:if test="!brokerageVat.equals('0.00')">
+															<s:property value="brokerageVat"/>
+														</s:if>
+													</td>
+														
+												</tr>
+												<tr>
 													<td style="font-weight: bold">
 														<s:text name="premium.total" />
 													</td>

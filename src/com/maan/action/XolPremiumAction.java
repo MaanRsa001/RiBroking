@@ -285,6 +285,9 @@ public class XolPremiumAction extends ActionSupport implements ModelDriven<Facul
 								 bean.setRipremiumList(SERVICE.getRipremiumList(bean));
 							 	forward= "PremiumRiSucuss";
 							 }else{
+								 if(StringUtils.isBlank(bean.getTableType())) {
+									 bean.setTableType("Temp");
+								 }
 								 SERVICE.GetPremiumDetails(bean,bean.getTransactionNo(),countryId);
 								forward= "PremiumSucuss";
 							 }

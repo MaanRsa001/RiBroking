@@ -1109,7 +1109,7 @@ gap:20px;
 																<s:text name="label.rateonline" />
 															</div>
 															<div class="tbox">
-																<s:textfield name="rateOnLine" id="rateOnLine" cssClass="inputBox"  cssStyle="text-align: right;"   maxlength="100"/>													
+																<s:textfield name="rateOnLine" id="rateOnLine" cssClass="inputBox"  cssStyle="text-align: right;"   maxlength="100" onkeyup="allow2DigitDecValues(this); middleMinusRestrictionNeg(this);jajvascript:this.value=Comma(this.value);negative(this.id,this.value)"/>													
 															</div>
 														</div>
 														<div class="textfield">

@@ -924,7 +924,7 @@
 								</s:if>
 								<s:if test='#session.MenuRights.indexOf("PST")!=-1 || #session.MenuRights.indexOf("AST")!=-1'>								
 									
-									<input type="button" value="Submit" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');insertupdate1('Submit');"/>
+									<input type="button" value="Next" class="btn btn-sm btn-success" onClick="disableForm(this.form,false,'');insertupdate1('Submit');"/>
 									&nbsp;&nbsp;&nbsp;
 								</s:if>
 								<s:if test='(#session.MenuRights.indexOf("PSV")!=-1 || #session.MenuRights.indexOf("ASE")!=-1)&& "Main"!=tableType'>								
