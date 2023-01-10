@@ -236,6 +236,7 @@ gap:20px;
 							</div>
 							</s:if>
 						</s:if>
+						<s:if test='!"Y".equals(contractMode)'>
 						<div class="tablerow">
 							<div class="boxcontent">
 								<div class="panel panel-primary">
@@ -243,41 +244,76 @@ gap:20px;
 											&nbsp;&nbsp;&nbsp;
 										</div>
 									<div class="panel-body">
-											<div class="boxcontent">
-												<div class="textfield33">
+										<div class="boxcontent">
+											<div class="textfield">
+												<div class="text">
+													<s:text name="label.bouquetModeYN" />
+												</div>
+												<div class="tbox">
+													<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{bouquetModeYN!=null}"></s:radio>													
+												</div>
+											</div>	
+											<div id="bouquetid">									
+											<div class="textfield">
+												<div class="text">
+													<s:text name="label.bouquetMode" />
+												</div>
+												<div class="tbox">
+													<s:select list="bouquetList" listValue="CODEDESC" listKey="CODE" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}" onchange="getCedentBroker(this.value);"/>
+												</div>
+											</div>
+											<div id="cedentbroker">
+											<s:if test="cedingCompanyName!=null && brokerName!=null">
+												<div class="textfield">
 													<div class="text">
-														<s:text name="label.bouquetModeYN" />
+														<s:text name="label.cedingCompany" />
 													</div>
 													<div class="tbox">
-														<s:radio list="#{'Y':'Yes','N':'No' }" name="bouquetModeYN" id="bouquetModeYN" value="%{bouquetModeYN==null?'N':bouquetModeYN}" onchange="getBouquest(this.value);" disabled="%{bouquetModeYN!=null}"></s:radio>													
+														<s:property value="cedingCompanyName"/>													
 													</div>
-												</div>										
-												<div class="textfield33">
-													<div id="bouquetid">
-														<div class="text">
-															<s:text name="label.bouquetMode" />
-														</div>
-														<div class="tbox">
-															<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}"/>
-														</div>
+												</div>	
+												<div class="textfield">
+													<div class="text">
+														<s:text name="label.broker" />
+													</div>
+													<div class="tbox">
+														<s:property value="brokerName"/>													
 													</div>
 												</div>
-												<div class="textfield33" >
-													<div id="bouquetpds">
-														<div class="boxcontent" align="center">
-														<s:if test='"Renewal".equals(renewalEditMode)'>
+												<div class="textfield">
+													<div class="text">
+														<s:text name="label.uwYearFrom" />
+													</div>
+													<div class="tbox">
+														<s:property value="uwYear"/>													
+													</div>
+												</div>	
+												<div class="textfield">
+													<div class="text">
+														<s:text name="label.uwYearto" />
+													</div>
+													<div class="tbox">
+														<s:property value="uwYearTo"/>													
+													</div>
+												</div>
+												</s:if>	
+											</div>
+											</div>
+											<div align="center">
+												<div id="bouquetpds">
+													<div class="boxcontent" align="center">
+													<s:if test='"Renewal".equals(renewalEditMode)'>
 															<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="Renewprocceed()" />	
 															<s:hidden name="expiry_Date" id="expiry_Date"></s:hidden>								
 														</s:if>
 														<s:else>
 															<input type="button"  value="Proceed"   class="btn btn-sm btn-success"   onclick="procceed()" />
 														</s:else>
-														
-														</div>
 													</div>
 												</div>
 											</div>
 										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -286,8 +322,13 @@ gap:20px;
 								<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
 							</div>
 						</div>
-						
+						</s:if>
+						<s:else>
+						<s:hidden name="bouquetModeYN" id="bouquetModeYN"/>
+						<s:hidden name="bouquetNo" id="bouquetNo"/>
+						</s:else>
 						<div id="bouquestid" style="display:none">
+							<s:if test='!"Y".equals(contractMode)'>
 							<s:if test='"Y".equals(bouquetModeYN)'>
 								<div class="boxcontent" >
 									<div class="panel panel-primary">											
@@ -370,6 +411,7 @@ gap:20px;
 									</div>
 									</div>
 								</s:if>
+								</s:if>
 						<div class="tablerow">
 							<div class="boxcontent">
 								<div class="panel panel-primary">
@@ -427,7 +469,7 @@ gap:20px;
 													<s:if test="RenewalMode != null">																												
 														<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />															
 														 <span class="input-group-addon">
-														 	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+														 	<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(1)">
 											 			     	<span class="glyphicon glyphicon-list"></span>
 											 			    </button>
 					     								</span>
@@ -436,7 +478,7 @@ gap:20px;
 														<%-- <s:if test="'Layer'.equals(proposalReference)">
 															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" />
 															 <span class="input-group-addon">
-                            									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+                            									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(1)">
 												 			     	<span class="glyphicon glyphicon-list"></span>
 												 			    </button>
 					     									 </span>
@@ -444,7 +486,7 @@ gap:20px;
 														<s:elseif test="baseLayer==null || ''.equals(baseLayer)">
 															<s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled='%{(#dislayer) || ("Y".equals(disableStatus1))?true:false}'  />
 															 <span class="input-group-addon">
-                            									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+                            									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(1)">
 												 			     	<span class="glyphicon glyphicon-list"></span>
 												 			    </button>
 					     									 </span>
@@ -458,7 +500,7 @@ gap:20px;
 														</s:else>
 														<%-- <s:select list="CeddingCompanylist" listKey="CUSTOMER_ID" listValue="NAME" name="cedingCo" id="CeddingId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---" disabled="true" /> --%>
 															 <span class="input-group-addon">
-                            									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(1)">
+                            									<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(1)">
 												 			     	<span class="glyphicon glyphicon-list"></span>
 												 			    </button>
 					     									 </span>
@@ -956,7 +998,7 @@ gap:20px;
 																	<s:select list="brokerlist" listKey="CUSTOMER_ID" listValue="NAME" name="broker" id="BrokerId" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{baseLayer==null  && "".equalsIgnoreCase(baseLayer) || "Y".equals(disableStatus1)?true:false}'  onchange="getPaypartner('paypartid');"/>
 																</s:else>
 																	<span class="input-group-addon">
-																		<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionview(2)">
+																		<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview(2)">
 														 			     	<span class="glyphicon glyphicon-list"></span>
 														 			    </button>
 								     								</span>
@@ -2044,7 +2086,9 @@ var a = 0;
 	if(a!=null && a!="" && b!=null && b!="") {
 		var adjRt=parseFloat(b)/100;
 		var c=parseFloat(a)*adjRt;
-		document.xol1.epi.value=Comma(c.toFixed(2));
+		var total=c.toFixed(2);
+		document.xol1.epi.value=Comma(total);
+		getRateOnline(total);
 	}else {
 		document.xol1.epi.value='';
 	}
@@ -2092,7 +2136,7 @@ function CalculateminimumrateEpi() {
 	}
 }
 
-function functionview(id){
+function functionBrokerview(id){
 	var cedding="";
 	if(id==1) {
 		cedding=document.getElementById("CeddingId").value;
@@ -2692,10 +2736,12 @@ function createcoverdeptCell1(cell, rowCount){
 	element = document.createElement("select");
          element.name = "coverdepartIdS["+(rowCount-2)+"]";
       	element.id = "coverdepartIdS["+(rowCount-2)+"]";
-       element.className = "inputBox";
+       element.className = "select1 inputBox ";
+      
       // element.setAttribute("onchange", "getCrestaIDAjax(this.value,'crestaid"+(rowCount-1)+"',"+(rowCount-1)+")");            
        populateCoverdept(element);
           cell.appendChild(element);
+          $('.select1').select2({ });
 }
 function populateCoverdept(objSelect){
 	var objOption = document.createElement("option");
@@ -3373,6 +3419,8 @@ function getReinsInfo(val){
 }
 getBouquest('<s:property value="bouquetModeYN"/>');
 function getBouquest(val){
+	var contmode='<s:property value="contractMode"/>';
+	if(contmode!='Y'){
 	if(val=="Y"){
     	document.getElementById('bouquetid').style.display = 'block';
     	$('.select1').select2({ });
@@ -3380,6 +3428,7 @@ function getBouquest(val){
    	else{
    	 	document.getElementById('bouquetid').style.display = 'none';
    	}
+	}
 }
 
 function getUnderwriterShare(val){
@@ -4115,7 +4164,7 @@ function Renewprocceed(){
     document.getElementById("renewalEditMode").value="Renewal";
     document.xol1.submit();
 }
-<s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN)'>	
+<s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN) && !"Y".equals(contractMode)'>	
 document.getElementById('bouquestid').style.display = 'block';
 document.getElementById('bouquetModeYNY').disabled=true;
 document.getElementById('bouquetModeYNN').disabled=true;
@@ -4125,6 +4174,10 @@ document.getElementById('bouquetpds1').style.display = 'none';
 if ($("#bouquetModeYNY").prop("checked")) {
 	document.getElementById('bouquetNo').disabled=true;
 }
+$('.select1').select2({ });
+</s:if>
+<s:if test='"Y".equals(contractMode)'>	
+document.getElementById('bouquestid').style.display = 'block';
 $('.select1').select2({ });
 </s:if>
 function getRateOnline(val1){
@@ -4140,11 +4193,15 @@ function getRateOnline(val1){
 	 total=parseInt(total)+parseInt(val);
 	 </s:iterator>
 	 val1=val1.replace(new RegExp(',', 'g'),'');
-	 var finalvalue=(parseFloat(total)/parseFloat(val1))*100;
-	 document.getElementById("rateOnLine").value=Comma(finalvalue.toFixed(2));	 
+	 var finalvalue=((parseFloat(val1)*100)/parseFloat(total));
+	 //alert(finalvalue);
+	 document.getElementById("rateOnLine").value=Comma(finalvalue.toFixed(4));	 
 	
 }
-
+function getCedentBroker(val){
+	var URL='${pageContext.request.contextPath}/getCedentBrokerRiskDetails.action?bouquetNo='+val+'&dropDown=cedentbroker';
+		postRequest(URL,'cedentbroker');
+}
 
 </script>		
 </body>

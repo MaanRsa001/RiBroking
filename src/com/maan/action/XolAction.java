@@ -241,6 +241,8 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 			 bean.setNoRetroCess("1");
 			 if("Y".equals(bean.getBouquetModeYN()) && StringUtils.isNotBlank(bean.getBouquetNo())) {
 					dropDownController.getBouquetCedentBrokerInfo(bean);
+					bean.setYearList(getYearList());
+					bean.setYearToList(getYearToList());
 				}
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");

@@ -267,6 +267,7 @@ gap:20px;
 											</div>
 											</s:if>
 									</s:if>
+									<s:if test='!"Y".equals(contractMode)'>
 									<div class="tablerow">
 										<div class="boxcontent">
 											<div class="panel panel-primary">
@@ -289,27 +290,43 @@ gap:20px;
 																<s:text name="label.bouquetMode" />
 															</div>
 															<div class="tbox">
-																<s:select list="bouquetList" listValue="Bouquet_NO" listKey="Bouquet_NO" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}" onchange="getCedentBroker(this.value);"/>
+																<s:select list="bouquetList" listValue="CODEDESC" listKey="CODE" name="bouquetNo" id="bouquetNo" cssClass="select1 inputBoxS" headerKey="" headerValue="---None---" disabled="%{bouquetModeYN!=null}" onchange="getCedentBroker(this.value);"/>
 															</div>
 														</div>
 														<div id="cedentbroker">
 														<s:if test="cedingCompanyName!=null && brokerName!=null">
 															<div class="textfield">
-																<div class="text">
-																	<s:text name="label.cedingCompany" />
+																	<div class="text">
+																		<s:text name="label.cedingCompany" />
+																	</div>
+																	<div class="tbox">
+																		<s:property value="cedingCompanyName"/>													
+																	</div>
+																</div>	
+																<div class="textfield">
+																	<div class="text">
+																		<s:text name="label.broker" />
+																	</div>
+																	<div class="tbox">
+																		<s:property value="brokerName"/>													
+																	</div>
 																</div>
-																<div class="tbox">
-																	<s:property value="cedingCompanyName"/>													
+																<div class="textfield">
+																	<div class="text">
+																		<s:text name="label.uwYearFrom" />
+																	</div>
+																	<div class="tbox">
+																		<s:property value="uwYear"/>													
+																	</div>
+																</div>	
+																<div class="textfield">
+																	<div class="text">
+																		<s:text name="label.uwYearto" />
+																	</div>
+																	<div class="tbox">
+																		<s:property value="uwYearTo"/>													
+																	</div>
 																</div>
-															</div>	
-															<div class="textfield">
-																<div class="text">
-																	<s:text name="label.broker" />
-																</div>
-																<div class="tbox">
-																	<s:property value="brokerName"/>													
-																</div>
-															</div>
 															</s:if>	
 														</div>
 														</div>
@@ -336,8 +353,14 @@ gap:20px;
 											<input type="button" value="Back" class="btn btn-sm btn-danger" onClick="destroyPopUps();FunctionEditCancel()" />
 										</div>
 									</div>
+									</s:if>
+									<s:else>
+									<s:hidden name="bouquetModeYN" id="bouquetModeYN"/>
+									<s:hidden name="bouquetNo" id="bouquetNo"/>
+									</s:else>
 									<div id="bouquestid" style="display:none">
 									<s:if test='"Y".equals(bouquetModeYN)'>
+									<s:if test='!"Y".equals(contractMode)'>
 										<div class="boxcontent" >
 											<div class="panel panel-primary">											
 												<div class="panel-heading">
@@ -420,6 +443,7 @@ gap:20px;
 												</div>
 											</div>
 											</div>
+											</s:if>
 										</s:if>
 									<div class="tablerow">
 										<div class="boxcontent">
@@ -1750,7 +1774,9 @@ gap:20px;
 													</div>
 												</div>
 											</div>
-								<div id="companyModal" class="modal fade" role="dialog">
+									
+							</div>	
+							<div id="companyModal" class="modal fade" role="dialog">
 								  <div class="modal-dialog modal-lg">
 								    <!-- Modal content-->
 								    <div class="modal-content">
@@ -1778,7 +1804,6 @@ gap:20px;
 								    </div>
 								  </div>
 							</div>	
-							</div>		
 							<div class="tablerow">
 										<div class="boxcontent" align="center">
 											<%-- <s:if test='amend_Id_Mode ==null ||"".equals(amend_Id_Mode) '> --%>
@@ -2364,7 +2389,6 @@ function functionBrokerview(id){
 	var cedding="";
 	if(id==1) {
 		cedding=document.getElementById("CeddingId").value;
-		alert("1s"+id);
 	}
 	else {
 		cedding=document.getElementById("BrokerId").value;
@@ -2971,6 +2995,8 @@ function functionEDate()
 }
 getBouquest('<s:property value="bouquetModeYN"/>');
 function getBouquest(val){
+	var contmode='<s:property value="contractMode"/>';
+	if(contmode!='Y'){
 	if(val=="Y"){
     	document.getElementById('bouquetid').style.display = 'block';
     	$('.select1').select2({ });
@@ -2978,6 +3004,7 @@ function getBouquest(val){
    	else{
    	 	document.getElementById('bouquetid').style.display = 'none';
    	}
+	}
 }
 getRiskInfo('<s:property value="riskdetailYN"/>');
 function getRiskInfo(val){
@@ -3564,7 +3591,7 @@ function Renewprocceed(){
     document.getElementById("renewalEditMode").value="Renewal";
     document.proportional.submit();
 }
-<s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN)'>	
+<s:if test='bouquetModeYN!=null && !"".equals(bouquetModeYN) && !"Y".equals(contractMode)'>	
 document.getElementById('bouquestid').style.display = 'block';
 document.getElementById('bouquetModeYNY').disabled=true;
 document.getElementById('bouquetModeYNN').disabled=true;
@@ -3576,7 +3603,10 @@ if ($("#bouquetModeYNY").prop("checked")) {
 }
 $('.select1').select2({ });
 </s:if>
-
+<s:if test='"Y".equals(contractMode)'>	
+document.getElementById('bouquestid').style.display = 'block';
+$('.select1').select2({ });
+</s:if>
 function getMethod(val){
 	if (val=='MA') {
          document.getElementById('methodida').style.display = 'block';

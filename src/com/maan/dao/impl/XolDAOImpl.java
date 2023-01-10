@@ -3405,7 +3405,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			if (resMap!=null) {
 				beanObj.setContractListVal(resMap.get("DATA_MAP_CONT_NO")==null?"":resMap.get("DATA_MAP_CONT_NO").toString());
 				beanObj.setProposal_no(resMap.get("RSK_PROPOSAL_NUMBER")==null?"":resMap.get("RSK_PROPOSAL_NUMBER").toString());
-				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
+				//beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
 				beanObj.setEndorsmentno(resMap.get("RSK_ENDORSEMENT_NO")==null?"":resMap.get("RSK_ENDORSEMENT_NO").toString());
 				beanObj.setContNo(resMap.get("RSK_CONTRACT_NO")==null?"":resMap.get("RSK_CONTRACT_NO").toString());
 				beanObj.setLayerNo(resMap.get("RSK_LAYER_NO")==null?"":resMap.get("RSK_LAYER_NO").toString());
@@ -3425,6 +3425,7 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 				beanObj.setOfferNo(resMap.get("OFFER_NO")==null?"":resMap.get("OFFER_NO").toString());
 				beanObj.setUnderwriter(resMap.get("RSK_UNDERWRITTER")==null?"":resMap.get("RSK_UNDERWRITTER").toString());
 				if(!"Layer".equalsIgnoreCase(beanObj.getProposalReference())){
+					if(StringUtils.isBlank(beanObj.getBaseLayer()))
 				beanObj.setBaseLayer(resMap.get("BASE_LAYER")==null?"":resMap.get("BASE_LAYER").toString());
 				}
 				beanObj.setIncepDate(resMap.get("RSK_INCEPTION_DATE")==null?"":resMap.get("RSK_INCEPTION_DATE").toString());
@@ -4890,13 +4891,23 @@ public class XolDAOImpl extends MyJdbcTemplate implements XolDAO {
 			if(StringUtils.isBlank(bean.getContNo())) {
 				query=getQuery("GET_LAYER_INFO");
 				obj= new Object[2];
-				obj[0]=bean.getProposal_no();
-				obj[1]=bean.getProposal_no();
+				if("Y".equals(bean.getContractMode())) {
+					obj[0]=bean.getBaseLayer();
+					obj[1]=bean.getBaseLayer();
+				}else {
+					obj[0]=bean.getProposal_no();
+					obj[1]=bean.getProposal_no();
+				}
 			}else {
 				query=getQuery("GET_LAYER_CONTRACT_INFO");
 				obj= new Object[2];
-				obj[0]=bean.getProposal_no();
-				obj[1]=bean.getProposal_no();
+				if("Y".equals(bean.getContractMode())) {
+					obj[0]=bean.getBaseLayer();
+					obj[1]=bean.getBaseLayer();
+				}else {
+					obj[0]=bean.getProposal_no();
+					obj[1]=bean.getProposal_no();
+				}
 			}
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));

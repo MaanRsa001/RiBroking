@@ -39,14 +39,68 @@ public class ClaimDAOImpl extends MyJdbcTemplate implements ClaimDAO {
 				if (!CollectionUtils.isEmpty(list)) {
 					for (int i = 0; i < list.size(); i++) {
 						Map<String, Object> contractDetails = (Map<String, Object>) list.get(i);
-						beanObj.setPolicy_Contract_No(contractDetails.get("PolicyContractNo") == null ? "": contractDetails.get("PolicyContractNo").toString());
-						beanObj.setDepartmentName(contractDetails.get("DepartmentName") == null ? "": contractDetails.get("DepartmentName").toString());
-						beanObj.setSigned_Share(contractDetails.get("SignedShare") == null ? "": contractDetails.get("SignedShare").toString());
-						beanObj.setFrom(contractDetails.get("From") == null ? "" : contractDetails.get("From").toString());
-						beanObj.setTo(contractDetails.get("To") == null ? "" : contractDetails.get("To").toString());
-						beanObj.setSumInsOSOC(contractDetails.get("SumInsOSOC") == null ? "": contractDetails.get("SumInsOSOC").toString());
-						beanObj.setSumInsOSDC(contractDetails.get("SumInsOSDC") == null ? "": contractDetails.get("SumInsOSDC").toString());
-						beanObj.setAcceptenceDate(contractDetails.get("AcceptenceDate") == null ? "": contractDetails.get("AcceptenceDate").toString());
+						
+						beanObj.setPolicy_Contract_No(contractDetails.get("PolicyContractNo")==null?"":contractDetails.get("PolicyContractNo").toString());
+						beanObj.setAmendId(contractDetails.get("AmendId")==null?"":contractDetails.get("AmendId").toString());
+						beanObj.setCeding_company_Name(contractDetails.get("CedingcompanyName")==null?"":contractDetails.get("CedingcompanyName").toString());
+						beanObj.setCeding_Company_Code(contractDetails.get("CedingCompanyCode")==null?"":contractDetails.get("CedingCompanyCode").toString());
+						beanObj.setProposal_No(contractDetails.get("ProposalNo")==null?"":contractDetails.get("ProposalNo").toString());
+						if(StringUtils.isBlank(beanObj.getDepartmentId()) || "0".equalsIgnoreCase(beanObj.getDepartmentId()) ){
+						beanObj.setDepartmentId(contractDetails.get("DepartmentId")==null?"":contractDetails.get("DepartmentId").toString());
+						beanObj.setDepartmentClass(contractDetails.get("DepartmentClass")==null?"":contractDetails.get("DepartmentClass").toString());
+						}
+						beanObj.setUwYear(contractDetails.get("UwYear")==null?"":contractDetails.get("UwYear").toString());
+						
+						if(StringUtils.isBlank(beanObj.getCurrecny())){
+						beanObj.setCurrecny(contractDetails.get("Currecny")==null?"":contractDetails.get("Currecny").toString());
+						}
+						//beanObj.setShareSigned(contractDetails.get("SHARE_SIGNED"))
+						if("1".equalsIgnoreCase(beanObj.getProductId())){
+							beanObj.setSigned_Share(contractDetails.get("SignedShare")==null?"":contractDetails.get("SignedShare").toString());
+							beanObj.setLimit_Our_share_USD(contractDetails.get("LimitOurshareUSD")==null?"":contractDetails.get("LimitOurshareUSD").toString());
+							beanObj.setSumInsOSOC(contractDetails.get("SumInsOSOC")==null?"":contractDetails.get("SumInsOSOC").toString());
+							beanObj.setSumInsOSDC(contractDetails.get("SumInsOSDC")==null?"":contractDetails.get("SumInsOSDC").toString());
+							beanObj.setDepartmentName(contractDetails.get("DepartmentName")==null?"":contractDetails.get("DepartmentName").toString());
+
+						}else
+						{
+							beanObj.setSigned_Share(contractDetails.get("SignedShare")==null?"":contractDetails.get("SignedShare").toString());
+							beanObj.setLimit_Orig_Curr(contractDetails.get("LimitOrigCurr")==null?"":contractDetails.get("LimitOrigCurr").toString());
+							beanObj.setLimit_Our_share_USD(contractDetails.get("LimitOurshareUSD")==null?"":contractDetails.get("LimitOurshareUSD").toString());
+							beanObj.setSumInsOSOC(contractDetails.get("SumInsOSOC")==null?"":contractDetails.get("SumInsOSOC").toString());
+							beanObj.setSumInsOSDC(contractDetails.get("SumInsOSDC")==null?"":contractDetails.get("SumInsOSDC").toString());
+							beanObj.setDepartmentName(contractDetails.get("DepartmentName")==null?"":contractDetails.get("DepartmentName").toString());
+						}
+						beanObj.setSubProfitCenter(contractDetails.get("SubProfitCenter")==null?"":contractDetails.get("SubProfitCenter").toString());
+						beanObj.setRetention(contractDetails.get("Retention")==null?"":contractDetails.get("Retention").toString());
+						beanObj.setFrom(contractDetails.get("From")==null?"":contractDetails.get("From").toString());
+						beanObj.setTo(contractDetails.get("To")==null?"":contractDetails.get("To").toString());
+						beanObj.setTreaty_Name(contractDetails.get("TreatyName")==null?"":contractDetails.get("TreatyName").toString());
+						beanObj.setBroker_code(contractDetails.get("Brokercode")==null?"":contractDetails.get("Brokercode").toString());
+						beanObj.setBroker_Name(contractDetails.get("BrokerName")==null?"":contractDetails.get("BrokerName").toString());
+						beanObj.setClaimdepartId(contractDetails.get("ClaimdepartId")==null?"":contractDetails.get("ClaimdepartId").toString());
+						beanObj.setConsubProfitId(contractDetails.get("ConsubProfitId")==null?"":contractDetails.get("ConsubProfitId").toString());
+						if(StringUtils.isBlank(beanObj.getInsuredName())){
+						beanObj.setInsuredName(contractDetails.get("InsuredName")==null?"":contractDetails.get("InsuredName").toString());
+						}
+						beanObj.setProposalType(contractDetails.get("ProposalType")==null?"":contractDetails.get("ProposalType").toString());
+						beanObj.setBasis(contractDetails.get("Basis")==null?"":contractDetails.get("Basis").toString());
+						
+						if("3".equalsIgnoreCase(beanObj.getProductId()))
+						{
+							beanObj.setNature_of_Coverage(contractDetails.get("NatureofCoverage")==null?"":contractDetails.get("NatureofCoverage").toString());
+							beanObj.setReinstatementPremium(contractDetails.get("ReinstatementPremium")==null?"":contractDetails.get("ReinstatementPremium").toString());
+							/*if(!"Y".equalsIgnoreCase(beanObj.getReinstatementPremium())){
+								beanObj.setReinstType("NA");
+								beanObj.setReinstPremiumOCOS("0");
+							}*/
+						}
+						if("2".equalsIgnoreCase(beanObj.getProductId()))
+						{
+							beanObj.setNature_of_Coverage(contractDetails.get("NatureofCoverage")==null?"":contractDetails.get("NatureofCoverage").toString());
+							beanObj.setCashLossOSOC(contractDetails.get("CashLossOSOC")==null?"0":contractDetails.get("CashLossOSOC").toString());
+							beanObj.setCashLossOSDC(contractDetails.get("CashLossOSDC")==null?"0":contractDetails.get("CashLossOSDC").toString());
+						}
 					}
 				}
 			} else if (mode == 4) {
@@ -507,154 +561,14 @@ public class ClaimDAOImpl extends MyJdbcTemplate implements ClaimDAO {
 		Object[] args = null;
 		try {
 			if (mode == 2) {
-				apiclaim.insertCliamDetails(beanObj);
+				insertFlag=apiclaim.insertCliamDetails(beanObj);
 			}
 			if (mode == 3) {
-				apiclaim.insertCliamDetailsmode3(beanObj);
+				insertFlag=apiclaim.insertCliamDetailsmode3(beanObj);
 			}
-
-			/*
-			 * //LOGGER.info("Edit Insert ClaimPayment Mode"); boolean checking = true;
-			 * //beanObj.setExc_Rate(getExcRateForCliam(beanObj.getClaim_No(),beanObj.
-			 * getPolicy_Contract_No()));
-			 * if("new".equalsIgnoreCase(beanObj.getPaymentFlag())){
-			 * checking=Mode_Validation(beanObj.getPayment_Request_No(),beanObj.getClaim_No(
-			 * )); } if(checking) { if("new".equalsIgnoreCase(beanObj.getPaymentFlag())){
-			 * //if("06".equalsIgnoreCase(beanObj.getBranchCode())){
-			 * beanObj.setClaimPaymentNo(new
-			 * DropDownControllor().getSequence("ClaimPayment",beanObj.getProductId(),
-			 * beanObj.getDepartmentId(), beanObj.getBranchCode(),"",beanObj.getDate()));
-			 * //}else //beanObj.setClaimPaymentNo(new
-			 * DropDownControllor().getPolicyNo("5","0",beanObj.getBranchCode()));
-			 * args=CliamDetailsAruguments(beanObj,mode);
-			 * 
-			 * args[0]=GetSl_no(beanObj.getClaim_No(),beanObj.getPolicy_Contract_No(),
-			 * "TTRN_CLAIM_PAYMENT"); query=getQuery(DBConstants.CLAIM_SELECT_MAXRESVID);
-			 * LOGGER.info("Query=>"+query);
-			 * LOGGER.info("Arg[0]====>"+beanObj.getClaim_No());
-			 * LOGGER.info("Arg[1]====>"+beanObj.getPolicy_Contract_No());
-			 * args[16]=(String)this.mytemplate.queryForObject(query,new
-			 * Object[]{beanObj.getClaim_No(),beanObj.getPolicy_Contract_No()},String.class)
-			 * ; query=getQuery(DBConstants.CLAIM_INSERT_PAYMENT);
-			 * LOGGER.info("Insert Query====>"+query); int i=0; for(Object o:args){
-			 * LOGGER.info("Arg["+i+"]====>"+o); i++; } this.mytemplate.update(query,args);
-			 * }else{ LOGGER.info("Edit Update ClaimPayment Mode");
-			 * query=getQuery("CLAIN_ARCH_INSERT"); Object arg[]=new Object[8]; arg[0]
-			 * =beanObj.getContarctno(); arg[1] = beanObj.getClaim_No(); arg[2] =
-			 * beanObj.getLayerNo(); arg[3] = beanObj.getClaimPaymentNo(); arg[4]
-			 * =beanObj.getContarctno(); arg[5] = beanObj.getClaim_No(); arg[6] =
-			 * beanObj.getLayerNo(); arg[7] = beanObj.getClaimPaymentNo();
-			 * this.mytemplate.update(query,arg);
-			 * 
-			 * query=getQuery("CLAIM_UPDATE_PAYMENT"); arg=new Object[22];
-			 * arg[0]=beanObj.getDate(); arg[1] =beanObj.getPayment_Reference(); arg[2] =
-			 * beanObj.getPayment_Request_No(); arg[3] = beanObj.getPaid_claim_os();
-			 * arg[4]=DropDownControllor.GetDesginationCountry(beanObj.getPaid_claim_os(),
-			 * beanObj.getExc_Rate()); arg[5]=beanObj.getSurveyor_fee_os();
-			 * arg[6]=DropDownControllor.GetDesginationCountry(beanObj.getSurveyor_fee_os(),
-			 * beanObj.getExc_Rate()); arg[7]=beanObj.getOther_prof_fee_os();
-			 * arg[8]=DropDownControllor.GetDesginationCountry(beanObj.getOther_prof_fee_os(
-			 * ),beanObj.getExc_Rate()); arg[9]=beanObj.getBranchCode();
-			 * arg[10]=beanObj.getLoginId(); arg[11]=beanObj.getPaid_Amount_Orig_curr();
-			 * arg[12]=DropDownControllor.GetDesginationCountry(beanObj.
-			 * getPaid_Amount_Orig_curr(),beanObj.getExc_Rate()); arg[13]
-			 * =beanObj.getRemarks(); if("3".equalsIgnoreCase(beanObj.getProductId())){
-			 * arg[14]=beanObj.getReinstType(); arg[15]=beanObj.getReinstPremiumOCOS();
-			 * arg[16]=DropDownControllor.GetDesginationCountry(beanObj.getReinstPremiumOCOS
-			 * (),beanObj.getExc_Rate()); }else{ arg[14]=""; arg[15]=""; arg[16]=""; }
-			 * arg[17]=beanObj.getPaymentType(); arg[18] =beanObj.getContarctno(); arg[19] =
-			 * beanObj.getClaim_No(); arg[20] = beanObj.getLayerNo(); arg[21] =
-			 * beanObj.getClaimPaymentNo(); this.mytemplate.update(query,arg);
-			 * 
-			 * } args = new String[1];
-			 * LOGGER.info("-----Paid Amount Updated By Cliam Details----");
-			 * query=getQuery(DBConstants.CLAIM_SELECT_SUMPAIDAMT);
-			 * LOGGER.info("Select Query====>"+query);
-			 * LOGGER.info("Arg[0]====>"+beanObj.getClaim_No());
-			 * LOGGER.info("Arg[1]====>"+beanObj.getPolicy_Contract_No());
-			 * args[0]=(String)this.mytemplate.queryForObject(query,new
-			 * Object[]{beanObj.getClaim_No(),beanObj.getPolicy_Contract_No()},String.class)
-			 * ; query=getQuery(DBConstants.CLAIM_UPDATE_TOTALAMTPAIDTILLDATE);
-			 * LOGGER.info("Update Query====>"+query); LOGGER.info("Arg[0]====>"+args[0]);
-			 * LOGGER.info("Arg[1]====>"+beanObj.getClaim_No());
-			 * LOGGER.info("Arg[2]====>"+beanObj.getPolicy_Contract_No());
-			 * this.mytemplate.update(query,new
-			 * Object[]{args[0],beanObj.getClaim_No(),beanObj.getPolicy_Contract_No()});
-			 * 
-			 * query=getQuery(DBConstants.CLAIM_UPDATE_EXCHANGE_RATE);
-			 * LOGGER.info("Update Query====>"+query);
-			 * LOGGER.info("Arg[0]====>"+beanObj.getCurrecny());
-			 * LOGGER.info("Arg[1]====>"+beanObj.getBranchCode());
-			 * LOGGER.info("Arg[0]====>"+beanObj.getClaimPaymentNo());
-			 * this.mytemplate.update(query,new
-			 * Object[]{beanObj.getCurrecny(),beanObj.getBranchCode(),beanObj.
-			 * getClaimPaymentNo()}); beanObj.setRi_Recovery((String) this.mytemplate.
-			 * queryForObject("select RI_RECOVERY from TTRN_CLAIM_DETAILS where CLAIM_NO=? and CONTRACT_NO=?"
-			 * ,new Object[]{beanObj.getClaim_No(),beanObj.getContarctno()},String.class));
-			 * //if("Yes".equalsIgnoreCase(beanObj.getRi_Recovery())){
-			 * query=getQuery(DBConstants.PREMIUM_SP_RETROSPLIT);
-			 * LOGGER.info("SP Name==>"+query); args = new String[16];
-			 * args[0]=beanObj.getContarctno();
-			 * args[1]=StringUtils.isEmpty(beanObj.getLayerNo())?"0":beanObj.getLayerNo();
-			 * args[2]=beanObj.getProductId(); args[3]=beanObj.getClaimPaymentNo();
-			 * args[4]=beanObj.getDate(); args[5]=beanObj.getCurrecny();
-			 * args[6]=beanObj.getExc_Rate(); args[7]=beanObj.getBranchCode(); args[8]="C";
-			 * args[9]=""; args[10]=""; args[11]=""; args[12]=""; args[13]=""; args[14]="";
-			 * args[15]=beanObj.getRi_Recovery();
-			 * LOGGER.info("Args==>"+StringUtils.join(args,",")); int
-			 * spresult=this.mytemplate.update(query,args);
-			 * LOGGER.info("SP Result==>"+spresult); //} insertFlag = true; } else {
-			 * insertFlag = false; } }
-			 */
-
 			if (mode == 8) {
-				apiclaim.insertCliamDetailsmode8(beanObj);
+				insertFlag=apiclaim.insertCliamDetailsmode8(beanObj);
 			}
-		
-				/*if ("Yes".equalsIgnoreCase(beanObj.getReverseClaimYN())) {
-					LOGGER.info("|| Insert Cliam Reserve ||");
-					beanObj.setExc_Rate(getExcRateForCliam(beanObj.getClaim_No(), beanObj.getPolicy_Contract_No()));
-					args = CliamDetailsAruguments(beanObj, mode);
-					args[0] = GetSl_no(beanObj.getClaim_No(), beanObj.getPolicy_Contract_No(), "TTRN_CLAIM_UPDATION");
-					query = getQuery(DBConstants.CLAIM_INSERT_GETUPDATIONQUERY);
-					LOGGER.info("Insert Query====>" + query);
-					int i = 0;
-					for (Object o : args) {
-						LOGGER.info("Arg[" + i + "]====>" + o);
-						i++;
-					}
-					this.mytemplate.update(query, args);
-				} else {
-					beanObj.setExc_Rate(getExcRateForCliam(beanObj.getClaim_No(), beanObj.getPolicy_Contract_No()));
-					args = CliamDetailsAruguments(beanObj, 12);
-					args[4] = "Inserted at the time of Claim Closure";
-					args[5] = beanObj.getClaim_closed_Date();
-					args[30] = beanObj.getClaim_closed_Date();
-					args[0] = GetSl_no(beanObj.getClaim_No(), beanObj.getPolicy_Contract_No(), "TTRN_CLAIM_UPDATION");
-					query = getQuery(DBConstants.CLAIM_INSERT_GETUPDATIONQUERY);
-					LOGGER.info("Insert Query====>" + query);
-					int i = 0;
-					for (Object o : args) {
-						LOGGER.info("Arg[" + i + "]====>" + o);
-						i++;
-					}
-					this.mytemplate.update(query, args);
-
-					LOGGER.info("|| Close Cliam ||");
-					query = getQuery(DBConstants.CLAIM_UPDATE_CLOSECLAIM);
-					LOGGER.info("Update Query=>" + query);
-					LOGGER.info("Args[0]=>" + "Closed" + "Args[1]=>" + beanObj.getPolicy_Contract_No() + "Args[2]=>"
-							+ beanObj.getClaim_No());
-					int result = this.mytemplate.update(query, new Object[] { "Closed", beanObj.getClaim_closed_Date(),
-							beanObj.getPolicy_Contract_No(), beanObj.getClaim_No() });
-					LOGGER.info("Update Result=>" + result);
-				}
-				beanObj.setRi_Recovery((String) this.mytemplate.queryForObject(
-						"select RI_RECOVERY from TTRN_CLAIM_DETAILS where CLAIM_NO=? and CONTRACT_NO=?",
-						new Object[] { beanObj.getClaim_No(), beanObj.getContarctno() }, String.class));
-
-			}*/
-
 			if (mode == 9) {
 				args = CliamDetailsAruguments(beanObj, mode);
 				query = getQuery(DBConstants.CLAIM_UPDATE_TTRNCLAIMDETAILSRDANDRDB);
@@ -683,37 +597,8 @@ public class ClaimDAOImpl extends MyJdbcTemplate implements ClaimDAO {
 			}
 			if (mode == 12) {
 				
-				apiclaim.insertCliamDetailsmode12(beanObj);
+				insertFlag=apiclaim.insertCliamDetailsmode12(beanObj);
 			}
-
-				/*LOGGER.info("|| Insert Cliam Reserve ||");
-				beanObj.setExc_Rate(getExcRateForCliam(beanObj.getClaim_No(), beanObj.getPolicy_Contract_No()));
-				args = CliamDetailsAruguments(beanObj, mode);
-				if (beanObj.getPaymentType().equals("Final")) {
-					args[4] = "Inserted at the time of Claim Closure";
-				}
-				args[5] = beanObj.getDate();
-				args[30] = beanObj.getDate();
-				args[0] = GetSl_no(beanObj.getClaim_No(), beanObj.getPolicy_Contract_No(), "TTRN_CLAIM_UPDATION");
-				query = getQuery(DBConstants.CLAIM_INSERT_GETUPDATIONQUERY);
-				LOGGER.info("Insert Query====>" + query);
-				int i = 0;
-				for (Object o : args) {
-					LOGGER.info("Arg[" + i + "]====>" + o);
-					i++;
-				}
-				this.mytemplate.update(query, args);
-
-				// LOGGER.info("|| Close Cliam ||");
-				query = getQuery(DBConstants.CLAIM_UPDATE_CLOSECLAIM);
-				LOGGER.info("Update Query=>" + query);
-				LOGGER.info("Args[0]=>" + "Closed" + "Args[1]=>" + beanObj.getPolicy_Contract_No() + "Args[2]=>"
-						+ beanObj.getClaim_No());
-				int result = this.mytemplate.update(query, new Object[] { "Closed", beanObj.getDate(),
-						beanObj.getPolicy_Contract_No(), beanObj.getClaim_No() });
-				LOGGER.info("Update Result=>" + result);
-
-			}*/
 			LOGGER.info("CliamBusinessImpl insertCliamDetails || Exit");
 		} catch (Exception exe) {
 			LOGGER.debug("Exception " + exe);

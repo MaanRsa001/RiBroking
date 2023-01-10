@@ -809,8 +809,8 @@ $('#input'+id).keyup(function() {
  }
  
  function funEditMode(proposalno,ceddingcompanyid,productId,baseLayer,baseContract,deptId) {
-     //document.getElementById("proposal_no").value=proposalno;
-     document.getElementById("proposal_no").value=baseLayer;
+     document.getElementById("proposal_no").value=proposalno;
+     //document.getElementById("proposal_no").value=baseLayer;
      document.getElementById("CustomerId").value=ceddingcompanyid;
      document.getElementById("baseLayer").value=baseLayer;
      document.getElementById("mode").value='edit';

@@ -2764,10 +2764,24 @@ alert("This action is not allowed because a previous transaction is pending for 
 			<s:textfield name="reinsSNo[%{#stat.count-1}]" id="reinsSNo[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/>
 		</td>
 		<td>
-			<s:select list="reinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}' theme="simple"/>
+			<div class="input-group"> 
+				<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}' theme="simple"/>
+				<span class="input-group-addon">
+				<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview('1','<s:property value='%{#stat.count-1}'/>');">
+ 			     	<span class="glyphicon glyphicon-list"></span>
+ 			    </button>
+				</span>
+			</div>
 		</td>
 		<td>
-			<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}' theme="simple"/>
+			<div class="input-group"> 
+				<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}' theme="simple"/>
+				<span class="input-group-addon">
+				<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview('2','<s:property value='%{#stat.count-1}'/>');" >
+ 			     	<span class="glyphicon glyphicon-list"></span>
+ 			    </button>
+				</span>
+			</div>
 		</td>
 		<td>
 			<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="checkDecimals10(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"List".equals(status)}' theme="simple"/>
@@ -2811,6 +2825,22 @@ alert("This action is not allowed because a previous transaction is pending for 
 	</div>
 	<div class="tbox">
 		<s:property value="brokerName"/>													
+	</div>
+</div>
+<div class="textfield">
+	<div class="text">
+		<s:text name="label.uwYearFrom" />
+	</div>
+	<div class="tbox">
+		<s:property value="uwYear"/>													
+	</div>
+</div>	
+<div class="textfield">
+	<div class="text">
+		<s:text name="label.uwYearto" />
+	</div>
+	<div class="tbox">
+		<s:property value="uwYearTo"/>													
 	</div>
 </div>
 </s:elseif>		

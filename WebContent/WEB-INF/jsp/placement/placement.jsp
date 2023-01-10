@@ -349,10 +349,24 @@
 																		<s:hidden name="proposalNos[%{#stat.count-1}]" id="proposalNos[%{#stat.count-1}]"></s:hidden>
 																	</td>
 																	<td>
+																	<div class="input-group"> 
 																		<s:select list="#ereinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsureName[%{#stat.count-1}]" id="reinsureName[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
+																		<span class="input-group-addon">
+																		<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview('1','<s:property value='%{#stat.count-1}'/>');">
+														 			     	<span class="glyphicon glyphicon-list"></span>
+														 			    </button>
+								     								</span>
+								     								</div>
 																	</td>
 																	<td>
+																	<div class="input-group"> 
 																		<s:select list="#ebrokerList" listKey="CUSTOMER_ID" listValue="NAME" name="placingBroker[%{#stat.count-1}]" id="placingBroker[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
+																		<span class="input-group-addon">
+																		<button type="button" name="companyBtn" id="companyBtn" data-toggle="modal" data-target="#companyModal" onclick="functionBrokerview('2','<s:property value='%{#stat.count-1}'/>');" >
+														 			     	<span class="glyphicon glyphicon-list"></span>
+														 			    </button>
+								     								</span>
+								     								</div>
 																	</td>
 																	<td>
 																		<s:textfield name="shareOffer[%{#stat.count-1}]" id="shareOffer[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"    onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" onchange="decimal(this.id,this.value);" disabled='%{"List".equals(status)}'/>
@@ -382,7 +396,20 @@
 															</div>
 															</s:if>
 															</div>
-															
+															<div id="companyModal" class="modal fade" role="dialog">
+															  <div class="modal-dialog modal-lg">
+															    <!-- Modal content-->
+															    <div class="modal-content">
+															      <div class="modal-header">
+															        <button type="button" class="close" data-dismiss="modal">&times;</button>
+															      </div>
+															      <div class="modal-body" >
+															        <div class="container-fluid" id="companyAjaxId">
+															        </div>
+															      </div>
+															    </div>
+															  </div>
+															</div>
 														</div>
 												</div> 
 											</div>
@@ -878,6 +905,17 @@ function hundredCheck(id,val){
 	else if(val=='-'){
 		document.getElementById(id).value='';
 	}
+}
+function functionBrokerview(id,val){
+	var cedding="";
+	if(id==1) {
+		cedding=document.getElementById("reinsureName["+val+"]").value;
+	}
+	else {
+		cedding=document.getElementById("placingBroker["+val+"]").value;
+	}
+	var URL ='<%=request.getContextPath()%>/ViewModeCeding?Mode=PopUp&ceddingcompany='+cedding;
+	postRequest(URL, 'companyAjaxId');		 
 }
 </script>	
 	

@@ -98,13 +98,13 @@ public class ApiForClaim extends ApiConfig implements Callable<Object>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void insertCliamDetails(ClaimBean beanObj) {
+	public boolean insertCliamDetails(ClaimBean beanObj) {
 			JSONObject hp = new JSONObject();
 			JSONObject json = null;
 			JSONParser parser = new JSONParser();
 			JSONArray array=new JSONArray();
 			String result="";
-			
+			boolean res=false;
 			try {
 				String link=getValueFromWebservice("maan.client.claim.Details");
 				authorization= getValueFromWebservice("marine.insurance.auth");
@@ -172,11 +172,16 @@ public class ApiForClaim extends ApiConfig implements Callable<Object>{
 				if(responseStr!=null && responseStr.length()>0) {
 					json = (JSONObject) parser.parse(responseStr);
 					result =  (String) json.get("Success");
-					beanObj.setClaim_No((String) json.get("Result"));
+					if("Success".equals(result)) {
+						res=true;
+						beanObj.setClaim_No((String) json.get("Result"));
+					}
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			return res;
 		}
 	
 	@SuppressWarnings("unchecked")
@@ -423,7 +428,8 @@ public class ApiForClaim extends ApiConfig implements Callable<Object>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void insertCliamDetailsmode3(ClaimBean beanObj) {
+	public boolean insertCliamDetailsmode3(ClaimBean beanObj) {
+		boolean res=false;
 		JSONObject hp = new JSONObject();
 		JSONObject json = null;
 		JSONParser parser = new JSONParser();
@@ -466,21 +472,25 @@ public class ApiForClaim extends ApiConfig implements Callable<Object>{
 			String responseStr=callAPIPost(link, authorization, hp.toString().replaceAll("\"\"", "null"));
 			if(responseStr!=null && responseStr.length()>0) {
 				json = (JSONObject) parser.parse(responseStr);
-				result =  (String) json.get("Success");
+				result =  (String) json.get("Message");
+				if("Success".equals(result)) {
+					res=true;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return res;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void insertCliamDetailsmode12(ClaimBean beanObj) {
+	public boolean insertCliamDetailsmode12(ClaimBean beanObj) {
 		JSONObject hp = new JSONObject();
 		JSONObject json = null;
 		JSONParser parser = new JSONParser();
 		JSONArray array=new JSONArray();
 		String result="";
-		
+		boolean res=false;
 		try {
 			String link=getValueFromWebservice("maan.client.claim.Details.Mode12");
 			authorization= getValueFromWebservice("marine.insurance.auth");
@@ -517,20 +527,24 @@ public class ApiForClaim extends ApiConfig implements Callable<Object>{
 			if(responseStr!=null && responseStr.length()>0) {
 				json = (JSONObject) parser.parse(responseStr);
 				result =  (String) json.get("Success");
+				if("Success".equals(result)) {
+					res=true;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return res;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void insertCliamDetailsmode8(ClaimBean beanObj) {
+	public boolean insertCliamDetailsmode8(ClaimBean beanObj) {
 		JSONObject hp = new JSONObject();
 		JSONObject json = null;
 		JSONParser parser = new JSONParser();
 		JSONArray array=new JSONArray();
 		String result="";
-		
+		boolean res=false;
 		try {
 			String link=getValueFromWebservice("maan.client.claim.Details.Mode8");
 			authorization= getValueFromWebservice("marine.insurance.auth");
@@ -568,10 +582,14 @@ public class ApiForClaim extends ApiConfig implements Callable<Object>{
 			if(responseStr!=null && responseStr.length()>0) {
 				json = (JSONObject) parser.parse(responseStr);
 				result =  (String) json.get("Success");
+				if("Success".equals(result)) {
+					res=true;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return res;
 	}
 	
 }

@@ -181,6 +181,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 	    	return dropDownController.getDocType(branchCode,pid,"RDS");
 	    }
 	 public String getCedentBroker(){
+		 bean.setBranchCode(branchCode);
 		 if(StringUtils.isNotBlank(bean.getBouquetNo())) {
 				dropDownController.getBouquetCedentBrokerInfo(bean);
 		 }

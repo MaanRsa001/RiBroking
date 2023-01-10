@@ -42,17 +42,17 @@
 								<s:hidden name="baseproposalNos[%{#stat.count-1}]" id="baseproposalNos[%{#stat.count-1}]"></s:hidden>
 							</td>
 							<td>
-								<s:select list="reinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsurerIds[%{#stat.count-1}]" id="reinsurerIds[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
+								<s:select list="reinsurerList" listKey="CUSTOMER_ID" listValue="NAME" name="reinsurerIds[%{#stat.count-1}]" id="reinsurerIds[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="true"/>
 							</td>
 							<td>
-								<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="brokerIds[%{#stat.count-1}]" id="brokerIds[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"N".equals(changeStatus[#stat.count-1])}'/>
+								<s:select list="brokerList" listKey="CUSTOMER_ID" listValue="NAME" name="brokerIds[%{#stat.count-1}]" id="brokerIds[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="true"/>
 							</td>
 							<td>
-								<s:select list="statusList" listKey="STATUS_CODE" listValue="STATUS_NAME" name="currentStatus[%{#stat.count-1}]" id="currentStatus[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="true"/>
+								<s:select list="statusList" listKey="STATUS_CODE" listValue="STATUS_NAME" name="currentStatus[%{#stat.count-1}]" id="currentStatus[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"CSL".equals(currentStatus[#stat.count-1])}'/>
 							</td>
 							<td>
 								<%-- <s:select list="subStatusList" listKey="SUB_STATUS_CODE" listValue="SUB_STATUS_NAME" name="newStatus" id="newStatus" cssClass="inputBoxS" headerKey="" headerValue="---Select---"/> --%>
-								<s:select list="statusList" listKey="STATUS_CODE" listValue="STATUS_NAME" name="newStatus[%{#stat.count-1}]" id="newStatus[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled="true"/>
+								<s:select list="statusList" listKey="STATUS_CODE" listValue="STATUS_NAME" name="newStatus[%{#stat.count-1}]" id="newStatus[%{#stat.count-1}]" cssClass="select1 inputBoxS" headerKey="" headerValue="---Select---"  disabled='%{"CSL".equals(currentStatus[#stat.count-1])}'/>
 							</td>
 							<td>
 								<s:textfield name="shareOffered[%{#stat.count-1}]" id="shareOffered[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>
@@ -67,7 +67,7 @@
 								<s:textfield name="proposedSL[%{#stat.count-1}]" id="proposedSL[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>
 							</td>
 							<td>
-								<s:textfield name="signedLine[%{#stat.count-1}]" id="signedLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>
+								<s:textfield name="signedLine[%{#stat.count-1}]" id="signedLine[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);"  disabled='%{"CSL".equals(currentStatus[#stat.count-1])}'/>
 							</td>
 							<td>
 								<s:textfield name="brokerages[%{#stat.count-1}]" id="brokerages[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;" onkeyup="allow8DigitDecValues(this);middleMinusRestrictionNeg(this);negative(this.id,this.value);allowOneDot(this);hundredCheck(this.id,this.value);" disabled="true"/>

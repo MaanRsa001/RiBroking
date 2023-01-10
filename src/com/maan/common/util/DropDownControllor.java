@@ -3483,7 +3483,7 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 			query= getQuery("GET_BOUQUET_CEDENT_BROKER");
 			logger.info("Select Query=>"+query);
 			logger.info("Args[0]=>"+bean.getBouquetNo());
-			list=this.mytemplate.queryForList(query,new Object[]{bean.getBouquetNo()});
+			list=this.mytemplate.queryForList(query,new Object[]{bean.getBouquetNo(),bean.getBranchCode()});
 			logger.info("Result=>"+list.size());
 			if(list!=null && list.size()>0){
 				bean.setCedingCo(list.get(0).get("CEDING_COMPANY_ID")==null?"":list.get(0).get("CEDING_COMPANY_ID").toString());
@@ -3628,8 +3628,9 @@ public List<Map<String, Object>> getbroGroupList(CedingMasterBean bean) {
 					proposedWL.add(map.get("SHARE_PROPOSAL_WRITTEN")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSAL_WRITTEN").toString()));
 					signedLine.add(map.get("SHARE_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_SIGNED").toString()));
 					proposedSL.add(map.get("SHARE_PROPOSED_SIGNED")==null?"":DropDownControllor.formattereight(map.get("SHARE_PROPOSED_SIGNED").toString()));
-					currentStatus.add(map.get("CURRENT_STATUS")==null?"":map.get("CURRENT_STATUS").toString());
-					newStatus.add(map.get("NEW_STATUS")==null?"":map.get("NEW_STATUS").toString());
+					//currentStatus.add(map.get("CURRENT_STATUS")==null?"":map.get("CURRENT_STATUS").toString());
+					currentStatus.add(map.get("NEW_STATUS")==null?"O":map.get("NEW_STATUS").toString());
+					//newStatus.add(map.get("NEW_STATUS")==null?"":map.get("NEW_STATUS").toString());
 					statusNo.add(map.get("STATUS_NO")==null?"":map.get("STATUS_NO").toString());
 					
 				}
