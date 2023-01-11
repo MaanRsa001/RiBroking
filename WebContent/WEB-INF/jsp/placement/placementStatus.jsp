@@ -99,7 +99,7 @@
 																<s:text name="label.updateDate" />
 															</div> 
 															<div class="tbox">
-																<s:textfield name="updateDate" id="updateDate" cssClass="inputBox" />												
+																<s:textfield name="updateDate" id="updateDate" cssClass="inputBox" onchange="validatedate(this.id,this.value);"/>												
 															</div>
 														</div>
 														<div class="textfield">
@@ -240,7 +240,7 @@
 							
 								<input type="button"  value="Back"  class="btn btn-sm btn-danger"  onclick="FnBack()" />
 								<input type="button"  value="Submit"  class="btn btn-sm btn-success"  onclick="disableForm(this.form,false,'');FnSumbit()" />
-								<div id="emailid" style="display:none"><input type="button"  value="Send Mail & Update"  class="btn btn-sm btn-primary"  onclick="disableForm(this.form,false,'');FnEmailSumbit()" /></div>											
+								<div id="emailid" style="display:none"><input type="button"  value="Update & Send Mail"  class="btn btn-sm btn-primary"  onclick="disableForm(this.form,false,'');FnEmailSumbit()" /></div>											
 							</div>
 						</div>	
 						
@@ -283,7 +283,7 @@ function FnEmailSumbit(){
 	document.placement.submit();
 }
 
-<s:if test='newStatus!=null && !"".equals(newStatus) && !hasActionErrors()'>
+<s:if test='newStatus!=null && !"".equals(newStatus) && hasActionErrors()'>
 getStatuschange('<s:property value="newStatus"/>')
 </s:if>
 function getStatuschange(val){

@@ -2746,6 +2746,8 @@ alert("This action is not allowed because a previous transaction is pending for 
 </table>
 </s:elseif>
 <s:elseif test='"reinsurerid".equalsIgnoreCase(dropDown)'>
+<s:set var="ereinsurerList" value='%{reinsurerList}'/>
+<s:set var="ebrokerList" value='%{brokerList}'/>
 <table width="100%" class="table table-bordered" id="reinsTbl">
 	<thead>
 	<tr>

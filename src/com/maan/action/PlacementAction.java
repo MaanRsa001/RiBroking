@@ -436,7 +436,7 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 		service.attachFile(bean);
 		service.sendMail(bean);
 		bean.setReinsurerInfoList(service.getPlacingInfo(bean));
-		if("PWL".equalsIgnoreCase(bean.getMailType())) {
+		if("PWL".equalsIgnoreCase(bean.getMailType()) || "PSL".equalsIgnoreCase(bean.getMailType())) {
 			forward=summary();
 		}
 		}else {
@@ -480,6 +480,51 @@ public class PlacementAction extends ActionSupport implements ModelDriven<Placem
 			bean.setReinsurerInfoList(list);
 		} 
 		return "dropdownajax";
+	}
+	public String addReinsurer(){
+		String forward = "dropdownajax";
+		List<String> reinsSNo=new ArrayList<String>();
+		List<String> reinsureName=new ArrayList<String>();
+		List<String> placingBroker=new ArrayList<String>();
+		List<String> shareOffer=new ArrayList<String>();
+		List<String> deleteStatus=new ArrayList<String>();
+		List<String> changeStatus=new ArrayList<String>();
+			bean.getReinsSNo().add(bean.getDeleteId());
+			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+			for(int i=0;i<bean.getReinsSNo().size();i++){
+			Map<String,Object> string = new HashMap<String,Object>();
+			string.put("1","1");
+			list.add(string);
+			}
+			int j=1;
+
+			for(int k=0;k<bean.getReinsSNo().size();k++){
+				int value=Integer.parseInt(bean.getDeleteId())-1;
+				if(k<value){
+					reinsSNo.add(bean.getReinsSNo().get(k));
+					reinsureName.add(bean.getReinsureName().get(k));
+					placingBroker.add(bean.getPlacingBroker().get(k));
+					shareOffer.add(bean.getShareOffer().get(k));
+					deleteStatus.add(bean.getDeleteStatus().get(k));
+					changeStatus.add(bean.getChangeStatus().get(k));
+				}
+				else{
+					reinsSNo.add(String.valueOf(k+1));
+					reinsureName.add("");
+					placingBroker.add("");
+					shareOffer.add("");
+					deleteStatus.add("");
+					changeStatus.add("");
+				}
+				j++;
+			}
+			bean.setReinsSNo(reinsSNo);
+			bean.setReinsureName(reinsureName);
+			bean.setPlacingBroker(placingBroker);
+			bean.setShareOffer(shareOffer);
+			bean.setReinsurerInfoList(list);
+		
+		return forward;
 	}
 	public String attachFile() {
 		bean.setFilePath(ServletActionContext.getServletContext().getRealPath("/")+"documents/");

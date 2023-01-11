@@ -176,7 +176,7 @@ gap:20px;
 																			</s:if> --%>
 																	</div>
 																	<div class="tbox">
-																		<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);"  disabled="%{prclFlag==true?true:false}"  />
+																		<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);" onchange="validatedate(this.id,this.value);" disabled="%{prclFlag==true?true:false}"  />
 																	</div>
 																</div>
 															<br class="clear" />
@@ -562,7 +562,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																<div class="">
-																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"   onchange="functionDate();GetExchangeRate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}' />
+																	<s:textfield name="incepDate" id="incepDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"   onchange="functionDate();GetExchangeRate();validatedate(this.id,this.value);" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}' />
 																</div>
 															</div>
 														</div>
@@ -572,7 +572,7 @@ gap:20px;
 															</div>
 															<div class="tbox">
 																	<div class="">
-																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"  onchange="functionEDate();" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}'/>
+																		<s:textfield name="expDate" id="expDate" cssClass="inputBox" onkeyup="validateSpecialChars(this)"  onchange="functionEDate();validatedate(this.id,this.value);" disabled='%{"Renewal".equals(proposalReference) || (contNo != "" && contNo != null) || (#dislayer) || (#baselayer)?true:false}'/>
 																	</div>
 															</div>
 														</div>
@@ -1407,7 +1407,7 @@ gap:20px;
 																								<s:text name="label.fpcfixedDate" />
 																							</div>
 																							<div class="tbox">
-																									<s:textfield name="pcfixedDate" id="periodDate"  cssClass="inputBox"  />
+																									<s:textfield name="pcfixedDate" id="periodDate"  cssClass="inputBox" onchange="validatedate(this.id,this.value);" />
 																							</div>
 																						</div>
 																						

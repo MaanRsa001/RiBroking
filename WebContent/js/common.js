@@ -438,3 +438,13 @@ function middleMinusRestrictionNeg(txt) {
     txt.value= prevValue;
     return false;
 }
+function validatedate(id,value){
+var dateformat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+if(!value.match(dateformat))
+{
+	alert("Invalid date format!");
+	document.getElementById(id).value='';
+	return false;
+}
+
+}

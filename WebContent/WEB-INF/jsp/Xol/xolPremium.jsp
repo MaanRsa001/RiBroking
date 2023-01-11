@@ -302,7 +302,7 @@
 													<s:text name="label.amendmentDate" />
 												</div>
 												<div class="tbox">
-													<s:textfield name="amendmentDate" id="amendmentDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();" />													
+													<s:textfield name="amendmentDate" id="amendmentDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();validatedate(this.id,this.value);" />													
 												</div>
 											</div>
 											</s:if>
@@ -315,12 +315,12 @@
 												</div>
 												<s:if test='"edit".equals(mode)'>
 												<div class="tbox">
-													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();GetStatementRecDate();" disabled="true" />												
+													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);GetExchangeRate();GetStatementRecDate();" disabled="true" />												
 												</div>
 												</s:if>
 												<s:else>
 												<div class="tbox">
-													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();GetStatementRecDate();getTransactionDropDown('','trans','');"  />												
+													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);GetExchangeRate();GetStatementRecDate();getTransactionDropDown('','trans','');"  />												
 												</div>
 												</s:else>
 											</div>
@@ -330,7 +330,7 @@
 													<s:text name="label.statementReceivedDate" />
 												</div>
 												<div class="tbox">
-													<s:textfield name="inception_Date" id="inception_Date"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetStatementDate();"/>											
+													<s:textfield name="inception_Date" id="inception_Date"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);GetStatementDate();"/>											
 												</div>
 											</div>
 											</s:if>
@@ -342,7 +342,7 @@
 													<s:text name="label.statementDate" />
 												</div>
 												<div class="tbox">
-													<s:textfield name="statementDate" id="statementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);"  />													
+													<s:textfield name="statementDate" id="statementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);" onchange="validatedate(this.id,this.value);" />													
 												</div>
 											</div>
 											<div class="textfield">

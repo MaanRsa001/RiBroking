@@ -599,11 +599,13 @@ public void getPlacementNo(PlacementBean bean) {
 
 	public void updateStatus(PlacementBean bean,String status) {
 		String corresId="",statusNo="";
+		String query="";
 		try {
-			
-			String query=getQuery("GET_CORRESPONDENT_SEQ");
+			if(StringUtils.isBlank(bean.getCorresId())) {
+			query=getQuery("GET_CORRESPONDENT_SEQ");
 			corresId=this.mytemplate.queryForObject(query, String.class);
 			bean.setCorresId(corresId);
+			}
 			if(StringUtils.isBlank(bean.getStatusNo())) {
 				statusNo=new DropDownControllor().getSequence("StatusNo","0","0", bean.getBranchCode(),"","");
 				bean.setStatusNo(statusNo);
@@ -858,7 +860,7 @@ public void getPlacementNo(PlacementBean bean) {
 			BodyPart messageBodyPart1 = new MimeBodyPart();
 			messageBodyPart1.setContent(bean.getMailBody(),"text/html;charset=UTF-8");
 			multipart.addBodyPart(messageBodyPart1);
-			List<Map<String,Object>>list=getExistingAttachList(bean);
+			List<Map<String,Object>>list=getMailAttachList(bean);
 			if(!CollectionUtils.isEmpty(list)) {
 				for(int i=0;i<list.size();i++) {
 					Map<String,Object>map=list.get(i);
@@ -1138,10 +1140,14 @@ public void getPlacementNo(PlacementBean bean) {
 		return list;
 	}
 	public String attachFile(PlacementBean bean) {
-		String query="",result="";
+		String query="",result="",corresId="";
 		List<Map<String,Object>>list=null;
 		try {
-			
+			if(StringUtils.isBlank(bean.getCorresId())) {
+				query=getQuery("GET_CORRESPONDENT_SEQ");
+				corresId=this.mytemplate.queryForObject(query, String.class);
+				bean.setCorresId(corresId);
+			}
 			if("C".equals(bean.getPlacementMode())) {
 				list=GetPlacementBouquet(bean);
 			}
@@ -1177,26 +1183,12 @@ public void getPlacementNo(PlacementBean bean) {
 		String query="";
 		try {
 			Object[] obj=new Object[5];
-			/*if(StringUtils.isNotBlank(bean.getBouquetNo())) {
-				query=getQuery("GET_EX_DOC_BOUQUET_LIST");
-				obj[0]=bean.getBranchCode();
-				obj[1]=bean.getBouquetNo();
-				obj[2]=bean.getReinsurerId();
-				obj[3]=bean.getBrokerId();
-			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
-				query=getQuery("GET_EX_DOC_BASE_LIST");
-				obj[0]=bean.getBranchCode();
-				obj[1]=bean.getBaseProposalNo();
-				obj[2]=bean.getReinsurerId();
-				obj[3]=bean.getBrokerId();
-			}else {*/
-				query=getQuery("GET_EX_DOC_PRO_LIST");
+				query=getQuery("GET_EX_DOC_LIST");
 				obj[0]=bean.getBranchCode();
 				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
 				obj[2]=bean.getReinsurerId();
 				obj[3]=bean.getBrokerId();
 				obj[4]=bean.getCorresId();
-				/* } */
 			logger.info("Query=>"+query);
 			logger.info("Args=>"+StringUtils.join(obj, ","));
 			list=this.mytemplate.queryForList(query, obj);
@@ -1206,7 +1198,42 @@ public void getPlacementNo(PlacementBean bean) {
 		}
 		return list;
 	}
-
+	public List<Map<String, Object>> getMailAttachList(PlacementBean bean) {
+		List<Map<String,Object>>list=null;
+		String query="";
+		try {
+			Object[] obj=new Object[5];
+			if(StringUtils.isNotBlank(bean.getBouquetNo())) {
+				query=getQuery("GET_EX_DOC_BOUQUET_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBouquetNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+				obj[4]=bean.getCorresId();
+			}else if(StringUtils.isNotBlank(bean.getBaseProposalNo())) {
+				query=getQuery("GET_EX_DOC_BASE_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=bean.getBaseProposalNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+				obj[4]=bean.getCorresId();
+			}else {
+				query=getQuery("GET_EX_DOC_PRO_LIST");
+				obj[0]=bean.getBranchCode();
+				obj[1]=StringUtils.isBlank(bean.getEproposalNo())?bean.getProposalNo():bean.getEproposalNo();
+				obj[2]=bean.getReinsurerId();
+				obj[3]=bean.getBrokerId();
+				obj[4]=bean.getCorresId();
+				} 
+			logger.info("Query=>"+query);
+			logger.info("Args=>"+StringUtils.join(obj, ","));
+			list=this.mytemplate.queryForList(query, obj);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception:", e);
+		}
+		return list;
+	}
 
 	public String deleteFile(PlacementBean bean) {
 		String query="";
@@ -1516,7 +1543,7 @@ public void getPlacementNo(PlacementBean bean) {
 					cedeingId="63".equals(bean.getBrokerId())?bean.getReinsurerId():bean.getBrokerId();
 				}
 				query=getQuery("GET_MAIL_CC_LIST");
-				logger.info("Select Query==> " + query);
+				logger.info("Select Query==> " + query+"==?"+cedeingId);
 				
 				statusList=this.mytemplate.queryForList(query,new Object[]{cedeingId});
 			}catch(Exception e){

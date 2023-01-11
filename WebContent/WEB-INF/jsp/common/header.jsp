@@ -245,12 +245,12 @@ function postRequestID(strUrl, id) {
 			$('#' + id).html(data);
 		},
 		beforeSend : function() {
-			$('#loading').show();
-			$('.ajaxLoader').show();
+			//$('#loading').show();
+			//$('.ajaxLoader').show();
 		},
 		complete : function() {
-			$('#loading').hide();
-			$('.ajaxLoader').hide();
+			//$('#loading').hide();
+			//$('.ajaxLoader').hide();
 		},
 		type : 'POST'
 	});

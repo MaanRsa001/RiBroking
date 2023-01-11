@@ -269,7 +269,7 @@
 																	<s:text name="claim.dateofLoss" />
 																</div>
 																<div class="tbox">
-																	<s:textfield name="date_of_Loss" id="date_of_Loss" cssClass="inputBox" onchange="getReserveDate(this.value);"/>
+																	<s:textfield name="date_of_Loss" id="date_of_Loss" cssClass="inputBox" onchange="validatedate(this.id,this.value);getReserveDate(this.value);"/>
 																</div>
 															</div>
 															<div class="textfield">
@@ -277,7 +277,7 @@
 																	<s:text name="claim.reportDate" />
 																</div>
 																<div class="tbox">
-																	<s:textfield name="report_Date" id="report_Date" cssClass="inputBox" />
+																	<s:textfield name="report_Date" id="report_Date" cssClass="inputBox" onchange="validatedate(this.id,this.value);"/>
 																</div>
 															</div>
 															<div class="textfield">
@@ -286,7 +286,7 @@
 																</div>
 																<div class="tbox">
 																<s:if test="claim_No==null || claim_No=='' ">
-																	<s:textfield name="reservePositionDate" id="reservePositionDate" cssClass="inputBox" />
+																	<s:textfield name="reservePositionDate" id="reservePositionDate" cssClass="inputBox" onchange="validatedate(this.id,this.value);"/>
 																</s:if>
 																<s:else>
 																<s:textfield name="reservePositionDate" id="reservePositionDate" cssClass="inputBox" disabled="true"/>
@@ -299,7 +299,7 @@
 																	<s:text name="claim.registrationDate" />
 																</div>
 																<div class="tbox">
-																	<s:textfield name="created_Date" id="created_Date" cssClass="inputBox" onchange="GetExchangeRate()" />
+																	<s:textfield name="created_Date" id="created_Date" cssClass="inputBox" onchange="validatedate(this.id,this.value);GetExchangeRate()" />
 																	<s:if test='"Yes".equals(ri_Recovery)'>
 																		<s:select list="#{'india':'India','USA':'USA'}" name="recovery_from" cssClass="inputBoxS" cssStyle="display:none;" headerKey="removed" headerValue="---Select---" />
 																	</s:if>
@@ -785,7 +785,7 @@
 																	<s:text name="claim.paymentDate" />
 																</div>
 																<div class="tbox">
-																	<s:textfield name="date" id="date" cssClass="inputBox" disabled='%{("Y".equals(disabledFields) ||"view".equals(paymentFlag)) ?true:false}'/>
+																	<s:textfield name="date" id="date" cssClass="inputBox" disabled='%{("Y".equals(disabledFields) ||"view".equals(paymentFlag)) ?true:false}' onchange="validatedate(this.id,this.value);"/>
 																</div>
 															</div>
 															<div class="textfield">
@@ -1216,7 +1216,7 @@
 																	<s:text name="claim.reviewDate" />
 																</div>
 																<div class="tbox">
-																	<s:textfield name="review_Date" id="review_Date" cssClass="inputBox" />
+																	<s:textfield name="review_Date" id="review_Date" cssClass="inputBox" onchange="validatedate(this.id,this.value);"/>
 																</div>
 															</div>
 															<div class="textfield">

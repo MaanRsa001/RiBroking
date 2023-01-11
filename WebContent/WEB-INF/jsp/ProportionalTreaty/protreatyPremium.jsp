@@ -370,7 +370,7 @@
 													<!--  <div class="inputAppend">
 														<sj:datepicker name="amendmentDate" id="amendmentDate" displayFormat="dd/mm/yy" cssClass="pullLeft" cssStyle="width: 85%; border:transparent;" onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();" />
 													</div>	-->
-													<s:textfield name="amendmentDate" id="amendmentDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();" />												
+													<s:textfield name="amendmentDate" id="amendmentDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();validatedate(this.id,this.value);" />												
 												</div>
 											</div>
 											<div class="textfield">
@@ -425,12 +425,12 @@
 												</div>
 												<s:if test='"edit".equals(mode)'>
 												<div class="tbox">
-													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();GetStatementRecDate();getoutStanding();getAccDate();" disabled="true" />												
+													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);GetExchangeRate();GetStatementRecDate();getoutStanding();getAccDate();" disabled="true" />												
 												</div>
 												</s:if>
 												<s:else>
 												<div class="tbox">
-													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetExchangeRate();GetStatementRecDate();getoutStanding();getAccDate();" disabled="%{disableStatus}"/>													
+													<s:textfield name="transaction" id="transaction"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);GetExchangeRate();GetStatementRecDate();getoutStanding();getAccDate();" disabled="%{disableStatus}"/>													
 												</div>
 												</s:else>
 											</div>
@@ -439,7 +439,7 @@
 													<s:text name="label.statementReceivedDate" />
 												</div>
 												<div class="tbox">
-													<s:textfield name="inception_Date" id="inception_Date"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="GetStatementDate();getAccDate();"/>																						
+													<s:textfield name="inception_Date" id="inception_Date"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);GetStatementDate();getAccDate();"/>																						
 												</div>
 											</div>
 											<div class="textfield">
@@ -448,12 +448,12 @@
 												</div>
 												<s:if test='"edit".equals(mode)'>
 												<div class="tbox">
-													<s:textfield name="statementDate" id="statementDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this);getoutStanding();getAccDate();"  disabled="true" />												
+													<s:textfield name="statementDate" id="statementDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this);getoutStanding();getAccDate();" onchange="validatedate(this.id,this.value);"  disabled="true" />												
 												</div>
 												</s:if>
 												<s:else>
 												<div class="tbox">
-													<s:textfield name="statementDate" id="statementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);getoutStanding();getAccDate();"  disabled="%{disableStatus}"/>													
+													<s:textfield name="statementDate" id="statementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this);getoutStanding();getAccDate();" onchange="validatedate(this.id,this.value);" disabled="%{disableStatus}"/>													
 												</div>
 												</s:else>
 											</div>
@@ -490,7 +490,7 @@
 													<s:text name="label.accountPeriodDate" />
 												</div>
 												<div class="tbox">													
-														<s:textfield cssClass="inputBox" name="accountPeriodDate" id="accountPeriodDate"  maxlength="50" readonly="flase"/>												
+														<s:textfield cssClass="inputBox" name="accountPeriodDate" id="accountPeriodDate"  maxlength="50" readonly="flase" onchange="validatedate(this.id,this.value);"/>												
 												</div>
 											</div>
 											<div class="textfield">

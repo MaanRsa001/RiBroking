@@ -3041,6 +3041,7 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 				this.addActionError(getText("errors.dummy.contract",new String[]{bean.getUwYear()}));
 			}
 			validationRemarks();
+			validateRiDetail();
 
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
@@ -3048,6 +3049,26 @@ public class RiskDetailsAction extends ActionSupport implements ModelDriven<Risk
 		}
 	}
 
+	private void validateRiDetail() {
+		for(int i=0;i<bean.getReinsurerIds().size();i++) {
+			if("CSL".equalsIgnoreCase(bean.getNewStatus().get(i))) {
+				if(StringUtils.isBlank(bean.getReinsurerIds().get(i))) {
+					addActionError(getText("error.ReinsurerId.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getBrokerIds().get(i))) {
+					addActionError(getText("error.BrokerIds.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getShareOffered().get(i))) {
+					addActionError(getText("error.ShareOffered.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getWrittenLine().get(i))) {
+					addActionError(getText("error.WrittenLine.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getSignedLine().get(i))) {
+					addActionError(getText("error.SignedLine.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getProposedSL().get(i))) {
+					addActionError(getText("error.ProposedSL.required",new String[] {String.valueOf(i+1)}));
+				}
+				
+			}
+			}
+	}
 	private String dateFormat(String name){
 		String arr[]=name.split("/");
 		return arr[1]+"/"+arr[0]+"/"+arr[2];

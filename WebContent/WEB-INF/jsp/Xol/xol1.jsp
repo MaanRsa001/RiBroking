@@ -141,7 +141,7 @@ gap:20px;
 															</s:if> --%>
 													</div>
 													<div class="tbox">
-														<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="functionDate()" disabled="%{prclFlag==true?true:false}"  />
+														<s:textfield name="endorsementDate" id="endorsementDate"  cssClass="inputBox"   onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);" disabled="%{prclFlag==true?true:false}"  />
 													</div>
 												</div>													 
 											<br class="clear"></br>
@@ -517,12 +517,12 @@ gap:20px;
 													<s:if test="RenewalMode != null">
 														<s:if test="layerProposalNo == null || layerProposalNo == ''">
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:if>
 														<s:else>
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate" cssClass="inputBox"  onkeyup="validateSpecialChars(this)" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate" cssClass="inputBox"  onkeyup="validateSpecialChars(this)" onchange="validatedate(this.id,this.value);" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:else>
 													</s:if>
@@ -530,18 +530,18 @@ gap:20px;
 														<s:if test="layerProposalNo == null || layerProposalNo == ''">
 															<s:if test="prclFlag == true">
 																<div class="">
-																<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"    readonly="true"/>
+																<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate();validatedate(this.id,this.value);"    readonly="true"/>
 																</div>
 															</s:if>
 															<s:else>
 																<div class="">
-																<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
+																<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate();validatedate(this.id,this.value);"  disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 																</div>																
 															</s:else>
 														</s:if>
 														<s:else>
 															<div class="">
-															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate()"  disabled='%{proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
+															<s:textfield name="incepDate" id="incepDate"  cssClass="inputBox" onkeyup="validateSpecialChars(this)" onchange="functionDate();GetExchangeRate();validatedate(this.id,this.value);"  disabled='%{proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}' />
 															</div>
 														</s:else>
 													</s:else>													
@@ -554,12 +554,12 @@ gap:20px;
 												<div class="tbox">
 													<s:if test="layerProposalNo == null || layerProposalNo == ''">
 														<div class="">
-														<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
+														<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();validatedate(this.id,this.value);" disabled='%{(contNo != "" && contNo != null) ||proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
 														</div>														
 													</s:if>
 													<s:else>
 													<div class="">
-													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();" disabled='%{proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
+													<s:textfield name="expDate" id="expDate"  cssClass="inputBox"  onkeyup="validateSpecialChars(this)"   onchange="functionEDate();validatedate(this.id,this.value);" disabled='%{proposalReference!=null  && !"".equalsIgnoreCase(proposalReference) || (#dislayer) || (#baselayer) ?true:false}'/>
 													 </div>
 													</s:else>
 												</div>
@@ -1204,7 +1204,7 @@ gap:20px;
 																<s:textfield name="installsno[%{#stat.count-1}]" id="installsno[%{#stat.count-1}]" cssClass="inputBox" value="%{#stat.count}" readonly="true" theme="simple"/>
 																  </td>
 																<td>
-																	<s:textfield name="instalmentDateList[%{#stat.count-1}]" id="instalmentDateList[%{#stat.count-1}]"  cssClass="inputBox datepicker instalmentDate"   onkeyup="validateSpecialChars(this);" disabled='%{("".equals(transactionList[#stat.count-1]))?false:true}'/>
+																	<s:textfield name="instalmentDateList[%{#stat.count-1}]" id="instalmentDateList[%{#stat.count-1}]"  cssClass="inputBox datepicker instalmentDate"   onkeyup="validateSpecialChars(this);" onchange="validatedate(this.id,this.value);" disabled='%{("".equals(transactionList[#stat.count-1]))?false:true}'/>
 																</td>
 																<td>
 																	<s:textfield name="installmentPremium[%{#stat.count-1}]" id="installmentPremium[%{#stat.count-1}]" cssClass="inputBox" cssStyle="text-align: right;"  onkeyup="Itnegative(this.id,this.value);middleMinusRestrictionNeg(this);allow2DigitDecValues(this);this.value=Comma(this.value);allow2DigitDecValues(this);" maxlength="26" disabled='%{("".equals(transactionList[#stat.count-1]))?false:true}'/>
@@ -2590,6 +2590,7 @@ var table = document.getElementById(tableID);
 			 document.getElementById("loopcount").value =parseInt(rowCount);			 
 			 getEgnpiCal();
 			 getAnnualAggNo();
+			 $('.select1').select2({ });
 			 //getAjaxCoverClass();
 			 
 }
@@ -2741,7 +2742,7 @@ function createcoverdeptCell1(cell, rowCount){
       // element.setAttribute("onchange", "getCrestaIDAjax(this.value,'crestaid"+(rowCount-1)+"',"+(rowCount-1)+")");            
        populateCoverdept(element);
           cell.appendChild(element);
-          $('.select1').select2({ });
+         
 }
 function populateCoverdept(objSelect){
 	var objOption = document.createElement("option");

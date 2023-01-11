@@ -296,6 +296,7 @@ public class ProportionalPremiumAction extends ActionSupport implements ModelDri
 			    bean.setClaimNo(claimno);
 			    bean2.setPolicy_Contract_No(bean.getContNo());
 			    bean2.setLayerNo(bean.getLayerno()==null?"":bean.getLayerno());
+			    bean2.setBranchCode(branchCode);
 			    if(StringUtils.isNotBlank(bean.getDepartmentId())){
 			    	 bean2.setDepartmentId(bean.getDepartmentId());
 			    }

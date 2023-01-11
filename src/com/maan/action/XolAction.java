@@ -2710,13 +2710,33 @@ public class XolAction extends ActionSupport implements ModelDriven<RiskDetailsB
 				validationContract();
 				}
 			validationRemarks();
+			validateRiDetail();
 			
 		} catch (Exception e) {
 			logger.debug("Exception @ {" + e + "}");
 			e.printStackTrace();
 		}
 	}
-
+	private void validateRiDetail() {
+		for(int i=0;i<bean.getReinsurerIds().size();i++) {
+			if("CSL".equalsIgnoreCase(bean.getNewStatus().get(i))) {
+				if(StringUtils.isBlank(bean.getReinsurerIds().get(i))) {
+					addActionError(getText("error.ReinsurerId.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getBrokerIds().get(i))) {
+					addActionError(getText("error.BrokerIds.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getShareOffered().get(i))) {
+					addActionError(getText("error.ShareOffered.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getWrittenLine().get(i))) {
+					addActionError(getText("error.WrittenLine.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getSignedLine().get(i))) {
+					addActionError(getText("error.SignedLine.required",new String[] {String.valueOf(i+1)}));
+				}if(StringUtils.isBlank(bean.getProposedSL().get(i))) {
+					addActionError(getText("error.ProposedSL.required",new String[] {String.valueOf(i+1)}));
+				}
+				
+			}
+			}
+	}
 	private void validateSecondPage() {
 		try {
 			Validation validation = new Validation();
@@ -4366,16 +4386,40 @@ public String insInstall() {
 	List<String> paymentDueDays = new ArrayList<String>();
 	List<String> instalList = new ArrayList<String>();
 	int count=bean.getInstallsno().size();
-	if(StringUtils.isNotBlank(bean.getM_d_InstalmentNumber()) && Integer.parseInt(bean.getM_d_InstalmentNumber())>0){
-	for(int j=0;j<Integer.parseInt(bean.getM_d_InstalmentNumber());j++){
+	int nos=Integer.parseInt(bean.getM_d_InstalmentNumber());
+	if(StringUtils.isNotBlank(bean.getM_d_InstalmentNumber()) && nos>0){
+	
+		if(StringUtils.isNotEmpty(bean.getM_dPremium()) && nos!=0)
+		{	double total=0;
+			final  DecimalFormat twoDigit = new DecimalFormat("###0.00");
+			
+				total=Double.parseDouble(bean.getM_dPremium())/nos;
+				final double dround = Math.round(total * 100.0) / 100.0;
+				logger.info("Rounded Value=>" + dround);
+				final String valu = twoDigit.format(dround);
+				//List<String> InstallmentPremium = bean.getInstallmentPremium()==null?new ArrayList<String>():bean.getInstallmentPremium();
+				double Sum=0.0;
+				for(int i=0;i<nos-1;i++){
+					installmentPremium.add(valu);
+					 Sum=Sum+Double.parseDouble(valu);
+					 logger.info("Formated Value1=>" + Sum);
+				}
+				Double Gwpi=Double.parseDouble(bean.getM_dPremium());
+				String retotal =twoDigit.format(Gwpi-Sum);
+				 logger.info("Formated retotal=>" + retotal);
+				 installmentPremium.add(retotal);
+			
+		}
+		
+		
+		
+		for(int j=0;j<Integer.parseInt(bean.getM_d_InstalmentNumber());j++){	
 		
 		if(count>j) {
 		if(StringUtils.isNotBlank(bean.getInstalmentDateList().get(j))){
 			instalmentDate.add(bean.getInstalmentDateList().get(j));
 		}
-		if(StringUtils.isNotBlank(bean.getInstallmentPremium().get(j))){
-			installmentPremium.add(bean.getInstallmentPremium().get(j));	
-					}
+		
 		if(StringUtils.isNotBlank(bean.getPaymentDueDays().get(j))){
 			paymentDueDays.add(bean.getPaymentDueDays().get(j));
 		}

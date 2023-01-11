@@ -149,7 +149,7 @@
 							</s:else>
 							<s:if test='("A".equals(newStatus))'>
 							<td>
-								<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox writtenvaliditydate" theme="simple"/>
+								<s:textfield name="writtenvaliditydate[%{#stat.count-1}]" id="writtenvaliditydate[%{#stat.count-1}]" cssClass="inputBox writtenvaliditydate" theme="simple" onchange="validatedate(this.id,this.value);"/>
 							</td>
 							<td>
 								<s:textfield name="writtenvalidityRemarks[%{#stat.count-1}]" id="writtenvalidityRemarks[%{#stat.count-1}]" cssClass="inputBox" theme="simple"/>
@@ -179,7 +179,7 @@
 							</s:else>
 							<s:if test='(#esl)'>
 							<td>
-								<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox signedLineValidity"  theme="simple"/>
+								<s:textfield name="signedLineValidity[%{#stat.count-1}]" id="signedLineValidity[%{#stat.count-1}]" cssClass="inputBox signedLineValidity"  theme="simple" onchange="validatedate(this.id,this.value);"/>
 							</td>
 							<td>
 								<s:textfield name="signedLineRemarks[%{#stat.count-1}]" id="signedLineRemarks[%{#stat.count-1}]" cssClass="inputBox"  theme="simple"/>

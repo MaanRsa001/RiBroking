@@ -298,7 +298,7 @@
 																	<s:text name="label.placementMode" />
 																</div>
 																<div class="tbox">
-																	<s:radio list="#{'S':'Separate','C':'Combined / Bouquet'}" name="placementMode"  id="placementMode" onclick="getPlacement();" disabled="%{placementDisabled!=null}"/>												
+																	<s:radio list="#{'S':'Separate','C':'Combined / Bouquet'}" name="placementMode"  id="placementMode" value="%{placementMode==null?'C':placementMode}" onclick="getPlacement();" disabled="%{placementDisabled!=null}"/>												
 																</div>
 															</div>
 															<div class="textfield">
@@ -391,7 +391,7 @@
 															</table> 
 															<div class="boxcontent" align="center">
 																<s:if test='"Y".equals(reinsurerType)'>
-																<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="reinsureRow('reinsTbl');" />
+																<input type="button"  value="AddMore"  class="btn btn-sm btn-primary" onclick="disableForm(this.form,false,'');reinsureRow('reinsTbl');" />
 																</s:if>
 															</div>
 															</s:if>
@@ -615,7 +615,7 @@
 </div>
 <script type="text/javascript">
 $('.select1').select2({ });
-function reinsureRow(tableID)
+function reinsureRow1(tableID)
 {
 var table = document.getElementById(tableID);
 
@@ -734,6 +734,12 @@ function populateBroker(objSelect){
  function getReinsurer(val){
 	 document.getElementById('eproposalNo').value= val;
 	 postFormRequest("${pageContext.request.contextPath}/getreinsurerInfoPlacement.action?mode=delete&deleteId="+val+"&dropDown=reinsurerid", "reinsurerid", "placement");
+ }
+ function reinsureRow(tableID)
+ {
+ var table = document.getElementById(tableID);
+ var val = table.rows.length;
+ postFormRequest("${pageContext.request.contextPath}/addReinsurerPlacement.action?mode=delete&deleteId="+val+"&dropDown=reinsurerid", "reinsurerid", "placement");
  }
 function deleteRow(val){
 	
